@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { imgOnError } from '../../utils/productHelper';
 
 export default function GalleryLightbox({ images = [], startIndex = 0, title = '', onClose }) {
   const [index, setIndex] = useState(startIndex);
@@ -44,7 +45,7 @@ export default function GalleryLightbox({ images = [], startIndex = 0, title = '
           </>
         )}
         <div className="pd-lbox-imgwrap">
-          <img key={index} className="pd-lbox-img" src={images[index]} alt={title || `Image ${index + 1}`} />
+          <img key={index} className="pd-lbox-img" src={images[index]} alt={title || `Image ${index + 1}`} onError={imgOnError} />
         </div>
         <div className="pd-lbox-count">{index + 1} / {len}</div>
         {len > 1 && (
@@ -57,7 +58,7 @@ export default function GalleryLightbox({ images = [], startIndex = 0, title = '
                 onClick={() => setIndex(i)}
                 aria-label={`View image ${i + 1}`}
               >
-                <img src={img} alt="" loading="lazy" />
+                <img src={img} alt="" loading="lazy" onError={imgOnError} />
               </button>
             ))}
           </div>

@@ -5,7 +5,7 @@ import { userOrders as userOrdersAction, cancelOrder } from '../../actions/order
 import { addCartItem } from '../../actions/cartActions';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { formatMoney } from '../../utils/productHelper';
+import { formatMoney, resolveProductImage, imgOnError } from '../../utils/productHelper';
 import { openInvoice } from '../../utils/invoice';
 
 const TABS = [
@@ -143,7 +143,7 @@ export default function UserOrders () {
                                     <Link to={`/order/${order._id}`} className="mo-thumbs">
                                         {order.orderItems.slice(0, 4).map((item, i) => (
                                             <span className="mo-thumb" key={item.product + i}>
-                                                <img src={item.image} alt={item.name} loading="lazy" />
+                                                <img src={resolveProductImage(item.image)} alt={item.name} loading="lazy" onError={imgOnError} />
                                             </span>
                                         ))}
                                         {order.orderItems.length > 4 && <span className="mo-thumb mo-thumb-more">+{order.orderItems.length - 4}</span>}

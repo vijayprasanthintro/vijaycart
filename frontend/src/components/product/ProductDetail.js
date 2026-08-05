@@ -13,7 +13,7 @@ import ProductCarousel from "../home/ProductCarousel";
 import GalleryLightbox from "./GalleryLightbox";
 import axios from "axios";
 import { useWishlist } from "../../context/WishlistContext";
-import { getPricing, formatMoney, roundRating, getDelivery, getGalleryImages, getDemoReviews } from "../../utils/productHelper";
+import { getPricing, formatMoney, roundRating, getDelivery, getGalleryImages, getDemoReviews, imgOnError } from "../../utils/productHelper";
 
 const arrivalText = (days) => {
     const d = new Date();
@@ -363,7 +363,7 @@ export default function ProductDetail () {
                                                     onClick={() => setActiveImage(i)}
                                                     aria-label={`View image ${i + 1}`}
                                                 >
-                                                    <img src={img.image} alt={`${product.name} ${i + 1}`} loading="lazy" decoding="async" />
+                                                    <img src={typeof img === 'string' ? img : (img && img.image) || ''} alt={`${product.name} ${i + 1}`} loading="lazy" decoding="async" onError={imgOnError} />
                                                 </button>
                                             ))}
                                         </div>
@@ -381,13 +381,13 @@ export default function ProductDetail () {
                                     >
                                         {canZoom && <span className="gallery-zoom-hint"><i className="fa fa-search-plus" aria-hidden="true"></i></span>}
                                         {images.length > 0 && images[activeImage] && (
-                                            <img src={images[activeImage].image} alt={product.name} loading="eager" decoding="async" fetchPriority="high" />
+                                            <img src={typeof images[activeImage] === 'string' ? images[activeImage] : (images[activeImage] && images[activeImage].image) || ''} alt={product.name} loading="eager" decoding="async" fetchPriority="high" onError={imgOnError} />
                                         )}
                                         {canZoom && zoom.active && images[activeImage] && (
                                             <div
                                                 className="pd-zoom"
                                                 style={{
-                                                    backgroundImage: `url(${images[activeImage].image})`,
+                                                    backgroundImage: `url(${typeof images[activeImage] === 'string' ? images[activeImage] : (images[activeImage] && images[activeImage].image) || ''})`,
                                                     backgroundPosition: `${zoom.x}% ${zoom.y}%`,
                                                 }}
                                             ></div>
@@ -660,7 +660,7 @@ export default function ProductDetail () {
                     {!loading && product._id && stickyVisible && (
                         <div className="pd-sticky">
                             <div className="pd-sticky-inner">
-                                <img className="pd-sticky-thumb" src={images[0]} alt="" />
+                                <img className="pd-sticky-thumb" src={typeof images[0] === 'string' ? images[0] : (images[0] && images[0].image) || ''} alt="" onError={imgOnError} />
                                 <div className="pd-sticky-info">
                                     <span className="pd-sticky-name">{product.name}</span>
                                     <span className="pd-sticky-price">

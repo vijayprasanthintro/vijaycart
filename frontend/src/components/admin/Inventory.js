@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getAdminProducts } from '../../actions/productActions';
 import { toINR } from './Charts';
+import { productImage, imgOnError } from '../../utils/productHelper';
 
 export default function Inventory() {
     const { products = [], loading = true } = useSelector(state => state.productsState);
@@ -96,7 +97,7 @@ export default function Inventory() {
                                         <tr key={product._id}>
                                             <td>
                                                 <div className="ad-toolbar" style={{ justifyContent: 'flex-start' }}>
-                                                    {product.images && product.images[0] ? <img src={product.images[0].image} alt={product.name} className="ad-avatar" style={{ width: 40, height: 40 }} /> : <span className="ad-avatar"><i className="fa fa-box" aria-hidden="true"></i></span>}
+                                                    {product.images && product.images[0] ? <img src={productImage(product)} alt={product.name} className="ad-avatar" style={{ width: 40, height: 40 }} onError={imgOnError} /> : <span className="ad-avatar"><i className="fa fa-box" aria-hidden="true"></i></span>}
                                                     <span className="ad-td-strong" style={{ maxWidth: 280 }}>{product.name}</span>
                                                 </div>
                                             </td>

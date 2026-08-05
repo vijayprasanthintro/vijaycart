@@ -5,7 +5,7 @@ import Loader from '../layouts/Loader';
 import { orderDetail as orderDetailAction, cancelOrder, requestReturn } from '../../actions/orderActions';
 import { addCartItem } from '../../actions/cartActions';
 import { toast } from 'react-toastify';
-import { formatMoney, getDeliveryLabel } from '../../utils/productHelper';
+import { formatMoney, getDeliveryLabel, resolveProductImage, imgOnError } from '../../utils/productHelper';
 import { openInvoice } from '../../utils/invoice';
 
 const statusMeta = (status) => {
@@ -193,7 +193,7 @@ export default function OrderDetail () {
                                 {orderItems.map((item, idx) => (
                                     <div className="co-item" key={item.product || item._id} style={{ animationDelay: `${idx * 0.06}s` }}>
                                         <Link to={`/product/${item.product}`} className="co-item-img">
-                                            <img src={item.image} alt={item.name} loading="lazy" />
+                                            <img src={resolveProductImage(item.image)} alt={item.name} loading="lazy" onError={imgOnError} />
                                         </Link>
                                         <div className="co-item-body">
                                             <Link to={`/product/${item.product}`} className="co-item-name">{item.name}</Link>

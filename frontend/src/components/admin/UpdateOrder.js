@@ -7,6 +7,7 @@ import { clearOrderUpdated, clearError } from "../../slices/orderSlice";
 import { getDeliveryBoys } from "../../actions/deliveryActions";
 import { Link } from "react-router-dom";
 import { toINR } from './Charts';
+import { resolveProductImage, imgOnError } from '../../utils/productHelper';
 
 export default function UpdateOrder() {
     const { loading, isOrderUpdated, error, orderDetail } = useSelector(state => state.orderState);
@@ -111,7 +112,7 @@ export default function UpdateOrder() {
                                     <tr key={item._id}>
                                         <td>
                                             <div className="ad-toolbar" style={{ justifyContent: 'flex-start' }}>
-                                                {item.image && <img src={item.image} alt={item.name} className="ad-avatar" style={{ width: 42, height: 42 }} />}
+                                                {item.image && <img src={resolveProductImage(item.image)} alt={item.name} className="ad-avatar" style={{ width: 42, height: 42 }} onError={imgOnError} />}
                                                 <Link to={`/product/${item.product}`} className="ad-td-strong">{item.name}</Link>
                                             </div>
                                         </td>

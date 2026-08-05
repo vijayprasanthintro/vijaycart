@@ -6,6 +6,7 @@ import { getCategories } from '../../actions/categoryActions';
 import { clearError, clearProductDeleted } from '../../slices/productSlice';
 import { toast } from 'react-toastify';
 import { toINR } from './Charts';
+import { productImage, imgOnError } from '../../utils/productHelper';
 
 export default function ProductList() {
     const { products = [], loading = true, error } = useSelector(state => state.productsState);
@@ -96,7 +97,7 @@ export default function ProductList() {
                                         <tr key={product._id}>
                                             <td>
                                                 {product.images && product.images[0] ? (
-                                                    <img src={product.images[0].image} alt={product.name} className="ad-avatar" style={{ width: 42, height: 42 }} />
+                                                    <img src={productImage(product)} alt={product.name} className="ad-avatar" style={{ width: 42, height: 42 }} onError={imgOnError} />
                                                 ) : (
                                                     <span className="ad-avatar"><i className="fa fa-box" aria-hidden="true"></i></span>
                                                 )}

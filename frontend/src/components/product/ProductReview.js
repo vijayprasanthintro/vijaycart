@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import GalleryLightbox from './GalleryLightbox';
-import { getReviewImages, getHelpfulBase } from '../../utils/productHelper';
+import { getReviewImages, getHelpfulBase, imgOnError } from '../../utils/productHelper';
 
 const HELP_KEY = 'vijaycart_review_helpful';
 
@@ -74,7 +74,7 @@ function ReviewCard({ review }) {
                                 onClick={() => openGallery(idx)}
                                 aria-label="View review photo"
                             >
-                                <img src={img} alt="Customer review" loading="lazy" />
+                                <img src={img} alt="Customer review" loading="lazy" onError={imgOnError} />
                             </button>
                         ))}
                         {more > 0 && (

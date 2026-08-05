@@ -85,6 +85,41 @@ export const getDeliveryLabel = (seed = '') =>
 export const getDeliveryDay = (seed = '') =>
   getDeliveryDate(seed).toLocaleDateString('en-US', { weekday: 'long' });
 
+// -------- Image URL resolution & fallback --------
+// Product images are stored in MongoDB as paths relative to the frontend
+// (`/images/products/...`), relative to the backend uploads dir (`/uploads/...`),
+// or occasionally as absolute URLs. Absolute URLs bake in a hostname (e.g.
+// http://127.0.0.1:8000) that breaks on any other deployment, so we resolve
+// every source to something the current origin can actually serve:
+//   - absolute http(s)      -> used as-is
+//   - /uploads/...          -> prefixed with the API base (REACT_APP_API_URL)
+//   - /images/... (or any)  -> served by the frontend itself, used as-is
+export const IMAGE_FALLBACK = '/images/placeholder.svg';
+
+export const resolveProductImage = (src) => {
+  if (!src) return IMAGE_FALLBACK;
+  const s = String(src);
+  if (/^https?:\/\//i.test(s)) return s;
+  if (s.startsWith('/uploads/')) {
+    const base = (process.env.REACT_APP_API_URL || '').replace(/\/+$/, '');
+    return base + s;
+  }
+  return s;
+};
+
+// Reusable onError handler for <img> tags: swaps a broken source for the
+// placeholder exactly once (the dataset guard stops a replace loop).
+export const imgOnError = (e) => {
+  const el = e.currentTarget;
+  if (!el || el.dataset.fb) return;
+  el.dataset.fb = '1';
+  el.src = IMAGE_FALLBACK;
+};
+
+// First image of a product (card/thumbnail usage), resolved + fallback.
+export const productImage = (product = {}) =>
+  resolveProductImage(product && product.images && product.images[0] ? product.images[0].image : '');
+
 // -------- Gallery / review demo media --------
 // Most seeded products carry a single image, so we build multi-image galleries
 // and review photos deterministically from the shared public image pool. The
@@ -148,7 +183,7 @@ const hashId = (s = '') => {
 };
 
 export const getGalleryImages = (product = {}) => {
-  const own = (product.images || []).map(i => i.image).filter(Boolean);
+  const own = (product.images || []).map(i => (i && i.image ? resolveProductImage(i.image) : '')).filter(Boolean);
   const h = hashId(product._id || product.name || '');
   const target = Math.max(own.length, 5);
   const out = [];
@@ -170,7 +205,7 @@ export const getReviewImages = (review = {}, max = 8) => {
   const seen = new Set();
   let step = 0;
   while (out.length < count && step < PRODUCT_IMAGE_POOL.length * 3) {
-    const img = PRODUCT_IMAGE_POOL[(h + step * 17) % PRODUCT_IMAGE_POOL.length];
+    const img = resolveProductImage(PRODUCT_IMAGE_POOL[(h + step * 17) % PRODUCT_IMAGE_POOL.length]);
     if (!seen.has(img)) { seen.add(img); out.push(img); }
     step++;
   }

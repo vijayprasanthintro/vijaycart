@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { formatMoney } from '../../utils/productHelper';
+import { formatMoney, productImage, imgOnError } from '../../utils/productHelper';
 
 const RECENT_KEY = 'vijaycart_recent_searches';
 const MAX_RECENT = 6;
@@ -368,7 +368,7 @@ export default function SearchSuggest({ variant = 'desktop', onDone }) {
                           onMouseDown={(e) => e.preventDefault()}
                           onClick={() => selectRow({ kind: 'product', ref: p })}
                         >
-                          <img className="ss-thumb" src={p.images && p.images[0] ? p.images[0].image : ''} alt="" loading="lazy" />
+                          <img className="ss-thumb" src={productImage(p)} alt="" loading="lazy" onError={imgOnError} />
                           <span className="ss-item-main">
                             <span className="ss-item-name"><Highlight text={p.name} query={keyword} /></span>
                             <span className="ss-item-sub">{p.category}</span>

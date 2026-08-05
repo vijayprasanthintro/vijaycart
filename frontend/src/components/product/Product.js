@@ -5,7 +5,7 @@ import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useWishlist } from '../../context/WishlistContext';
 import { addCartItem } from '../../actions/cartActions';
-import { getPricing, formatMoney, roundRating, isInStock, getBadge, getDelivery } from '../../utils/productHelper';
+import { getPricing, formatMoney, roundRating, isInStock, getBadge, getDelivery, productImage, imgOnError } from '../../utils/productHelper';
 
 export default memo(function Product ({product, col}) {
     const dispatch = useDispatch();
@@ -62,10 +62,11 @@ export default memo(function Product ({product, col}) {
                 <div className="position-relative overflow-hidden">
                   <img
                     className="card-img-top mx-auto"
-                    src={product.images[0].image}
+                    src={productImage(product)}
                     alt={product.name}
                     loading="lazy"
                     decoding="async"
+                    onError={imgOnError}
                   />
                   <button
                     type="button"
@@ -133,7 +134,7 @@ export default memo(function Product ({product, col}) {
                         <div className="row align-items-center g-0">
                             <div className="col-12 col-md-5 text-center quickview-img">
                                 {product.images.length > 0 &&
-                                  <img src={product.images[0].image} alt={product.name} loading="lazy" decoding="async" />}
+                                  <img src={productImage(product)} alt={product.name} loading="lazy" decoding="async" onError={imgOnError} />}
                             </div>
                             <div className="col-12 col-md-7 quickview-info">
                                 <span className="product-seller">{product.brand || product.seller}</span>

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { decreaseCartItemQty, increaseCartItemQty, removeItemFromCart } from '../../slices/cartSlice';
 import { addCartItem } from '../../actions/cartActions';
-import { getPricing, formatMoney, getDelivery } from '../../utils/productHelper';
+import { getPricing, formatMoney, getDelivery, resolveProductImage, imgOnError } from '../../utils/productHelper';
 import { toast } from 'react-toastify';
 
 const SAVED_KEY = 'vijaycart_saved';
@@ -86,7 +86,7 @@ export default function Cart() {
             <div className="cart-item" key={item.product}>
                 <div className="cart-item-main">
                     <Link to={`/product/${item.product}`} className="cart-item-img" title={item.name}>
-                        <img src={item.image} alt={item.name} loading="lazy" />
+                        <img src={resolveProductImage(item.image)} alt={item.name} loading="lazy" onError={imgOnError} />
                     </Link>
                     <div className="cart-item-body">
                         <Link to={`/product/${item.product}`} className="item-name">{item.name}</Link>

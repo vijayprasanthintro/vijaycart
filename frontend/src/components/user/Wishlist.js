@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useWishlist } from '../../context/WishlistContext';
 import { addCartItem } from '../../actions/cartActions';
-import { getPricing, formatMoney, roundRating } from '../../utils/productHelper';
+import { getPricing, formatMoney, roundRating, productImage, imgOnError } from '../../utils/productHelper';
 import MetaData from '../layouts/MetaData';
 
 export default function Wishlist() {
@@ -62,7 +62,7 @@ export default function Wishlist() {
                                 ><i className="fa fa-heart" aria-hidden="true"></i></button>
                                 <Link to={`/product/${product._id}`} className="d-block overflow-hidden">
                                     {product.images && product.images.length > 0 && (
-                                        <img className="card-img-top mx-auto" src={product.images[0].image} alt={product.name} loading="lazy" />
+                                        <img className="card-img-top mx-auto" src={productImage(product)} alt={product.name} loading="lazy" onError={imgOnError} />
                                     )}
                                 </Link>
                                 <div className="card-body d-flex flex-column">

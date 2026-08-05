@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import CheckoutSteps from './CheckoutStep';
 import { setCoupon, clearCoupon } from '../../slices/cartSlice';
-import { formatMoney, getPricing, getDeliveryLabel, getDeliveryDay } from '../../utils/productHelper';
+import { formatMoney, getPricing, getDeliveryLabel, getDeliveryDay, resolveProductImage, imgOnError } from '../../utils/productHelper';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
@@ -126,7 +126,7 @@ export default function ConfirmOrder () {
                                 return (
                                     <div className="co-item" key={item.product} style={{ animationDelay: `${idx * 0.06}s` }}>
                                         <Link to={`/product/${item.product}`} className="co-item-img">
-                                            <img src={item.image} alt={item.name} loading="lazy" />
+                                            <img src={resolveProductImage(item.image)} alt={item.name} loading="lazy" onError={imgOnError} />
                                         </Link>
                                         <div className="co-item-body">
                                             <Link to={`/product/${item.product}`} className="co-item-name">{item.name}</Link>
