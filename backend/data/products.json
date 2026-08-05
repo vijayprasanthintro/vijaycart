@@ -1,0 +1,2547 @@
+[
+  {
+    "name": "NovaTech Astro 5G Smartphone (8GB, 128GB)",
+    "brand": "NovaTech",
+    "seller": "NovaTech Official Store",
+    "category": "Smartphones",
+    "price": 24999,
+    "mrp": 30999,
+    "discount": 19,
+    "stock": 120,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "The NovaTech Astro 5G brings flagship-level speed to an everyday price. Its bright AMOLED display and 64MP triple camera make it a dependable all-rounder for work, gaming and photos. A large 5000mAh battery keeps the day going even with heavy use.",
+    "specifications": [
+      { "label": "Display", "value": "6.4-inch AMOLED FHD+ with 120Hz refresh" },
+      { "label": "Processor", "value": "NovaTech Octa-Core 5G (6nm)" },
+      { "label": "RAM", "value": "8GB LPDDR4X with virtual RAM expansion" },
+      { "label": "Storage", "value": "128GB UFS 2.2, expandable up to 1TB" },
+      { "label": "Rear Camera", "value": "64MP main + 8MP ultra-wide + 2MP macro" },
+      { "label": "Front Camera", "value": "32MP punch-hole" },
+      { "label": "Battery", "value": "5000mAh with 33W fast charging" },
+      { "label": "Operating System", "value": "Android 14 with NovaOS 2.0" },
+      { "label": "Connectivity", "value": "5G, dual 4G VoLTE, Wi-Fi 6, Bluetooth 5.2" },
+      { "label": "Security", "value": "In-display fingerprint sensor" }
+    ],
+    "features": [
+      "120Hz AMOLED display for buttery-smooth scrolling",
+      "5G ready for ultra-fast downloads",
+      "64MP AI triple camera with night mode",
+      "5000mAh battery with 33W fast charging",
+      "8GB RAM with virtual RAM expansion",
+      "Stereo speakers with Dolby Atmos"
+    ],
+    "highlights": [
+      "6.4-inch FHD+ AMOLED with 120Hz refresh rate",
+      "5G support with dual nano-SIM",
+      "5000mAh battery with 33W charger in the box",
+      "64MP AI triple camera with night mode",
+      "Free screen guard and back cover included"
+    ],
+    "warranty": "1 Year Manufacturer Warranty on Device & 6 Months on In-Box Accessories",
+    "images": [
+      { "image": "/images/products/1.jpg" },
+      { "image": "/images/products/2.jpg" },
+      { "image": "/images/products/20.jpg" }
+    ],
+    "reviews": [
+      { "user": "507f1f77bcf86cd799439011", "userName": "Rahul Sharma", "rating": 5, "comment": "Superb display and battery life for the price. Gaming is smooth with the 120Hz panel." },
+      { "user": "507f191e810c19729de860ea", "userName": "Priya Patel", "rating": 4, "comment": "Camera is great in daylight and the phone feels premium. Charger included is a plus." },
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Amit Verma", "rating": 4, "comment": "Value for money. The 5G connectivity works well with my operator." }
+    ]
+  },
+  {
+    "name": "VertexBook Pro 15 Laptop (i7, 16GB, 512GB SSD)",
+    "brand": "Vertex",
+    "seller": "Vertex Store India",
+    "category": "Laptops",
+    "price": 58990,
+    "mrp": 72990,
+    "discount": 19,
+    "stock": 85,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "The VertexBook Pro 15 pairs a 13th Gen Intel Core processor with a vivid FHD display for serious productivity and light creative work. Its slim aluminium body, backlit keyboard and long battery life make it ideal for students and professionals on the move.",
+    "specifications": [
+      { "label": "Display", "value": "15.6-inch FHD (1920x1080) IPS anti-glare" },
+      { "label": "Processor", "value": "13th Gen Intel Core i7-1360P" },
+      { "label": "RAM", "value": "16GB DDR4 3200MHz" },
+      { "label": "Storage", "value": "512GB NVMe SSD" },
+      { "label": "Graphics", "value": "Intel Iris Xe Graphics" },
+      { "label": "Keyboard", "value": "Backlit chiclet keyboard" },
+      { "label": "Battery", "value": "56Wh with 65W USB-C fast charge" },
+      { "label": "Operating System", "value": "Windows 11 Home" },
+      { "label": "Weight", "value": "1.79 kg" },
+      { "label": "Ports", "value": "USB-C, 2x USB-A, HDMI 1.4, headphone jack" }
+    ],
+    "features": [
+      "13th Gen Intel Core i7 performance",
+      "16GB RAM for smooth multitasking",
+      "512GB NVMe SSD boots in seconds",
+      "Full HD IPS display with wide viewing angles",
+      "All-metal aluminium chassis",
+      "Fingerprint reader for one-tap login"
+    ],
+    "highlights": [
+      "Intel Core i7 (13th Gen) processor",
+      "15.6-inch FHD IPS anti-glare display",
+      "512GB NVMe SSD + 16GB RAM",
+      "Windows 11 Home preloaded",
+      "1.79 kg slim aluminium design",
+      "Backlit keyboard for low-light typing"
+    ],
+    "warranty": "2 Years Onsite Manufacturer Warranty (1 Year Extended)",
+    "images": [
+      { "image": "/images/products/3.jpg" },
+      { "image": "/images/products/6.jpg" },
+      { "image": "/images/products/21.jpg" }
+    ],
+    "reviews": [
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Sneha Kulkarni", "rating": 5, "comment": "Handles my coding projects and video calls effortlessly. Battery easily lasts a full workday." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Vikram Singh", "rating": 4, "comment": "Build quality feels premium and the keyboard is lovely to type on." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Ananya Iyer", "rating": 5, "comment": "Boots up instantly and the display is crisp. Great value compared to other i7 laptops." }
+    ]
+  },
+  {
+    "name": "NovaTech 43 inch 4K UHD Smart TV",
+    "brand": "NovaTech",
+    "seller": "NovaTech Official Store",
+    "category": "Televisions",
+    "price": 27499,
+    "mrp": 34999,
+    "discount": 21,
+    "stock": 60,
+    "ratings": 4.3,
+    "numOfReviews": 3,
+    "description": "Bring cinema home with the NovaTech 43-inch 4K Ultra HD Smart TV. Rich HDR10+ colours, Dolby Audio and a snappy Android TV interface turn every movie night into an experience. The slim bezel-less design looks stunning in any living room.",
+    "specifications": [
+      { "label": "Display", "value": "43-inch 4K UHD (3840x2160) LED" },
+      { "label": "HDR", "value": "HDR10+ and HLG" },
+      { "label": "Audio", "value": "2 x 10W with Dolby Audio" },
+      { "label": "Operating System", "value": "Android TV 11 with built-in Chromecast" },
+      { "label": "Connectivity", "value": "3x HDMI 2.0, 2x USB 2.0, Wi-Fi, Bluetooth 5.0" },
+      { "label": "Processor", "value": "Quad-core" },
+      { "label": "Refresh Rate", "value": "60Hz" },
+      { "label": "Weight", "value": "7.4 kg (with stand)" }
+    ],
+    "features": [
+      "4K Ultra HD resolution with HDR10+",
+      "Dolby Audio for immersive sound",
+      "Android TV with Google Assistant",
+      "Built-in Chromecast to cast your phone",
+      "Bezel-less design for a premium look",
+      "Wall mount kit included"
+    ],
+    "highlights": [
+      "43-inch 4K UHD LED display",
+      "HDR10+ and Dolby Audio support",
+      "Android TV 11 with built-in Google Assistant",
+      "3 HDMI and 2 USB ports",
+      "Slim bezel-less design",
+      "Free wall-mount bracket included"
+    ],
+    "warranty": "1 Year Comprehensive Warranty on TV and Panel",
+    "images": [
+      { "image": "/images/products/4.jpg" },
+      { "image": "/images/products/22.jpg" }
+    ],
+    "reviews": [
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Mohammed Ali", "rating": 5, "comment": "Picture quality is excellent for the price and Android TV is very responsive." },
+      { "user": "507f1f77bcf86cd799439012", "userName": "Divya Nair", "rating": 4, "comment": "Sound is good enough without a soundbar. Setup was easy." },
+      { "user": "507f191e810c19729de860eb", "userName": "Karan Mehta", "rating": 4, "comment": "Great viewing angles and the bezel-less look is beautiful on the wall." }
+    ]
+  },
+  {
+    "name": "PixelSense D700 DSLR Camera with 18-55mm Kit Lens",
+    "brand": "PixelSense",
+    "seller": "PixelSense Imaging Store",
+    "category": "Cameras",
+    "price": 44999,
+    "mrp": 56499,
+    "discount": 20,
+    "stock": 25,
+    "ratings": 4.6,
+    "numOfReviews": 3,
+    "description": "The PixelSense D700 puts pro-grade control in your hands with a 24.2MP APS-C sensor and 4K video capture. The included 18-55mm kit lens covers everyday shooting, while the vari-angle touchscreen makes creative angles easy.",
+    "specifications": [
+      { "label": "Sensor", "value": "24.2MP APS-C CMOS" },
+      { "label": "Lens", "value": "18-55mm f/3.5-5.6 kit lens" },
+      { "label": "Video", "value": "4K UHD up to 30fps" },
+      { "label": "Viewfinder", "value": "Optical pentaprism" },
+      { "label": "Screen", "value": "3-inch vari-angle touchscreen" },
+      { "label": "ISO Range", "value": "100-25600 (expandable to 51200)" },
+      { "label": "Continuous Shooting", "value": "7fps" },
+      { "label": "Connectivity", "value": "Wi-Fi and Bluetooth" },
+      { "label": "Battery Life", "value": "Approx 800 shots per charge" },
+      { "label": "Storage", "value": "SD/SDHC/SDXC cards" }
+    ],
+    "features": [
+      "24.2MP APS-C sensor for detailed photos",
+      "4K UHD video recording",
+      "Vari-angle touchscreen LCD",
+      "Dual control dials for quick adjustments",
+      "Built-in Wi-Fi and Bluetooth transfer",
+      "7fps continuous shooting"
+    ],
+    "highlights": [
+      "24.2MP APS-C CMOS sensor",
+      "4K UHD video at up to 30fps",
+      "18-55mm kit lens included",
+      "3-inch vari-angle touch display",
+      "Built-in flash and hot shoe",
+      "Up to 800 shots per charge"
+    ],
+    "warranty": "2 Years Manufacturer Warranty on Body, 1 Year on Lens",
+    "images": [
+      { "image": "/images/products/5.jpg" },
+      { "image": "/images/products/23.jpg" }
+    ],
+    "reviews": [
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6f", "userName": "Rohan Joshi", "rating": 5, "comment": "The autofocus is quick and photos are sharp. Perfect first DSLR." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f1", "userName": "Pooja Reddy", "rating": 5, "comment": "4K video quality is great and the touchscreen flip makes vlogging easy." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0e", "userName": "Simran Kaur", "rating": 4, "comment": "Solid build, comfortable grip. Battery life is decent for a day of shooting." }
+    ]
+  },
+  {
+    "name": "QuantumTab 10.5 2K Tablet (6GB, 128GB)",
+    "brand": "Quantum",
+    "seller": "Quantum Store",
+    "category": "Tablets",
+    "price": 18499,
+    "mrp": 22999,
+    "discount": 20,
+    "stock": 70,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "The QuantumTab 10.5 is a lightweight entertainment and study companion with a crisp 2K display and all-day battery. Four speakers tuned for movies and a big screen make it perfect for streaming, reading and video calls.",
+    "specifications": [
+      { "label": "Display", "value": "10.5-inch 2K (2000x1200) LCD" },
+      { "label": "Processor", "value": "Octa-core" },
+      { "label": "RAM", "value": "6GB" },
+      { "label": "Storage", "value": "128GB, expandable via microSD" },
+      { "label": "Camera", "value": "8MP rear, 5MP front" },
+      { "label": "Speakers", "value": "Quad speakers with Dolby Atmos" },
+      { "label": "Battery", "value": "7250mAh with 18W charging" },
+      { "label": "Operating System", "value": "Android 14" },
+      { "label": "Connectivity", "value": "Wi-Fi 6, 4G LTE (SIM supported)" },
+      { "label": "Weight", "value": "480 g" }
+    ],
+    "features": [
+      "2K display for sharp video and reading",
+      "Quad speakers with Dolby Atmos",
+      "7250mAh battery for all-day use",
+      "4G LTE calling on select models",
+      "Slim 7.2mm metal body",
+      "Kids mode with parental controls"
+    ],
+    "highlights": [
+      "10.5-inch 2K high-resolution display",
+      "Quad speakers with Dolby Atmos",
+      "7250mAh battery with fast charging",
+      "6GB RAM + 128GB storage",
+      "4G LTE and Wi-Fi connectivity",
+      "480 g slim design"
+    ],
+    "warranty": "1 Year Manufacturer Warranty",
+    "images": [
+      { "image": "/images/products/7.jpg" },
+      { "image": "/images/products/24.jpg" }
+    ],
+    "reviews": [
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Neha Gupta", "rating": 5, "comment": "Perfect for online classes and Netflix. Battery genuinely lasts all day." },
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Deepak Chauhan", "rating": 4, "comment": "Screen is bright and clear, speakers are surprisingly loud." },
+      { "user": "507f1f77bcf86cd799439011", "userName": "Kavita Menon", "rating": 4, "comment": "Light to carry and handles multitasking well with 6GB RAM." }
+    ]
+  },
+  {
+    "name": "HyperPlay X Pro Gaming Console (512GB)",
+    "brand": "HyperPlay",
+    "seller": "HyperPlay Games Store",
+    "category": "Gaming",
+    "price": 36990,
+    "mrp": 45990,
+    "discount": 20,
+    "stock": 40,
+    "ratings": 4.7,
+    "numOfReviews": 3,
+    "description": "The HyperPlay X Pro delivers silky 4K gaming at up to 120fps with a lightning-fast custom SSD. Backward compatibility, a bundled wireless controller and a growing exclusive library make it the heart of your living room entertainment.",
+    "specifications": [
+      { "label": "Resolution", "value": "Up to 4K at 120fps" },
+      { "label": "Storage", "value": "512GB NVMe custom SSD" },
+      { "label": "Processor", "value": "8-core custom" },
+      { "label": "Graphics", "value": "Custom RDNA-class GPU" },
+      { "label": "Controller", "value": "Wireless (Bluetooth) included" },
+      { "label": "Optical Drive", "value": "None (digital edition)" },
+      { "label": "Ports", "value": "USB-A, USB-C, HDMI 2.1, Ethernet" },
+      { "label": "Audio", "value": "3D spatial audio support" },
+      { "label": "Network", "value": "Wi-Fi 6 + Gigabit Ethernet" }
+    ],
+    "features": [
+      "4K gaming at up to 120fps",
+      "Custom SSD for near-instant loading",
+      "Backward compatibility with most previous-gen titles",
+      "Bundled wireless controller",
+      "Ray tracing support",
+      "Quiet cooling design"
+    ],
+    "highlights": [
+      "4K 120fps gaming capability",
+      "512GB custom NVMe SSD",
+      "Ray tracing and 3D audio",
+      "Wireless controller included in the box",
+      "Wi-Fi 6 connectivity",
+      "Play previous-gen games on one console"
+    ],
+    "warranty": "1 Year Manufacturer Warranty (1 Year Additional on Controller)",
+    "images": [
+      { "image": "/images/products/8.jpg" },
+      { "image": "/images/products/25.jpg" }
+    ],
+    "reviews": [
+      { "user": "507f191e810c19729de860ea", "userName": "Arjun Nair", "rating": 5, "comment": "Loads games in seconds and 4K looks stunning. Best console I have owned." },
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Karan Mehta", "rating": 5, "comment": "Quiet even during heavy sessions. Controller feels premium." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Rohan Joshi", "rating": 4, "comment": "Great value with the bundled controller. Wish storage was a bit larger." }
+    ]
+  },
+  {
+    "name": "Horizon 27 inch QHD 144Hz Gaming Monitor",
+    "brand": "Horizon",
+    "seller": "Horizon Display Store",
+    "category": "Monitors",
+    "price": 19999,
+    "mrp": 25999,
+    "discount": 23,
+    "stock": 50,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "The Horizon 27-inch QHD monitor keeps fast-paced gameplay fluid with a 144Hz refresh rate and 1ms response time. Its IPS panel delivers vivid, consistent colours, and the ergonomic stand keeps long sessions comfortable.",
+    "specifications": [
+      { "label": "Panel", "value": "27-inch QHD (2560x1440) IPS" },
+      { "label": "Refresh Rate", "value": "144Hz" },
+      { "label": "Response Time", "value": "1ms (MPRT)" },
+      { "label": "Colour Gamut", "value": "95% sRGB" },
+      { "label": "Brightness", "value": "350 nits" },
+      { "label": "Ports", "value": "2x HDMI 2.0, DisplayPort 1.4, audio out" },
+      { "label": "Sync", "value": "FreeSync Premium" },
+      { "label": "Stand", "value": "Height, tilt, swivel and pivot" },
+      { "label": "VESA", "value": "100x100 mm compatible" }
+    ],
+    "features": [
+      "144Hz refresh rate for smooth gaming",
+      "1ms response time reduces ghosting",
+      "QHD resolution with IPS colour",
+      "FreeSync Premium for tear-free play",
+      "Ergonomic height-adjustable stand",
+      "Low blue light mode"
+    ],
+    "highlights": [
+      "27-inch QHD IPS panel",
+      "144Hz refresh rate with 1ms response",
+      "FreeSync Premium support",
+      "Height, tilt, swivel and pivot stand",
+      "HDMI and DisplayPort inputs",
+      "VESA mount compatible"
+    ],
+    "warranty": "3 Years Panel Warranty",
+    "images": [
+      { "image": "/images/products/9.jpg" },
+      { "image": "/images/products/26.jpg" }
+    ],
+    "reviews": [
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Vikram Singh", "rating": 5, "comment": "Colours are excellent and 144Hz is a huge upgrade from 60Hz." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Pooja Reddy", "rating": 4, "comment": "No ghosting in fast shooters. Stand adjustments are very useful." },
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Mohammed Ali", "rating": 5, "comment": "Great for both work and gaming. Panel is bright and uniform." }
+    ]
+  },
+  {
+    "name": "SkyHawk Aero 4K Camera Drone with Gimbal",
+    "brand": "SkyHawk",
+    "seller": "SkyHawk Drones Store",
+    "category": "Drones",
+    "price": 24490,
+    "mrp": 31990,
+    "discount": 23,
+    "stock": 20,
+    "ratings": 4.2,
+    "numOfReviews": 3,
+    "description": "Capture stunning aerial footage with the SkyHawk Aero 4K drone. A 3-axis gimbal keeps shots steady while a 30-minute flight time gives you plenty of airtime, and one-tap return-to-home makes every flight worry-free.",
+    "specifications": [
+      { "label": "Camera", "value": "4K UHD with 3-axis gimbal" },
+      { "label": "Transmission Range", "value": "4 km" },
+      { "label": "Flight Time", "value": "Up to 30 minutes" },
+      { "label": "Max Speed", "value": "Up to 15 m/s" },
+      { "label": "GPS", "value": "GPS + GLONASS" },
+      { "label": "Obstacle Sensing", "value": "Downward vision sensors" },
+      { "label": "Battery", "value": "3500mAh LiPo" },
+      { "label": "Weight", "value": "570 g" },
+      { "label": "Controller", "value": "Remote with phone holder" },
+      { "label": "Storage", "value": "MicroSD (not included)" }
+    ],
+    "features": [
+      "4K UHD camera with 3-axis gimbal",
+      "Up to 30 minutes of flight time",
+      "4 km HD video transmission",
+      "GPS return-to-home and geofencing",
+      "Foldable design for easy travel",
+      "One-tap quick shots"
+    ],
+    "highlights": [
+      "4K UHD camera with 3-axis gimbal stabilisation",
+      "30-minute flight time",
+      "4 km transmission range",
+      "GPS-assisted return-to-home",
+      "Foldable and portable body",
+      "Spare propeller set included"
+    ],
+    "warranty": "1 Year Manufacturer Warranty + 6 Months on Battery",
+    "images": [
+      { "image": "/images/products/10.jpg" },
+      { "image": "/images/products/27.jpg" }
+    ],
+    "reviews": [
+      { "user": "507f1f77bcf86cd799439012", "userName": "Deepak Chauhan", "rating": 4, "comment": "Footage is stable and clear. Return-to-home works exactly as promised." },
+      { "user": "507f191e810c19729de860eb", "userName": "Ananya Iyer", "rating": 4, "comment": "Easy to learn and fly. Battery life is close to the advertised 30 minutes." },
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6f", "userName": "Simran Kaur", "rating": 5, "comment": "Excellent beginner drone. The foldable design fits easily in my backpack." }
+    ]
+  },
+  {
+    "name": "EchoWave Boombox Portable Bluetooth Speaker (40W)",
+    "brand": "EchoWave",
+    "seller": "EchoWave Audio Store",
+    "category": "Audio",
+    "price": 6999,
+    "mrp": 9999,
+    "discount": 30,
+    "stock": 90,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "The EchoWave Boombox pumps out punchy 40W sound with deep bass that fills any room. Rugged and IPX6-rated, it survives poolside parties and outdoor trips, and the 12-hour battery keeps the music going all day.",
+    "specifications": [
+      { "label": "Power", "value": "40W output (dual 20W)" },
+      { "label": "Bluetooth", "value": "5.3 with low latency" },
+      { "label": "Battery Life", "value": "12 hours playtime" },
+      { "label": "Charging", "value": "USB-C fast charge" },
+      { "label": "Water Resistance", "value": "IPX6" },
+      { "label": "Connectivity", "value": "Bluetooth, AUX 3.5mm, USB playback" },
+      { "label": "Drivers", "value": "2x 2.25-inch full range + passive radiators" },
+      { "label": "Weight", "value": "1.4 kg" }
+    ],
+    "features": [
+      "40W powerful sound with bass radiators",
+      "IPX6 water resistance for outdoors",
+      "12-hour battery life",
+      "Bluetooth 5.3 with strong range",
+      "TWS pairing for stereo sound",
+      "Built-in microphone for calls"
+    ],
+    "highlights": [
+      "40W loud output with deep bass",
+      "IPX6 water and dust resistant",
+      "Up to 12 hours of playtime",
+      "Bluetooth 5.3 with 20m range",
+      "TWS stereo pairing",
+      "Built-in mic for hands-free calls"
+    ],
+    "warranty": "1 Year Manufacturer Warranty",
+    "images": [
+      { "image": "/images/products/11.jpg" }
+    ],
+    "reviews": [
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f1", "userName": "Kavita Menon", "rating": 5, "comment": "Bass is amazing for this size and it survived a beach day with no issues." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0e", "userName": "Neha Gupta", "rating": 4, "comment": "Loud and clear. Battery easily covers a full evening of music." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Arjun Nair", "rating": 4, "comment": "Great party speaker. TWS pairing with a second unit works well." }
+    ]
+  },
+  {
+    "name": "SoundPeak Over-Ear Wireless Headphones with ANC",
+    "brand": "SoundPeak",
+    "seller": "SoundPeak Audio Store",
+    "category": "Headphones",
+    "price": 4499,
+    "mrp": 7999,
+    "discount": 44,
+    "stock": 110,
+    "ratings": 4.3,
+    "numOfReviews": 3,
+    "description": "The SoundPeak over-ear headphones pair active noise cancellation with a plush, comfortable fit for long listening sessions. With 30 hours of playback and low-latency gaming mode, they handle music, calls and games with ease.",
+    "specifications": [
+      { "label": "Driver", "value": "40mm dynamic" },
+      { "label": "Noise Cancellation", "value": "Hybrid active noise cancellation" },
+      { "label": "Battery Life", "value": "30 hours (ANC on)" },
+      { "label": "Charging", "value": "USB-C quick charge (10 min = 5 hrs)" },
+      { "label": "Bluetooth", "value": "5.3 with multipoint" },
+      { "label": "Codecs", "value": "AAC, SBC" },
+      { "label": "Weight", "value": "245 g" },
+      { "label": "Microphone", "value": "Dual mic with ENC" },
+      { "label": "Foldable", "value": "Yes" }
+    ],
+    "features": [
+      "Hybrid active noise cancellation",
+      "30-hour battery life",
+      "Low-latency mode for gaming",
+      "Multipoint Bluetooth 5.3",
+      "Plush ear cushions for comfort",
+      "Built-in mic with ENC for clear calls"
+    ],
+    "highlights": [
+      "Hybrid active noise cancellation",
+      "Up to 30 hours playtime",
+      "USB-C fast charge",
+      "Bluetooth 5.3 multipoint pairing",
+      "Foldable travel-friendly design",
+      "40mm drivers for rich sound"
+    ],
+    "warranty": "1 Year Manufacturer Warranty",
+    "images": [
+      { "image": "/images/products/12.jpg" }
+    ],
+    "reviews": [
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Rahul Sharma", "rating": 5, "comment": "ANC is genuinely good and they are comfortable for hours. Great value." },
+      { "user": "507f1f77bcf86cd799439011", "userName": "Priya Patel", "rating": 4, "comment": "Sound quality is balanced and call clarity is surprisingly good." },
+      { "user": "507f191e810c19729de860ea", "userName": "Amit Verma", "rating": 4, "comment": "Battery lasts days. Low-latency mode is great for casual gaming." }
+    ]
+  },
+  {
+    "name": "Keyshift RGB Hot-Swappable Mechanical Keyboard (75%)",
+    "brand": "Keyshift",
+    "seller": "Keyshift Gear Store",
+    "category": "Components",
+    "price": 5999,
+    "mrp": 8499,
+    "discount": 29,
+    "stock": 75,
+    "ratings": 4.6,
+    "numOfReviews": 3,
+    "description": "The Keyshift RGB keyboard is built for gamers and typists who want a tactile, reliable board. Hot-swappable switches, tri-mode connectivity and per-key RGB let you personalise every detail of your setup.",
+    "specifications": [
+      { "label": "Layout", "value": "75% TKL compact" },
+      { "label": "Switches", "value": "Hot-swappable mechanical (red)" },
+      { "label": "Connectivity", "value": "Bluetooth 5.0, 2.4GHz, USB-C wired" },
+      { "label": "Battery", "value": "3000mAh (wireless use)" },
+      { "label": "Keycaps", "value": "Double-shot PBT" },
+      { "label": "Backlight", "value": "Per-key RGB with effects" },
+      { "label": "Polling Rate", "value": "1000Hz wired" },
+      { "label": "Weight", "value": "950 g" }
+    ],
+    "features": [
+      "Hot-swappable switches for easy customisation",
+      "Tri-mode: Bluetooth, 2.4GHz and wired",
+      "Per-key RGB backlighting",
+      "Double-shot PBT keycaps",
+      "3000mAh battery for wireless use",
+      "1000Hz polling rate"
+    ],
+    "highlights": [
+      "Hot-swappable mechanical switches",
+      "Tri-mode connectivity (Bluetooth/2.4G/USB-C)",
+      "Per-key RGB with custom effects",
+      "Durable PBT double-shot keycaps",
+      "Compact 75% layout saves desk space",
+      "3000mAh battery"
+    ],
+    "warranty": "2 Years Manufacturer Warranty",
+    "images": [
+      { "image": "/images/products/13.jpg" }
+    ],
+    "reviews": [
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Vikram Singh", "rating": 5, "comment": "Typing feel is excellent and swapping switches was easy. RGB is vibrant." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Rohan Joshi", "rating": 5, "comment": "Wireless latency is unnoticeable. Battery lasts over a week of daily use." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Neha Gupta", "rating": 4, "comment": "Solid build and the PBT keycaps feel premium. Great value board." }
+    ]
+  },
+  {
+    "name": "Logitech Silent Wireless Mouse",
+    "brand": "Logitech",
+    "seller": "Logitech Store",
+    "category": "Accessories",
+    "price": 1299,
+    "mrp": 1799,
+    "discount": 28,
+    "stock": 200,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "The Logitech wireless mouse pairs a precise 1000 DPI optical sensor with silent click technology for distraction-free work. Its compact, ambidextrous shape and 18-month battery life make it a dependable everyday companion.",
+    "specifications": [
+      { "label": "Sensor", "value": "1000 DPI optical" },
+      { "label": "Connectivity", "value": "2.4GHz wireless (nano receiver)" },
+      { "label": "Buttons", "value": "3 (left, right, scroll)" },
+      { "label": "Silent Clicks", "value": "Yes" },
+      { "label": "Battery", "value": "1x AA, up to 18 months" },
+      { "label": "Compatibility", "value": "Windows, macOS, Chrome OS" },
+      { "label": "Receiver", "value": "Nano USB stored in battery bay" },
+      { "label": "Weight", "value": "91 g" }
+    ],
+    "features": [
+      "Silent click switches for quiet work",
+      "Precise 1000 DPI optical tracking",
+      "18-month battery life",
+      "Nano receiver with 10m range",
+      "Ambidextrous comfortable design",
+      "Plug-and-play, no drivers needed"
+    ],
+    "highlights": [
+      "Silent clicks reduce noise",
+      "Up to 18 months battery life",
+      "2.4GHz wireless with nano receiver",
+      "Works on Windows, macOS and Chrome OS",
+      "Compact ambidextrous design",
+      "3-year limited warranty"
+    ],
+    "warranty": "3 Years Limited Hardware Warranty",
+    "images": [
+      { "image": "/images/products/accessories-mouse.svg" }
+    ],
+    "reviews": [
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Divya Nair", "rating": 5, "comment": "Perfect for office use. The silent clicks are a lifesaver in meetings." },
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Karan Mehta", "rating": 4, "comment": "Fits nicely in my laptop bag and the battery seems to last forever." },
+      { "user": "507f1f77bcf86cd799439012", "userName": "Pooja Reddy", "rating": 5, "comment": "No lag and very smooth tracking on my desk. Highly recommended." }
+    ]
+  },
+  {
+    "name": "Anker 20000mAh Power Bank with LED Display",
+    "brand": "Anker",
+    "seller": "Anker India Store",
+    "category": "Accessories",
+    "price": 2999,
+    "mrp": 3999,
+    "discount": 25,
+    "stock": 150,
+    "ratings": 4.6,
+    "numOfReviews": 3,
+    "description": "Keep every device charged on the go with the Anker 20000mAh power bank. It delivers 20W fast charging through USB-C and features a clear LED display, so you always know how much power is left.",
+    "specifications": [
+      { "label": "Capacity", "value": "20000mAh" },
+      { "label": "Output", "value": "USB-C 20W, USB-A 15W (total 24W)" },
+      { "label": "Input", "value": "USB-C 20W" },
+      { "label": "Display", "value": "LED percentage display" },
+      { "label": "Pass-Through Charging", "value": "Yes" },
+      { "label": "Weight", "value": "345 g" },
+      { "label": "Protection", "value": "Overcharge, over-discharge, short-circuit" }
+    ],
+    "features": [
+      "20W USB-C fast charging",
+      "20000mAh capacity for multiple top-ups",
+      "LED display shows exact battery level",
+      "Dual output ports",
+      "MultiProtect safety system",
+      "Pass-through charging supported"
+    ],
+    "highlights": [
+      "20000mAh high-capacity battery",
+      "20W fast charging over USB-C",
+      "LED digital display",
+      "Charge two devices at once",
+      "Compact and travel-friendly",
+      "MultiProtect safety protection"
+    ],
+    "warranty": "18 Months Manufacturer Warranty",
+    "images": [
+      { "image": "/images/products/accessories-powerbank.svg" }
+    ],
+    "reviews": [
+      { "user": "507f191e810c19729de860eb", "userName": "Mohammed Ali", "rating": 5, "comment": "Charges my phone twice plus my earbuds. The LED display is very handy." },
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6f", "userName": "Sneha Kulkarni", "rating": 5, "comment": "Fast charging is genuine 20W. Solid build quality from Anker as always." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f1", "userName": "Deepak Chauhan", "rating": 4, "comment": "Slightly heavy but worth it for the capacity. Very reliable." }
+    ]
+  },
+  {
+    "name": "Samsung Galaxy Buds2 TWS Earbuds with ANC",
+    "brand": "Samsung",
+    "seller": "Samsung India Store",
+    "category": "Headphones",
+    "price": 6499,
+    "mrp": 9999,
+    "discount": 35,
+    "stock": 130,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "Tuned by AKG, the Samsung Galaxy Buds2 deliver crisp, balanced sound with active noise cancellation to shut out the world. A compact charging case extends total playtime to 29 hours, and touch controls keep you in command.",
+    "specifications": [
+      { "label": "Driver", "value": "2-way (woofer + tweeter)" },
+      { "label": "Active Noise Cancellation", "value": "Yes, 2 levels" },
+      { "label": "Battery Life", "value": "Up to 5 hours (ANC on), 29 hours with case" },
+      { "label": "Charging", "value": "USB-C and Qi wireless" },
+      { "label": "Bluetooth", "value": "5.2" },
+      { "label": "Water Resistance", "value": "IPX2 (buds)" },
+      { "label": "Microphones", "value": "3 mics with beamforming" },
+      { "label": "Codecs", "value": "SBC, AAC, SSC" }
+    ],
+    "features": [
+      "AKG-tuned 2-way sound",
+      "Active noise cancellation with ambient mode",
+      "Up to 29 hours with charging case",
+      "Lightweight ergonomic fit (5g per bud)",
+      "Touch controls for playback and calls",
+      "Wireless charging case"
+    ],
+    "highlights": [
+      "AKG-tuned immersive audio",
+      "Active noise cancellation built in",
+      "29 hours total battery with case",
+      "Wireless and USB-C charging",
+      "IPX2 splash resistance",
+      "Seamless Samsung device pairing"
+    ],
+    "warranty": "1 Year Manufacturer Warranty",
+    "images": [
+      { "image": "/images/products/audio-buds.svg" }
+    ],
+    "reviews": [
+      { "user": "607f1a2b3c4d5e6f7a8b9c0e", "userName": "Ananya Iyer", "rating": 5, "comment": "Sound is beautifully balanced and the fit is super comfortable." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Rahul Sharma", "rating": 4, "comment": "ANC works well on the metro. Case charges wirelessly, which is convenient." },
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Simran Kaur", "rating": 4, "comment": "Calls are clear and touch controls are responsive. Great daily driver." }
+    ]
+  },
+  {
+    "name": "DermaGlow Hydrating Face Cream with Hyaluronic Acid (50ml)",
+    "brand": "DermaGlow",
+    "seller": "DermaGlow Skincare Store",
+    "category": "Beauty/Health",
+    "price": 499,
+    "mrp": 699,
+    "discount": 29,
+    "stock": 180,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "A lightweight, non-greasy daily moisturiser infused with hyaluronic acid and vitamin E. It locks in moisture for 24 hours, leaving skin soft, plump and glowing without clogging pores.",
+    "specifications": [
+      { "label": "Quantity", "value": "50ml" },
+      { "label": "Key Ingredients", "value": "Hyaluronic acid, vitamin E, ceramides" },
+      { "label": "Skin Type", "value": "All skin types, suitable for sensitive" },
+      { "label": "Fragrance", "value": "Mild, hypoallergenic" },
+      { "label": "Texture", "value": "Lightweight gel-cream" },
+      { "label": "Usage", "value": "Apply twice daily on cleansed skin" },
+      { "label": "Dermatologically Tested", "value": "Yes" },
+      { "label": "Cruelty Free", "value": "Yes" }
+    ],
+    "features": [
+      "24-hour deep hydration",
+      "Hyaluronic acid plumps skin",
+      "Non-comedogenic, won't clog pores",
+      "Soothes dry and sensitive skin",
+      "Lightweight fast-absorbing texture",
+      "Dermatologically tested"
+    ],
+    "highlights": [
+      "Hyaluronic acid + vitamin E formula",
+      "Non-greasy fast-absorbing finish",
+      "Suitable for all skin types",
+      "24-hour moisturisation",
+      "Dermatologically tested",
+      "100% cruelty free"
+    ],
+    "warranty": "Best before 24 months from manufacturing",
+    "images": [
+      { "image": "/images/products/beauty-cream.svg" }
+    ],
+    "reviews": [
+      { "user": "507f1f77bcf86cd799439011", "userName": "Priya Patel", "rating": 5, "comment": "My skin feels soft all day without getting oily. No fragrance irritation." },
+      { "user": "507f191e810c19729de860ea", "userName": "Kavita Menon", "rating": 5, "comment": "Lightweight and absorbs fast. Perfect for the humid climate." },
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Sneha Kulkarni", "rating": 4, "comment": "Works well under makeup and lasts a long time. Great value." }
+    ]
+  },
+  {
+    "name": "Herbal Roots Ayurvedic Hair Oil (300ml)",
+    "brand": "Herbal Roots",
+    "seller": "Herbal Roots Wellness Store",
+    "category": "Beauty/Health",
+    "price": 399,
+    "mrp": 549,
+    "discount": 27,
+    "stock": 160,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "Herbal Roots hair oil blends 12 ayurvedic herbs including bhringraj, amla and neem to nourish the scalp and strengthen hair roots. Regular massage promotes healthy growth and reduces hair fall.",
+    "specifications": [
+      { "label": "Quantity", "value": "300ml" },
+      { "label": "Key Ingredients", "value": "Bhringraj, amla, neem, coconut oil, rosemary" },
+      { "label": "Benefits", "value": "Reduces hair fall, strengthens roots" },
+      { "label": "Usage", "value": "Massage 2-3 times a week" },
+      { "label": "Texture", "value": "Warm herbal oil" },
+      { "label": "Free From", "value": "Parabens, sulphates and mineral oil" },
+      { "label": "Suitable For", "value": "All hair types" }
+    ],
+    "features": [
+      "Ayurvedic blend of 12 herbs",
+      "Strengthens hair roots from within",
+      "Reduces hair fall and dandruff",
+      "Adds natural shine and softness",
+      "Free from parabens and sulphates",
+      "Warm massage improves blood circulation"
+    ],
+    "highlights": [
+      "12 ayurvedic herbs in cold-pressed base",
+      "Reduces hair fall with regular use",
+      "Strengthens roots and adds shine",
+      "Paraben and sulphate free",
+      "Suitable for all hair types",
+      "300ml bottle for months of use"
+    ],
+    "warranty": "Best before 18 months from manufacturing",
+    "images": [
+      { "image": "/images/products/beauty-hairoil.svg" }
+    ],
+    "reviews": [
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Amit Verma", "rating": 4, "comment": "Natural herbal smell and my hair feels softer after a month of use." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Divya Nair", "rating": 5, "comment": "Reduced my hair fall noticeably. Warms up nicely for a massage." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Neha Gupta", "rating": 4, "comment": "Good quality oil with authentic ayurvedic ingredients. Value for money." }
+    ]
+  },
+  {
+    "name": "NutriFit Whey Protein Powder - Rich Chocolate (1kg)",
+    "brand": "NutriFit",
+    "seller": "NutriFit Nutrition Store",
+    "category": "Beauty/Health",
+    "price": 2199,
+    "mrp": 2999,
+    "discount": 27,
+    "stock": 100,
+    "ratings": 4.6,
+    "numOfReviews": 3,
+    "description": "NutriFit whey protein delivers 24g of fast-absorbing protein per scoop to support muscle recovery after training. It mixes easily, tastes great and is lab-tested for purity and safety.",
+    "specifications": [
+      { "label": "Quantity", "value": "1kg (approx 30 servings)" },
+      { "label": "Protein per Serving", "value": "24g" },
+      { "label": "Flavour", "value": "Rich chocolate" },
+      { "label": "Key Nutrients", "value": "Whey protein concentrate, digestive enzymes" },
+      { "label": "BCAAs", "value": "5.5g per serving" },
+      { "label": "Mixability", "value": "Instant, no clumps" },
+      { "label": "Lab Tested", "value": "Yes, for heavy metals and purity" },
+      { "label": "Additives", "value": "Free from harmful fillers" }
+    ],
+    "features": [
+      "24g protein per serving",
+      "5.5g naturally occurring BCAAs",
+      "Instant mixing, no clumps",
+      "Rich chocolate flavour",
+      "Lab-tested for purity",
+      "Added digestive enzymes"
+    ],
+    "highlights": [
+      "24g whey protein per scoop",
+      "5.5g BCAAs for recovery",
+      "Lab-tested and safe",
+      "30 servings per pack",
+      "Great taste, mixes instantly",
+      "Supports muscle building"
+    ],
+    "warranty": "Best before 18 months from manufacturing",
+    "images": [
+      { "image": "/images/products/beauty-protein.svg" }
+    ],
+    "reviews": [
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Vikram Singh", "rating": 5, "comment": "Tastes great and dissolves without a blender. Recovery has been excellent." },
+      { "user": "507f1f77bcf86cd799439012", "userName": "Rohan Joshi", "rating": 5, "comment": "Third tub I have bought. Consistent quality and no bloating." },
+      { "user": "507f191e810c19729de860eb", "userName": "Pooja Reddy", "rating": 4, "comment": "Good protein content and easy on the stomach. Chocolate flavour is nice." }
+    ]
+  },
+  {
+    "name": "DermaGlow Vitamin C Face Serum (30ml)",
+    "brand": "DermaGlow",
+    "seller": "DermaGlow Skincare Store",
+    "category": "Beauty/Health",
+    "price": 649,
+    "mrp": 899,
+    "discount": 28,
+    "stock": 140,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "Brighten dull skin with a potent 10% vitamin C serum that fades dark spots and evens skin tone. Packed with hyaluronic acid, it hydrates while protecting against daily environmental stress.",
+    "specifications": [
+      { "label": "Quantity", "value": "30ml" },
+      { "label": "Concentration", "value": "10% L-ascorbic acid" },
+      { "label": "Key Ingredients", "value": "Vitamin C, hyaluronic acid, ferulic acid" },
+      { "label": "Benefits", "value": "Brightens, fades spots, evens tone" },
+      { "label": "Skin Type", "value": "All skin types" },
+      { "label": "Usage", "value": "Apply 3-4 drops on cleansed skin, morning and night" },
+      { "label": "Free From", "value": "Sulphates, parabens, fragrance" },
+      { "label": "Packaging", "value": "UV-protective amber bottle" }
+    ],
+    "features": [
+      "10% vitamin C brightens and evens tone",
+      "Reduces dark spots and pigmentation",
+      "Hyaluronic acid locks in moisture",
+      "Lightweight, quick-absorbing serum",
+      "Stabilised formula with ferulic acid",
+      "No parabens or sulphates"
+    ],
+    "highlights": [
+      "10% stabilised vitamin C",
+      "Fades dark spots and pigmentation",
+      "Hydrating hyaluronic acid base",
+      "Lightweight non-sticky finish",
+      "UV-protective amber bottle",
+      "Suitable for all skin types"
+    ],
+    "warranty": "Best before 24 months from manufacturing",
+    "images": [
+      { "image": "/images/products/beauty-serum.svg" }
+    ],
+    "reviews": [
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Ananya Iyer", "rating": 5, "comment": "My dark spots have visibly faded in six weeks. Absorbs nicely." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Kavita Menon", "rating": 4, "comment": "Gentle on my sensitive skin and gives a nice glow by morning." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Sneha Kulkarni", "rating": 5, "comment": "Good concentration, no tingling. Skin tone looks much more even now." }
+    ]
+  },
+  {
+    "name": "DermaGlow SPF 50 PA+++ Sunscreen Lotion (60ml)",
+    "brand": "DermaGlow",
+    "seller": "DermaGlow Skincare Store",
+    "category": "Beauty/Health",
+    "price": 549,
+    "mrp": 749,
+    "discount": 27,
+    "stock": 150,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "Broad-spectrum SPF 50 sunscreen that protects against UVA and UVB rays without leaving a white cast. Its feather-light, non-greasy formula layers well under makeup and suits all skin tones.",
+    "specifications": [
+      { "label": "Quantity", "value": "60ml" },
+      { "label": "SPF", "value": "SPF 50 PA+++" },
+      { "label": "Protection", "value": "Broad spectrum UVA/UVB" },
+      { "label": "Finish", "value": "Matte, non-greasy" },
+      { "label": "Water Resistance", "value": "80 minutes" },
+      { "label": "Skin Type", "value": "All skin types" },
+      { "label": "Key Ingredients", "value": "Zinc oxide, aloe vera, niacinamide" },
+      { "label": "Suitable For", "value": "Face and body" }
+    ],
+    "features": [
+      "Broad-spectrum SPF 50 protection",
+      "No white cast on any skin tone",
+      "Matte non-greasy finish",
+      "Water resistant for 80 minutes",
+      "Niacinamide soothes skin",
+      "Works well under makeup"
+    ],
+    "highlights": [
+      "SPF 50 PA+++ protection",
+      "Lightweight no-white-cast formula",
+      "80 minutes water resistance",
+      "Non-comedogenic, won't clog pores",
+      "Suitable for sensitive skin",
+      "60ml generous size"
+    ],
+    "warranty": "Best before 24 months from manufacturing",
+    "images": [
+      { "image": "/images/products/beauty-sunscreen.svg" }
+    ],
+    "reviews": [
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Mohammed Ali", "rating": 5, "comment": "No white cast at all and my skin stays matte through the day." },
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Divya Nair", "rating": 4, "comment": "Light and comfortable. Layers perfectly under my foundation." },
+      { "user": "507f1f77bcf86cd799439011", "userName": "Rahul Sharma", "rating": 4, "comment": "Does not sting my eyes and lasts a good while outdoors." }
+    ]
+  },
+  {
+    "name": "NutriFit Daily Multivitamin Tablets (60 tablets)",
+    "brand": "NutriFit",
+    "seller": "NutriFit Nutrition Store",
+    "category": "Beauty/Health",
+    "price": 799,
+    "mrp": 1099,
+    "discount": 27,
+    "stock": 170,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "A complete daily multivitamin with 20+ essential vitamins and minerals to fill nutritional gaps and boost everyday energy. Easy-to-swallow tablets support immunity, bone health and overall well-being.",
+    "specifications": [
+      { "label": "Quantity", "value": "60 tablets (1 month supply)" },
+      { "label": "Vitamins", "value": "A, C, D3, E, K2, B-complex" },
+      { "label": "Minerals", "value": "Zinc, magnesium, selenium, iron, calcium" },
+      { "label": "Serving", "value": "1 tablet daily after a meal" },
+      { "label": "Benefits", "value": "Immunity, energy, bone health" },
+      { "label": "Suitable For", "value": "Adults 18+" },
+      { "label": "Free From", "value": "Gluten and artificial colours" },
+      { "label": "Storage", "value": "Cool, dry place" }
+    ],
+    "features": [
+      "20+ essential vitamins and minerals",
+      "Supports immunity and energy",
+      "Strengthens bones with D3 + K2 + calcium",
+      "Single daily tablet, easy to swallow",
+      "Free from gluten and artificial colours",
+      "One-month supply pack"
+    ],
+    "highlights": [
+      "20+ vitamins and minerals",
+      "Vitamin C, D3 and zinc for immunity",
+      "B-complex for daily energy",
+      "60 tablets, 1 month supply",
+      "Gentle and easy to swallow",
+      "Backed by lab testing"
+    ],
+    "warranty": "Best before 24 months from manufacturing",
+    "images": [
+      { "image": "/images/products/beauty-vitamin.svg" }
+    ],
+    "reviews": [
+      { "user": "507f191e810c19729de860ea", "userName": "Deepak Chauhan", "rating": 5, "comment": "Easy to swallow and I feel a clear difference in energy levels." },
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Priya Patel", "rating": 4, "comment": "No aftertaste and convenient one-a-day dosing. Good value." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Amit Verma", "rating": 4, "comment": "Complete formula at a reasonable price. Has been great so far." }
+    ]
+  },
+  {
+    "name": "Atomic Habits (Paperback) by James Clear",
+    "brand": "James Clear",
+    "seller": "Srishti Books",
+    "category": "Books",
+    "price": 349,
+    "mrp": 499,
+    "discount": 30,
+    "stock": 210,
+    "ratings": 4.7,
+    "numOfReviews": 3,
+    "description": "Atomic Habits offers a proven framework for building good habits and breaking bad ones through tiny, 1% changes. Backed by research and real stories, it is one of the most practical guides to lasting self-improvement.",
+    "specifications": [
+      { "label": "Author", "value": "James Clear" },
+      { "label": "Format", "value": "Paperback" },
+      { "label": "Pages", "value": "320 pages" },
+      { "label": "Publisher", "value": "Srishti Books" },
+      { "label": "Language", "value": "English" },
+      { "label": "ISBN", "value": "978-0143493333" },
+      { "label": "Dimensions", "value": "20 x 13 x 2 cm" },
+      { "label": "Weight", "value": "260 g" }
+    ],
+    "features": [
+      "Proven habit-building framework",
+      "Practical 1% improvement strategy",
+      "Backed by behavioural science research",
+      "Actionable exercises in every chapter",
+      "No fluff, direct and engaging",
+      "Great for personal and professional growth"
+    ],
+    "highlights": [
+      "Best-selling self-improvement classic",
+      "New Delhi paperback edition",
+      "320 pages of practical guidance",
+      "Makes good habits inevitable",
+      "Language: English",
+      "Ideal for gifting"
+    ],
+    "warranty": "Book returns accepted within 7 days",
+    "images": [
+      { "image": "/images/products/book-atomic.svg" }
+    ],
+    "reviews": [
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Neha Gupta", "rating": 5, "comment": "Life-changing read. Simple ideas that are actually easy to apply." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Karan Mehta", "rating": 5, "comment": "Every chapter gives a concrete action. Finished it in a week." },
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Rohan Joshi", "rating": 4, "comment": "Great quality print and delivery was quick. Highly recommended book." }
+    ]
+  },
+  {
+    "name": "Children's Storybook Collection (20 Illustrated Stories)",
+    "brand": "Srishti Books",
+    "seller": "Srishti Books",
+    "category": "Books",
+    "price": 399,
+    "mrp": 599,
+    "discount": 33,
+    "stock": 140,
+    "ratings": 4.6,
+    "numOfReviews": 3,
+    "description": "A beautifully illustrated collection of 20 short stories that spark imagination and teach kindness, honesty and courage. Perfect for bedtime reading, each tale is simple, engaging and age-appropriate.",
+    "specifications": [
+      { "label": "Format", "value": "Paperback, full colour illustrations" },
+      { "label": "Pages", "value": "120 pages" },
+      { "label": "Language", "value": "English" },
+      { "label": "Age Group", "value": "3 to 8 years" },
+      { "label": "Publisher", "value": "Srishti Books" },
+      { "label": "Number of Stories", "value": "20" },
+      { "label": "Dimensions", "value": "21 x 14 x 1 cm" }
+    ],
+    "features": [
+      "20 original short stories",
+      "Bright full-colour illustrations",
+      "Teaches values like kindness and honesty",
+      "Short stories ideal for bedtime",
+      "Large easy-to-read text",
+      "Ages 3-8 recommended"
+    ],
+    "highlights": [
+      "20 illustrated bedtime stories",
+      "Colourful pages kids will love",
+      "Values-based storytelling",
+      "Easy-to-read large print",
+      "120 pages of fun",
+      "Great birthday gift"
+    ],
+    "warranty": "Book returns accepted within 7 days",
+    "images": [
+      { "image": "/images/products/book-kids.svg" }
+    ],
+    "reviews": [
+      { "user": "507f1f77bcf86cd799439012", "userName": "Divya Nair", "rating": 5, "comment": "My daughter asks for two stories every night now. Lovely illustrations." },
+      { "user": "507f191e810c19729de860eb", "userName": "Kavita Menon", "rating": 5, "comment": "Perfect gift for a 5-year-old. Stories are short and full of values." },
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Priya Patel", "rating": 4, "comment": "Good quality pages and bright colours. Great bedtime collection." }
+    ]
+  },
+  {
+    "name": "The Midnight Library (Hardcover) by Matt Haig",
+    "brand": "Matt Haig",
+    "seller": "Srishti Books",
+    "category": "Books",
+    "price": 449,
+    "mrp": 649,
+    "discount": 31,
+    "stock": 90,
+    "ratings": 4.6,
+    "numOfReviews": 3,
+    "description": "Between life and death lies a library where every book lets you try the life you might have lived. The Midnight Library is a thought-provoking, hopeful story about regret, choice and second chances.",
+    "specifications": [
+      { "label": "Author", "value": "Matt Haig" },
+      { "label": "Format", "value": "Hardcover" },
+      { "label": "Pages", "value": "304 pages" },
+      { "label": "Publisher", "value": "Srishti Books" },
+      { "label": "Language", "value": "English" },
+      { "label": "ISBN", "value": "978-9354895597" },
+      { "label": "Dimensions", "value": "20 x 13 x 2.5 cm" },
+      { "label": "Weight", "value": "380 g" }
+    ],
+    "features": [
+      "International best-selling fiction",
+      "Hardcover collector's edition",
+      "Explores themes of regret and choice",
+      "Heartfelt, life-affirming narrative",
+      "Beautiful prose and pacing",
+      "Perfect for book clubs"
+    ],
+    "highlights": [
+      "Number 1 international bestseller",
+      "Durable hardcover binding",
+      "304 pages of immersive storytelling",
+      "A hopeful read for difficult times",
+      "Makes a thoughtful gift",
+      "English language edition"
+    ],
+    "warranty": "Book returns accepted within 7 days",
+    "images": [
+      { "image": "/images/products/book-midnight.svg" }
+    ],
+    "reviews": [
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f1", "userName": "Ananya Iyer", "rating": 5, "comment": "Beautiful and emotional. Finished it in two sittings." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0e", "userName": "Simran Kaur", "rating": 5, "comment": "The hardcover feels premium and the story stays with you." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Arjun Nair", "rating": 4, "comment": "Thought-provoking read with a hopeful ending. Highly recommend." }
+    ]
+  },
+  {
+    "name": "Rich Dad Poor Dad (Paperback) by Robert T. Kiyosaki",
+    "brand": "Robert T. Kiyosaki",
+    "seller": "Srishti Books",
+    "category": "Books",
+    "price": 349,
+    "mrp": 499,
+    "discount": 30,
+    "stock": 190,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "Rich Dad Poor Dad shares the story of two fathers with opposite views on money and the lessons they teach about building wealth. A timeless introduction to financial literacy, assets and passive income.",
+    "specifications": [
+      { "label": "Author", "value": "Robert T. Kiyosaki" },
+      { "label": "Format", "value": "Paperback" },
+      { "label": "Pages", "value": "252 pages" },
+      { "label": "Publisher", "value": "Srishti Books" },
+      { "label": "Language", "value": "English" },
+      { "label": "ISBN", "value": "978-1612681122" },
+      { "label": "Dimensions", "value": "20 x 13 x 1.8 cm" },
+      { "label": "Weight", "value": "240 g" }
+    ],
+    "features": [
+      "Classic personal finance guide",
+      "Teaches assets vs liabilities",
+      "Simple money lessons anyone can apply",
+      "Story-driven, easy to read",
+      "Great starting point for investing",
+      "Durable paperback binding"
+    ],
+    "highlights": [
+      "Bestselling finance classic",
+      "Clear lessons on building wealth",
+      "Story-driven and easy to follow",
+      "252 pages of insight",
+      "English paperback edition",
+      "Ideal for young investors"
+    ],
+    "warranty": "Book returns accepted within 7 days",
+    "images": [
+      { "image": "/images/products/book-richdad.svg" }
+    ],
+    "reviews": [
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Mohammed Ali", "rating": 5, "comment": "Changed how I think about money. A must-read for young adults." },
+      { "user": "507f1f77bcf86cd799439011", "userName": "Deepak Chauhan", "rating": 4, "comment": "Simple concepts explained with stories. Very easy to finish." },
+      { "user": "507f191e810c19729de860ea", "userName": "Neha Gupta", "rating": 5, "comment": "Worth every rupee. Print quality is good and delivery was fast." }
+    ]
+  },
+  {
+    "name": "Science Encyclopedia for Children (Hardcover)",
+    "brand": "Srishti Books",
+    "seller": "Srishti Books",
+    "category": "Books",
+    "price": 799,
+    "mrp": 1199,
+    "discount": 33,
+    "stock": 85,
+    "ratings": 4.7,
+    "numOfReviews": 3,
+    "description": "The Science Encyclopedia brings 200+ concepts in physics, chemistry, biology and space to life with vivid illustrations and clear explanations. Perfect for curious minds and school projects alike.",
+    "specifications": [
+      { "label": "Format", "value": "Hardcover with full-colour spreads" },
+      { "label": "Pages", "value": "192 pages" },
+      { "label": "Language", "value": "English" },
+      { "label": "Age Group", "value": "8 to 14 years" },
+      { "label": "Publisher", "value": "Srishti Books" },
+      { "label": "Topics", "value": "Physics, chemistry, biology, space, technology" },
+      { "label": "Dimensions", "value": "28 x 22 x 2 cm" },
+      { "label": "Weight", "value": "950 g" }
+    ],
+    "features": [
+      "200+ illustrated science concepts",
+      "Covers physics, chemistry, biology and space",
+      "Easy-to-understand explanations",
+      "Perfect for school projects",
+      "Durable hardcover format",
+      "Glossy full-colour pages"
+    ],
+    "highlights": [
+      "Comprehensive 192-page encyclopedia",
+      "Full-colour diagrams and photos",
+      "Covers all major science branches",
+      "Great for ages 8-14",
+      "Sturdy hardcover binding",
+      "Value for money"
+    ],
+    "warranty": "Book returns accepted within 7 days",
+    "images": [
+      { "image": "/images/products/book-science.svg" }
+    ],
+    "reviews": [
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Vikram Singh", "rating": 5, "comment": "My son loves the space section. Illustrations are top quality." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Sneha Kulkarni", "rating": 5, "comment": "Perfect for school projects. Explanations are clear even for kids." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Rahul Sharma", "rating": 4, "comment": "Thick, well-bound book with wonderful visuals. Great gift." }
+    ]
+  },
+  {
+    "name": "BrewMate Instant Coffee Jar (200g)",
+    "brand": "BrewMate",
+    "seller": "BrewMate Food Store",
+    "category": "Food",
+    "price": 349,
+    "mrp": 479,
+    "discount": 27,
+    "stock": 220,
+    "ratings": 4.3,
+    "numOfReviews": 3,
+    "description": "BrewMate instant coffee delivers rich, aromatic coffee in seconds. Made from 100% robusta and arabica beans, it brews a smooth, full-bodied cup that stays consistently good sip after sip.",
+    "specifications": [
+      { "label": "Weight", "value": "200g jar" },
+      { "label": "Bean Type", "value": "Arabica + robusta blend" },
+      { "label": "Roast", "value": "Medium-dark" },
+      { "label": "Brewing", "value": "Instant, dissolves in hot or cold water" },
+      { "label": "Caffeine", "value": "Medium" },
+      { "label": "Origin", "value": "South Indian estates" },
+      { "label": "Pack Size", "value": "200g" }
+    ],
+    "features": [
+      "100% pure coffee, no chicory",
+      "Rich aroma with smooth body",
+      "Brews instantly, hot or iced",
+      "Made from South Indian beans",
+      "Resealable fresh-lock jar",
+      "Great value 200g pack"
+    ],
+    "highlights": [
+      "Pure coffee with no chicory",
+      "Medium-dark roasted beans",
+      "Quick and easy to brew",
+      "Fresh-lock airtight jar",
+      "200g for longer lasting stock",
+      "Pairs well with milk or black"
+    ],
+    "warranty": "Best before 18 months from manufacturing",
+    "images": [
+      { "image": "/images/products/food-coffee.svg" }
+    ],
+    "reviews": [
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Amit Verma", "rating": 4, "comment": "Strong, smooth and no bitterness. Great value for daily coffee." },
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Karan Mehta", "rating": 4, "comment": "Dissolves instantly and the aroma is rich. My go-to morning coffee." },
+      { "user": "507f1f77bcf86cd799439012", "userName": "Pooja Reddy", "rating": 5, "comment": "Perfect strength and taste. Better than the premium brands I tried." }
+    ]
+  },
+  {
+    "name": "NutriBite Premium Mixed Dry Fruits (1kg)",
+    "brand": "NutriBite",
+    "seller": "NutriBite Foods Store",
+    "category": "Food",
+    "price": 1199,
+    "mrp": 1599,
+    "discount": 25,
+    "stock": 95,
+    "ratings": 4.6,
+    "numOfReviews": 3,
+    "description": "NutriBite mixed dry fruits combine almonds, cashews, raisins and pistachios in one premium pack. Vacuum-sealed for freshness, they make a wholesome, energy-packed snack for the whole family.",
+    "specifications": [
+      { "label": "Weight", "value": "1kg (almonds, cashews, raisins, pistachios)" },
+      { "label": "Packing", "value": "Vacuum-sealed resealable pouch" },
+      { "label": "Origin", "value": "India (Kashmir, Maharashtra, Karnataka)" },
+      { "label": "Shelf Life", "value": "6 months" },
+      { "label": "Additives", "value": "No added sugar, no preservatives" },
+      { "label": "Best For", "value": "Snacking, desserts, gifting" }
+    ],
+    "features": [
+      "4 premium nuts and dry fruits",
+      "Rich in protein and healthy fats",
+      "Vacuum-sealed for freshness",
+      "No added sugar or preservatives",
+      "Resealable pack for easy storage",
+      "Great for snacking and gifting"
+    ],
+    "highlights": [
+      "1kg mixed premium dry fruits",
+      "Almonds, cashews, raisins, pistachios",
+      "High in fibre and good fats",
+      "No preservatives added",
+      "Vacuum-sealed freshness",
+      "Ideal gift pack"
+    ],
+    "warranty": "Best before 6 months from packing",
+    "images": [
+      { "image": "/images/products/food-dry-fruits.svg" }
+    ],
+    "reviews": [
+      { "user": "507f191e810c19729de860ea", "userName": "Divya Nair", "rating": 5, "comment": "Fresh and crunchy, exactly as described. Perfect mix of all four." },
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Rohan Joshi", "rating": 5, "comment": "Bought for gifting and the quality impressed everyone." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Kavita Menon", "rating": 4, "comment": "Good value for a full kilo. Would love more pistachios though." }
+    ]
+  },
+  {
+    "name": "BeePure 100% Raw Natural Honey (500g)",
+    "brand": "BeePure",
+    "seller": "BeePure Naturals Store",
+    "category": "Food",
+    "price": 399,
+    "mrp": 549,
+    "discount": 27,
+    "stock": 130,
+    "ratings": 4.7,
+    "numOfReviews": 3,
+    "description": "BeePure raw honey is unprocessed and unheated, sourced directly from beekeepers. Naturally rich in enzymes and antioxidants, it is the perfect natural sweetener for tea, toast and healthy cooking.",
+    "specifications": [
+      { "label": "Weight", "value": "500g" },
+      { "label": "Purity", "value": "100% raw, unprocessed, unheated" },
+      { "label": "Source", "value": "Wild forest and multi-floral" },
+      { "label": "Texture", "value": "Natural crystallisation may occur" },
+      { "label": "Benefits", "value": "Antioxidants, energy, soothes throat" },
+      { "label": "Additives", "value": "None" },
+      { "label": "Certification", "value": "FSSAI licensed facility" }
+    ],
+    "features": [
+      "100% raw and unprocessed",
+      "Retains natural enzymes and antioxidants",
+      "Sourced from natural forest hives",
+      "Soothes throat and boosts energy",
+      "No added sugar or preservatives",
+      "Resealable squeeze-proof jar"
+    ],
+    "highlights": [
+      "100% pure raw honey",
+      "Unheated to preserve nutrients",
+      "500g value pack",
+      "Natural sweetener for everyday use",
+      "No additives or preservatives",
+      "FSSAI licensed facility"
+    ],
+    "warranty": "Best before 24 months from packing",
+    "images": [
+      { "image": "/images/products/food-honey.svg" }
+    ],
+    "reviews": [
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Sneha Kulkarni", "rating": 5, "comment": "You can taste the purity. Much better than supermarket honey." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Mohammed Ali", "rating": 5, "comment": "Thick and rich, wonderful in tea and on toast. Highly recommend." },
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Ananya Iyer", "rating": 4, "comment": "Natural and unadulterated. Great value for 500g." }
+    ]
+  },
+  {
+    "name": "OlivePride Extra Virgin Olive Oil (1L)",
+    "brand": "OlivePride",
+    "seller": "OlivePride Gourmet Store",
+    "category": "Food",
+    "price": 899,
+    "mrp": 1249,
+    "discount": 28,
+    "stock": 75,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "Cold-pressed extra virgin olive oil from Mediterranean groves with a fruity, peppery finish. Low in saturated fats and high in heart-friendly monounsaturated fats, it is ideal for salads, dips and light cooking.",
+    "specifications": [
+      { "label": "Volume", "value": "1L" },
+      { "label": "Grade", "value": "Extra virgin (cold-pressed)" },
+      { "label": "Acidity", "value": "Below 0.8%" },
+      { "label": "Source", "value": "Mediterranean olives" },
+      { "label": "Smoke Point", "value": "190C" },
+      { "label": "Best For", "value": "Salads, dressings, light sauteing" },
+      { "label": "Packaging", "value": "Premium tin" }
+    ],
+    "features": [
+      "Cold-pressed first-press oil",
+      "Rich in heart-friendly monounsaturated fats",
+      "Fruity, peppery Mediterranean taste",
+      "Low acidity, high purity",
+      "Great for salads and dressings",
+      "Premium tin packaging"
+    ],
+    "highlights": [
+      "100% extra virgin olive oil",
+      "First cold-pressed, low acidity",
+      "1 litre premium pack",
+      "Heart-healthy fats",
+      "Peppery, fruity flavour",
+      "Ideal for Mediterranean cooking"
+    ],
+    "warranty": "Best before 18 months from packing",
+    "images": [
+      { "image": "/images/products/food-olive-oil.svg" }
+    ],
+    "reviews": [
+      { "user": "507f1f77bcf86cd799439011", "userName": "Deepak Chauhan", "rating": 5, "comment": "Genuine extra virgin taste. My salads have never been better." },
+      { "user": "507f191e810c19729de860ea", "userName": "Simran Kaur", "rating": 4, "comment": "Fresh and peppery, great for light cooking too. Good value." },
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Arjun Nair", "rating": 5, "comment": "High quality oil, the tin keeps it fresh for a long time." }
+    ]
+  },
+  {
+    "name": "GrainGhar Organic Basmati Rice (5kg)",
+    "brand": "GrainGhar",
+    "seller": "GrainGhar Grocery Store",
+    "category": "Food",
+    "price": 649,
+    "mrp": 899,
+    "discount": 28,
+    "stock": 120,
+    "ratings": 4.6,
+    "numOfReviews": 3,
+    "description": "GrainGhar organic basmati rice is long-grain, aromatic and grown without chemical pesticides. It cooks to light, fluffy grains that stay separate, perfect for biryani, pulao and everyday meals.",
+    "specifications": [
+      { "label": "Weight", "value": "5kg" },
+      { "label": "Rice Type", "value": "Long-grain basmati, aged" },
+      { "label": "Origin", "value": "Organic farms of Haryana" },
+      { "label": "Grain Length", "value": "8.35mm" },
+      { "label": "Cooking Time", "value": "12-15 minutes" },
+      { "label": "Certification", "value": "India Organic certified" },
+      { "label": "Best For", "value": "Biryani, pulao, plain rice" }
+    ],
+    "features": [
+      "Aged 12+ months for better aroma",
+      "Long grains that cook separate",
+      "Certified organic, no pesticides",
+      "Ideal for biryani and pulao",
+      "Non-sticky fluffy texture",
+      "5kg family pack"
+    ],
+    "highlights": [
+      "100% certified organic basmati",
+      "Extra-long 8.35mm grains",
+      "Naturally aromatic",
+      "Free from chemical fertilisers",
+      "5kg value pack",
+      "Perfect for festive cooking"
+    ],
+    "warranty": "Best before 12 months from packing",
+    "images": [
+      { "image": "/images/products/food-rice.svg" }
+    ],
+    "reviews": [
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Priya Patel", "rating": 5, "comment": "The aroma while cooking is incredible. Grains stay separate." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Vikram Singh", "rating": 5, "comment": "Best basmati I have bought online. Biryani turned out perfect." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Neha Gupta", "rating": 4, "comment": "Fluffy and tasty, great for daily rice. Value for a 5kg pack." }
+    ]
+  },
+  {
+    "name": "BrewMate Premium Green Tea (100 Pyramid Bags)",
+    "brand": "BrewMate",
+    "seller": "BrewMate Food Store",
+    "category": "Food",
+    "price": 299,
+    "mrp": 425,
+    "discount": 30,
+    "stock": 200,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "Gently steamed green tea leaves are packed fresh into 100 pyramid bags that unlock a clean, grassy flavour. Naturally rich in antioxidants, it is a refreshing, calorie-free brew any time of day.",
+    "specifications": [
+      { "label": "Count", "value": "100 tea bags" },
+      { "label": "Type", "value": "Green tea, single estate" },
+      { "label": "Bags", "value": "Pyramid bags for better infusion" },
+      { "label": "Brewing", "value": "Steep 2-3 min at 80C" },
+      { "label": "Caffeine", "value": "Low to medium" },
+      { "label": "Antioxidants", "value": "Rich in catechins" },
+      { "label": "Best For", "value": "Hot or iced tea" }
+    ],
+    "features": [
+      "100 pyramid tea bags",
+      "Single-estate, gently steamed leaves",
+      "Rich in antioxidant catechins",
+      "Fresh, clean grassy flavour",
+      "Zero calories, zero sugar",
+      "Steeps well hot or iced"
+    ],
+    "highlights": [
+      "100 premium green tea bags",
+      "Pyramid bags for fuller flavour",
+      "Antioxidant-rich and calorie-free",
+      "Refreshing daily brew",
+      "Great value pack",
+      "Suitable for hot and iced tea"
+    ],
+    "warranty": "Best before 18 months from packing",
+    "images": [
+      { "image": "/images/products/food-tea.svg" }
+    ],
+    "reviews": [
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Rahul Sharma", "rating": 5, "comment": "Fresh and smooth, no bitterness. The pyramid bags really work." },
+      { "user": "507f1f77bcf86cd799439012", "userName": "Kavita Menon", "rating": 4, "comment": "Great daily brew and excellent value for 100 bags." },
+      { "user": "507f191e810c19729de860ea", "userName": "Amit Verma", "rating": 4, "comment": "Light and refreshing. My evening ritual now." }
+    ]
+  },
+  {
+    "name": "ComfortCraft Queen Size Bed Frame with Hydraulic Storage",
+    "brand": "ComfortCraft",
+    "seller": "ComfortCraft Furniture Store",
+    "category": "Home",
+    "price": 11499,
+    "mrp": 15999,
+    "discount": 28,
+    "stock": 45,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "A sturdy engineered-wood bed frame with a soft fabric upholstery that adds warmth to your bedroom. The hydraulic lift provides hidden storage, and the reinforced slats keep your mattress firmly supported.",
+    "specifications": [
+      { "label": "Size", "value": "Queen (60 x 78 inches)" },
+      { "label": "Material", "value": "Engineered wood + fabric upholstery" },
+      { "label": "Storage", "value": "Hydraulic lift storage" },
+      { "label": "Finish", "value": "Grey fabric with wooden legs" },
+      { "label": "Weight Capacity", "value": "350 kg" },
+      { "label": "Assembly", "value": "Free installation service" },
+      { "label": "Includes", "value": "Headboard, side rails, slats" }
+    ],
+    "features": [
+      "Hydraulic lift for extra storage",
+      "Plush fabric upholstered headboard",
+      "Reinforced slats, no box spring needed",
+      "350kg weight capacity",
+      "Tool-free assembly guide",
+      "Free installation included"
+    ],
+    "highlights": [
+      "Queen size with hydraulic storage",
+      "Soft grey fabric headboard",
+      "Sturdy engineered wood frame",
+      "350kg load capacity",
+      "Free home installation",
+      "2 year structural warranty"
+    ],
+    "warranty": "2 Years Structural Warranty",
+    "images": [
+      { "image": "/images/products/home-bed.svg" }
+    ],
+    "reviews": [
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Divya Nair", "rating": 5, "comment": "Beautiful and sturdy. The storage lift is very useful for our room." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Karan Mehta", "rating": 4, "comment": "Great value. Installation team was prompt and professional." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Pooja Reddy", "rating": 5, "comment": "No creaks, very solid. Looks far more expensive than it is." }
+    ]
+  },
+  {
+    "name": "CookLine 5-Piece Granite Non-Stick Cookware Set",
+    "brand": "CookLine",
+    "seller": "CookLine Kitchen Store",
+    "category": "Home",
+    "price": 2499,
+    "mrp": 3699,
+    "discount": 32,
+    "stock": 80,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "A 5-piece non-stick cookware set that makes everyday cooking easy and oil-light. The durable granite coating is scratch-resistant, and the induction-friendly base heats evenly on every stovetop.",
+    "specifications": [
+      { "label": "Pieces", "value": "5 (fry pan, kadhai, lid, 2 spatulas)" },
+      { "label": "Coating", "value": "3-layer granite non-stick" },
+      { "label": "Material", "value": "Aluminium body, heat-resistant handles" },
+      { "label": "Compatible", "value": "Gas, induction, ceramic" },
+      { "label": "Heat Resistance", "value": "230C" },
+      { "label": "Care", "value": "Hand wash recommended" },
+      { "label": "Set Weight", "value": "3.2 kg" }
+    ],
+    "features": [
+      "3-layer granite non-stick coating",
+      "Even heat distribution, low oil cooking",
+      "Induction and gas compatible",
+      "Ergonomic heat-safe handles",
+      "Easy to clean",
+      "5-piece set at one price"
+    ],
+    "highlights": [
+      "5-piece granite cookware set",
+      "Scratch-resistant non-stick surface",
+      "Works on induction and gas",
+      "Cool-touch handles",
+      "Easy clean design",
+      "Great value bundle"
+    ],
+    "warranty": "1 Year Manufacturer Warranty on Non-Stick Coating",
+    "images": [
+      { "image": "/images/products/home-cookware.svg" }
+    ],
+    "reviews": [
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Sneha Kulkarni", "rating": 5, "comment": "Nothing sticks and clean-up is effortless. Works on my induction." },
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Ananya Iyer", "rating": 4, "comment": "Good weight, heats evenly. Great starter set for a new kitchen." },
+      { "user": "507f1f77bcf86cd799439011", "userName": "Mohammed Ali", "rating": 4, "comment": "Solid quality for the price. Handles stay cool while cooking." }
+    ]
+  },
+  {
+    "name": "CookLine 16-Piece Ceramic Dinner Set (Serves 4)",
+    "brand": "CookLine",
+    "seller": "CookLine Kitchen Store",
+    "category": "Home",
+    "price": 3499,
+    "mrp": 4999,
+    "discount": 30,
+    "stock": 55,
+    "ratings": 4.6,
+    "numOfReviews": 3,
+    "description": "Serve in style with this 16-piece ceramic dinner set featuring a clean, modern pattern. Durable stoneware is microwave and dishwasher safe, making it perfect for everyday meals and special occasions.",
+    "specifications": [
+      { "label": "Pieces", "value": "16 (4 dinner plates, 4 bowls, 4 dessert plates, 4 mugs)" },
+      { "label": "Material", "value": "High-fired stoneware ceramic" },
+      { "label": "Pattern", "value": "Modern speckled glaze" },
+      { "label": "Microwave Safe", "value": "Yes" },
+      { "label": "Dishwasher Safe", "value": "Yes" },
+      { "label": "Food Safe", "value": "Lead-free glaze" },
+      { "label": "Style", "value": "Contemporary" }
+    ],
+    "features": [
+      "16-piece complete dinner set",
+      "Durable high-fired stoneware",
+      "Microwave and dishwasher safe",
+      "Lead-free food-safe glaze",
+      "Modern speckled finish",
+      "Serves 4 people fully"
+    ],
+    "highlights": [
+      "16-piece ceramic set for 4",
+      "Elegant modern glaze",
+      "Microwave and dishwasher safe",
+      "Lead-free and food-safe",
+      "Chip-resistant stoneware",
+      "Complete table setting"
+    ],
+    "warranty": "30 Days Replacement Guarantee",
+    "images": [
+      { "image": "/images/products/home-dinner-set.svg" }
+    ],
+    "reviews": [
+      { "user": "507f191e810c19729de860ea", "userName": "Neha Gupta", "rating": 5, "comment": "Beautiful finish and sturdy. Survived the dishwasher many times." },
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Rohan Joshi", "rating": 5, "comment": "Elegant set that looks great on the dinner table. Great quality." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Priya Patel", "rating": 4, "comment": "Weighty and premium. The glaze pattern is really pretty." }
+    ]
+  },
+  {
+    "name": "GlowNest LED Table Lamp with Touch Dimming",
+    "brand": "GlowNest",
+    "seller": "GlowNest Home Store",
+    "category": "Home",
+    "price": 999,
+    "mrp": 1499,
+    "discount": 33,
+    "stock": 110,
+    "ratings": 4.3,
+    "numOfReviews": 3,
+    "description": "A modern LED table lamp with adjustable brightness and a warm 3000K glow that's easy on the eyes. The touch control and flexible neck make it perfect for desks, bedside tables and reading corners.",
+    "specifications": [
+      { "label": "Bulb", "value": "LED, built-in, 6W" },
+      { "label": "Brightness", "value": "3-step touch dimming" },
+      { "label": "Colour Temperature", "value": "Warm 3000K" },
+      { "label": "Power Source", "value": "USB Type-C / plug" },
+      { "label": "Material", "value": "ABS + aluminium" },
+      { "label": "Neck", "value": "Flexible gooseneck" },
+      { "label": "Base", "value": "Weighted non-slip base" },
+      { "label": "Lifespan", "value": "25,000 hours" }
+    ],
+    "features": [
+      "3-step touch dimming",
+      "Warm eye-friendly light",
+      "Flexible gooseneck for any angle",
+      "USB-C powered, portable",
+      "Energy-efficient 6W LED",
+      "Sturdy weighted base"
+    ],
+    "highlights": [
+      "Touch control with 3 brightness levels",
+      "Warm 3000K reading light",
+      "Flexible gooseneck design",
+      "Runs on USB-C or wall plug",
+      "25,000 hour LED lifespan",
+      "Compact and modern"
+    ],
+    "warranty": "1 Year Manufacturer Warranty",
+    "images": [
+      { "image": "/images/products/home-lamp.svg" }
+    ],
+    "reviews": [
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Arjun Nair", "rating": 5, "comment": "Perfect reading lamp. The touch dimming is really smooth." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Simran Kaur", "rating": 4, "comment": "Warm light, great on the eyes. The gooseneck holds position well." },
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Deepak Chauhan", "rating": 4, "comment": "Good build quality for the price. Looks modern on my desk." }
+    ]
+  },
+  {
+    "name": "ComfortCraft 3-Seater Fabric Sofa (Grey)",
+    "brand": "ComfortCraft",
+    "seller": "ComfortCraft Furniture Store",
+    "category": "Home",
+    "price": 16999,
+    "mrp": 24999,
+    "discount": 32,
+    "stock": 30,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "A spacious 3-seater sofa wrapped in soft, easy-clean linen fabric with high-resilience foam cushions. The sturdy solid wood frame and neutral colour fit effortlessly into any living room.",
+    "specifications": [
+      { "label": "Seats", "value": "3 seater (approx 210cm wide)" },
+      { "label": "Upholstery", "value": "Linen-look fabric" },
+      { "label": "Frame", "value": "Solid wood + plywood" },
+      { "label": "Cushions", "value": "High-resilience foam" },
+      { "label": "Legs", "value": "Wooden legs" },
+      { "label": "Assembly", "value": "Free installation" },
+      { "label": "Weight Capacity", "value": "400 kg" },
+      { "label": "Fabric Care", "value": "Removable, washable covers" }
+    ],
+    "features": [
+      "Soft linen-look fabric upholstery",
+      "High-resilience foam cushions",
+      "Sturdy solid wood frame",
+      "Removable washable covers",
+      "Deep comfortable seating",
+      "Neutral shade fits any decor"
+    ],
+    "highlights": [
+      "3-seater comfort for families",
+      "Linen-look easy-clean fabric",
+      "High-resilience foam seating",
+      "Solid wood frame, 400kg capacity",
+      "Free installation at home",
+      "2 year structural warranty"
+    ],
+    "warranty": "2 Years Structural Warranty (1 Year on Fabric)",
+    "images": [
+      { "image": "/images/products/home-sofa.svg" }
+    ],
+    "reviews": [
+      { "user": "507f1f77bcf86cd799439011", "userName": "Kavita Menon", "rating": 5, "comment": "Very comfortable and the fabric feels premium. Fits my living room perfectly." },
+      { "user": "507f191e810c19729de860ea", "userName": "Vikram Singh", "rating": 5, "comment": "Solid construction and the delivery team assembled it quickly." },
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Rahul Sharma", "rating": 4, "comment": "Great comfort and value. Neutral grey matches everything." }
+    ]
+  },
+  {
+    "name": "ComfortCraft Sheesham Wood Coffee Table (Honey Finish)",
+    "brand": "ComfortCraft",
+    "seller": "ComfortCraft Furniture Store",
+    "category": "Home",
+    "price": 6499,
+    "mrp": 8999,
+    "discount": 28,
+    "stock": 40,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "A clean-lined coffee table in rich honeywood finish that anchors your living room with warmth. Two open shelves keep books and remotes within reach while the durable surface handles daily life.",
+    "specifications": [
+      { "label": "Material", "value": "Sheesham wood" },
+      { "label": "Finish", "value": "Honey brown polish" },
+      { "label": "Dimensions", "value": "90 x 45 x 40 cm" },
+      { "label": "Shelves", "value": "2 open storage shelves" },
+      { "label": "Assembly", "value": "Minimal, legs attach easily" },
+      { "label": "Weight Capacity", "value": "60 kg" },
+      { "label": "Style", "value": "Contemporary" }
+    ],
+    "features": [
+      "Solid sheesham wood build",
+      "Warm honey-brown finish",
+      "2 open shelves for storage",
+      "Rounded edges for safety",
+      "Compact living-room friendly",
+      "Easy leg assembly"
+    ],
+    "highlights": [
+      "Premium sheesham wood",
+      "Two-tier open storage",
+      "90cm wide tabletop",
+      "Rich honey finish",
+      "Easy self-assembly",
+      "2 year structural warranty"
+    ],
+    "warranty": "2 Years Structural Warranty",
+    "images": [
+      { "image": "/images/products/home-table.svg" }
+    ],
+    "reviews": [
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Ananya Iyer", "rating": 5, "comment": "Solid wood, beautiful finish. Assembly took ten minutes." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Mohammed Ali", "rating": 4, "comment": "Looks premium and the shelves are handy. Great value." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Divya Nair", "rating": 4, "comment": "Sturdy and well made. The honey finish is exactly as pictured." }
+    ]
+  },
+  {
+    "name": "LittleMango Baby Cotton Romper (Combed Cotton)",
+    "brand": "LittleMango",
+    "seller": "LittleMango Kids Store",
+    "category": "Clothes/Shoes",
+    "price": 449,
+    "mrp": 699,
+    "discount": 36,
+    "stock": 150,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "A soft, breathable cotton romper for babies with easy snap-button legs for quick nappy changes. Gentle on delicate skin and machine washable, it keeps little ones comfy all day.",
+    "specifications": [
+      { "label": "Fabric", "value": "100% combed cotton" },
+      { "label": "Fit", "value": "Regular, snap-button crotch" },
+      { "label": "Sizes", "value": "0-3M to 12-18M" },
+      { "label": "Neckline", "value": "Round neck" },
+      { "label": "Print", "value": "All-over mango print" },
+      { "label": "Care", "value": "Machine wash cold" },
+      { "label": "Skin Safe", "value": "Azo-free dyes" }
+    ],
+    "features": [
+      "100% soft combed cotton",
+      "Snap buttons for quick changes",
+      "Azo-free, skin-safe dyes",
+      "Breathable for all seasons",
+      "Machine washable",
+      "Cute all-over print"
+    ],
+    "highlights": [
+      "Super soft combed cotton",
+      "Quick nappy-change snaps",
+      "Skin-friendly Azo-free dyes",
+      "Available in multiple sizes",
+      "Machine washable",
+      "Adorable gift choice"
+    ],
+    "warranty": "7 Days Easy Return",
+    "images": [
+      { "image": "/images/products/kids-romper.svg" }
+    ],
+    "reviews": [
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Divya Nair", "rating": 5, "comment": "Softest cotton, my baby loves it. The snaps make changes so easy." },
+      { "user": "507f1f77bcf86cd799439011", "userName": "Priya Patel", "rating": 5, "comment": "No skin irritation and washes well without losing softness." },
+      { "user": "507f191e810c19729de860ea", "userName": "Kavita Menon", "rating": 4, "comment": "Adorable print and true to size. Great for gifting." }
+    ]
+  },
+  {
+    "name": "LittleMango Kids Unisex Breathable Sneakers",
+    "brand": "LittleMango",
+    "seller": "LittleMango Kids Store",
+    "category": "Clothes/Shoes",
+    "price": 1199,
+    "mrp": 1799,
+    "discount": 33,
+    "stock": 140,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "Lightweight, flexible sneakers with breathable mesh uppers and cushioned soles for growing feet. Hook-and-loop straps make them easy for kids to put on and take off by themselves.",
+    "specifications": [
+      { "label": "Material", "value": "Breathable mesh + EVA sole" },
+      { "label": "Closure", "value": "Hook-and-loop strap" },
+      { "label": "Sizes", "value": "8K to 13K" },
+      { "label": "Weight", "value": "180g per shoe" },
+      { "label": "Sole", "value": "Flexible, non-slip EVA" },
+      { "label": "Gender", "value": "Unisex" },
+      { "label": "Toe Protection", "value": "Reinforced toe cap" }
+    ],
+    "features": [
+      "Breathable mesh keeps feet cool",
+      "Flexible non-slip EVA sole",
+      "Easy hook-and-loop closure",
+      "Padded collar for comfort",
+      "Lightweight for active play",
+      "Reinforced toe protection"
+    ],
+    "highlights": [
+      "Lightweight and flexible",
+      "Breathable mesh upper",
+      "Easy velcro straps",
+      "Cushioned, non-slip sole",
+      "Unisex colourways",
+      "Great for daily school wear"
+    ],
+    "warranty": "30 Days Size Exchange",
+    "images": [
+      { "image": "/images/products/kids-sneakers.svg" }
+    ],
+    "reviews": [
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Sneha Kulkarni", "rating": 5, "comment": "My son puts them on himself now. Very comfortable for running around." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Ananya Iyer", "rating": 4, "comment": "Great quality and the velcro holds well. True to size." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Rohan Joshi", "rating": 4, "comment": "Lightweight and breathable. Perfect for school and play." }
+    ]
+  },
+  {
+    "name": "LittleMango Kids Cotton T-Shirt Set (Pack of 3)",
+    "brand": "LittleMango",
+    "seller": "LittleMango Kids Store",
+    "category": "Clothes/Shoes",
+    "price": 599,
+    "mrp": 899,
+    "discount": 33,
+    "stock": 160,
+    "ratings": 4.6,
+    "numOfReviews": 3,
+    "description": "A set of 3 soft cotton t-shirts in playful colours that mix and match with everything. Tag-free necks and stretchable fabric make dressing fuss-free for kids on the move.",
+    "specifications": [
+      { "label": "Set Contains", "value": "3 t-shirts" },
+      { "label": "Fabric", "value": "100% cotton (bio-washed)" },
+      { "label": "Sizes", "value": "2-3Y to 9-10Y" },
+      { "label": "Neckline", "value": "Tag-free crew neck" },
+      { "label": "Print", "value": "Mix of solid and graphic prints" },
+      { "label": "Care", "value": "Machine wash cold" },
+      { "label": "Fit", "value": "Regular" }
+    ],
+    "features": [
+      "Set of 3 easy-to-wear tees",
+      "100% soft bio-washed cotton",
+      "Tag-free neck for comfort",
+      "Colourful mix of prints",
+      "Machine washable",
+      "Fits true to size"
+    ],
+    "highlights": [
+      "3 tees in one pack",
+      "Super soft bio-washed cotton",
+      "Tag-free comfortable neck",
+      "Fun colours and prints",
+      "Easy machine care",
+      "Great value"
+    ],
+    "warranty": "7 Days Easy Return",
+    "images": [
+      { "image": "/images/products/kids-tshirt.svg" }
+    ],
+    "reviews": [
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Neha Gupta", "rating": 5, "comment": "Super soft and bright colours. Three tees for a great price." },
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Mohammed Ali", "rating": 5, "comment": "No tags to irritate my daughter's neck. Washes beautifully." },
+      { "user": "507f1f77bcf86cd799439011", "userName": "Vikram Singh", "rating": 4, "comment": "Good quality cotton and prints stay bright after washes." }
+    ]
+  },
+  {
+    "name": "UrbanThread Men's Slim Fit Stretch Jeans (Indigo)",
+    "brand": "UrbanThread",
+    "seller": "UrbanThread Fashion Store",
+    "category": "Clothes/Shoes",
+    "price": 1499,
+    "mrp": 2399,
+    "discount": 38,
+    "stock": 130,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "Classic slim-fit jeans with just the right amount of stretch for all-day comfort. Fade-resistant denim with a clean finish pairs easily with shirts, tees and everything in between.",
+    "specifications": [
+      { "label": "Fit", "value": "Slim fit, mid rise" },
+      { "label": "Fabric", "value": "98% cotton, 2% elastane" },
+      { "label": "Wash", "value": "Indigo medium" },
+      { "label": "Sizes", "value": "28 to 40" },
+      { "label": "Features", "value": "5-pocket styling, stretch denim" },
+      { "label": "Closure", "value": "Zip fly with button" },
+      { "label": "Length", "value": "32 inch" }
+    ],
+    "features": [
+      "Comfort stretch denim",
+      "Fade-resistant medium indigo",
+      "Slim, modern silhouette",
+      "Classic 5-pocket design",
+      "Breathable pure cotton blend",
+      "Versatile everyday wear"
+    ],
+    "highlights": [
+      "Stretch comfort fit",
+      "Medium indigo wash",
+      "5-pocket classic style",
+      "True-to-size fit",
+      "Durable fade-resistant fabric",
+      "Available in sizes 28-40"
+    ],
+    "warranty": "30 Days Size Exchange",
+    "images": [
+      { "image": "/images/products/men-jeans.svg" }
+    ],
+    "reviews": [
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Deepak Chauhan", "rating": 5, "comment": "Perfect fit and the stretch makes them super comfortable all day." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Arjun Nair", "rating": 4, "comment": "Nice indigo wash that fades slowly. Great everyday jeans." },
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Karan Mehta", "rating": 4, "comment": "Good quality denim at a fair price. True to size." }
+    ]
+  },
+  {
+    "name": "UrbanThread Men's Cotton Casual Shirt (Full Sleeve)",
+    "brand": "UrbanThread",
+    "seller": "UrbanThread Fashion Store",
+    "category": "Clothes/Shoes",
+    "price": 899,
+    "mrp": 1399,
+    "discount": 36,
+    "stock": 145,
+    "ratings": 4.3,
+    "numOfReviews": 3,
+    "description": "A relaxed-fit casual shirt in breathable pure cotton with a subtle texture that dresses up or down. Spread collar, full button front and chest pocket make it a wardrobe staple.",
+    "specifications": [
+      { "label": "Fabric", "value": "100% cotton" },
+      { "label": "Fit", "value": "Relaxed fit" },
+      { "label": "Collar", "value": "Spread collar" },
+      { "label": "Sleeve", "value": "Full sleeve with adjustable cuff" },
+      { "label": "Pattern", "value": "Solid with fine texture" },
+      { "label": "Sizes", "value": "S to 3XL" },
+      { "label": "Pocket", "value": "Single chest pocket" }
+    ],
+    "features": [
+      "Breathable 100% cotton",
+      "Relaxed comfortable fit",
+      "Spread collar for a sharp look",
+      "Easy machine care",
+      "Wrinkle-resistant weave",
+      "Pairs with jeans or chinos"
+    ],
+    "highlights": [
+      "Pure cotton comfort",
+      "Relaxed casual fit",
+      "Full-sleeve versatile design",
+      "Wrinkle-resistant fabric",
+      "True-to-size",
+      "Everyday office casual"
+    ],
+    "warranty": "30 Days Size Exchange",
+    "images": [
+      { "image": "/images/products/men-shirt.svg" }
+    ],
+    "reviews": [
+      { "user": "507f1f77bcf86cd799439011", "userName": "Amit Verma", "rating": 5, "comment": "Great fabric, breathable and crisp. Perfect for office casual." },
+      { "user": "507f191e810c19729de860ea", "userName": "Rahul Sharma", "rating": 4, "comment": "Comfortable fit and quality stitching. Good value shirt." },
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Vikram Singh", "rating": 4, "comment": "Wrinkle-resistant as claimed. Looks sharp after a full day." }
+    ]
+  },
+  {
+    "name": "RunStride Men's Running Shoes (Cushioned)",
+    "brand": "RunStride",
+    "seller": "RunStride Footwear Store",
+    "category": "Clothes/Shoes",
+    "price": 2199,
+    "mrp": 3299,
+    "discount": 33,
+    "stock": 120,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "Lightweight running shoes with responsive cushioning and a breathable knit upper. The grippy outsole and supportive midsole keep every stride smooth, from daily jogs to gym sessions.",
+    "specifications": [
+      { "label": "Upper", "value": "Breathable engineered knit" },
+      { "label": "Midsole", "value": "EVA cushioning" },
+      { "label": "Outsole", "value": "Durable rubber grip" },
+      { "label": "Closure", "value": "Lace-up" },
+      { "label": "Weight", "value": "260g per shoe (size 42)" },
+      { "label": "Drop", "value": "10mm" },
+      { "label": "Sizes", "value": "UK 7 to 12" },
+      { "label": "Best For", "value": "Running, gym, walking" }
+    ],
+    "features": [
+      "Responsive EVA cushioning",
+      "Breathable knit upper",
+      "Grip-tested rubber outsole",
+      "Lightweight all-day comfort",
+      "Supportive 10mm drop",
+      "Versatile for run and gym"
+    ],
+    "highlights": [
+      "Cushioned, responsive midsole",
+      "Breathable knit construction",
+      "Superior outsole grip",
+      "Ultra-lightweight design",
+      "Ideal for daily runs",
+      "Available UK 7-12"
+    ],
+    "warranty": "30 Days Size Exchange",
+    "images": [
+      { "image": "/images/products/men-shoes.svg" }
+    ],
+    "reviews": [
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Rohan Joshi", "rating": 5, "comment": "Great cushioning and grip. My knees feel much better on long runs." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Pooja Reddy", "rating": 5, "comment": "Light and breathable, perfect for the gym and daily walks." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Simran Kaur", "rating": 4, "comment": "Comfortable straight out of the box. Great value runners." }
+    ]
+  },
+  {
+    "name": "TrailPeak Trekking Backpack (40L) with Rain Cover",
+    "brand": "TrailPeak",
+    "seller": "TrailPeak Outdoor Store",
+    "category": "Outdoor",
+    "price": 2799,
+    "mrp": 3999,
+    "discount": 30,
+    "stock": 65,
+    "ratings": 4.6,
+    "numOfReviews": 3,
+    "description": "A 40-litre trekking backpack with an adjustable torso fit, padded hip belt and rain cover for multi-day trails. Multiple compartments and side bottle pockets keep gear organised and easy to reach.",
+    "specifications": [
+      { "label": "Capacity", "value": "40L" },
+      { "label": "Material", "value": "Water-resistant ripstop nylon" },
+      { "label": "Frame", "value": "Internal support" },
+      { "label": "Back Panel", "value": "Airflow ventilated" },
+      { "label": "Hip Belt", "value": "Padded, adjustable" },
+      { "label": "Rain Cover", "value": "Included" },
+      { "label": "Pockets", "value": "Main, front, side bottles, hydration port" },
+      { "label": "Weight", "value": "1.1 kg" }
+    ],
+    "features": [
+      "40L capacity for multi-day treks",
+      "Ventilated back panel for airflow",
+      "Included rain cover",
+      "Hydration bladder compatible",
+      "Padded adjustable hip belt",
+      "Multiple organised pockets"
+    ],
+    "highlights": [
+      "Spacious 40L pack",
+      "Ventilated comfortable back",
+      "Rain cover included free",
+      "Fits a 15.6-inch laptop sleeve",
+      "Lightweight durable ripstop",
+      "Ideal weekend trekker"
+    ],
+    "warranty": "1 Year Manufacturer Warranty",
+    "images": [
+      { "image": "/images/products/outdoor-backpack.svg" }
+    ],
+    "reviews": [
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Mohammed Ali", "rating": 5, "comment": "Survived a weekend monsoon trek. The rain cover is a lifesaver." },
+      { "user": "507f1f77bcf86cd799439011", "userName": "Karan Mehta", "rating": 5, "comment": "Back support is great even with a heavy load. Very well made." },
+      { "user": "507f191e810c19729de860ea", "userName": "Divya Nair", "rating": 4, "comment": "Roomy with smart pockets. Excellent value for trekkers." }
+    ]
+  },
+  {
+    "name": "TrailPeak 26T Mountain Bicycle (21-Speed)",
+    "brand": "TrailPeak",
+    "seller": "TrailPeak Outdoor Store",
+    "category": "Sports",
+    "price": 8999,
+    "mrp": 12999,
+    "discount": 31,
+    "stock": 35,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "A rugged 26-inch mountain bike built for trails, parks and city streets. With 21-speed gears, front suspension and durable disc brakes, it gives confident control on any terrain.",
+    "specifications": [
+      { "label": "Wheel", "value": "26-inch" },
+      { "label": "Frame", "value": "Durable carbon steel" },
+      { "label": "Gears", "value": "21-speed" },
+      { "label": "Suspension", "value": "Front fork suspension" },
+      { "label": "Brakes", "value": "Disc brakes front and rear" },
+      { "label": "Tyres", "value": "Knobby all-terrain" },
+      { "label": "Assembly", "value": "80% pre-assembled" },
+      { "label": "Rider Height", "value": "5ft to 5ft 9in" }
+    ],
+    "features": [
+      "21-speed smooth shifting",
+      "Front suspension absorbs bumps",
+      "Reliable disc brakes",
+      "Knobby all-terrain tyres",
+      "Adjustable comfortable seat",
+      "Durable steel frame"
+    ],
+    "highlights": [
+      "26-inch all-terrain wheels",
+      "21-speed gearing",
+      "Front suspension fork",
+      "Disc brakes both wheels",
+      "Great for trails and city",
+      "80% pre-assembled delivery"
+    ],
+    "warranty": "1 Year Frame Warranty",
+    "images": [
+      { "image": "/images/products/outdoor-bike.svg" }
+    ],
+    "reviews": [
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Deepak Chauhan", "rating": 5, "comment": "Rides smoothly on rough roads. The disc brakes are very reassuring." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Arjun Nair", "rating": 4, "comment": "Great value mountain bike. Shifting is smooth after a quick tune." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Sneha Kulkarni", "rating": 4, "comment": "Sturdy build and comfortable ride. Assembly was simple." }
+    ]
+  },
+  {
+    "name": "TrailPeak Waterproof Hiking Boots",
+    "brand": "TrailPeak",
+    "seller": "TrailPeak Outdoor Store",
+    "category": "Outdoor",
+    "price": 3299,
+    "mrp": 4899,
+    "discount": 33,
+    "stock": 70,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "Trek-ready hiking boots with a waterproof membrane that keeps feet dry in wet terrain. The grippy outsole, ankle support and cushioned insole handle rough trails with confidence.",
+    "specifications": [
+      { "label": "Upper", "value": "Breathable leather + mesh" },
+      { "label": "Waterproofing", "value": "PU waterproof membrane" },
+      { "label": "Outsole", "value": "High-grip rubber lug" },
+      { "label": "Ankle Support", "value": "High-top design" },
+      { "label": "Insole", "value": "Cushioned, removable" },
+      { "label": "Sizes", "value": "UK 6 to 12" },
+      { "label": "Weight", "value": "430g per boot" },
+      { "label": "Best For", "value": "Hiking, trekking, monsoon" }
+    ],
+    "features": [
+      "Waterproof membrane keeps feet dry",
+      "High-grip lug outsole",
+      "Ankle-high support for trails",
+      "Cushioned removable insole",
+      "Durable leather-mesh upper",
+      "Monsoon-ready traction"
+    ],
+    "highlights": [
+      "Fully waterproof construction",
+      "Aggressive trail grip outsole",
+      "Supportive high-top fit",
+      "All-day cushioned comfort",
+      "Built for monsoons and treks",
+      "True-to-size fit"
+    ],
+    "warranty": "6 Months Manufacturer Warranty",
+    "images": [
+      { "image": "/images/products/outdoor-boots.svg" }
+    ],
+    "reviews": [
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Vikram Singh", "rating": 5, "comment": "Feet stayed dry through a full day in the rain. Great grip." },
+      { "user": "507f1f77bcf86cd799439011", "userName": "Rahul Sharma", "rating": 5, "comment": "No break-in pain and very stable on rocky trails." },
+      { "user": "507f191e810c19729de860ea", "userName": "Ananya Iyer", "rating": 4, "comment": "Comfortable and durable. True to size, maybe half-size up for thick socks." }
+    ]
+  },
+  {
+    "name": "TrailPeak Camping Sleeping Bag (3-Season)",
+    "brand": "TrailPeak",
+    "seller": "TrailPeak Outdoor Store",
+    "category": "Outdoor",
+    "price": 1899,
+    "mrp": 2699,
+    "discount": 30,
+    "stock": 85,
+    "ratings": 4.3,
+    "numOfReviews": 3,
+    "description": "A cosy sleeping bag rated for three seasons with soft microfibre filling that stays warm without the bulk. It packs into a compact stuff sack and unzips fully to double as a blanket.",
+    "specifications": [
+      { "label": "Temperature Rating", "value": "10C comfort" },
+      { "label": "Filling", "value": "100% polyester microfibre" },
+      { "label": "Shell", "value": "Ripstop nylon" },
+      { "label": "Lining", "value": "Soft brushed polyester" },
+      { "label": "Zip", "value": "Full-length with anti-snag" },
+      { "label": "Packed Size", "value": "38 x 20cm" },
+      { "label": "Unrolled Size", "value": "190 x 75cm" },
+      { "label": "Weight", "value": "1.3 kg" }
+    ],
+    "features": [
+      "3-season warmth rating",
+      "Soft microfibre filling",
+      "Full-length anti-snag zip",
+      "Packs into compact sack",
+      "Doubles as a blanket when unzipped",
+      "Durable ripstop shell"
+    ],
+    "highlights": [
+      "Rated to 10C comfort",
+      "Compact pack size",
+      "Anti-snag zipper design",
+      "190cm length fits most adults",
+      "Stuff sack included",
+      "Great for car camping"
+    ],
+    "warranty": "1 Year Manufacturer Warranty",
+    "images": [
+      { "image": "/images/products/outdoor-sleeping-bag.svg" }
+    ],
+    "reviews": [
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Kavita Menon", "rating": 5, "comment": "Warm and cosy on a chilly night. Packs down surprisingly small." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Rohan Joshi", "rating": 4, "comment": "Good warmth and no cold spots. Great for weekend camps." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Pooja Reddy", "rating": 4, "comment": "Comfortable and easy to pack. Excellent value for the price." }
+    ]
+  },
+  {
+    "name": "TrailPeak 4-Person Camping Tent (Waterproof)",
+    "brand": "TrailPeak",
+    "seller": "TrailPeak Outdoor Store",
+    "category": "Outdoor",
+    "price": 4499,
+    "mrp": 6499,
+    "discount": 31,
+    "stock": 40,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "A spacious 4-person dome tent with waterproof flysheet and taped seams for dependable camping shelter. Two doors, mesh windows and a fast pitch design make it easy for family weekends away.",
+    "specifications": [
+      { "label": "Capacity", "value": "4 persons" },
+      { "label": "Poles", "value": "Fibreglass, pre-attached" },
+      { "label": "Fabric", "value": "190T polyester, 3000mm waterhead" },
+      { "label": "Floor", "value": "210T polyester with taped seams" },
+      { "label": "Doors", "value": "2 entrances with mesh" },
+      { "label": "Windows", "value": "Mesh for ventilation" },
+      { "label": "Packed Size", "value": "58 x 16 x 16 cm" },
+      { "label": "Weight", "value": "3.4 kg" }
+    ],
+    "features": [
+      "Waterproof 3000mm flysheet",
+      "Spacious 4-person interior",
+      "2 doors and mesh windows",
+      "Fast, tool-free pitch",
+      "Taped sealed floor seams",
+      "Carry bag and stakes included"
+    ],
+    "highlights": [
+      "Sleeps 4 adults comfortably",
+      "3000mm waterproof rating",
+      "Breathable mesh ventilation",
+      "Simple 5-minute setup",
+      "Sturdy fibreglass poles",
+      "Compact carry bag"
+    ],
+    "warranty": "1 Year Manufacturer Warranty",
+    "images": [
+      { "image": "/images/products/outdoor-tent.svg" }
+    ],
+    "reviews": [
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Mohammed Ali", "rating": 5, "comment": "Set up in minutes and survived heavy rain overnight. No leaks." },
+      { "user": "507f1f77bcf86cd799439011", "userName": "Divya Nair", "rating": 4, "comment": "Roomy for our family of four. Ventilation is good in summer." },
+      { "user": "507f191e810c19729de860ea", "userName": "Deepak Chauhan", "rating": 4, "comment": "Solid tent at a great price. Poles are sturdy and the bag is compact." }
+    ]
+  },
+  {
+    "name": "ZenFlow Premium Yoga Mat (8mm, Eco-Friendly)",
+    "brand": "ZenFlow",
+    "seller": "ZenFlow Wellness Store",
+    "category": "Sports",
+    "price": 999,
+    "mrp": 1499,
+    "discount": 33,
+    "stock": 155,
+    "ratings": 4.6,
+    "numOfReviews": 3,
+    "description": "A thick, non-slip yoga mat that cushions joints and holds firm through every asana. The moisture-wicking surface and carry strap make practice comfortable at home or in the studio.",
+    "specifications": [
+      { "label": "Thickness", "value": "8mm (extra thick)" },
+      { "label": "Material", "value": "TPE, eco-friendly" },
+      { "label": "Size", "value": "183 x 61 cm" },
+      { "label": "Texture", "value": "Dual-sided non-slip" },
+      { "label": "Weight", "value": "1.4 kg" },
+      { "label": "Includes", "value": "Carry strap" },
+      { "label": "Care", "value": "Wipe clean, air dry" },
+      { "label": "Colours", "value": "Sage, graphite, rose" }
+    ],
+    "features": [
+      "Extra-thick 8mm cushioning",
+      "Dual-sided non-slip grip",
+      "Eco-friendly TPE material",
+      "Moisture-wicking surface",
+      "Lightweight with carry strap",
+      "Easy to clean"
+    ],
+    "highlights": [
+      "8mm extra thick cushioning",
+      "Strong non-slip grip",
+      "Eco-friendly TPE",
+      "Comfortable 183cm length",
+      "Carry strap included",
+      "Great for beginners"
+    ],
+    "warranty": "6 Months Manufacturer Warranty",
+    "images": [
+      { "image": "/images/products/outdoor-yoga.svg" }
+    ],
+    "reviews": [
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Sneha Kulkarni", "rating": 5, "comment": "Great cushioning for my knees and it never slips during practice." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Neha Gupta", "rating": 5, "comment": "Non-slip even when I sweat. The carry strap is a nice bonus." },
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Amit Verma", "rating": 4, "comment": "Thick and comfortable, perfect for beginners. Good quality TPE." }
+    ]
+  },
+  {
+    "name": "Xiaomi Smart Band 8 (AMOLED, 5ATM)",
+    "brand": "Xiaomi",
+    "seller": "Xiaomi India Store",
+    "category": "Wearables",
+    "price": 2799,
+    "mrp": 3999,
+    "discount": 30,
+    "stock": 175,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "The Xiaomi Smart Band 8 tracks heart rate, sleep and 150+ workout modes on a vivid AMOLED display. With 16 days of battery life and 5ATM water resistance, it is a complete wellness companion.",
+    "specifications": [
+      { "label": "Display", "value": "1.62-inch AMOLED" },
+      { "label": "Battery Life", "value": "Up to 16 days" },
+      { "label": "Water Resistance", "value": "5ATM" },
+      { "label": "Sensors", "value": "Heart rate, SpO2, accelerometer" },
+      { "label": "Workout Modes", "value": "150+" },
+      { "label": "Connectivity", "value": "Bluetooth 5.1" },
+      { "label": "Notifications", "value": "Call, app alerts" },
+      { "label": "Compatibility", "value": "Android and iOS" },
+      { "label": "Weight", "value": "13g (strap excluded)" }
+    ],
+    "features": [
+      "Bright AMOLED touch display",
+      "16-day battery life",
+      "150+ sport modes",
+      "Continuous heart rate and SpO2",
+      "5ATM water resistance",
+      "Notifications on your wrist"
+    ],
+    "highlights": [
+      "1.62-inch AMOLED display",
+      "Up to 16 days battery",
+      "5ATM swim-proof rating",
+      "150+ workout modes",
+      "Heart rate and SpO2 tracking",
+      "Works with Android and iOS"
+    ],
+    "warranty": "1 Year Manufacturer Warranty",
+    "images": [
+      { "image": "/images/products/wearables-band.svg" }
+    ],
+    "reviews": [
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Priya Patel", "rating": 5, "comment": "The display is gorgeous and battery truly lasts over two weeks." },
+      { "user": "507f1f77bcf86cd799439011", "userName": "Arjun Nair", "rating": 5, "comment": "Accurate tracking and comfortable to wear 24/7. Great value band." },
+      { "user": "507f191e810c19729de860ea", "userName": "Simran Kaur", "rating": 4, "comment": "Swim tracking works well and the straps are easy to swap." }
+    ]
+  },
+  {
+    "name": "AuraFashion Women's Floral Summer Dress",
+    "brand": "AuraFashion",
+    "seller": "AuraFashion Boutique Store",
+    "category": "Clothes/Shoes",
+    "price": 1099,
+    "mrp": 1699,
+    "discount": 35,
+    "stock": 125,
+    "ratings": 4.5,
+    "numOfReviews": 3,
+    "description": "A breezy A-line summer dress in soft, flowing fabric with a cheerful floral print. Short sleeves, a flattering fit and below-knee length keep it stylish from brunch to beach walks.",
+    "specifications": [
+      { "label": "Fabric", "value": "Rayon blend, breathable" },
+      { "label": "Length", "value": "Below knee" },
+      { "label": "Fit", "value": "A-line, relaxed" },
+      { "label": "Sleeve", "value": "Short puff sleeve" },
+      { "label": "Print", "value": "All-over floral" },
+      { "label": "Closure", "value": "Back tie-up" },
+      { "label": "Sizes", "value": "XS to 2XL" }
+    ],
+    "features": [
+      "Soft breathable rayon fabric",
+      "Flattering A-line silhouette",
+      "Vibrant floral print",
+      "Comfortable short sleeves",
+      "Below-knee versatile length",
+      "Easy back tie-up closure"
+    ],
+    "highlights": [
+      "Flowy summer-ready dress",
+      "All-over floral print",
+      "Breathable rayon fabric",
+      "True-to-size fit",
+      "Machine washable",
+      "Perfect for warm days"
+    ],
+    "warranty": "30 Days Size Exchange",
+    "images": [
+      { "image": "/images/products/women-dress.svg" }
+    ],
+    "reviews": [
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Ananya Iyer", "rating": 5, "comment": "Light, breezy and the print is even prettier in person." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Kavita Menon", "rating": 5, "comment": "Perfect summer dress. Fabric feels great against the skin." },
+      { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Pooja Reddy", "rating": 4, "comment": "True to size and comfortable all day. Great colour and fit." }
+    ]
+  },
+  {
+    "name": "AuraFashion Women's Leather Handbag (Tote)",
+    "brand": "AuraFashion",
+    "seller": "AuraFashion Boutique Store",
+    "category": "Clothes/Shoes",
+    "price": 1999,
+    "mrp": 2999,
+    "discount": 33,
+    "stock": 90,
+    "ratings": 4.4,
+    "numOfReviews": 3,
+    "description": "A structured tote handbag in premium PU leather with a spacious lined interior. Multiple pockets, a zip closure and an adjustable shoulder strap make it as practical as it is polished.",
+    "specifications": [
+      { "label": "Material", "value": "Premium PU leather" },
+      { "label": "Size", "value": "30 x 24 x 12 cm" },
+      { "label": "Lining", "value": "Soft fabric with zip pocket" },
+      { "label": "Compartments", "value": "Main + 2 interior pockets" },
+      { "label": "Closure", "value": "Zip + flap" },
+      { "label": "Strap", "value": "Adjustable, detachable" },
+      { "label": "Hardware", "value": "Gold-tone" }
+    ],
+    "features": [
+      "Structured premium PU leather",
+      "Spacious main compartment",
+      "Zip and flap secure closure",
+      "Adjustable shoulder strap",
+      "Gold-tone hardware",
+      "Everyday or office use"
+    ],
+    "highlights": [
+      "Premium PU leather finish",
+      "3 interior pockets",
+      "Secure zip and flap closure",
+      "Adjustable crossbody strap",
+      "Spacious 30cm tote",
+      "Versatile work-everyday bag"
+    ],
+    "warranty": "30 Days Replacement on Manufacturing Defects",
+    "images": [
+      { "image": "/images/products/women-handbag.svg" }
+    ],
+    "reviews": [
+      { "user": "60e4d3c2b1a0987654321fed", "userName": "Divya Nair", "rating": 5, "comment": "Looks far more expensive than it is. Roomy and well organised." },
+      { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Neha Gupta", "rating": 5, "comment": "Great everyday tote. The leather finish is very premium." },
+      { "user": "507f1f77bcf86cd799439011", "userName": "Sneha Kulkarni", "rating": 4, "comment": "Sturdy stitching and lovely colour. Perfect for office." }
+    ]
+  },
+  {
+    "name": "AuraFashion Women's Ankle Strap Block Heels",
+    "brand": "AuraFashion",
+    "seller": "AuraFashion Boutique Store",
+    "category": "Clothes/Shoes",
+    "price": 1499,
+    "mrp": 2299,
+    "discount": 35,
+    "stock": 105,
+    "ratings": 4.3,
+    "numOfReviews": 3,
+    "description": "Chic block heels with a secure ankle strap and cushioned footbed for all-day wear. The 6cm block heel offers stability, while the clean silhouette works with dresses, skirts and trousers.",
+    "specifications": [
+      { "label": "Heel Height", "value": "6cm block heel" },
+      { "label": "Material", "value": "Vegan leather upper" },
+      { "label": "Insole", "value": "Cushioned memory foam" },
+      { "label": "Outsole", "value": "Non-slip TPR" },
+      { "label": "Closure", "value": "Buckle ankle strap" },
+      { "label": "Sizes", "value": "EU 36 to 41" },
+      { "label": "Colours", "value": "Black, beige, wine" }
+    ],
+    "features": [
+      "Stable 6cm block heel",
+      "Cushioned memory foam insole",
+      "Secure buckle ankle strap",
+      "Non-slip durable outsole",
+      "Comfortable all-day wear",
+      "Versatile neutral shades"
+    ],
+    "highlights": [
+      "6cm block heel for stability",
+      "Plush memory foam footbed",
+      "Ankle strap keeps feet secure",
+      "Non-slip sole",
+      "True-to-size fit",
+      "Elevates any outfit"
+    ],
+    "warranty": "30 Days Size Exchange",
+    "images": [
+      { "image": "/images/products/women-heels.svg" }
+    ],
+    "reviews": [
+      { "user": "507f191e810c19729de860ea", "userName": "Simran Kaur", "rating": 5, "comment": "Comfortable enough for a full day at work. The block heel is stable." },
+      { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Pooja Reddy", "rating": 4, "comment": "Great fit and the ankle strap keeps them secure while walking." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Ananya Iyer", "rating": 4, "comment": "Elegant and comfortable. True to size with a nice cushion." }
+    ]
+  }
+]

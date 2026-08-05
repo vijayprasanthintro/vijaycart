@@ -1,0 +1,40 @@
+{
+  "name": "vijaycart",
+  "version": "1.0.0",
+  "description": "ecommerce using MERN stack",
+  "main": "server.js",
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
+  },
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "set NODE_ENV=development&&nodemon backend/server.js",
+    "prod": "set NODE_ENV=production&&nodemon backend/server.js",
+    "seeder": "node backend/utils/seeder.js"
+  },
+  "author": "Vijayprasanth",
+  "license": "ISC",
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
+    "@stripe/react-stripe-js": "^6.3.0",
+    "@stripe/stripe-js": "^9.4.0",
+    "bcrypt": "^5.1.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.6",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^7.5.0",
+    "mongoose": "^6.8.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.8.0",
+    "stripe": "^11.9.1",
+    "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

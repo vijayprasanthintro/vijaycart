@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkfrontend=self.webpackChunkfrontend||[]).push([[60],{6060(e,n,s){s.r(n),s.d(n,{default:()=>u});var l=s(5043),r=s(7846),t=s(579);const a=(0,l.lazy)(()=>Promise.all([s.e(149),s.e(940),s.e(652),s.e(320)]).then(s.bind(s,4320)));function u(){return(0,t.jsx)(l.Suspense,{fallback:(0,t.jsx)(r.A,{}),children:(0,t.jsx)(a,{})})}}}]);
+//# sourceMappingURL=60.87779eec.chunk.js.map
