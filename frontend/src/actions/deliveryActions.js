@@ -72,3 +72,14 @@ export const assignOrder = (id, deliveryBoy) => async (dispatch) => {
         return { success: false, error: error.response?.data?.message || error.message }
     }
 }
+
+export const createDeliveryBoy = (deliveryBoyData) => async (dispatch) => {
+    dispatch(deliveryRequest())
+    try {
+        const { data } = await axios.post(`/api/v1/admin/deliveryboy`, deliveryBoyData)
+        return { success: true, deliveryBoy: data.deliveryBoy }
+    } catch (error) {
+        dispatch(deliveryFail(error.response?.data?.message || error.message))
+        return { success: false, error: error.response?.data?.message || error.message }
+    }
+}
