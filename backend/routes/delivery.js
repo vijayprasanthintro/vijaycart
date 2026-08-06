@@ -11,6 +11,7 @@ router.route('/delivery/history').get(isAuthenticatedUser, authorizeRoles('deliv
 
 //Admin Routes
 router.route('/admin/deliveryboys').get(isAuthenticatedUser, authorizeRoles('admin'), getDeliveryBoys);
+router.route('/admin/deliveryboy').post(isAuthenticatedUser, authorizeRoles('admin'), createDeliveryBoy);
 router.route('/admin/order/:id/assign').put(isAuthenticatedUser, authorizeRoles('admin'), assignOrder);
 
 module.exports = router;
