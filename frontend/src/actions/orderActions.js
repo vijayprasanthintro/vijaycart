@@ -18,7 +18,7 @@ export const cancelOrder = id => async(dispatch) => {
     try {
         await axios.put(`/api/v1/order/cancel/${id}`)
         dispatch(cancelOrderSuccess())
-        dispatch(userOrders)
+        dispatch(userOrders())
         return { success: true }
     } catch (error) {
         dispatch(cancelOrderFail(error.response?.data?.message || error.message))
@@ -36,13 +36,18 @@ export const createOrder = order => async(dispatch) => {
         throw error
     }
 }
-export const userOrders = async(dispatch) => {
+
+// Proper thunk: returns a function the store calls with dispatch. (The old
+// `async(dispatch) => {...}` signature was invoked directly, so dispatching it
+// called the body with an undefined `dispatch` and the orders list never
+// loaded — "No orders yet" even after successful payments.)
+export const userOrders = () => async(dispatch) => {
     try {
        dispatch(userOrdersRequest())
        const {data} = await axios.get(`/api/v1/myorders`)
        dispatch(userOrdersSuccess(data))
     } catch (error) {
-        dispatch(userOrdersFail(error.response.data.message))
+       dispatch(userOrdersFail(error.response?.data?.message || error.message))
     }
 }
 export const orderDetail = id => async(dispatch) => {
@@ -51,17 +56,17 @@ export const orderDetail = id => async(dispatch) => {
        const {data} = await axios.get(`/api/v1/order/${id}`)
        dispatch(orderDetailSuccess(data))
     } catch (error) {
-        dispatch(orderDetailFail(error.response.data.message))
+        dispatch(orderDetailFail(error.response?.data?.message || error.message))
     }
 }
 
-export const adminOrders = async(dispatch) => {
+export const adminOrders = () => async(dispatch) => {
     try {
        dispatch(adminOrdersRequest())
        const {data} = await axios.get(`/api/v1/admin/orders`)
        dispatch(adminOrdersSuccess(data))
     } catch (error) {
-        dispatch(adminOrdersFail(error.response.data.message))
+        dispatch(adminOrdersFail(error.response?.data?.message || error.message))
     }
 }
 

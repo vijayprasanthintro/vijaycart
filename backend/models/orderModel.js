@@ -50,6 +50,15 @@ const orderSchema = mongoose.Schema({
         required: true,
         ref: 'User'
     },
+    // Client-generated idempotency key for this checkout session. Used to
+    // prevent duplicate orders when a payment is submitted more than once
+    // (double-click, network retry). Sparse so older orders without a key
+    // (and the unique constraint) are unaffected.
+    orderKey: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
     deliveryBoy: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'User'

@@ -49,7 +49,7 @@ export default function UserOrders () {
     const [tab, setTab] = useState('all');
 
     useEffect(() => {
-        dispatch(userOrdersAction)
+        dispatch(userOrdersAction())
     }, [dispatch])
 
     const filtered = userOrders.filter(o => matchesTab(o.orderStatus, tab));

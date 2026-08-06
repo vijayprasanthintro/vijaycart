@@ -10,12 +10,23 @@ dotenv.config({path:path.join(__dirname,"config/config.env")});
 
 app.use(compression());
 
-// CORS Configuration
+// CORS Configuration — credentials (the httpOnly auth cookie) require an exact
+// origin allow-list. Both the Vercel frontends, the Railway backend's own
+// origin, and the two common dev origins are allowed.
+const ALLOWED_ORIGINS = [
+    'https://vijaycart-snowy.vercel.app',
+    'https://vijayprasanthintros-projects.vercel.app',
+    'https://vijaycart-production-2ec5.up.railway.app',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+];
 app.use(cors({
-    origin: [
-        'https://vijaycart-snowy.vercel.app',
-        'https://vijayprasanthintros-projects.vercel.app'
-    ],
+    origin: (origin, cb) => {
+        // Allow non-browser clients (curl, Postman, same-origin proxies) that
+        // send no Origin header, and exact allow-listed origins only.
+        if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+        return cb(new Error('Not allowed by CORS'));
+    },
     credentials: true
 }));
 

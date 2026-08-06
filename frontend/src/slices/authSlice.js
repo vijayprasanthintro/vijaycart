@@ -1,11 +1,48 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// The httpOnly cookie is the real credential; this localStorage copy of the
+// user profile is only an optimistic cache so that a page refresh restores the
+// UI session instantly (no redirect-to-login flash) before /myprofile
+// re-validates against the cookie. If the server rejects the cookie, the
+// cache is cleared and the user is logged out for real.
+const AUTH_KEY = 'vijaycart_auth';
+
+const readAuth = () => {
+    try {
+        const raw = localStorage.getItem(AUTH_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.isAuthenticated && parsed.user) return parsed;
+        return null;
+    } catch {
+        return null;
+    }
+};
+
+const persistAuth = (user) => {
+    try {
+        localStorage.setItem(AUTH_KEY, JSON.stringify({ isAuthenticated: true, user }));
+    } catch {
+        /* storage unavailable — cookie session still works for the current tab */
+    }
+};
+
+const clearAuth = () => {
+    try {
+        localStorage.removeItem(AUTH_KEY);
+    } catch {
+        /* ignore */
+    }
+};
+
+const savedAuth = readAuth();
 
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
         loading: true,
-        isAuthenticated: false
+        isAuthenticated: !!savedAuth,
+        user: savedAuth ? savedAuth.user : null
     },
     reducers: {
         loginRequest(state, action){
@@ -15,6 +52,7 @@ const authSlice = createSlice({
             }
         },
         loginSuccess(state, action){
+            persistAuth(action.payload.user);
             return {
                 loading: false,
                 isAuthenticated: true,
@@ -41,6 +79,7 @@ const authSlice = createSlice({
             }
         },
         registerSuccess(state, action){
+            persistAuth(action.payload.user);
             return {
                 loading: false,
                 isAuthenticated: true,
@@ -55,13 +94,16 @@ const authSlice = createSlice({
             }
         },
         loadUserRequest(state, action){
+            // Keep the previously known session while re-validating. Setting
+            // isAuthenticated=false here would flash a logged-out state on
+            // every refresh before /myprofile responds.
             return {
                 ...state,
-                isAuthenticated: false,
                 loading: true,
             }
         },
         loadUserSuccess(state, action){
+            persistAuth(action.payload.user);
             return {
                 loading: false,
                 isAuthenticated: true,
@@ -69,15 +111,31 @@ const authSlice = createSlice({
             }
         },
         loadUserFail(state, action){
+            const { status, message } = action.payload || {};
+            // Only treat an explicit auth rejection as a logout. A transient
+            // network/500 error must not kick the user out of a valid session.
+            const isAuthError = status === 401 || status === 403
+                || (status === 400 && /login first|token|unauthorized|not allowed/i.test(String(message || '')));
+            if (isAuthError) {
+                clearAuth();
+                return {
+                    loading: false,
+                    isAuthenticated: false,
+                    error: message
+                };
+            }
             return {
                 ...state,
                 loading: false,
-            }
+                error: message
+            };
         },
         logoutSuccess(state, action){
+            clearAuth();
             return {
                 loading: false,
                 isAuthenticated: false,
+                user: null
             }
         },
         logoutFail(state, action){
@@ -94,6 +152,7 @@ const authSlice = createSlice({
             }
         },
         updateProfileSuccess(state, action){
+            persistAuth(action.payload.user);
             return {
                 ...state,
                 loading: false,
@@ -164,6 +223,7 @@ const authSlice = createSlice({
             }
         },
         resetPasswordSuccess(state, action){
+            persistAuth(action.payload.user);
             return {
                 ...state,
                 loading: false,

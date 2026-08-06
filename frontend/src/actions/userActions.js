@@ -10,7 +10,6 @@ import {
     loadUserSuccess,
     loadUserFail,
     logoutSuccess,
-    logoutFail,
     updateProfileRequest,
     updateProfileSuccess,
     updateProfileFail,
@@ -85,7 +84,13 @@ export const loadUser = () => async (dispatch) => {
         const { data }  = await axios.get(`/api/v1/myprofile`);
         dispatch(loadUserSuccess(data))
     } catch (error) {
-        dispatch(loadUserFail(error.response.data.message))
+        // Pass the HTTP status so the slice can distinguish a real auth
+        // rejection (401/403) from a transient network/server error, and only
+        // log the user out in the former case.
+        dispatch(loadUserFail({
+            message: error.response?.data?.message || error.message,
+            status: error.response?.status
+        }))
     }
 
 }
@@ -94,10 +99,10 @@ export const logout = () => async (dispatch) => {
 
     try {
         await axios.get(`/api/v1/logout`);
-        dispatch(logoutSuccess())
     } catch (error) {
-        dispatch(logoutFail)
+        // Best effort — clear the client session regardless.
     }
+    dispatch(logoutSuccess())
 
 }
 

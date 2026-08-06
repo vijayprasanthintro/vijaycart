@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutSuccess } from '../../slices/authSlice';
+import { logout } from '../../actions/userActions';
 import { useWishlist } from '../../context/WishlistContext';
 import { Dropdown, Image } from 'react-bootstrap';
 import SearchSuggest from './SearchSuggest';
@@ -43,8 +43,11 @@ export default function Header() {
     return () => { document.body.style.overflow = ''; };
   }, [mobileSearchOpen]);
 
-  const logoutHandler = () => {
-    dispatch(logoutSuccess());
+  const logoutHandler = async () => {
+    // Calls the backend /logout (clears the httpOnly cookie server-side) and
+    // then dispatches logoutSuccess internally. Without the cookie being
+    // cleared, a page refresh would restore the old session.
+    await dispatch(logout());
     navigate('/');
   };
 

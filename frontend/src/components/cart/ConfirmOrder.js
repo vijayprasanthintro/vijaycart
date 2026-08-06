@@ -4,10 +4,15 @@ import { validateShipping } from './Shipping';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import CheckoutSteps from './CheckoutStep';
-import { setCoupon, clearCoupon } from '../../slices/cartSlice';
+import { setCoupon, clearCoupon, setOrderKey } from '../../slices/cartSlice';
 import { formatMoney, getPricing, getDeliveryLabel, getDeliveryDay, resolveProductImage, imgOnError } from '../../utils/productHelper';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+
+const generateOrderKey = () =>
+    (typeof crypto !== 'undefined' && crypto.randomUUID)
+        ? crypto.randomUUID()
+        : `ord_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 
 const TYPES = {
     home: { label: 'Home', icon: 'fa-house' },
@@ -23,7 +28,7 @@ const SUPPORT = {
 const COUPON_EXAMPLES = ['VJ10', 'SAVE20', 'FREESHIP'];
 
 export default function ConfirmOrder () {
-    const { shippingInfo, items:cartItems, coupon } = useSelector(state => state.cartState);
+    const { shippingInfo, items:cartItems, coupon, orderKey } = useSelector(state => state.cartState);
     const { user } = useSelector(state => state.authState);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -86,6 +91,12 @@ export default function ConfirmOrder () {
             discountPrice: couponDiscount
         }
         sessionStorage.setItem('orderInfo', JSON.stringify(data))
+        // Idempotency key for this checkout session. Generated once here and
+        // reused on every payment attempt so retries (refresh, double-click,
+        // network error) can never create a second order on the server.
+        if (!orderKey) {
+            dispatch(setOrderKey(generateOrderKey()))
+        }
         navigate('/payment')
     }
 

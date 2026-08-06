@@ -56,15 +56,21 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
 
 //Logout - /api/v1/logout
 exports.logoutUser = (req, res, next) => {
-        res.cookie('token',null, {
-            expires: new Date(Date.now()),
-            httpOnly: true
-        })
-        .status(200)
-        .json({
-            success: true,
-            message: "Loggedout"
-        })
+    const isProd = process.env.NODE_ENV === 'production';
+    // Clear the token cookie with flags matching how it was set, otherwise the
+    // browser keeps it and the next refresh logs the user straight back in.
+    res.cookie('token', null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+        sameSite: isProd ? 'none' : 'lax',
+        secure: isProd,
+        path: '/'
+    })
+    .status(200)
+    .json({
+        success: true,
+        message: "Loggedout"
+    })
 
 }
 

@@ -16,7 +16,7 @@ export default function UserList() {
 
     useEffect(() => {
         dispatch(getUsers);
-        dispatch(adminOrdersAction);
+        dispatch(adminOrdersAction());
     }, [dispatch]);
 
     useEffect(() => {

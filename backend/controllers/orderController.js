@@ -16,8 +16,34 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
         couponCode,
         totalPrice,
         paymentInfo,
-        paymentMethod = 'card'
+        paymentMethod = 'card',
+        orderKey
     } = req.body;
+
+    if (!Array.isArray(orderItems) || orderItems.length === 0) {
+        return next(new ErrorHandler('Your cart is empty. Add items before placing an order.', 400))
+    }
+    if (!shippingInfo || !shippingInfo.address || !shippingInfo.city || !shippingInfo.postalCode || !shippingInfo.phoneNo) {
+        return next(new ErrorHandler('Shipping address is incomplete. Please provide a valid address.', 400))
+    }
+
+    // Idempotency: a checkout session can only ever produce one order. If the
+    // same session (orderKey) or the same payment transaction (paymentInfo.id)
+    // already created an order — e.g. a double-click, or a retry after the
+    // client lost the response — return the existing order instead of creating
+    // a duplicate.
+    if (orderKey) {
+        const existing = await Order.findOne({ orderKey });
+        if (existing) {
+            return res.status(200).json({ success: true, order: existing })
+        }
+    }
+    if (paymentInfo && paymentInfo.id) {
+        const existing = await Order.findOne({ 'paymentInfo.id': paymentInfo.id });
+        if (existing) {
+            return res.status(200).json({ success: true, order: existing })
+        }
+    }
 
     //Cash on Delivery is gated server-side too so a bypassed UI cannot place
     //one when the store has COD disabled, the pincode is excluded, or the
@@ -43,20 +69,35 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
 
     const isPaid = paymentInfo && paymentInfo.status === 'succeeded';
 
-    const order = await Order.create({
-        orderItems,
-        shippingInfo,
-        itemsPrice,
-        taxPrice,
-        shippingPrice,
-        discountPrice,
-        couponCode,
-        totalPrice,
-        paymentInfo,
-        paymentMethod,
-        paidAt: isPaid ? Date.now() : undefined,
-        user: req.user.id
-    })
+    let order;
+    try {
+        order = await Order.create({
+            orderItems,
+            shippingInfo,
+            itemsPrice,
+            taxPrice,
+            shippingPrice,
+            discountPrice,
+            couponCode,
+            totalPrice,
+            paymentInfo,
+            paymentMethod,
+            paidAt: isPaid ? Date.now() : undefined,
+            user: req.user.id,
+            orderKey
+        })
+    } catch (err) {
+        // Two submissions for the same session arriving concurrently can both
+        // pass the findOne above; the unique index then rejects the second.
+        // Treat that as idempotent success and return the already-created order.
+        if (err && err.code === 11000 && orderKey) {
+            const existing = await Order.findOne({ orderKey });
+            if (existing) {
+                return res.status(200).json({ success: true, order: existing })
+            }
+        }
+        throw err;
+    }
 
     //Track coupon usage so admin-created limits stay accurate.
     if (couponCode) {
@@ -87,7 +128,9 @@ exports.getSingleOrder = catchAsyncError(async (req, res, next) => {
 
 //Get Loggedin User Orders - /api/v1/myorders
 exports.myOrders = catchAsyncError(async (req, res, next) => {
-    const orders = await Order.find({user: req.user.id});
+    // Orders are looked up by the authenticated user's id so every order a
+    // user places is returned, and only theirs. Newest first.
+    const orders = await Order.find({ user: req.user.id }).sort({ createdAt: -1 });
 
     res.status(200).json({
         success: true,

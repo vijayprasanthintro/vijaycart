@@ -41,7 +41,7 @@ export default function Profile () {
     }, [user?._id]);
 
     useEffect(() => {
-        dispatch(userOrdersAction)
+        dispatch(userOrdersAction())
     }, [dispatch])
 
     const logoutHandler = async () => {

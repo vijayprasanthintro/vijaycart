@@ -16,7 +16,7 @@ export default function AssignDelivery() {
     const [assigning, setAssigning] = useState(null);
 
     useEffect(() => {
-        dispatch(adminOrdersAction)
+        dispatch(adminOrdersAction())
         dispatch(getDeliveryBoys)
     }, [dispatch])
 
@@ -37,7 +37,7 @@ export default function AssignDelivery() {
                 position: toast.POSITION.BOTTOM_CENTER,
                 onOpen: () => {
                     dispatch(clearUpdateDelivery())
-                    dispatch(adminOrdersAction)
+                    dispatch(adminOrdersAction())
                 }
             })
         }

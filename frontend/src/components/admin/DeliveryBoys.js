@@ -11,7 +11,7 @@ export default function DeliveryBoys() {
 
     useEffect(() => {
         dispatch(getDeliveryBoys);
-        dispatch(adminOrdersAction);
+        dispatch(adminOrdersAction());
     }, [dispatch]);
 
     const stats = id => {

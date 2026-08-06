@@ -16,7 +16,7 @@ export default function OrderList() {
     const [status, setStatus] = useState('');
 
     useEffect(() => {
-        dispatch(adminOrdersAction);
+        dispatch(adminOrdersAction());
         dispatch(getDeliveryBoys);
     }, [dispatch]);
 

@@ -3,9 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const COUPON_KEY = 'vijaycart_coupon';
+const ORDER_KEY = 'vijaycart_orderKey';
 
 const readCoupon = () => {
     try { return JSON.parse(sessionStorage.getItem(COUPON_KEY)); } catch { return null; }
+};
+
+const readOrderKey = () => {
+    try { return sessionStorage.getItem(ORDER_KEY) || null; } catch { return null; }
 };
 
 const cartSlice = createSlice({
@@ -14,7 +19,12 @@ const cartSlice = createSlice({
         items: localStorage.getItem('cartItems')? JSON.parse(localStorage.getItem('cartItems')): [],
         loading: false,
         shippingInfo: localStorage.getItem('shippingInfo')? JSON.parse(localStorage.getItem('shippingInfo')): {},
-        coupon: readCoupon()
+        coupon: readCoupon(),
+        // Idempotency key for the current checkout session. Created when the
+        // user reaches the payment screen, cleared after the order is created,
+        // so a refresh/retry of the same session can never create a duplicate
+        // order on the server.
+        orderKey: readOrderKey()
     },
     reducers: {
         addCartItemRequest(state, action){
@@ -93,16 +103,33 @@ const cartSlice = createSlice({
                 coupon: null
             }
         },
+        setOrderKey(state, action) {
+            const key = action.payload;
+            try { sessionStorage.setItem(ORDER_KEY, key); } catch { /* ignore */ }
+            return {
+                ...state,
+                orderKey: key
+            }
+        },
+        clearOrderKey(state, action) {
+            try { sessionStorage.removeItem(ORDER_KEY); } catch { /* ignore */ }
+            return {
+                ...state,
+                orderKey: null
+            }
+        },
         orderCompleted(state, action) {
             localStorage.removeItem('shippingInfo');
             localStorage.removeItem('cartItems');
             sessionStorage.removeItem('orderInfo');
             try { sessionStorage.removeItem(COUPON_KEY); } catch { /* ignore */ }
+            try { sessionStorage.removeItem(ORDER_KEY); } catch { /* ignore */ }
             return {
                 items: [],
                 loading: false,
                 shippingInfo: {},
-                coupon: null
+                coupon: null,
+                orderKey: null
             }
         }
 
@@ -120,6 +147,8 @@ export const {
     saveShippingInfo,
     setCoupon,
     clearCoupon,
+    setOrderKey,
+    clearOrderKey,
     orderCompleted
  } = actions;
 

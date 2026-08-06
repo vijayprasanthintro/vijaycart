@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import { orderCompleted } from "../../slices/cartSlice";
+import { orderCompleted, setOrderKey } from "../../slices/cartSlice";
 import { validateShipping } from './Shipping';
 import { createOrder } from '../../actions/orderActions';
 import { clearError as clearOrderError } from "../../slices/orderSlice";
@@ -79,7 +79,7 @@ export default function Payment() {
     const navigate = useNavigate();
     const orderInfo = JSON.parse(sessionStorage.getItem('orderInfo'))
     const { user } = useSelector(state => state.authState)
-    const { items: cartItems, shippingInfo } = useSelector(state => state.cartState)
+    const { items: cartItems, shippingInfo, orderKey } = useSelector(state => state.cartState)
     const { error: orderError } = useSelector(state => state.orderState)
 
     const total = Number(orderInfo ? orderInfo.totalPrice : 0);
@@ -183,7 +183,12 @@ export default function Payment() {
         if (method === 'cod' && codCheck.available === false) setMethod('upi');
     }, [method, codCheck.available]);
 
-    const buildOrder = (paymentInfo, paymentMethod) => ({
+    const generateOrderKey = () =>
+        (typeof crypto !== 'undefined' && crypto.randomUUID)
+            ? crypto.randomUUID()
+            : `ord_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+
+    const buildOrder = (paymentInfo, paymentMethod, key) => ({
         orderItems: cartItems,
         shippingInfo,
         itemsPrice: orderInfo ? orderInfo.itemsPrice : 0,
@@ -193,11 +198,17 @@ export default function Payment() {
         discountPrice,
         couponCode: orderInfo ? orderInfo.couponCode : '',
         paymentInfo,
-        paymentMethod
+        paymentMethod,
+        // Idempotency key so a retried submit can never duplicate the order.
+        orderKey: key
     });
 
     const completePayment = async (paymentInfo, paymentMethod) => {
-        const order = buildOrder(paymentInfo, paymentMethod);
+        // Guarantee an idempotency key exists for this checkout session even
+        // if the user navigated straight here (e.g. after a refresh).
+        const key = orderKey || generateOrderKey();
+        if (!orderKey) dispatch(setOrderKey(key));
+        const order = buildOrder(paymentInfo, paymentMethod, key);
         try {
             await dispatch(createOrder(order));
             dispatch(orderCompleted());
