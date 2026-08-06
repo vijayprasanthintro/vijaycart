@@ -97,7 +97,7 @@
       { "image": "/images/products/21.jpg" }
     ],
     "reviews": [
-      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Sneha Kulkarni", "rating": 5, "comment": "Handles my coding projects and video calls effortlessly. Battery easily lasts a full workday." },
+      { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "vijay", "rating": 5, "comment": "Handles my coding projects and video calls effortlessly. Battery easily lasts a full workday." },
       { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Vikram Singh", "rating": 4, "comment": "Build quality feels premium and the keyboard is lovely to type on." },
       { "user": "60e4d3c2b1a0987654321fed", "userName": "Ananya Iyer", "rating": 5, "comment": "Boots up instantly and the display is crisp. Great value compared to other i7 laptops." }
     ]
