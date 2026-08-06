@@ -2,7 +2,32 @@ const catchAsyncError = require('../middlewares/catchAsyncError');
 const Order = require('../models/orderModel');
 const User = require('../models/userModel');
 const ErrorHandler = require('../utils/errorHandler');
+//Admin: Create a new delivery boy - /api/v1/admin/deliveryboy
+exports.createDeliveryBoy = catchAsyncError(async (req, res, next) => {
+    const { name, email, password, phone } = req.body;
 
+    if (!name || !email || !password) {
+        return next(new ErrorHandler('Please enter name, email and password', 400))
+    }
+
+    const existing = await User.findOne({ email });
+    if (existing) {
+        return next(new ErrorHandler('A user with this email already exists', 400))
+    }
+
+    const deliveryBoy = await User.create({
+        name,
+        email,
+        password,
+        phone,
+        role: 'deliveryboy'
+    });
+
+    res.status(201).json({
+        success: true,
+        deliveryBoy
+    })
+});
 //Expected OTP for an order — last 4 digits of the customer's phone number.
 function orderOtp(order) {
     const digits = String(order.shippingInfo.phoneNo || '').replace(/\D/g, '');
