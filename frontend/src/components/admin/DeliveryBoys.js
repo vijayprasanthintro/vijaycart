@@ -94,4 +94,4 @@ export default function DeliveryBoys() {
             </div>
         </Fragment>
     );
-}
+    }
