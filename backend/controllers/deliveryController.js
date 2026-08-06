@@ -2,6 +2,23 @@ const catchAsyncError = require('../middlewares/catchAsyncError');
 const Order = require('../models/orderModel');
 const User = require('../models/userModel');
 const ErrorHandler = require('../utils/errorHandler');
+
+//Expected OTP for an order — last 4 digits of the customer's phone number.
+function orderOtp(order) {
+    const digits = String(order.shippingInfo.phoneNo || '').replace(/\D/g, '');
+    return digits.slice(-4);
+}
+
+//Admin: List all delivery boys - /api/v1/admin/deliveryboys
+exports.getDeliveryBoys = catchAsyncError(async (req, res, next) => {
+    const deliveryBoys = await User.find({ role: 'deliveryboy' }).select('name email avatar role');
+
+    res.status(200).json({
+        success: true,
+        deliveryBoys
+    })
+});
+
 //Admin: Create a new delivery boy - /api/v1/admin/deliveryboy
 exports.createDeliveryBoy = catchAsyncError(async (req, res, next) => {
     const { name, email, password, phone } = req.body;
@@ -26,21 +43,6 @@ exports.createDeliveryBoy = catchAsyncError(async (req, res, next) => {
     res.status(201).json({
         success: true,
         deliveryBoy
-    })
-});
-//Expected OTP for an order — last 4 digits of the customer's phone number.
-function orderOtp(order) {
-    const digits = String(order.shippingInfo.phoneNo || '').replace(/\D/g, '');
-    return digits.slice(-4);
-}
-
-//Admin: List all delivery boys - /api/v1/admin/deliveryboys
-exports.getDeliveryBoys = catchAsyncError(async (req, res, next) => {
-    const deliveryBoys = await User.find({ role: 'deliveryboy' }).select('name email avatar role');
-
-    res.status(200).json({
-        success: true,
-        deliveryBoys
     })
 });
 
@@ -108,6 +110,7 @@ exports.updateDeliveryStatus = catchAsyncError(async (req, res, next) => {
     if (!order) {
         return next(new ErrorHandler(`Order not found with this id: ${req.params.id}`, 404))
     }
+
     if (String(order.deliveryBoy) !== String(req.user.id)) {
         return next(new ErrorHandler('This order is not assigned to you', 401))
     }
@@ -145,7 +148,7 @@ exports.updateDeliveryStatus = catchAsyncError(async (req, res, next) => {
         const otp = String(req.body.otp || '').trim();
         const expected = orderOtp(order);
         if (!otp || otp !== expected) {
-            return next(new ErrorHandler(`Invalid OTP. Please confirm the last 4 digits of the customer's phone number with them`, 400))
+            return next(new ErrorHandler(`Invalid OTP. Please confirm the last 4 digits of the customer's phone number`, 400))
         }
         order.deliveredAt = Date.now();
         if (order.paymentMethod === 'cod') {
