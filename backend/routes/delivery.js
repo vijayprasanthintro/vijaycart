@@ -1,5 +1,5 @@
 const express = require('express');
-const { myDeliveryOrders, todayDeliveryOrders, updateDeliveryStatus, deliveryHistory, getDeliveryBoys, assignOrder } = require('../controllers/deliveryController');
+const { myDeliveryOrders, todayDeliveryOrders, updateDeliveryStatus, deliveryHistory, getDeliveryBoys, assignOrder, createDeliveryBoy } = require('../controllers/deliveryController');
 const router = express.Router();
 const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/authenticate');
 
