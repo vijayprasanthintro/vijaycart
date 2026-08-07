@@ -11,6 +11,20 @@ const LIST_FIELDS = 'name price mrp discount brand images ratings stock seller n
 
 const MAX_LIMIT = 200;
 
+//Multipart forms send array-of-object fields (specifications, features) as
+//JSON strings. Restore them to real arrays before they reach the schema.
+function parseJsonField(value) {
+    if (typeof value === 'string') {
+        try {
+            const parsed = JSON.parse(value);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+            return [];
+        }
+    }
+    return Array.isArray(value) ? value : [];
+}
+
 //Get Products - /api/v1/products
 exports.getProducts = catchAsyncError(async (req, res, next)=>{
     const cacheKey = `products:${req.originalUrl}`;
@@ -59,6 +73,16 @@ exports.newProduct = catchAsyncError(async (req, res, next)=>{
     }
 
     req.body.images = images;
+
+    if (req.body.specifications !== undefined) {
+        req.body.specifications = parseJsonField(req.body.specifications);
+    }
+    if (req.body.features !== undefined) {
+        req.body.features = parseJsonField(req.body.features);
+    }
+    if (req.body.highlights !== undefined) {
+        req.body.highlights = parseJsonField(req.body.highlights);
+    }
 
     req.body.user = req.user.id;
     const product = await Product.create(req.body);
@@ -121,6 +145,16 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
 
 
     req.body.images = images;
+
+    if (req.body.specifications !== undefined) {
+        req.body.specifications = parseJsonField(req.body.specifications);
+    }
+    if (req.body.features !== undefined) {
+        req.body.features = parseJsonField(req.body.features);
+    }
+    if (req.body.highlights !== undefined) {
+        req.body.highlights = parseJsonField(req.body.highlights);
+    }
     
     if(!product) {
         return res.status(404).json({

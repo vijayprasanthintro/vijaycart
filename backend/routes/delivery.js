@@ -1,5 +1,5 @@
 const express = require('express');
-const { myDeliveryOrders, todayDeliveryOrders, updateDeliveryStatus, deliveryHistory, getDeliveryBoys, assignOrder, createDeliveryBoy } = require('../controllers/deliveryController');
+const { myDeliveryOrders, todayDeliveryOrders, updateDeliveryStatus, deliveryHistory, getDeliveryBoys, createDeliveryBoy, toggleAvailability, assignOrder } = require('../controllers/deliveryController');
 const router = express.Router();
 const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/authenticate');
 
@@ -12,6 +12,7 @@ router.route('/delivery/history').get(isAuthenticatedUser, authorizeRoles('deliv
 //Admin Routes
 router.route('/admin/deliveryboys').get(isAuthenticatedUser, authorizeRoles('admin'), getDeliveryBoys);
 router.route('/admin/deliveryboy').post(isAuthenticatedUser, authorizeRoles('admin'), createDeliveryBoy);
+router.route('/admin/deliveryboy/:id/availability').put(isAuthenticatedUser, authorizeRoles('admin'), toggleAvailability);
 router.route('/admin/order/:id/assign').put(isAuthenticatedUser, authorizeRoles('admin'), assignOrder);
 
 module.exports = router;

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import GalleryLightbox from './GalleryLightbox';
-import { getReviewImages, getHelpfulBase, imgOnError } from '../../utils/productHelper';
+import { getReviewImages, getHelpfulBase, getReviewerName, imgOnError } from '../../utils/productHelper';
 
 const HELP_KEY = 'vijaycart_review_helpful';
 
@@ -8,8 +8,6 @@ const avatarInitial = (name) => {
     const raw = (name || 'U').trim();
     return raw ? raw[0].toUpperCase() : 'U';
 };
-
-const reviewerName = (review) => review.userName || review.user?.name || 'Anonymous';
 
 function ReviewCard({ review }) {
     const [helpful, setHelpful] = useState(() => {
@@ -46,10 +44,10 @@ function ReviewCard({ review }) {
 
     return (
         <div className="review-card">
-            <div className="review-avatar">{avatarInitial(reviewerName(review))}</div>
+            <div className="review-avatar">{avatarInitial(getReviewerName(review))}</div>
             <div className="review-body">
                 <div className="review-top">
-                    <span className="review-name">{reviewerName(review)}</span>
+                    <span className="review-name">{getReviewerName(review)}</span>
                     <span className="review-verified"><i className="fa fa-check-circle" aria-hidden="true"></i> Verified Purchase</span>
                 </div>
                 <div className="review-stars">

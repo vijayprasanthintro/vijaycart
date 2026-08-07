@@ -4,6 +4,9 @@ const Product = require('../models/productModel');
 const Coupon = require('../models/couponModel');
 const Setting = require('../models/settingModel');
 const ErrorHandler = require('../utils/errorHandler');
+
+const ORDER_STATUSES = ['Pending', 'Confirmed', 'Packed', 'Shipped', 'Out for Delivery', 'Delivered', 'Cancelled'];
+
 //Create New Order - api/v1/order/new
 exports.newOrder =  catchAsyncError( async (req, res, next) => {
     const {
@@ -31,15 +34,16 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
     // same session (orderKey) or the same payment transaction (paymentInfo.id)
     // already created an order — e.g. a double-click, or a retry after the
     // client lost the response — return the existing order instead of creating
-    // a duplicate.
+    // a duplicate. The lookup is scoped to the authenticated user so a stale
+    // key inherited from another account can never surface that user's order.
     if (orderKey) {
-        const existing = await Order.findOne({ orderKey });
+        const existing = await Order.findOne({ orderKey, user: req.user.id });
         if (existing) {
             return res.status(200).json({ success: true, order: existing })
         }
     }
     if (paymentInfo && paymentInfo.id) {
-        const existing = await Order.findOne({ 'paymentInfo.id': paymentInfo.id });
+        const existing = await Order.findOne({ 'paymentInfo.id': paymentInfo.id, user: req.user.id });
         if (existing) {
             return res.status(200).json({ success: true, order: existing })
         }
@@ -84,14 +88,23 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
             paymentMethod,
             paidAt: isPaid ? Date.now() : undefined,
             user: req.user.id,
-            orderKey
+            orderKey,
+            orderStatus: 'Pending',
+            statusHistory: [{
+                status: 'Pending',
+                changedAt: Date.now(),
+                changedBy: req.user.id,
+                note: isPaid ? 'Order placed (paid)' : 'Order placed'
+            }]
         })
     } catch (err) {
         // Two submissions for the same session arriving concurrently can both
         // pass the findOne above; the unique index then rejects the second.
-        // Treat that as idempotent success and return the already-created order.
+        // Treat that as idempotent success and return the already-created order
+        // — but only if it belongs to this user. A key from another account is
+        // a stale/broken session and must fail loudly, not leak that order.
         if (err && err.code === 11000 && orderKey) {
-            const existing = await Order.findOne({ orderKey });
+            const existing = await Order.findOne({ orderKey, user: req.user.id });
             if (existing) {
                 return res.status(200).json({ success: true, order: existing })
             }
@@ -167,10 +180,17 @@ exports.cancelOrder = catchAsyncError(async (req, res, next) => {
     if (order.orderStatus === 'Cancelled') {
         return next(new ErrorHandler('Order has already been cancelled', 400))
     }
-    if (order.orderStatus !== 'Processing' && order.orderStatus !== 'Packed') {
+    if (order.orderStatus !== 'Pending' && order.orderStatus !== 'Confirmed' && order.orderStatus !== 'Packed') {
         return next(new ErrorHandler('Order can no longer be cancelled after it has been shipped', 400))
     }
     order.orderStatus = 'Cancelled';
+    order.statusHistory = order.statusHistory || [];
+    order.statusHistory.push({
+        status: 'Cancelled',
+        changedAt: Date.now(),
+        changedBy: req.user.id,
+        note: 'Cancelled by customer'
+    });
     await order.save();
 
     res.status(200).json({
@@ -222,24 +242,41 @@ exports.returnOrder = catchAsyncError(async (req, res, next) => {
 exports.updateOrder =  catchAsyncError(async (req, res, next) => {
     const order = await Order.findById(req.params.id);
 
-    if(order.orderStatus == 'Delivered') {
+    if (!order) {
+        return next(new ErrorHandler(`Order not found with this id: ${req.params.id}`, 404))
+    }
+
+    const nextStatus = String(req.body.orderStatus || '').trim();
+    if (!ORDER_STATUSES.includes(nextStatus)) {
+        return next(new ErrorHandler(`Invalid order status. Choose from: ${ORDER_STATUSES.join(', ')}`, 400))
+    }
+
+    if (order.orderStatus === 'Delivered') {
         return next(new ErrorHandler('Order has been already delivered!', 400))
     }
-    //Reserve stock only once — when the order first leaves 'Processing'.
-    if (order.orderStatus === 'Processing') {
+    //Reserve stock only once — when the order first leaves 'Pending'.
+    if (order.orderStatus === 'Pending') {
         order.orderItems.forEach(async orderItem => {
             await updateStock(orderItem.product, orderItem.quantity)
         })
     }
 
-    order.orderStatus = req.body.orderStatus;
+    order.orderStatus = nextStatus;
+    order.statusHistory = order.statusHistory || [];
+    order.statusHistory.push({
+        status: nextStatus,
+        changedAt: Date.now(),
+        changedBy: req.user.id,
+        note: 'Admin update'
+    });
     if (req.body.orderStatus === 'Delivered') {
         order.deliveredAt = Date.now();
     }
     await order.save();
 
     res.status(200).json({
-        success: true
+        success: true,
+        order
     })
     
 });

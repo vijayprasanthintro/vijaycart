@@ -6,6 +6,7 @@ import { clearUpdateDelivery } from "../../slices/deliverySlice"
 import { toast } from 'react-toastify'
 import Loader from '../layouts/Loader';
 import { toINR } from './Charts'
+import { statusBadge } from '../../utils/orderStatuses'
 
 export default function AssignDelivery() {
     const { adminOrders = [], loading: orderLoading } = useSelector(state => state.orderState)
@@ -17,7 +18,7 @@ export default function AssignDelivery() {
 
     useEffect(() => {
         dispatch(adminOrdersAction())
-        dispatch(getDeliveryBoys)
+        dispatch(getDeliveryBoys())
     }, [dispatch])
 
     useEffect(() => {
@@ -63,7 +64,7 @@ export default function AssignDelivery() {
             <div className="ad-page-head">
                 <div>
                     <h1>Assign Delivery Boy</h1>
-                    <p>Map active orders to your delivery partners</p>
+                    <p>Map active orders to your delivery partners — only available partners are selectable</p>
                 </div>
             </div>
             {orderLoading || dbLoading ? <Loader /> : (
@@ -88,7 +89,7 @@ export default function AssignDelivery() {
                                                     {new Date(order.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
                                                 </span>
                                             </div>
-                                            <span className={`ad-badge ${order.orderStatus === 'Delivered' ? 'ad-badge--success' : order.orderStatus === 'Cancelled' ? 'ad-badge--danger' : order.orderStatus === 'Processing' ? 'ad-badge--warning' : order.orderStatus === 'Packed' ? 'ad-badge--info' : 'ad-badge--primary'}`}>{order.orderStatus}</span>
+                                            <span className={`ad-badge ${statusBadge(order.orderStatus)}`}>{order.orderStatus}</span>
                                         </div>
                                         <div className="ad-assign__meta">
                                             <span><i className="fa fa-map-marker" aria-hidden="true"></i> {order.shippingInfo?.city || ''} · {order.shippingInfo?.state || ''} · {order.shippingInfo?.postalCode || ''}</span>
@@ -110,7 +111,9 @@ export default function AssignDelivery() {
                                                 >
                                                     <option value="">{current ? 'Reassign…' : 'Select delivery boy…'}</option>
                                                     {deliveryBoys.map(b => (
-                                                        <option key={b._id} value={b._id}>{b.name} ({b.email})</option>
+                                                        <option key={b._id} value={b._id} disabled={b.availability === false}>
+                                                            {b.name} ({b.email}){b.availability === false ? ' — Unavailable' : ''}
+                                                        </option>
                                                     ))}
                                                 </select>
                                                 <button

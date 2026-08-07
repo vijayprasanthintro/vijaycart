@@ -8,11 +8,20 @@ import { toast } from "react-toastify";
 
 export default function NewProduct() {
     const [name, setName] = useState("");
+    const [brand, setBrand] = useState("");
     const [price, setPrice] = useState("");
+    const [mrp, setMrp] = useState("");
+    const [discount, setDiscount] = useState(0);
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState("");
     const [stock, setStock] = useState(0);
     const [seller, setSeller] = useState("");
+    const [specs, setSpecs] = useState([
+        { label: 'Model', value: '' },
+        { label: 'RAM', value: '' },
+        { label: 'Storage', value: '' },
+        { label: 'Color', value: '' }
+    ]);
     const [images, setImages] = useState([]);
     const [imagesPreview, setImagesPreview] = useState([]);
 
@@ -53,9 +62,22 @@ export default function NewProduct() {
         formData.append('description', description);
         formData.append('seller', seller);
         formData.append('category', category);
+        if (brand.trim()) formData.append('brand', brand.trim());
+        if (mrp) formData.append('mrp', mrp);
+        if (discount) formData.append('discount', discount);
+        const cleanSpecs = specs
+            .filter(sp => sp.label.trim() || sp.value.trim())
+            .map(sp => ({ label: sp.label.trim(), value: sp.value.trim() }));
+        formData.append('specifications', JSON.stringify(cleanSpecs));
         images.forEach(image => formData.append('images', image));
         dispatch(createNewProduct(formData));
     };
+
+    const onSpecChange = (i, field, value) => {
+        setSpecs(specs.map((sp, idx) => idx === i ? { ...sp, [field]: value } : sp));
+    };
+    const addSpec = () => setSpecs([...specs, { label: '', value: '' }]);
+    const removeSpec = (i) => setSpecs(specs.filter((_, idx) => idx !== i));
 
     useEffect(() => {
         if (isProductCreated) {
@@ -87,12 +109,8 @@ export default function NewProduct() {
                                 <input className="ad-input" value={name} onChange={e => setName(e.target.value)} />
                             </div>
                             <div className="ad-field">
-                                <label className="ad-label">Price (₹) *</label>
-                                <input className="ad-input" type="number" value={price} onChange={e => setPrice(e.target.value)} />
-                            </div>
-                            <div className="ad-field">
-                                <label className="ad-label">Stock *</label>
-                                <input className="ad-input" type="number" value={stock} onChange={e => setStock(e.target.value)} />
+                                <label className="ad-label">Brand</label>
+                                <input className="ad-input" value={brand} onChange={e => setBrand(e.target.value)} placeholder="e.g. Samsung, Apple" />
                             </div>
                             <div className="ad-field">
                                 <label className="ad-label">Category *</label>
@@ -104,8 +122,41 @@ export default function NewProduct() {
                                 </select>
                             </div>
                             <div className="ad-field">
+                                <label className="ad-label">Price (₹) *</label>
+                                <input className="ad-input" type="number" value={price} onChange={e => setPrice(e.target.value)} />
+                            </div>
+                            <div className="ad-field">
+                                <label className="ad-label">Original Price / MRP (₹)</label>
+                                <input className="ad-input" type="number" value={mrp} onChange={e => setMrp(e.target.value)} />
+                            </div>
+                            <div className="ad-field">
+                                <label className="ad-label">Discount (%)</label>
+                                <input className="ad-input" type="number" min="0" max="95" value={discount} onChange={e => setDiscount(e.target.value)} />
+                            </div>
+                            <div className="ad-field">
+                                <label className="ad-label">Stock *</label>
+                                <input className="ad-input" type="number" value={stock} onChange={e => setStock(e.target.value)} />
+                            </div>
+                            <div className="ad-field">
                                 <label className="ad-label">Seller Name *</label>
                                 <input className="ad-input" value={seller} onChange={e => setSeller(e.target.value)} />
+                            </div>
+                            <div className="ad-field ad-field--full">
+                                <label className="ad-label">Specifications (Model, RAM, Storage, Color…)</label>
+                                <div className="ad-specs">
+                                    {specs.map((sp, i) => (
+                                        <div className="ad-specs__row" key={i}>
+                                            <input className="ad-input" placeholder="Label (e.g. RAM)" value={sp.label} onChange={e => onSpecChange(i, 'label', e.target.value)} />
+                                            <input className="ad-input" placeholder="Value (e.g. 8 GB)" value={sp.value} onChange={e => onSpecChange(i, 'value', e.target.value)} />
+                                            <button type="button" className="ad-btn ad-btn--danger ad-btn--sm ad-btn--icon" onClick={() => removeSpec(i)} title="Remove" disabled={specs.length <= 1}>
+                                                <i className="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    ))}
+                                    <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" onClick={addSpec} style={{ alignSelf: 'flex-start' }}>
+                                        <i className="fa fa-plus" aria-hidden="true"></i> Add spec
+                                    </button>
+                                </div>
                             </div>
                             <div className="ad-field ad-field--full">
                                 <label className="ad-label">Description *</label>

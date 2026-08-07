@@ -10,8 +10,8 @@ import { openInvoice } from '../../utils/invoice';
 
 const TABS = [
     { key: 'all', label: 'All' },
-    { key: 'processing', label: 'Processing' },
-    { key: 'shipped', label: 'Shipped' },
+    { key: 'pending', label: 'Pending' },
+    { key: 'transit', label: 'In Transit' },
     { key: 'delivered', label: 'Delivered' },
     { key: 'cancelled', label: 'Cancelled' },
 ];
@@ -22,16 +22,16 @@ const statusMeta = (status) => {
     if (s.includes('delivered')) return { label: status, cls: 'delivered' };
     if (s.includes('ship') || s.includes('out for delivery')) return { label: status, cls: 'shipped' };
     if (s.includes('pack')) return { label: status, cls: 'packed' };
-    if (s.includes('process')) return { label: status, cls: 'processing' };
-    return { label: status || 'Processing', cls: 'processing' };
+    if (s.includes('confirm')) return { label: status, cls: 'confirmed' };
+    return { label: status || 'Pending', cls: 'processing' };
 };
 
 const matchesTab = (status, tab) => {
     if (tab === 'all') return true;
     const s = (status || '').toLowerCase();
     switch (tab) {
-        case 'processing': return s.includes('process');
-        case 'shipped': return s.includes('ship') || s.includes('out for delivery') || s.includes('pack');
+        case 'pending': return s.includes('pending') || s.includes('process');
+        case 'transit': return s.includes('confirm') || s.includes('pack') || s.includes('ship') || s.includes('out for delivery');
         case 'delivered': return s.includes('deliver');
         case 'cancelled': return s.includes('cancel');
         default: return true;
@@ -55,7 +55,7 @@ export default function UserOrders () {
     const filtered = userOrders.filter(o => matchesTab(o.orderStatus, tab));
     const tabCount = (key) => key === 'all' ? userOrders.length : userOrders.filter(o => matchesTab(o.orderStatus, key)).length;
 
-    const canCancel = (status) => ['process', 'pack'].some(k => (status || '').toLowerCase().includes(k));
+    const canCancel = (status) => ['pending', 'confirm', 'process', 'pack'].some(k => (status || '').toLowerCase().includes(k));
 
     const returnBadge = (status) => {
         const s = (status || '').toLowerCase();

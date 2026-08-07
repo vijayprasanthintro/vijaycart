@@ -2997,6 +2997,7 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
 .mo-date { font-size: 0.76rem; color: var(--muted-text); font-family: var(--font-accent); margin-top: 0.15rem; }
 .mo-status { display: inline-flex; align-items: center; gap: 0.35rem; font-family: var(--font-accent); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; padding: 0.32rem 0.85rem; border-radius: 999px; }
 .mo-status.processing { background: rgba(45, 120, 220, 0.12); color: #2d78dc; }
+.mo-status.confirmed { background: rgba(99, 102, 241, 0.12); color: #6366f1; }
 .mo-status.packed { background: rgba(156, 39, 176, 0.12); color: #9c27b0; }
 .mo-status.shipped { background: rgba(156, 39, 176, 0.12); color: #9c27b0; }
 .mo-status.delivered { background: var(--success-soft); color: var(--success); }

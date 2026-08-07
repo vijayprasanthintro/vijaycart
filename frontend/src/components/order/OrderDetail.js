@@ -15,7 +15,8 @@ const statusMeta = (status) => {
     if (s.includes('out for delivery')) return { label: status, cls: 'shipped', icon: 'fa-truck' };
     if (s.includes('ship')) return { label: status, cls: 'shipped', icon: 'fa-truck' };
     if (s.includes('pack')) return { label: status, cls: 'packed', icon: 'fa-box' };
-    return { label: status || 'Processing', cls: 'processing', icon: 'fa-hourglass-half' };
+    if (s.includes('confirm')) return { label: status, cls: 'confirmed', icon: 'fa-check-circle-o' };
+    return { label: status || 'Pending', cls: 'processing', icon: 'fa-hourglass-half' };
 };
 
 const returnMeta = (status) => {
@@ -32,6 +33,7 @@ const returnMeta = (status) => {
 
 const TRACK_STEPS = [
     { label: 'Order Placed', icon: 'fa-check' },
+    { label: 'Confirmed', icon: 'fa-check-circle-o' },
     { label: 'Packed', icon: 'fa-box' },
     { label: 'Shipped', icon: 'fa-truck' },
     { label: 'Out for Delivery', icon: 'fa-motorcycle' },
@@ -41,13 +43,14 @@ const TRACK_STEPS = [
 function OrderTracking({ status }) {
     const s = (status || '').toLowerCase();
     let current = 0;
-    if (s.includes('pack')) current = 1;
-    else if (s.includes('ship')) current = s.includes('out for delivery') ? 3 : 2;
+    if (s.includes('confirm')) current = 1;
+    else if (s.includes('pack')) current = 2;
+    else if (s.includes('ship')) current = s.includes('out for delivery') ? 4 : 3;
     else if (s.includes('deliver')) current = 5;
 
     return (
         <div className="od-track">
-            <div className="od-track-fill" style={{ width: `${(Math.min(current, 4) / (TRACK_STEPS.length - 1)) * 100}%` }}></div>
+            <div className="od-track-fill" style={{ width: `${(Math.min(current, TRACK_STEPS.length - 1) / (TRACK_STEPS.length - 1)) * 100}%` }}></div>
             {TRACK_STEPS.map((step, i) => (
                 <div key={step.label} className={`od-track-step ${i < current ? 'done' : ''} ${i === current ? 'active' : ''}`}>
                     <span className="od-track-dot"><i className={`fa ${i < current ? 'fa-check' : step.icon}`} aria-hidden="true"></i></span>
@@ -65,7 +68,7 @@ const RETURN_REASONS = {
 
 export default function OrderDetail () {
     const { orderDetail, loading } = useSelector(state => state.orderState)
-    const { shippingInfo = {}, user = {}, orderStatus = 'Processing', orderItems = [], totalPrice = 0, itemsPrice = 0, shippingPrice = 0, taxPrice = 0, discountPrice = 0, couponCode = '', paymentMethod = '', paymentInfo = {}, returnStatus = 'None', returnReason = '', codStatus = 'Pending' } = orderDetail;
+    const { shippingInfo = {}, user = {}, orderStatus = 'Pending', orderItems = [], totalPrice = 0, itemsPrice = 0, shippingPrice = 0, taxPrice = 0, discountPrice = 0, couponCode = '', paymentMethod = '', paymentInfo = {}, returnStatus = 'None', returnReason = '', codStatus = 'Pending' } = orderDetail;
     const isPaid = paymentInfo && paymentInfo.status === "succeeded";
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -79,7 +82,7 @@ export default function OrderDetail () {
         dispatch(orderDetailAction(id))
     }, [id, dispatch])
 
-    const canCancel = ['process', 'pack'].some(k => (orderStatus || '').toLowerCase().includes(k));
+    const canCancel = ['pending', 'confirm', 'process', 'pack'].some(k => (orderStatus || '').toLowerCase().includes(k));
     const isDelivered = (orderStatus || '').toLowerCase().includes('deliver');
     const ret = returnMeta(returnStatus);
     const canRequestReturn = isDelivered && (!ret || String(returnStatus).toLowerCase().includes('rejected'));

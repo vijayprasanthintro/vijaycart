@@ -16,6 +16,7 @@ const NAV = [
         group: 'Management',
         items: [
             { to: '/admin/orders', icon: 'fa-shopping-basket', label: 'Orders' },
+            { to: '/admin/delivery', icon: 'fa-truck', label: 'Assign Delivery' },
             { to: '/admin/products', icon: 'fa-box', label: 'Products' },
             { to: '/admin/categories', icon: 'fa-th-large', label: 'Categories' },
             { to: '/admin/coupons', icon: 'fa-ticket', label: 'Coupons' },
@@ -48,6 +49,7 @@ const TITLES = {
     '/admin/categories': { title: 'Categories', sub: 'Organize your catalogue' },
     '/admin/coupons': { title: 'Coupons', sub: 'Discounts & promotions' },
     '/admin/delivery-boys': { title: 'Delivery Boys', sub: 'Delivery partners & assignments' },
+    '/admin/delivery': { title: 'Assign Delivery', sub: 'Map orders to delivery partners' },
     '/admin/users': { title: 'Users', sub: 'Customers & accounts' },
     '/admin/analytics': { title: 'Analytics', sub: 'Traffic, orders & trends' },
     '/admin/revenue': { title: 'Revenue', sub: 'Earnings & payment insights' },

@@ -17,11 +17,12 @@ exports.getAnalytics = catchAsyncError(async (req, res, next) => {
     let revenue = 0;
     let paidRevenue = 0;
     let pendingRevenue = 0;
+    const ACTIVE_STATUSES = ['Pending', 'Confirmed', 'Packed', 'Shipped', 'Out for Delivery'];
     orders.forEach(o => {
         if (o.orderStatus === 'Cancelled') return;
         revenue += o.totalPrice;
         if (o.orderStatus === 'Delivered') paidRevenue += o.totalPrice;
-        if (['Processing', 'Packed', 'Out for Delivery'].includes(o.orderStatus)) pendingRevenue += o.totalPrice;
+        if (ACTIVE_STATUSES.includes(o.orderStatus)) pendingRevenue += o.totalPrice;
     });
 
     const totalProducts = products.length;
@@ -33,11 +34,15 @@ exports.getAnalytics = catchAsyncError(async (req, res, next) => {
     const deliveryBoys = users.filter(u => u.role === 'deliveryboy').length;
     const admins = users.filter(u => u.role === 'admin').length;
 
+    //Legacy orders created before the Pending/Confirmed/Shipped vocabulary are
+    //migrated on startup, but the counts stay robust for in-flight documents.
+    const normalizeStatus = s => s === 'Processing' ? 'Pending' : s;
     const statusCounts = {};
     const statusRevenue = {};
     orders.forEach(o => {
-        statusCounts[o.orderStatus] = (statusCounts[o.orderStatus] || 0) + 1;
-        statusRevenue[o.orderStatus] = (statusRevenue[o.orderStatus] || 0) + o.totalPrice;
+        const key = normalizeStatus(o.orderStatus);
+        statusCounts[key] = (statusCounts[key] || 0) + 1;
+        statusRevenue[key] = (statusRevenue[key] || 0) + o.totalPrice;
     });
 
     const days = 14;

@@ -219,7 +219,35 @@ export const getHelpfulBase = (review = {}) => 4 + (hashId(review._id || review.
 // synthesize deterministic review cards to keep the page Flipkart-like. Real
 // reviews from the backend always take precedence (ProductDetail.js).
 
-const DEMO_NAMES = ['Rahul Sharma', 'Priya Patel', 'Amit Verma', 'Sneha Kulkarni', 'Vikram Singh', 'Ananya Iyer', 'Mohammed Ali', 'Divya Nair'];
+// Curated reviewer display names. Seeded reviews store a raw `userName` field
+// that is occasionally a username or free text, so the UI never renders it
+// directly — every review is shown under one of these fixed Indian names.
+export const REVIEWER_NAMES = [
+    'Kavin Kumar',
+    'Kaviyarasan',
+    'Pavitra',
+    'Jayanthika',
+    'Deva Prakash',
+    'Dinesh',
+    'Ilango',
+    'Vishal',
+    'Naveen Kumar',
+    'Deepak',
+    'Manikandan',
+    'Gautam',
+];
+
+// Deterministic reviewer display name for any review. A stored displayName /
+// userName is trusted only when it is one of the curated names; everything else
+// (usernames, emails, free text) falls back to a stable pick from the list so
+// no raw account identifier is ever shown.
+export const getReviewerName = (review = {}) => {
+    const raw = String((review && (review.displayName || review.userName)) || '').trim();
+    if (raw && REVIEWER_NAMES.includes(raw)) return raw;
+    return REVIEWER_NAMES[hashId(review._id || review.comment || '') % REVIEWER_NAMES.length];
+};
+
+const DEMO_NAMES = REVIEWER_NAMES;
 
 const DEMO_COMMENTS = [
   'Value for money. The build quality surprised me for this price range.',

@@ -2,14 +2,7 @@ import { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAnalytics } from '../../actions/analyticsActions';
 import { BarChart, DonutChart, toINR } from './Charts';
-
-const STATUS_COLORS = {
-    'Processing': '#e8a010',
-    'Packed': '#3b82f6',
-    'Out for Delivery': '#fb641b',
-    'Delivered': '#1f9d55',
-    'Cancelled': '#e0483e'
-};
+import { statusColor } from '../../utils/orderStatuses';
 
 export default function Revenue() {
     const { analytics, loading } = useSelector(state => state.analyticsState);
@@ -20,7 +13,7 @@ export default function Revenue() {
     }, [dispatch]);
 
     const statusRevenueSegments = Object.entries(analytics.statusRevenue || {}).map(([label, value]) => ({
-        label, value, color: STATUS_COLORS[label] || '#9098a8'
+        label, value, color: statusColor(label)
     }));
 
     const revenueTrend = (analytics.orderTrend || []).map(d => ({ label: d.label, value: d.revenue }));
@@ -79,7 +72,7 @@ export default function Revenue() {
                             const pct = analytics.revenue > 0 ? ((value / analytics.revenue) * 100).toFixed(1) : 0;
                             return (
                                 <div className="ad-list-item" style={{ padding: '0.55rem 0' }} key={label}>
-                                    <span className="ad-legend__dot" style={{ background: STATUS_COLORS[label] || '#9098a8' }}></span>
+                                    <span className="ad-legend__dot" style={{ background: statusColor(label) }}></span>
                                     <span className="ad-td-strong">{label}</span>
                                     <span className="ad-stat__label">{analytics.statusCounts?.[label] || 0} orders</span>
                                     <span style={{ marginLeft: 'auto', minWidth: 160 }}>

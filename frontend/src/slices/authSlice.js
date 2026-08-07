@@ -7,12 +7,39 @@ import { createSlice } from "@reduxjs/toolkit";
 // cache is cleared and the user is logged out for real.
 const AUTH_KEY = 'vijaycart_auth';
 
+// Keep the optimistic cache in step with the server session (JWT_EXPIRES_TIME
+// and the cookie both expire after 7 days). An expired cache is treated as a
+// logged-out state so a stale session is never shown as "still logged in".
+const AUTH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+// Keys owned by the cart/checkout flow. Cleared on logout and on account
+// switch so the next user never inherits the previous user's cart, saved
+// addresses, or half-finished checkout (which would reuse the previous user's
+// idempotency key and could surface their order on the success page).
+const CART_STORAGE_KEYS = ['cartItems', 'shippingInfo', 'vijaycart_addresses'];
+const CHECKOUT_SESSION_KEYS = ['orderInfo', 'vijaycart_orderKey', 'vijaycart_coupon'];
+
+const clearCheckoutSession = () => {
+    try {
+        CART_STORAGE_KEYS.forEach(k => localStorage.removeItem(k));
+        CHECKOUT_SESSION_KEYS.forEach(k => sessionStorage.removeItem(k));
+    } catch {
+        /* ignore */
+    }
+};
+
 const readAuth = () => {
     try {
         const raw = localStorage.getItem(AUTH_KEY);
         if (!raw) return null;
         const parsed = JSON.parse(raw);
-        if (parsed && parsed.isAuthenticated && parsed.user) return parsed;
+        if (parsed && parsed.isAuthenticated && parsed.user) {
+            if (parsed.expiresAt && Date.now() > parsed.expiresAt) {
+                clearAuth();
+                return null;
+            }
+            return parsed;
+        }
         return null;
     } catch {
         return null;
@@ -21,7 +48,11 @@ const readAuth = () => {
 
 const persistAuth = (user) => {
     try {
-        localStorage.setItem(AUTH_KEY, JSON.stringify({ isAuthenticated: true, user }));
+        localStorage.setItem(AUTH_KEY, JSON.stringify({
+            isAuthenticated: true,
+            user,
+            expiresAt: Date.now() + AUTH_TTL_MS
+        }));
     } catch {
         /* storage unavailable — cookie session still works for the current tab */
     }
@@ -34,6 +65,8 @@ const clearAuth = () => {
         /* ignore */
     }
 };
+
+export { AUTH_KEY };
 
 const savedAuth = readAuth();
 
@@ -52,6 +85,11 @@ const authSlice = createSlice({
             }
         },
         loginSuccess(state, action){
+            // Switching from one logged-in account to another must not carry
+            // over the previous account's cart / checkout session.
+            if (state.user && state.user.id !== action.payload.user.id) {
+                clearCheckoutSession();
+            }
             persistAuth(action.payload.user);
             return {
                 loading: false,
@@ -79,6 +117,9 @@ const authSlice = createSlice({
             }
         },
         registerSuccess(state, action){
+            if (state.user && state.user.id !== action.payload.user.id) {
+                clearCheckoutSession();
+            }
             persistAuth(action.payload.user);
             return {
                 loading: false,
@@ -131,6 +172,10 @@ const authSlice = createSlice({
             };
         },
         logoutSuccess(state, action){
+            // Drop the cart, saved addresses and any in-progress checkout so a
+            // different account logging in on this browser never inherits this
+            // user's data (previous-user bleed).
+            clearCheckoutSession();
             clearAuth();
             return {
                 loading: false,
