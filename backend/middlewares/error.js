@@ -1,6 +1,20 @@
 module.exports = (err, req, res, next) =>{
     err.statusCode  = err.statusCode || 500;
 
+    // CORS rejection from the cors middleware -> clean 403 JSON instead of a
+    // bare 500 so the frontend can distinguish "origin not allowed" from a
+    // genuine server failure.
+    if (err.message === 'Not allowed by CORS') {
+        err.statusCode = 403;
+        err.message = 'Origin not allowed by CORS';
+    }
+
+    // Stale/invalid JWT -> 401 in every environment (jsonwebtoken names are
+    // case-sensitive: JsonWebTokenError, TokenExpiredError, NotBeforeError).
+    if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError' || err.name === 'NotBeforeError') {
+        err.statusCode = 401;
+    }
+
     if(process.env.NODE_ENV == 'development'){
         return res.status(err.statusCode).json({
             success: false,
@@ -32,16 +46,20 @@ module.exports = (err, req, res, next) =>{
             err.statusCode = 400
         }
 
-        if(err.name == 'JSONWebTokenError') {
-            let message = `JSON Web Token is invalid. Try again`;
+        // jsonwebtoken error names are case-sensitive: JsonWebTokenError,
+        // TokenExpiredError, NotBeforeError. A stale cookie (e.g. after a
+        // JWT_SECRET rotation on deploy) must produce a 401 the frontend can
+        // treat as "logged out", NOT a 500 it would treat as a network error.
+        if(err.name == 'JsonWebTokenError' || err.name == 'NotBeforeError') {
+            let message = `JSON Web Token is invalid. Please login again`;
             error = new Error(message)
-            err.statusCode = 400
+            err.statusCode = 401
         }
 
         if(err.name == 'TokenExpiredError') {
-            let message = `JSON Web Token is expired. Try again`;
+            let message = `JSON Web Token is expired. Please login again`;
             error = new Error(message)
-            err.statusCode = 400
+            err.statusCode = 401
         }
 
         return res.status(err.statusCode).json({

@@ -3,7 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://vijaycart-production-2ec5.up.railway.app/api/:path*"
+    },
+    {
+      "source": "/uploads/:path*",
+      "destination": "https://vijaycart-production-2ec5.up.railway.app/uploads/:path*"
     }
   ]
 }
-

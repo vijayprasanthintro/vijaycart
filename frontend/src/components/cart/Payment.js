@@ -147,7 +147,7 @@ export default function Payment() {
         let active = true;
         if (method === 'wallet' && walletBalance === null) {
             axios.get('/api/v1/wallet')
-                .then(res => { if (active) setWalletBalance(Number(res.data.balance)); })
+                .then(res => { if (active) setWalletBalance(Number(res?.data?.balance)); })
                 .catch(() => { if (active) setWalletBalance(Number(user.walletBalance) || 500); });
         }
         return () => { active = false; };
@@ -166,9 +166,9 @@ export default function Payment() {
             .then(res => {
                 if (active) setCodCheck({
                     loading: false,
-                    available: !!res.data.available,
-                    reason: res.data.reason || '',
-                    maxAmount: Number(res.data.maxAmount) || 5000
+                    available: !!res?.data?.available,
+                    reason: res?.data?.reason || '',
+                    maxAmount: Number(res?.data?.maxAmount) || 5000
                 });
             })
             .catch(() => {
@@ -214,8 +214,19 @@ export default function Payment() {
             dispatch(orderCompleted());
             navigate('/order/success');
         } catch (err) {
-            toast.error(err?.response?.data?.message || 'Your order could not be created. Please retry.');
-            setProcessing(null);
+            // The request may have failed AFTER the server already created the
+            // order (dropped connection / timeout / cold start). Retrying with
+            // the SAME idempotency key makes the backend return the existing
+            // order instead of creating a duplicate, so a confirmed payment
+            // always reaches the success page — never only after going back.
+            try {
+                await dispatch(createOrder(order));
+                dispatch(orderCompleted());
+                navigate('/order/success');
+            } catch (retryErr) {
+                toast.error(retryErr?.response?.data?.message || 'Your order could not be created. Please retry.');
+                setProcessing(null);
+            }
         }
     };
 

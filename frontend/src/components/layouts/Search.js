@@ -54,7 +54,7 @@ export default function Search() {
       axios
         .get('/api/v1/products?page=1&limit=6', { params: { keyword: keyword.trim() } })
         .then((res) => {
-          if (mounted) setSuggestions((res.data.products || []).slice(0, 6));
+          if (mounted) setSuggestions((res?.data?.products || []).slice(0, 6));
         })
         .catch(() => {
           if (mounted) setSuggestions([]);

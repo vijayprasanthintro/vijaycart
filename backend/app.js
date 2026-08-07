@@ -10,24 +10,39 @@ dotenv.config({path:path.join(__dirname,"config/config.env")});
 
 app.use(compression());
 
-// CORS Configuration — credentials (the httpOnly auth cookie) require an exact
-// origin allow-list. Both the Vercel frontends, the Railway backend's own
-// origin, and the two common dev origins are allowed.
-const ALLOWED_ORIGINS = [
-    'https://vijaycart-snowy.vercel.app',
-    'https://vijayprasanthintros-projects.vercel.app',
-    'https://vijaycart-production-2ec5.up.railway.app',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000'
-];
+// CORS — environment-based allow-list. Credentials (the httpOnly auth cookie)
+// forbid a wildcard origin, so the exact frontend origin(s) are configured via
+// FRONTEND_URL (comma-separated for multiple domains). CORS_ORIGINS can add
+// extra origins (e.g. a staging frontend). Local dev origins are always
+// allowed so no .env change is needed to run the frontend + backend locally.
+const buildAllowedOrigins = () => {
+    const envOrigins = [
+        ...String(process.env.FRONTEND_URL || '').split(','),
+        ...String(process.env.CORS_ORIGINS || '').split(',')
+    ].map(s => s.trim()).filter(Boolean);
+    const devOrigins = [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+        'http://localhost:8000',
+        'http://127.0.0.1:8000'
+    ];
+    return [...new Set([...devOrigins, ...envOrigins])];
+};
+const ALLOWED_ORIGINS = buildAllowedOrigins();
+
 app.use(cors({
     origin: (origin, cb) => {
-        // Allow non-browser clients (curl, Postman, same-origin proxies) that
-        // send no Origin header, and exact allow-listed origins only.
-        if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+        // No Origin header: server-to-server / curl / Postman / mobile clients.
+        if (!origin) return cb(null, true);
+        if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
         return cb(new Error('Not allowed by CORS'));
     },
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    optionsSuccessStatus: 204
 }));
 
 app.use(express.json());
@@ -55,6 +70,12 @@ app.use('/api/v1/',category);
 app.use('/api/v1/',coupon);
 app.use('/api/v1/',setting);
 app.use('/api/v1/',admin);
+
+// Health check — mounted before the production SPA catch-all so it is never
+// swallowed by the frontend fallback route. Works locally and on Railway and
+// returns no sensitive data.
+const health = require('./routes/health');
+app.use('/api/health', health);
 
 if(process.env.NODE_ENV === "production") {
     const buildDir = path.join(__dirname, '../frontend/build');

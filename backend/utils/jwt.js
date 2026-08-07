@@ -26,7 +26,7 @@ const sendToken = (user, statusCode, res) => {
     .json({
         success: true,
         token,
-        user
+        user: user.password ? {...user.toObject(), password: undefined} : user
     })
 
 

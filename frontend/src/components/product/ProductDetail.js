@@ -153,7 +153,7 @@ export default function ProductDetail () {
     const loadPool = useCallback(async () => {
         try {
             const res = await axios.get('/api/v1/products?limit=200');
-            setPool(res.data.products || []);
+            setPool(res?.data?.products || []);
         } catch { /* ignore */ } finally {
             setPoolLoaded(true);
         }
@@ -316,11 +316,11 @@ export default function ProductDetail () {
                 axios.get(`/api/v1/pincode/${pin}`),
                 axios.get(`/api/v1/pincode/${pin}/cod?amount=${Math.round(Number(pricing.price) || 0)}`)
             ]);
-            const data = pinRes.data.data || {};
+            const data = pinRes?.data?.data || {};
             setPinStatus({
                 ok: true,
-                cod: !!codRes.data.available,
-                codReason: codRes.data.reason || '',
+                cod: !!codRes?.data?.available,
+                codReason: codRes?.data?.reason || '',
                 date: arrivalText(delivery.days),
                 area: [data.area, data.district, data.state].filter(Boolean).join(', '),
                 pin,

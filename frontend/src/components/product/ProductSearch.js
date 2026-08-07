@@ -93,7 +93,7 @@ export default function ProductSearch() {
       // Keyword matching (name/brand/category) happens client-side so results
       // are consistent regardless of which backend is deployed.
       const res = await axios.get('/api/v1/products?limit=200');
-      setAllProducts(res.data.products || []);
+      setAllProducts(res?.data?.products || []);
     } catch (err) {
       setPageError(err?.response?.data?.message || 'Failed to load products. Please try again.');
       setAllProducts([]);
