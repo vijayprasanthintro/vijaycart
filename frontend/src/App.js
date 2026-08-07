@@ -5,6 +5,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import store from './store';
+import { AUTH_KEY } from './slices/authSlice';
 import { loadUser } from './actions/userActions';
 import Home from './components/Home';
 import Header from './components/layouts/Header';
@@ -141,6 +142,19 @@ function App() {
     };
 
     initializeApp();
+  }, [])
+
+  // Keep the visible account in sync when another tab of this origin logs in
+  // or out (login/logout persist the shared cookie + localStorage cache). The
+  // `storage` event only fires in the other tabs, never the one that changed.
+  useEffect(() => {
+    const onAuthStorageChange = (e) => {
+      if (e.key === AUTH_KEY) {
+        store.dispatch(loadUser());
+      }
+    };
+    window.addEventListener('storage', onAuthStorageChange);
+    return () => window.removeEventListener('storage', onAuthStorageChange);
   }, [])
 
   return (

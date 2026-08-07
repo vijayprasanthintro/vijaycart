@@ -15,8 +15,10 @@ import {
 import { clearUpdateDelivery } from '../../slices/deliverySlice';
 
 const STATUS_BADGES = {
-    'Processing': 'badge-warning',
+    'Pending': 'badge-warning',
+    'Confirmed': 'badge-info',
     'Packed': 'badge-info',
+    'Shipped': 'badge-primary',
     'Out for Delivery': 'badge-primary',
     'Delivered': 'badge-success',
     'Cancelled': 'badge-danger'

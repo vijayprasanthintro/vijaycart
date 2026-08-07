@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getDeliveryBoys, createDeliveryBoy } from '../../actions/deliveryActions';
+import { getDeliveryBoys, createDeliveryBoy, toggleAvailability } from '../../actions/deliveryActions';
 import { adminOrders as adminOrdersAction } from '../../actions/orderActions';
 
 export default function DeliveryBoys() {
@@ -12,10 +12,11 @@ export default function DeliveryBoys() {
 
     const [showForm, setShowForm] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [toggling, setToggling] = useState(null);
     const [form, setForm] = useState({ name: '', email: '', password: '', phone: '' });
 
     useEffect(() => {
-        dispatch(getDeliveryBoys);
+        dispatch(getDeliveryBoys());
         dispatch(adminOrdersAction());
     }, [dispatch]);
 
@@ -29,6 +30,19 @@ export default function DeliveryBoys() {
     };
 
     const unassigned = adminOrders.filter(o => !o.deliveryBoy && o.orderStatus !== 'Cancelled' && o.orderStatus !== 'Delivered');
+
+    const availabilityHandler = async (boy) => {
+        const next = boy.availability === false;
+        setToggling(boy._id);
+        const res = await toggleAvailability(boy._id, next)(dispatch);
+        setToggling(null);
+        if (res.success) {
+            toast.success(next ? `${boy.name} is now available` : `${boy.name} is now unavailable`, { position: toast.POSITION.BOTTOM_CENTER });
+            dispatch(getDeliveryBoys());
+        } else {
+            toast.error(res.error || 'Failed to update availability', { position: toast.POSITION.BOTTOM_CENTER });
+        }
+    };
 
     const changeHandler = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -47,7 +61,7 @@ export default function DeliveryBoys() {
             toast.success('Delivery boy added successfully!', { position: toast.POSITION.BOTTOM_CENTER });
             setForm({ name: '', email: '', password: '', phone: '' });
             setShowForm(false);
-            dispatch(getDeliveryBoys);
+            dispatch(getDeliveryBoys());
         } else {
             toast.error(res.error || 'Failed to add delivery boy', { position: toast.POSITION.BOTTOM_CENTER });
         }
@@ -125,14 +139,17 @@ export default function DeliveryBoys() {
                                     <tr>
                                         <th>Partner</th>
                                         <th>Email</th>
+                                        <th>Phone</th>
                                         <th>Assigned</th>
                                         <th>Out for Delivery</th>
                                         <th>Delivered</th>
+                                        <th>Availability</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {deliveryBoys.map(boy => {
                                         const s = stats(boy._id);
+                                        const busy = toggling === boy._id;
                                         return (
                                             <tr key={boy._id}>
                                                 <td>
@@ -142,9 +159,27 @@ export default function DeliveryBoys() {
                                                     </div>
                                                 </td>
                                                 <td>{boy.email}</td>
+                                                <td>{boy.phone || '—'}</td>
                                                 <td><span className="ad-td-strong">{s.assigned}</span></td>
                                                 <td><span className={`ad-badge ${s.outForDelivery > 0 ? 'ad-badge--primary' : ''}`}>{s.outForDelivery}</span></td>
                                                 <td><span className={`ad-badge ${s.delivered > 0 ? 'ad-badge--success' : ''}`}>{s.delivered}</span></td>
+                                                <td>
+                                                    <div className="ad-toolbar" style={{ justifyContent: 'flex-start' }}>
+                                                        <span className={`ad-badge ${boy.availability === false ? 'ad-badge--danger' : 'ad-badge--success'}`}>
+                                                            {boy.availability === false ? 'Unavailable' : 'Available'}
+                                                        </span>
+                                                        <button
+                                                            type="button"
+                                                            className="ad-btn ad-btn--ghost ad-btn--sm"
+                                                            disabled={busy}
+                                                            onClick={() => availabilityHandler(boy)}
+                                                            title={boy.availability === false ? 'Mark available' : 'Mark unavailable'}
+                                                        >
+                                                            {busy ? <i className="fa fa-spinner fa-spin" aria-hidden="true"></i> : <i className={`fa ${boy.availability === false ? 'fa-toggle-on' : 'fa-toggle-off'}`} aria-hidden="true"></i>}
+                                                            {boy.availability === false ? ' Make available' : ' Make unavailable'}
+                                                        </button>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         );
                                     })}

@@ -3,13 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getAnalytics } from '../../actions/analyticsActions';
 import { BarChart, DonutChart, toINR } from './Charts';
+import { ORDER_STATUSES, statusBadge, statusColor } from '../../utils/orderStatuses';
 
-const STATUS_COLORS = {
-    'Processing': '#e8a010',
-    'Packed': '#3b82f6',
-    'Out for Delivery': '#fb641b',
-    'Delivered': '#1f9d55',
-    'Cancelled': '#e0483e'
+const STATUS_STAT = {
+    'Pending': { icon: 'fa-hourglass-half', mod: 'ad-stat--warning', label: 'Pending' },
+    'Confirmed': { icon: 'fa-check-circle-o', mod: 'ad-stat--info', label: 'Confirmed' },
+    'Packed': { icon: 'fa-box', mod: 'ad-stat--info', label: 'Packed' },
+    'Shipped': { icon: 'fa-paper-plane-o', mod: 'ad-stat--primary', label: 'Shipped' },
+    'Out for Delivery': { icon: 'fa-truck', mod: 'ad-stat--primary', label: 'Out for Delivery' },
+    'Delivered': { icon: 'fa-check-circle', mod: 'ad-stat--success', label: 'Delivered' },
+    'Cancelled': { icon: 'fa-times-circle', mod: 'ad-stat--danger', label: 'Cancelled' }
 };
 
 export default function Dashboard() {
@@ -20,8 +23,11 @@ export default function Dashboard() {
         dispatch(getAnalytics());
     }, [dispatch]);
 
-    const statusSegments = Object.entries(analytics.statusCounts || {}).map(([label, value]) => ({
-        label, value, color: STATUS_COLORS[label] || '#9098a8'
+    const statusCounts = analytics.statusCounts || {};
+    const statusSegments = ORDER_STATUSES.map(status => ({
+        label: status,
+        value: statusCounts[status] || 0,
+        color: statusColor(status)
     }));
 
     const trendData = (analytics.orderTrend || []).map(d => ({ label: d.label, value: d.orders }));
@@ -100,6 +106,18 @@ export default function Dashboard() {
                         <div className="ad-stat__value">{analytics.returnRequests || 0}</div>
                     </div>
                 </div>
+                {ORDER_STATUSES.map(status => {
+                    const meta = STATUS_STAT[status];
+                    return (
+                        <div className={`ad-stat ${meta.mod}`} key={status}>
+                            <div className="ad-stat__icon"><i className={`fa ${meta.icon}`} aria-hidden="true"></i></div>
+                            <div>
+                                <div className="ad-stat__label">{meta.label}</div>
+                                <div className="ad-stat__value">{statusCounts[status] || 0}</div>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
 
             <div className="ad-chart-row">
@@ -133,7 +151,7 @@ export default function Dashboard() {
                         )}
                         {(analytics.recentOrders || []).slice(0, 6).map(order => (
                             <div className="ad-list-item" key={order._id}>
-                                <span className={`ad-badge ad-badge--${STATUS_COLORS[order.orderStatus] ? (order.orderStatus === 'Delivered' ? 'success' : order.orderStatus === 'Cancelled' ? 'danger' : order.orderStatus === 'Processing' ? 'warning' : order.orderStatus === 'Packed' ? 'info' : 'primary') : 'muted'}`}>
+                                <span className={`ad-badge ${statusBadge(order.orderStatus)}`}>
                                     <span className="ad-badge__dot"></span>{order.orderStatus}
                                 </span>
                                 <div className="ad-td-strong">#{order._id.slice(-8).toUpperCase()}</div>

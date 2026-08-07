@@ -83,3 +83,14 @@ export const createDeliveryBoy = (deliveryBoyData) => async (dispatch) => {
         return { success: false, error: error.response?.data?.message || error.message }
     }
 }
+
+export const toggleAvailability = (id, availability) => async (dispatch) => {
+    dispatch(deliveryRequest())
+    try {
+        const { data } = await axios.put(`/api/v1/admin/deliveryboy/${id}/availability`, { availability })
+        return { success: true, deliveryBoy: data.deliveryBoy }
+    } catch (error) {
+        dispatch(deliveryFail(error.response?.data?.message || error.message))
+        return { success: false, error: error.response?.data?.message || error.message }
+    }
+}

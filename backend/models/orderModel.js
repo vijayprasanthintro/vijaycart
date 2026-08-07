@@ -146,8 +146,39 @@ const orderSchema = mongoose.Schema({
     orderStatus: {
         type: String,
         required: true,
-        default: 'Processing'
+        default: 'Pending',
+        enum: [
+            'Pending',
+            'Confirmed',
+            'Packed',
+            'Shipped',
+            'Out for Delivery',
+            'Delivered',
+            'Cancelled'
+        ]
     },
+    //Audit trail behind the visual order timeline. Every status change is
+    //appended with the acting user and a timestamp.
+    statusHistory: [
+        {
+            status: {
+                type: String,
+                trim: true
+            },
+            changedAt: {
+                type: Date,
+                default: Date.now
+            },
+            changedBy: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'User'
+            },
+            note: {
+                type: String,
+                trim: true
+            }
+        }
+    ],
     deliveryDate: {
         type: Date
     },

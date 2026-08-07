@@ -6,6 +6,7 @@ import { getDeliveryBoys } from '../../actions/deliveryActions';
 import { clearError, clearOrderDeleted } from '../../slices/orderSlice';
 import { toast } from 'react-toastify';
 import { toINR } from './Charts';
+import { ORDER_STATUSES, statusBadge } from '../../utils/orderStatuses';
 
 export default function OrderList() {
     const { adminOrders = [], loading = true, error, isOrderDeleted } = useSelector(state => state.orderState);
@@ -17,7 +18,7 @@ export default function OrderList() {
 
     useEffect(() => {
         dispatch(adminOrdersAction());
-        dispatch(getDeliveryBoys);
+        dispatch(getDeliveryBoys());
     }, [dispatch]);
 
     useEffect(() => {
@@ -43,6 +44,7 @@ export default function OrderList() {
             const q = query.trim().toLowerCase();
             list = list.filter(o =>
                 o._id.toLowerCase().includes(q) ||
+                (o.shippingInfo?.name || o.user?.name || '').toLowerCase().includes(q) ||
                 (o.shippingInfo?.city || '').toLowerCase().includes(q) ||
                 (o.shippingInfo?.phoneNo || '').includes(q)
             );
@@ -63,7 +65,7 @@ export default function OrderList() {
                     <h1>Orders</h1>
                     <p>{adminOrders.length} total · {toINR(revenue)} revenue (excl. cancelled)</p>
                 </div>
-                <Link to="/admin/delivery-boys" className="ad-btn ad-btn--primary"><i className="fa fa-motorcycle" aria-hidden="true"></i> Assign Delivery</Link>
+                <Link to="/admin/delivery" className="ad-btn ad-btn--primary"><i className="fa fa-motorcycle" aria-hidden="true"></i> Assign Delivery</Link>
             </div>
 
             <div className="ad-stat-grid">
@@ -73,11 +75,11 @@ export default function OrderList() {
                 </div>
                 <div className="ad-stat ad-stat--warning">
                     <div className="ad-stat__icon"><i className="fa fa-hourglass-half" aria-hidden="true"></i></div>
-                    <div><div className="ad-stat__label">Processing</div><div className="ad-stat__value">{adminOrders.filter(o => o.orderStatus === 'Processing').length}</div></div>
+                    <div><div className="ad-stat__label">Pending</div><div className="ad-stat__value">{adminOrders.filter(o => o.orderStatus === 'Pending' || o.orderStatus === 'Processing').length}</div></div>
                 </div>
                 <div className="ad-stat ad-stat--primary">
                     <div className="ad-stat__icon"><i className="fa fa-truck" aria-hidden="true"></i></div>
-                    <div><div className="ad-stat__label">In Transit</div><div className="ad-stat__value">{adminOrders.filter(o => ['Packed', 'Out for Delivery'].includes(o.orderStatus)).length}</div></div>
+                    <div><div className="ad-stat__label">In Transit</div><div className="ad-stat__value">{adminOrders.filter(o => ['Confirmed', 'Packed', 'Shipped', 'Out for Delivery'].includes(o.orderStatus)).length}</div></div>
                 </div>
                 <div className="ad-stat ad-stat--info">
                     <div className="ad-stat__icon"><i className="fa fa-check-circle" aria-hidden="true"></i></div>
@@ -94,7 +96,7 @@ export default function OrderList() {
                         </div>
                         <select className="ad-filter" value={status} onChange={e => setStatus(e.target.value)}>
                             <option value="">All statuses</option>
-                            {['Processing', 'Packed', 'Out for Delivery', 'Delivered', 'Cancelled'].map(s => (
+                            {ORDER_STATUSES.map(s => (
                                 <option key={s} value={s}>{s}</option>
                             ))}
                         </select>
@@ -112,8 +114,10 @@ export default function OrderList() {
                                     <tr>
                                         <th>Order</th>
                                         <th>Customer</th>
+                                        <th>Ship To</th>
                                         <th>Items</th>
                                         <th>Total</th>
+                                        <th>Payment</th>
                                         <th>Status</th>
                                         <th>Delivery Boy</th>
                                         <th>Placed</th>
@@ -130,10 +134,26 @@ export default function OrderList() {
                                                     <div className="ad-td-strong">{order.shippingInfo?.name || order.user?.name || '—'}</div>
                                                     <div className="ad-stat__label">{order.shippingInfo?.phoneNo || ''}</div>
                                                 </td>
+                                                <td>
+                                                    <span className="ad-stat__label">
+                                                        {[order.shippingInfo?.city, order.shippingInfo?.state, order.shippingInfo?.postalCode].filter(Boolean).join(', ') || '—'}
+                                                    </span>
+                                                </td>
                                                 <td>{order.orderItems?.length || 0}</td>
                                                 <td><span className="ad-td-strong">{toINR(order.totalPrice)}</span></td>
                                                 <td>
-                                                    <span className={`ad-badge ${order.orderStatus === 'Delivered' ? 'ad-badge--success' : order.orderStatus === 'Cancelled' ? 'ad-badge--danger' : order.orderStatus === 'Processing' ? 'ad-badge--warning' : order.orderStatus === 'Packed' ? 'ad-badge--info' : 'ad-badge--primary'}`}>
+                                                    {order.paymentMethod === 'cod' ? (
+                                                        <span className={`ad-badge ${order.codStatus === 'Collected' ? 'ad-badge--success' : 'ad-badge--warning'}`}>
+                                                            COD · {order.codStatus === 'Collected' ? 'Collected' : 'Pending'}
+                                                        </span>
+                                                    ) : (
+                                                        <span className={`ad-badge ${order.paymentInfo?.status === 'succeeded' ? 'ad-badge--success' : 'ad-badge--danger'}`}>
+                                                            {order.paymentInfo?.status === 'succeeded' ? 'PAID' : 'NOT PAID'}
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    <span className={`ad-badge ${statusBadge(order.orderStatus)}`}>
                                                         {order.orderStatus}
                                                     </span>
                                                 </td>

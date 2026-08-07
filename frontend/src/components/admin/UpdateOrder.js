@@ -8,13 +8,14 @@ import { getDeliveryBoys } from "../../actions/deliveryActions";
 import { Link } from "react-router-dom";
 import { toINR } from './Charts';
 import { resolveProductImage, imgOnError } from '../../utils/productHelper';
+import { ORDER_STATUSES, statusBadge } from '../../utils/orderStatuses';
 
 export default function UpdateOrder() {
     const { loading, isOrderUpdated, error, orderDetail } = useSelector(state => state.orderState);
     const { deliveryBoys = [] } = useSelector(state => state.deliveryState);
     const { user = {}, orderItems = [], shippingInfo = {}, totalPrice = 0, paymentInfo = {}, returnStatus = 'None', returnReason = '', paymentMethod = '', codStatus = 'Pending' } = orderDetail;
     const isPaid = paymentInfo.status === 'succeeded';
-    const [orderStatus, setOrderStatus] = useState("Processing");
+    const [orderStatus, setOrderStatus] = useState("Pending");
     const { id: orderId } = useParams();
     const dispatch = useDispatch();
 
@@ -36,7 +37,7 @@ export default function UpdateOrder() {
     }, [isOrderUpdated, error, dispatch, orderId]);
 
     useEffect(() => {
-        dispatch(getDeliveryBoys);
+        dispatch(getDeliveryBoys());
     }, [dispatch]);
 
     useEffect(() => {
@@ -44,6 +45,14 @@ export default function UpdateOrder() {
     }, [orderDetail]);
 
     const boy = deliveryBoys.find(b => String(b._id) === String(orderDetail.deliveryBoy));
+
+    const currentIndex = ORDER_STATUSES.indexOf(orderDetail.orderStatus);
+    const isCancelled = orderDetail.orderStatus === 'Cancelled';
+    const historyTimes = {};
+    (orderDetail.statusHistory || []).forEach(h => {
+        if (h.status) historyTimes[h.status] = h.changedAt;
+    });
+    const fmtTime = t => t ? new Date(t).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : null;
 
     return (
         <Fragment>
@@ -86,15 +95,43 @@ export default function UpdateOrder() {
                         <div className="ad-field">
                             <label className="ad-label">Order Status</label>
                             <select className="ad-select" value={orderStatus} onChange={e => setOrderStatus(e.target.value)}>
-                                <option value="Processing">Processing</option>
-                                <option value="Packed">Packed</option>
-                                <option value="Out for Delivery">Out for Delivery</option>
-                                <option value="Delivered">Delivered</option>
+                                {ORDER_STATUSES.map(s => (
+                                    <option key={s} value={s}>{s}</option>
+                                ))}
                             </select>
                         </div>
                         <button className="ad-btn ad-btn--primary" style={{ width: '100%', marginTop: '1rem' }} disabled={loading} onClick={submitHandler}>
                             {loading && <i className="fa fa-spinner fa-spin" aria-hidden="true"></i>} Update Status
                         </button>
+                    </div>
+                </div>
+            </div>
+
+            <div className="ad-card">
+                <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-history" aria-hidden="true"></i> Order Timeline</h3></div>
+                <div className="ad-card__body">
+                    <div className="ad-timeline">
+                        {ORDER_STATUSES.map((s, i) => {
+                            const reached = isCancelled ? false : i <= currentIndex;
+                            const isCurrent = !isCancelled && i === currentIndex;
+                            const danger = isCancelled && s === 'Cancelled';
+                            const done = reached && !isCurrent;
+                            const time = historyTimes[s] ? fmtTime(historyTimes[s]) : null;
+                            const icon = s === 'Delivered' ? 'fa-check' : s === 'Cancelled' ? 'fa-times' : s === 'Out for Delivery' ? 'fa-truck' : s === 'Packed' ? 'fa-box' : s === 'Shipped' ? 'fa-paper-plane-o' : s === 'Confirmed' ? 'fa-check-circle-o' : 'fa-hourglass-half';
+                            return (
+                                <div className={`ad-timeline__item ${done ? 'ad-timeline__item--done' : ''} ${isCurrent ? 'ad-timeline__item--current' : ''} ${danger ? 'ad-timeline__item--danger' : ''}`} key={s}>
+                                    <div className="ad-timeline__rail">
+                                        <span className="ad-timeline__node"><i className={`fa ${icon}`} aria-hidden="true"></i></span>
+                                        {i < ORDER_STATUSES.length - 1 && <span className="ad-timeline__line"></span>}
+                                    </div>
+                                    <div className="ad-timeline__content">
+                                        <span className={`ad-badge ${danger ? 'ad-badge--danger' : statusBadge(s)}`}>{s}</span>
+                                        {time && <span className="ad-muted ad-timeline__time">{time}</span>}
+                                        {isCurrent && <span className="ad-timeline__tag">Current</span>}
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

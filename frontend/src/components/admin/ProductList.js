@@ -19,7 +19,7 @@ export default function ProductList() {
 
     useEffect(() => {
         dispatch(getAdminProducts);
-        dispatch(getCategories);
+        dispatch(getCategories());
     }, [dispatch]);
 
     useEffect(() => {

@@ -2,14 +2,7 @@ import { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAnalytics } from '../../actions/analyticsActions';
 import { BarChart, DonutChart, toINR } from './Charts';
-
-const STATUS_COLORS = {
-    'Processing': '#e8a010',
-    'Packed': '#3b82f6',
-    'Out for Delivery': '#fb641b',
-    'Delivered': '#1f9d55',
-    'Cancelled': '#e0483e'
-};
+import { statusColor } from '../../utils/orderStatuses';
 
 export default function Analytics() {
     const { analytics, loading } = useSelector(state => state.analyticsState);
@@ -20,7 +13,7 @@ export default function Analytics() {
     }, [dispatch]);
 
     const statusSegments = Object.entries(analytics.statusCounts || {}).map(([label, value]) => ({
-        label, value, color: STATUS_COLORS[label] || '#9098a8'
+        label, value, color: statusColor(label)
     }));
 
     const orderTrend = (analytics.orderTrend || []).map(d => ({ label: d.label, value: d.orders }));
