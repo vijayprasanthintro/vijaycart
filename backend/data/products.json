@@ -40,9 +40,10 @@
     ],
     "warranty": "1 Year Manufacturer Warranty on Device & 6 Months on In-Box Accessories",
     "images": [
-      { "image": "/images/products/1.jpg" },
-      { "image": "/images/products/2.jpg" },
-      { "image": "/images/products/20.jpg" }
+      { "image": "/images/products/smartphone-1.jpg" },
+      { "image": "/images/products/smartphone-2.jpg" },
+      { "image": "/images/products/smartphone-3.jpg" },
+      { "image": "/images/products/smartphone-4.png" }
     ],
     "reviews": [
       { "user": "507f1f77bcf86cd799439011", "userName": "Rahul Sharma", "rating": 5, "comment": "Superb display and battery life for the price. Gaming is smooth with the 120Hz panel." },
@@ -92,9 +93,10 @@
     ],
     "warranty": "2 Years Onsite Manufacturer Warranty (1 Year Extended)",
     "images": [
-      { "image": "/images/products/3.jpg" },
-      { "image": "/images/products/6.jpg" },
-      { "image": "/images/products/21.jpg" }
+      { "image": "/images/products/laptop-1.jpeg" },
+      { "image": "/images/products/laptop-2.jpg" },
+      { "image": "/images/products/laptop-3.jpg" },
+      { "image": "/images/products/laptop-4.jpg" }
     ],
     "reviews": [
       { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "vijay", "rating": 5, "comment": "Handles my coding projects and video calls effortlessly. Battery easily lasts a full workday." },
@@ -142,8 +144,10 @@
     ],
     "warranty": "1 Year Comprehensive Warranty on TV and Panel",
     "images": [
-      { "image": "/images/products/4.jpg" },
-      { "image": "/images/products/22.jpg" }
+      { "image": "/images/products/smart-tv-1.jpg" },
+      { "image": "/images/products/smart-tv-2.jpg" },
+      { "image": "/images/products/smart-tv-3.jpg" },
+      { "image": "/images/products/smart-tv-4.jpg" }
     ],
     "reviews": [
       { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Mohammed Ali", "rating": 5, "comment": "Picture quality is excellent for the price and Android TV is very responsive." },
@@ -193,8 +197,10 @@
     ],
     "warranty": "2 Years Manufacturer Warranty on Body, 1 Year on Lens",
     "images": [
-      { "image": "/images/products/5.jpg" },
-      { "image": "/images/products/23.jpg" }
+      { "image": "/images/products/dslr-camera-1.jpg" },
+      { "image": "/images/products/dslr-camera-2.jpg" },
+      { "image": "/images/products/dslr-camera-3.jpg" },
+      { "image": "/images/products/dslr-camera-4.jpg" }
     ],
     "reviews": [
       { "user": "5f6a7b8c9d0e1f2a3b4c5d6f", "userName": "Rohan Joshi", "rating": 5, "comment": "The autofocus is quick and photos are sharp. Perfect first DSLR." },
@@ -244,8 +250,10 @@
     ],
     "warranty": "1 Year Manufacturer Warranty",
     "images": [
-      { "image": "/images/products/7.jpg" },
-      { "image": "/images/products/24.jpg" }
+      { "image": "/images/products/tablet-1.jpg" },
+      { "image": "/images/products/tablet-2.jpeg" },
+      { "image": "/images/products/tablet-3.jpg" },
+      { "image": "/images/products/tablet-4.jpg" }
     ],
     "reviews": [
       { "user": "60e4d3c2b1a0987654321fed", "userName": "Neha Gupta", "rating": 5, "comment": "Perfect for online classes and Netflix. Battery genuinely lasts all day." },
@@ -294,8 +302,10 @@
     ],
     "warranty": "1 Year Manufacturer Warranty (1 Year Additional on Controller)",
     "images": [
-      { "image": "/images/products/8.jpg" },
-      { "image": "/images/products/25.jpg" }
+      { "image": "/images/products/game-controller-1.jpg" },
+      { "image": "/images/products/game-controller-2.jpg" },
+      { "image": "/images/products/game-controller-3.jpg" },
+      { "image": "/images/products/game-controller-4.jpg" }
     ],
     "reviews": [
       { "user": "507f191e810c19729de860ea", "userName": "Arjun Nair", "rating": 5, "comment": "Loads games in seconds and 4K looks stunning. Best console I have owned." },
@@ -344,8 +354,10 @@
     ],
     "warranty": "3 Years Panel Warranty",
     "images": [
-      { "image": "/images/products/9.jpg" },
-      { "image": "/images/products/26.jpg" }
+      { "image": "/images/products/monitor-1.jpg" },
+      { "image": "/images/products/monitor-2.jpg" },
+      { "image": "/images/products/monitor-3.png" },
+      { "image": "/images/products/monitor-4.jpg" }
     ],
     "reviews": [
       { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Vikram Singh", "rating": 5, "comment": "Colours are excellent and 144Hz is a huge upgrade from 60Hz." },
@@ -395,8 +407,10 @@
     ],
     "warranty": "1 Year Manufacturer Warranty + 6 Months on Battery",
     "images": [
-      { "image": "/images/products/10.jpg" },
-      { "image": "/images/products/27.jpg" }
+      { "image": "/images/products/drone-1.JPG" },
+      { "image": "/images/products/drone-2.JPG" },
+      { "image": "/images/products/drone-3.jpg" },
+      { "image": "/images/products/drone-4.jpg" }
     ],
     "reviews": [
       { "user": "507f1f77bcf86cd799439012", "userName": "Deepak Chauhan", "rating": 4, "comment": "Footage is stable and clear. Return-to-home works exactly as promised." },
@@ -444,7 +458,10 @@
     ],
     "warranty": "1 Year Manufacturer Warranty",
     "images": [
-      { "image": "/images/products/11.jpg" }
+      { "image": "/images/products/speaker-1.jpeg" },
+      { "image": "/images/products/speaker-2.jpg" },
+      { "image": "/images/products/speaker-3.jpg" },
+      { "image": "/images/products/speaker-4.jpg" }
     ],
     "reviews": [
       { "user": "60d5f2b1c3e4a5b6c7d8e9f1", "userName": "Kavita Menon", "rating": 5, "comment": "Bass is amazing for this size and it survived a beach day with no issues." },
@@ -493,7 +510,10 @@
     ],
     "warranty": "1 Year Manufacturer Warranty",
     "images": [
-      { "image": "/images/products/12.jpg" }
+      { "image": "/images/products/headphones-1.jpg" },
+      { "image": "/images/products/headphones-2.jpg" },
+      { "image": "/images/products/headphones-3.jpg" },
+      { "image": "/images/products/headphones-4.jpg" }
     ],
     "reviews": [
       { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Rahul Sharma", "rating": 5, "comment": "ANC is genuinely good and they are comfortable for hours. Great value." },
@@ -541,7 +561,10 @@
     ],
     "warranty": "2 Years Manufacturer Warranty",
     "images": [
-      { "image": "/images/products/13.jpg" }
+      { "image": "/images/products/keyboard-1.jpg" },
+      { "image": "/images/products/keyboard-2.jpg" },
+      { "image": "/images/products/keyboard-3.jpg" },
+      { "image": "/images/products/keyboard-4.jpg" }
     ],
     "reviews": [
       { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Vikram Singh", "rating": 5, "comment": "Typing feel is excellent and swapping switches was easy. RGB is vibrant." },
@@ -589,7 +612,10 @@
     ],
     "warranty": "3 Years Limited Hardware Warranty",
     "images": [
-      { "image": "/images/products/accessories-mouse.svg" }
+      { "image": "/images/products/mouse-1.jpg" },
+      { "image": "/images/products/mouse-2.jpg" },
+      { "image": "/images/products/mouse-3.jpg" },
+      { "image": "/images/products/mouse-4.jpg" }
     ],
     "reviews": [
       { "user": "60e4d3c2b1a0987654321fed", "userName": "Divya Nair", "rating": 5, "comment": "Perfect for office use. The silent clicks are a lifesaver in meetings." },
@@ -636,7 +662,10 @@
     ],
     "warranty": "18 Months Manufacturer Warranty",
     "images": [
-      { "image": "/images/products/accessories-powerbank.svg" }
+      { "image": "/images/products/powerbank-1.jpg" },
+      { "image": "/images/products/powerbank-2.jpg" },
+      { "image": "/images/products/powerbank-3.jpg" },
+      { "image": "/images/products/powerbank-4.jpg" }
     ],
     "reviews": [
       { "user": "507f191e810c19729de860eb", "userName": "Mohammed Ali", "rating": 5, "comment": "Charges my phone twice plus my earbuds. The LED display is very handy." },
@@ -684,7 +713,10 @@
     ],
     "warranty": "1 Year Manufacturer Warranty",
     "images": [
-      { "image": "/images/products/audio-buds.svg" }
+      { "image": "/images/products/audio-buds-1.jpg" },
+      { "image": "/images/products/audio-buds-2.jpg" },
+      { "image": "/images/products/audio-buds-3.jpg" },
+      { "image": "/images/products/audio-buds-4.jpg" }
     ],
     "reviews": [
       { "user": "607f1a2b3c4d5e6f7a8b9c0e", "userName": "Ananya Iyer", "rating": 5, "comment": "Sound is beautifully balanced and the fit is super comfortable." },
@@ -732,7 +764,10 @@
     ],
     "warranty": "Best before 24 months from manufacturing",
     "images": [
-      { "image": "/images/products/beauty-cream.svg" }
+      { "image": "/images/products/face-cream-1.jpg" },
+      { "image": "/images/products/face-cream-2.jpg" },
+      { "image": "/images/products/face-cream-3.jpg" },
+      { "image": "/images/products/face-cream-4.jpg" }
     ],
     "reviews": [
       { "user": "507f1f77bcf86cd799439011", "userName": "Priya Patel", "rating": 5, "comment": "My skin feels soft all day without getting oily. No fragrance irritation." },
@@ -779,7 +814,10 @@
     ],
     "warranty": "Best before 18 months from manufacturing",
     "images": [
-      { "image": "/images/products/beauty-hairoil.svg" }
+      { "image": "/images/products/hair-oil-1.jpg" },
+      { "image": "/images/products/hair-oil-2.jpg" },
+      { "image": "/images/products/hair-oil-3.jpg" },
+      { "image": "/images/products/hair-oil-4.jpg" }
     ],
     "reviews": [
       { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Amit Verma", "rating": 4, "comment": "Natural herbal smell and my hair feels softer after a month of use." },
@@ -827,7 +865,9 @@
     ],
     "warranty": "Best before 18 months from manufacturing",
     "images": [
-      { "image": "/images/products/beauty-protein.svg" }
+      { "image": "/images/products/protein-1.jpg" },
+      { "image": "/images/products/protein-2.jpg" },
+      { "image": "/images/products/protein-3.jpg" }
     ],
     "reviews": [
       { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Vikram Singh", "rating": 5, "comment": "Tastes great and dissolves without a blender. Recovery has been excellent." },
@@ -875,7 +915,9 @@
     ],
     "warranty": "Best before 24 months from manufacturing",
     "images": [
-      { "image": "/images/products/beauty-serum.svg" }
+      { "image": "/images/products/serum-1.jpg" },
+      { "image": "/images/products/serum-2.jpg" },
+      { "image": "/images/products/serum-3.jpg" }
     ],
     "reviews": [
       { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Ananya Iyer", "rating": 5, "comment": "My dark spots have visibly faded in six weeks. Absorbs nicely." },
@@ -923,7 +965,10 @@
     ],
     "warranty": "Best before 24 months from manufacturing",
     "images": [
-      { "image": "/images/products/beauty-sunscreen.svg" }
+      { "image": "/images/products/sunscreen-1.jpg" },
+      { "image": "/images/products/sunscreen-2.jpg" },
+      { "image": "/images/products/sunscreen-3.jpg" },
+      { "image": "/images/products/sunscreen-4.jpg" }
     ],
     "reviews": [
       { "user": "60e4d3c2b1a0987654321fed", "userName": "Mohammed Ali", "rating": 5, "comment": "No white cast at all and my skin stays matte through the day." },
@@ -971,7 +1016,10 @@
     ],
     "warranty": "Best before 24 months from manufacturing",
     "images": [
-      { "image": "/images/products/beauty-vitamin.svg" }
+      { "image": "/images/products/vitamins-1.jpg" },
+      { "image": "/images/products/vitamins-2.jpg" },
+      { "image": "/images/products/vitamins-3.jpg" },
+      { "image": "/images/products/vitamins-4.jpg" }
     ],
     "reviews": [
       { "user": "507f191e810c19729de860ea", "userName": "Deepak Chauhan", "rating": 5, "comment": "Easy to swallow and I feel a clear difference in energy levels." },
@@ -1019,7 +1067,10 @@
     ],
     "warranty": "Book returns accepted within 7 days",
     "images": [
-      { "image": "/images/products/book-atomic.svg" }
+      { "image": "/images/products/book-1.jpg" },
+      { "image": "/images/products/book-2.jpg" },
+      { "image": "/images/products/book-3.jpg" },
+      { "image": "/images/products/book-4.jpg" }
     ],
     "reviews": [
       { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Neha Gupta", "rating": 5, "comment": "Life-changing read. Simple ideas that are actually easy to apply." },
@@ -1066,7 +1117,10 @@
     ],
     "warranty": "Book returns accepted within 7 days",
     "images": [
-      { "image": "/images/products/book-kids.svg" }
+      { "image": "/images/products/kids-book-1.jpg" },
+      { "image": "/images/products/kids-book-2.jpg" },
+      { "image": "/images/products/kids-book-3.jpg" },
+      { "image": "/images/products/kids-book-4.jpg" }
     ],
     "reviews": [
       { "user": "507f1f77bcf86cd799439012", "userName": "Divya Nair", "rating": 5, "comment": "My daughter asks for two stories every night now. Lovely illustrations." },
@@ -1114,7 +1168,10 @@
     ],
     "warranty": "Book returns accepted within 7 days",
     "images": [
-      { "image": "/images/products/book-midnight.svg" }
+      { "image": "/images/products/novel-1.jpg" },
+      { "image": "/images/products/novel-2.jpg" },
+      { "image": "/images/products/novel-3.jpg" },
+      { "image": "/images/products/novel-4.png" }
     ],
     "reviews": [
       { "user": "60d5f2b1c3e4a5b6c7d8e9f1", "userName": "Ananya Iyer", "rating": 5, "comment": "Beautiful and emotional. Finished it in two sittings." },
@@ -1162,7 +1219,10 @@
     ],
     "warranty": "Book returns accepted within 7 days",
     "images": [
-      { "image": "/images/products/book-richdad.svg" }
+      { "image": "/images/products/money-book-1.jpg" },
+      { "image": "/images/products/money-book-2.jpg" },
+      { "image": "/images/products/money-book-3.jpg" },
+      { "image": "/images/products/money-book-4.jpg" }
     ],
     "reviews": [
       { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Mohammed Ali", "rating": 5, "comment": "Changed how I think about money. A must-read for young adults." },
@@ -1210,7 +1270,10 @@
     ],
     "warranty": "Book returns accepted within 7 days",
     "images": [
-      { "image": "/images/products/book-science.svg" }
+      { "image": "/images/products/encyclopedia-1.jpg" },
+      { "image": "/images/products/encyclopedia-2.jpg" },
+      { "image": "/images/products/encyclopedia-3.jpg" },
+      { "image": "/images/products/encyclopedia-4.jpg" }
     ],
     "reviews": [
       { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Vikram Singh", "rating": 5, "comment": "My son loves the space section. Illustrations are top quality." },
@@ -1257,7 +1320,10 @@
     ],
     "warranty": "Best before 18 months from manufacturing",
     "images": [
-      { "image": "/images/products/food-coffee.svg" }
+      { "image": "/images/products/coffee-1.jpg" },
+      { "image": "/images/products/coffee-2.jpg" },
+      { "image": "/images/products/coffee-3.jpg" },
+      { "image": "/images/products/coffee-4.jpg" }
     ],
     "reviews": [
       { "user": "60e4d3c2b1a0987654321fed", "userName": "Amit Verma", "rating": 4, "comment": "Strong, smooth and no bitterness. Great value for daily coffee." },
@@ -1303,7 +1369,10 @@
     ],
     "warranty": "Best before 6 months from packing",
     "images": [
-      { "image": "/images/products/food-dry-fruits.svg" }
+      { "image": "/images/products/dry-fruits-1.jpg" },
+      { "image": "/images/products/dry-fruits-2.jpg" },
+      { "image": "/images/products/dry-fruits-3.jpg" },
+      { "image": "/images/products/dry-fruits-4.jpg" }
     ],
     "reviews": [
       { "user": "507f191e810c19729de860ea", "userName": "Divya Nair", "rating": 5, "comment": "Fresh and crunchy, exactly as described. Perfect mix of all four." },
@@ -1350,7 +1419,10 @@
     ],
     "warranty": "Best before 24 months from packing",
     "images": [
-      { "image": "/images/products/food-honey.svg" }
+      { "image": "/images/products/honey-1.jpg" },
+      { "image": "/images/products/honey-2.jpg" },
+      { "image": "/images/products/honey-3.jpg" },
+      { "image": "/images/products/honey-4.jpg" }
     ],
     "reviews": [
       { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Sneha Kulkarni", "rating": 5, "comment": "You can taste the purity. Much better than supermarket honey." },
@@ -1397,7 +1469,10 @@
     ],
     "warranty": "Best before 18 months from packing",
     "images": [
-      { "image": "/images/products/food-olive-oil.svg" }
+      { "image": "/images/products/olive-oil-1.jpg" },
+      { "image": "/images/products/olive-oil-2.jpg" },
+      { "image": "/images/products/olive-oil-3.jpg" },
+      { "image": "/images/products/olive-oil-4.jpg" }
     ],
     "reviews": [
       { "user": "507f1f77bcf86cd799439011", "userName": "Deepak Chauhan", "rating": 5, "comment": "Genuine extra virgin taste. My salads have never been better." },
@@ -1444,7 +1519,10 @@
     ],
     "warranty": "Best before 12 months from packing",
     "images": [
-      { "image": "/images/products/food-rice.svg" }
+      { "image": "/images/products/rice-1.jpg" },
+      { "image": "/images/products/rice-2.jpg" },
+      { "image": "/images/products/rice-3.jpg" },
+      { "image": "/images/products/rice-4.jpg" }
     ],
     "reviews": [
       { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Priya Patel", "rating": 5, "comment": "The aroma while cooking is incredible. Grains stay separate." },
@@ -1491,7 +1569,10 @@
     ],
     "warranty": "Best before 18 months from packing",
     "images": [
-      { "image": "/images/products/food-tea.svg" }
+      { "image": "/images/products/green-tea-1.jpg" },
+      { "image": "/images/products/green-tea-2.jpg" },
+      { "image": "/images/products/green-tea-3.jpg" },
+      { "image": "/images/products/green-tea-4.jpg" }
     ],
     "reviews": [
       { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Rahul Sharma", "rating": 5, "comment": "Fresh and smooth, no bitterness. The pyramid bags really work." },
@@ -1538,7 +1619,10 @@
     ],
     "warranty": "2 Years Structural Warranty",
     "images": [
-      { "image": "/images/products/home-bed.svg" }
+      { "image": "/images/products/bed-1.jpg" },
+      { "image": "/images/products/bed-2.jpg" },
+      { "image": "/images/products/bed-3.jpg" },
+      { "image": "/images/products/bed-4.jpg" }
     ],
     "reviews": [
       { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Divya Nair", "rating": 5, "comment": "Beautiful and sturdy. The storage lift is very useful for our room." },
@@ -1585,7 +1669,10 @@
     ],
     "warranty": "1 Year Manufacturer Warranty on Non-Stick Coating",
     "images": [
-      { "image": "/images/products/home-cookware.svg" }
+      { "image": "/images/products/cookware-1.jpg" },
+      { "image": "/images/products/cookware-2.jpg" },
+      { "image": "/images/products/cookware-3.jpg" },
+      { "image": "/images/products/cookware-4.jpg" }
     ],
     "reviews": [
       { "user": "60e4d3c2b1a0987654321fed", "userName": "Sneha Kulkarni", "rating": 5, "comment": "Nothing sticks and clean-up is effortless. Works on my induction." },
@@ -1632,7 +1719,10 @@
     ],
     "warranty": "30 Days Replacement Guarantee",
     "images": [
-      { "image": "/images/products/home-dinner-set.svg" }
+      { "image": "/images/products/dinner-set-1.jpg" },
+      { "image": "/images/products/dinner-set-2.jpg" },
+      { "image": "/images/products/dinner-set-3.jpg" },
+      { "image": "/images/products/dinner-set-4.jpeg" }
     ],
     "reviews": [
       { "user": "507f191e810c19729de860ea", "userName": "Neha Gupta", "rating": 5, "comment": "Beautiful finish and sturdy. Survived the dishwasher many times." },
@@ -1680,7 +1770,10 @@
     ],
     "warranty": "1 Year Manufacturer Warranty",
     "images": [
-      { "image": "/images/products/home-lamp.svg" }
+      { "image": "/images/products/table-lamp-1.jpg" },
+      { "image": "/images/products/table-lamp-2.jpg" },
+      { "image": "/images/products/table-lamp-3.jpg" },
+      { "image": "/images/products/table-lamp-4.jpg" }
     ],
     "reviews": [
       { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Arjun Nair", "rating": 5, "comment": "Perfect reading lamp. The touch dimming is really smooth." },
@@ -1728,7 +1821,10 @@
     ],
     "warranty": "2 Years Structural Warranty (1 Year on Fabric)",
     "images": [
-      { "image": "/images/products/home-sofa.svg" }
+      { "image": "/images/products/sofa-1.jpg" },
+      { "image": "/images/products/sofa-2.jpg" },
+      { "image": "/images/products/sofa-3.jpg" },
+      { "image": "/images/products/sofa-4.jpg" }
     ],
     "reviews": [
       { "user": "507f1f77bcf86cd799439011", "userName": "Kavita Menon", "rating": 5, "comment": "Very comfortable and the fabric feels premium. Fits my living room perfectly." },
@@ -1775,7 +1871,10 @@
     ],
     "warranty": "2 Years Structural Warranty",
     "images": [
-      { "image": "/images/products/home-table.svg" }
+      { "image": "/images/products/coffee-table-1.jpg" },
+      { "image": "/images/products/coffee-table-2.jpg" },
+      { "image": "/images/products/coffee-table-3.jpeg" },
+      { "image": "/images/products/coffee-table-4.jpg" }
     ],
     "reviews": [
       { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Ananya Iyer", "rating": 5, "comment": "Solid wood, beautiful finish. Assembly took ten minutes." },
@@ -1822,7 +1921,10 @@
     ],
     "warranty": "7 Days Easy Return",
     "images": [
-      { "image": "/images/products/kids-romper.svg" }
+      { "image": "/images/products/baby-clothes-1.jpg" },
+      { "image": "/images/products/baby-clothes-2.jpg" },
+      { "image": "/images/products/baby-clothes-3.jpg" },
+      { "image": "/images/products/baby-clothes-4.jpg" }
     ],
     "reviews": [
       { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Divya Nair", "rating": 5, "comment": "Softest cotton, my baby loves it. The snaps make changes so easy." },
@@ -1869,7 +1971,10 @@
     ],
     "warranty": "30 Days Size Exchange",
     "images": [
-      { "image": "/images/products/kids-sneakers.svg" }
+      { "image": "/images/products/kids-shoes-1.jpg" },
+      { "image": "/images/products/kids-shoes-2.jpg" },
+      { "image": "/images/products/kids-shoes-3.jpg" },
+      { "image": "/images/products/kids-shoes-4.jpg" }
     ],
     "reviews": [
       { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Sneha Kulkarni", "rating": 5, "comment": "My son puts them on himself now. Very comfortable for running around." },
@@ -1916,7 +2021,10 @@
     ],
     "warranty": "7 Days Easy Return",
     "images": [
-      { "image": "/images/products/kids-tshirt.svg" }
+      { "image": "/images/products/kids-tshirt-1.jpg" },
+      { "image": "/images/products/kids-tshirt-2.png" },
+      { "image": "/images/products/kids-tshirt-3.jpg" },
+      { "image": "/images/products/kids-tshirt-4.jpg" }
     ],
     "reviews": [
       { "user": "60e4d3c2b1a0987654321fed", "userName": "Neha Gupta", "rating": 5, "comment": "Super soft and bright colours. Three tees for a great price." },
@@ -1963,7 +2071,10 @@
     ],
     "warranty": "30 Days Size Exchange",
     "images": [
-      { "image": "/images/products/men-jeans.svg" }
+      { "image": "/images/products/jeans-1.jpg" },
+      { "image": "/images/products/jeans-2.jpg" },
+      { "image": "/images/products/jeans-3.jpg" },
+      { "image": "/images/products/jeans-4.jpg" }
     ],
     "reviews": [
       { "user": "607f1a2b3c4d5e6f7a8b9c0d", "userName": "Deepak Chauhan", "rating": 5, "comment": "Perfect fit and the stretch makes them super comfortable all day." },
@@ -2010,7 +2121,10 @@
     ],
     "warranty": "30 Days Size Exchange",
     "images": [
-      { "image": "/images/products/men-shirt.svg" }
+      { "image": "/images/products/men-shirt-1.jpg" },
+      { "image": "/images/products/men-shirt-2.jpg" },
+      { "image": "/images/products/men-shirt-3.jpg" },
+      { "image": "/images/products/men-shirt-4.jpg" }
     ],
     "reviews": [
       { "user": "507f1f77bcf86cd799439011", "userName": "Amit Verma", "rating": 5, "comment": "Great fabric, breathable and crisp. Perfect for office casual." },
@@ -2058,7 +2172,10 @@
     ],
     "warranty": "30 Days Size Exchange",
     "images": [
-      { "image": "/images/products/men-shoes.svg" }
+      { "image": "/images/products/running-shoes-1.jpg" },
+      { "image": "/images/products/running-shoes-2.jpg" },
+      { "image": "/images/products/running-shoes-3.jpg" },
+      { "image": "/images/products/running-shoes-4.jpg" }
     ],
     "reviews": [
       { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Rohan Joshi", "rating": 5, "comment": "Great cushioning and grip. My knees feel much better on long runs." },
@@ -2106,7 +2223,10 @@
     ],
     "warranty": "1 Year Manufacturer Warranty",
     "images": [
-      { "image": "/images/products/outdoor-backpack.svg" }
+      { "image": "/images/products/backpack-1.jpg" },
+      { "image": "/images/products/backpack-2.jpg" },
+      { "image": "/images/products/backpack-3.jpg" },
+      { "image": "/images/products/backpack-4.jpg" }
     ],
     "reviews": [
       { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Mohammed Ali", "rating": 5, "comment": "Survived a weekend monsoon trek. The rain cover is a lifesaver." },
@@ -2154,7 +2274,10 @@
     ],
     "warranty": "1 Year Frame Warranty",
     "images": [
-      { "image": "/images/products/outdoor-bike.svg" }
+      { "image": "/images/products/mountain-bike-1.jpg" },
+      { "image": "/images/products/mountain-bike-2.jpg" },
+      { "image": "/images/products/mountain-bike-3.jpg" },
+      { "image": "/images/products/mountain-bike-4.jpg" }
     ],
     "reviews": [
       { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Deepak Chauhan", "rating": 5, "comment": "Rides smoothly on rough roads. The disc brakes are very reassuring." },
@@ -2202,7 +2325,10 @@
     ],
     "warranty": "6 Months Manufacturer Warranty",
     "images": [
-      { "image": "/images/products/outdoor-boots.svg" }
+      { "image": "/images/products/hiking-boots-1.jpg" },
+      { "image": "/images/products/hiking-boots-2.jpg" },
+      { "image": "/images/products/hiking-boots-3.jpg" },
+      { "image": "/images/products/hiking-boots-4.jpg" }
     ],
     "reviews": [
       { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Vikram Singh", "rating": 5, "comment": "Feet stayed dry through a full day in the rain. Great grip." },
@@ -2250,7 +2376,10 @@
     ],
     "warranty": "1 Year Manufacturer Warranty",
     "images": [
-      { "image": "/images/products/outdoor-sleeping-bag.svg" }
+      { "image": "/images/products/sleeping-bag-1.JPG" },
+      { "image": "/images/products/sleeping-bag-2.jpg" },
+      { "image": "/images/products/sleeping-bag-3.JPG" },
+      { "image": "/images/products/sleeping-bag-4.jpg" }
     ],
     "reviews": [
       { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Kavita Menon", "rating": 5, "comment": "Warm and cosy on a chilly night. Packs down surprisingly small." },
@@ -2298,7 +2427,10 @@
     ],
     "warranty": "1 Year Manufacturer Warranty",
     "images": [
-      { "image": "/images/products/outdoor-tent.svg" }
+      { "image": "/images/products/tent-1.jpg" },
+      { "image": "/images/products/tent-2.jpg" },
+      { "image": "/images/products/tent-3.jpg" },
+      { "image": "/images/products/tent-4.jpg" }
     ],
     "reviews": [
       { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Mohammed Ali", "rating": 5, "comment": "Set up in minutes and survived heavy rain overnight. No leaks." },
@@ -2346,7 +2478,10 @@
     ],
     "warranty": "6 Months Manufacturer Warranty",
     "images": [
-      { "image": "/images/products/outdoor-yoga.svg" }
+      { "image": "/images/products/yoga-mat-1.jpg" },
+      { "image": "/images/products/yoga-mat-2.jpg" },
+      { "image": "/images/products/yoga-mat-3.JPG" },
+      { "image": "/images/products/yoga-mat-4.jpg" }
     ],
     "reviews": [
       { "user": "60d5f2b1c3e4a5b6c7d8e9f0", "userName": "Sneha Kulkarni", "rating": 5, "comment": "Great cushioning for my knees and it never slips during practice." },
@@ -2395,7 +2530,10 @@
     ],
     "warranty": "1 Year Manufacturer Warranty",
     "images": [
-      { "image": "/images/products/wearables-band.svg" }
+      { "image": "/images/products/smartband-1.jpg" },
+      { "image": "/images/products/smartband-2.jpg" },
+      { "image": "/images/products/smartband-3.jpg" },
+      { "image": "/images/products/smartband-4.jpg" }
     ],
     "reviews": [
       { "user": "5a4b3c2d1e0f9a8b7c6d5e4f", "userName": "Priya Patel", "rating": 5, "comment": "The display is gorgeous and battery truly lasts over two weeks." },
@@ -2442,7 +2580,10 @@
     ],
     "warranty": "30 Days Size Exchange",
     "images": [
-      { "image": "/images/products/women-dress.svg" }
+      { "image": "/images/products/women-dress-1.jpg" },
+      { "image": "/images/products/women-dress-2.jpg" },
+      { "image": "/images/products/women-dress-3.jpg" },
+      { "image": "/images/products/women-dress-4.jpg" }
     ],
     "reviews": [
       { "user": "5f6a7b8c9d0e1f2a3b4c5d6e", "userName": "Ananya Iyer", "rating": 5, "comment": "Light, breezy and the print is even prettier in person." },
@@ -2489,7 +2630,10 @@
     ],
     "warranty": "30 Days Replacement on Manufacturing Defects",
     "images": [
-      { "image": "/images/products/women-handbag.svg" }
+      { "image": "/images/products/handbag-1.jpg" },
+      { "image": "/images/products/handbag-2.jpg" },
+      { "image": "/images/products/handbag-3.jpg" },
+      { "image": "/images/products/handbag-4.jpg" }
     ],
     "reviews": [
       { "user": "60e4d3c2b1a0987654321fed", "userName": "Divya Nair", "rating": 5, "comment": "Looks far more expensive than it is. Roomy and well organised." },
@@ -2536,7 +2680,10 @@
     ],
     "warranty": "30 Days Size Exchange",
     "images": [
-      { "image": "/images/products/women-heels.svg" }
+      { "image": "/images/products/heels-1.jpg" },
+      { "image": "/images/products/heels-2.jpg" },
+      { "image": "/images/products/heels-3.jpg" },
+      { "image": "/images/products/heels-4.jpg" }
     ],
     "reviews": [
       { "user": "507f191e810c19729de860ea", "userName": "Simran Kaur", "rating": 5, "comment": "Comfortable enough for a full day at work. The block heel is stable." },

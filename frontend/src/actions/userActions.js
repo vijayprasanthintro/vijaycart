@@ -3,25 +3,16 @@ import {
     loginRequest, 
     loginSuccess, 
     clearError,
-    registerFail,
-    registerRequest,
-    registerSuccess,
+    otpRequest,
+    otpRequestSuccess,
+    otpRequestFail,
     loadUserRequest,
     loadUserSuccess,
     loadUserFail,
     logoutSuccess,
     updateProfileRequest,
     updateProfileSuccess,
-    updateProfileFail,
-    updatePasswordRequest,
-    updatePasswordSuccess,
-    updatePasswordFail,
-    forgotPasswordRequest,
-    forgotPasswordSuccess,
-    forgotPasswordFail,
-    resetPasswordRequest,
-    resetPasswordSuccess,
-    resetPasswordFail
+    updateProfileFail
 } from '../slices/authSlice';
 
 import {
@@ -41,11 +32,23 @@ import {
 } from '../slices/userSlice'
 import axios from 'axios';
 
-export const login = (email, password) => async (dispatch) => {
+//Step 1: Request an OTP for a mobile number (or email for legacy accounts).
+export const sendOtp = (payload) => async (dispatch) => {
+    try {
+        dispatch(otpRequest())
+        const { data } = await axios.post(`/api/v1/otp/request`, payload);
+        dispatch(otpRequestSuccess(data))
+    } catch (error) {
+        dispatch(otpRequestFail(error.response?.data?.message || error.message))
+    }
+}
+
+//Step 2: Verify the OTP -> sets the auth cookie and logs the user in.
+export const verifyOtp = (payload) => async (dispatch) => {
 
         try {
             dispatch(loginRequest())
-            const { data }  = await axios.post(`/api/v1/login`,{email,password});
+            const { data }  = await axios.post(`/api/v1/otp/verify`,payload);
             dispatch(loginSuccess(data))
         } catch (error) {
             dispatch(loginFail(error.response?.data?.message || error.message))
@@ -55,24 +58,6 @@ export const login = (email, password) => async (dispatch) => {
 
 export const clearAuthError = dispatch => {
     dispatch(clearError())
-}
-
-export const register = (userData) => async (dispatch) => {
-
-    try {
-        dispatch(registerRequest())
-        const config = {
-            headers: {
-                'Content-type': 'multipart/form-data'
-            }
-        }
-
-        const { data }  = await axios.post(`/api/v1/register`,userData, config);
-        dispatch(registerSuccess(data))
-    } catch (error) {
-        dispatch(registerFail(error.response?.data?.message || error.message))
-    }
-
 }
 
 export const loadUser = () => async (dispatch) => {
@@ -120,57 +105,6 @@ export const updateProfile = (userData) => async (dispatch) => {
         dispatch(updateProfileSuccess(data))
     } catch (error) {
         dispatch(updateProfileFail(error.response?.data?.message || error.message))
-    }
-
-}
-
-export const updatePassword = (formData) => async (dispatch) => {
-
-    try {
-        dispatch(updatePasswordRequest())
-        const config = {
-            headers: {
-                'Content-type': 'application/json'
-            }
-        }
-        await axios.put(`/api/v1/password/change`, formData, config);
-        dispatch(updatePasswordSuccess())
-    } catch (error) {
-        dispatch(updatePasswordFail(error.response?.data?.message || error.message))
-    }
-
-}
-
-export const forgotPassword = (formData) => async (dispatch) => {
-
-    try {
-        dispatch(forgotPasswordRequest())
-        const config = {
-            headers: {
-                'Content-type': 'application/json'
-            }
-        }
-        const { data} =  await axios.post(`/api/v1/password/forgot`, formData, config);
-        dispatch(forgotPasswordSuccess(data))
-    } catch (error) {
-        dispatch(forgotPasswordFail(error.response?.data?.message || error.message))
-    }
-
-}
-
-export const resetPassword = (formData, token) => async (dispatch) => {
-
-    try {
-        dispatch(resetPasswordRequest())
-        const config = {
-            headers: {
-                'Content-type': 'application/json'
-            }
-        }
-        const { data} =  await axios.post(`/api/v1/password/reset/${token}`, formData, config);
-        dispatch(resetPasswordSuccess(data))
-    } catch (error) {
-        dispatch(resetPasswordFail(error.response?.data?.message || error.message))
     }
 
 }

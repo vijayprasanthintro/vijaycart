@@ -280,7 +280,7 @@ export default function Home() {
                 <Link to="/search/all" className="view-all-link">View All <i className="fa fa-arrow-right" aria-hidden="true"></i></Link>
               </div>
               <div className="row">
-                {moreProducts.map(product => <Product key={product._id} product={product} col={3} />)}
+                {moreProducts.map((product, i) => <Product key={product._id} product={product} col={3} index={i} />)}
               </div>
             </section>
           )}

@@ -8,7 +8,7 @@ import { getDeliveryBoys } from "../../actions/deliveryActions";
 import { Link } from "react-router-dom";
 import { toINR } from './Charts';
 import { resolveProductImage, imgOnError } from '../../utils/productHelper';
-import { ORDER_STATUSES, statusBadge } from '../../utils/orderStatuses';
+import { ORDER_STATUSES, LOCKED_STATUS, statusBadge } from '../../utils/orderStatuses';
 
 export default function UpdateOrder() {
     const { loading, isOrderUpdated, error, orderDetail } = useSelector(state => state.orderState);
@@ -48,6 +48,9 @@ export default function UpdateOrder() {
 
     const currentIndex = ORDER_STATUSES.indexOf(orderDetail.orderStatus);
     const isCancelled = orderDetail.orderStatus === 'Cancelled';
+    const isLocked = orderDetail.orderStatus === LOCKED_STATUS;
+    const isTerminal = isCancelled || isLocked;
+    const editableStatuses = ORDER_STATUSES.filter(s => s !== LOCKED_STATUS);
     const historyTimes = {};
     (orderDetail.statusHistory || []).forEach(h => {
         if (h.status) historyTimes[h.status] = h.changedAt;
@@ -92,17 +95,27 @@ export default function UpdateOrder() {
                 <div className="ad-card">
                     <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-cog" aria-hidden="true"></i> Update Status</h3></div>
                     <div className="ad-card__body">
-                        <div className="ad-field">
-                            <label className="ad-label">Order Status</label>
-                            <select className="ad-select" value={orderStatus} onChange={e => setOrderStatus(e.target.value)}>
-                                {ORDER_STATUSES.map(s => (
-                                    <option key={s} value={s}>{s}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <button className="ad-btn ad-btn--primary" style={{ width: '100%', marginTop: '1rem' }} disabled={loading} onClick={submitHandler}>
-                            {loading && <i className="fa fa-spinner fa-spin" aria-hidden="true"></i>} Update Status
-                        </button>
+                        {isLocked ? (
+                            <div className="ad-locked">
+                                <div className="ad-locked__icon"><i className="fa fa-lock" aria-hidden="true"></i></div>
+                                <b>Locked · Cancelled by Customer</b>
+                                <p>This order has been cancelled by the customer and cannot be modified. You can only view this order.</p>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="ad-field">
+                                    <label className="ad-label">Order Status</label>
+                                    <select className="ad-select" value={orderStatus} onChange={e => setOrderStatus(e.target.value)}>
+                                        {editableStatuses.map(s => (
+                                            <option key={s} value={s}>{s}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <button className="ad-btn ad-btn--primary" style={{ width: '100%', marginTop: '1rem' }} disabled={loading} onClick={submitHandler}>
+                                    {loading && <i className="fa fa-spinner fa-spin" aria-hidden="true"></i>} Update Status
+                                </button>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
@@ -112,12 +125,12 @@ export default function UpdateOrder() {
                 <div className="ad-card__body">
                     <div className="ad-timeline">
                         {ORDER_STATUSES.map((s, i) => {
-                            const reached = isCancelled ? false : i <= currentIndex;
-                            const isCurrent = !isCancelled && i === currentIndex;
-                            const danger = isCancelled && s === 'Cancelled';
+                            const reached = isTerminal ? false : i <= currentIndex;
+                            const isCurrent = !isTerminal && i === currentIndex;
+                            const danger = isLocked ? s === LOCKED_STATUS : isCancelled && s === 'Cancelled';
                             const done = reached && !isCurrent;
                             const time = historyTimes[s] ? fmtTime(historyTimes[s]) : null;
-                            const icon = s === 'Delivered' ? 'fa-check' : s === 'Cancelled' ? 'fa-times' : s === 'Out for Delivery' ? 'fa-truck' : s === 'Packed' ? 'fa-box' : s === 'Shipped' ? 'fa-paper-plane-o' : s === 'Confirmed' ? 'fa-check-circle-o' : 'fa-hourglass-half';
+                            const icon = s === LOCKED_STATUS ? 'fa-lock' : s === 'Delivered' ? 'fa-check' : s === 'Cancelled' ? 'fa-times' : s === 'Out for Delivery' ? 'fa-truck' : s === 'Packed' ? 'fa-box' : s === 'Shipped' ? 'fa-paper-plane-o' : s === 'Confirmed' ? 'fa-check-circle-o' : 'fa-hourglass-half';
                             return (
                                 <div className={`ad-timeline__item ${done ? 'ad-timeline__item--done' : ''} ${isCurrent ? 'ad-timeline__item--current' : ''} ${danger ? 'ad-timeline__item--danger' : ''}`} key={s}>
                                     <div className="ad-timeline__rail">
@@ -125,9 +138,10 @@ export default function UpdateOrder() {
                                         {i < ORDER_STATUSES.length - 1 && <span className="ad-timeline__line"></span>}
                                     </div>
                                     <div className="ad-timeline__content">
-                                        <span className={`ad-badge ${danger ? 'ad-badge--danger' : statusBadge(s)}`}>{s}</span>
+                                        <span className={`ad-badge ${danger ? 'ad-badge--danger' : statusBadge(s)}`}>{s === LOCKED_STATUS && <i className="fa fa-lock mr-1" aria-hidden="true"></i>}{s}</span>
                                         {time && <span className="ad-muted ad-timeline__time">{time}</span>}
                                         {isCurrent && <span className="ad-timeline__tag">Current</span>}
+                                        {danger && <span className="ad-timeline__tag">Locked</span>}
                                     </div>
                                 </div>
                             );

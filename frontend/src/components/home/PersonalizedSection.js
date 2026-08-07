@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 import { Fragment } from 'react';
 
 const DEFAULT_STORES = [
-  { name: 'Designer Cases', to: '/search/all?category=Accessories', img: '/images/products/7.jpg' },
-  { name: 'Wrist Watches', to: '/search/all?category=Accessories', img: '/images/products/5.jpg' },
-  { name: 'Eau De Parfum', to: '/search/all?category=Beauty/Health', img: '/images/products/10.jpg' },
-  { name: 'Laptops', to: '/search/all?category=Laptops', img: '/images/products/4.jpg' },
+  { name: 'Designer Cases', to: '/search/all?category=Accessories', img: '/images/products/smartphone-1.jpg' },
+  { name: 'Wrist Watches', to: '/search/all?category=Accessories', img: '/images/products/smartband-1.jpg' },
+  { name: 'Eau De Parfum', to: '/search/all?category=Beauty/Health', img: '/images/products/serum-1.jpg' },
+  { name: 'Laptops', to: '/search/all?category=Laptops', img: '/images/products/laptop-1.jpg' },
 ];
 
 export default function PersonalizedSection({ products = [] }) {

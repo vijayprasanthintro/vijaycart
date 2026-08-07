@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import MetaData from "../layouts/MetaData";
 import CheckoutSteps from "./CheckoutStep";
 import { getDeliveryLabel, formatMoney } from "../../utils/productHelper";
@@ -15,6 +15,14 @@ const METHOD_META = {
 
 export default function OrderSuccess() {
     const { orderDetail } = useSelector(state => state.orderState);
+
+    // A hard refresh loses the in-memory Redux order detail, so this page
+    // would otherwise show an empty "success" screen. Send the user to their
+    // orders instead, where the placed order is always persisted.
+    if (!orderDetail || !orderDetail._id) {
+        return <Navigate to="/orders" replace />;
+    }
+
     const estSeed = (orderDetail.shippingInfo && orderDetail.shippingInfo.postalCode) || orderDetail._id || '';
     const isCod = orderDetail.paymentMethod === 'cod';
     const method = METHOD_META[orderDetail.paymentMethod] || (orderDetail.paymentInfo && orderDetail.paymentInfo.status === 'succeeded' ? { label: 'Card', icon: 'fa-credit-card' } : null);

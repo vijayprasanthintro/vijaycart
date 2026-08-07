@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { getAdminProducts } from '../../actions/productActions';
 import { toINR } from './Charts';
 import { productImage, imgOnError } from '../../utils/productHelper';
+import AdminPagination from './AdminPagination';
+import AdminExport from './AdminExport';
 
 export default function Inventory() {
     const { products = [], loading = true } = useSelector(state => state.productsState);
@@ -11,6 +13,8 @@ export default function Inventory() {
 
     const [query, setQuery] = useState('');
     const [stock, setStock] = useState('all');
+    const [page, setPage] = useState(1);
+    const PER_PAGE = 10;
 
     useEffect(() => {
         dispatch(getAdminProducts);
@@ -32,6 +36,27 @@ export default function Inventory() {
         return list;
     }, [products, query, stock]);
 
+    useEffect(() => { setPage(1); }, [query, stock]);
+
+    const pageItems = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+    const exportHeaders = [
+        { label: 'Name', key: 'name' },
+        { label: 'Category', key: 'category' },
+        { label: 'Seller', key: 'seller' },
+        { label: 'Price', key: 'price', type: 'number' },
+        { label: 'Stock', key: 'stock', type: 'number' },
+        { label: 'Stock Value', key: 'stockValue', type: 'number' }
+    ];
+    const exportRows = filtered.map(p => ({
+        name: p.name,
+        category: p.category,
+        seller: p.seller || '',
+        price: p.price,
+        stock: p.stock,
+        stockValue: p.stock * p.price
+    }));
+
     return (
         <Fragment>
             <div className="ad-page-head">
@@ -39,6 +64,7 @@ export default function Inventory() {
                     <h1>Inventory</h1>
                     <p>Stock levels &amp; alerts</p>
                 </div>
+                <AdminExport filename="inventory" headers={exportHeaders} rows={exportRows} />
             </div>
 
             <div className="ad-stat-grid">
@@ -93,7 +119,7 @@ export default function Inventory() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filtered.map(product => (
+                                    {pageItems.map(product => (
                                         <tr key={product._id}>
                                             <td>
                                                 <div className="ad-toolbar" style={{ justifyContent: 'flex-start' }}>
@@ -116,6 +142,9 @@ export default function Inventory() {
                                 </tbody>
                             </table>
                         </div>
+                    )}
+                    {filtered.length > PER_PAGE && (
+                        <AdminPagination count={filtered.length} perPage={PER_PAGE} page={page} onChange={setPage} />
                     )}
                 </div>
             </div>

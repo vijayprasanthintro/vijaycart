@@ -7,10 +7,23 @@ import { createSlice } from "@reduxjs/toolkit";
 // cache is cleared and the user is logged out for real.
 const AUTH_KEY = 'vijaycart_auth';
 
+// "Remember me" preference (stored in localStorage so it survives restarts).
+// When unchecked, the optimistic auth cache is kept in sessionStorage only,
+// so closing the browser drops the cached UI session (the server cookie may
+// still be valid, but the app no longer restores the session optimistically).
+const REMEMBER_KEY = 'vijaycart_remember';
+
 // Keep the optimistic cache in step with the server session (JWT_EXPIRES_TIME
 // and the cookie both expire after 7 days). An expired cache is treated as a
 // logged-out state so a stale session is never shown as "still logged in".
 const AUTH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+const readRemember = () => {
+    try { return localStorage.getItem(REMEMBER_KEY) !== '0'; } catch { return true; }
+};
+
+const authStorage = () => readRemember() ? localStorage : sessionStorage;
+const otherAuthStorage = () => readRemember() ? sessionStorage : localStorage;
 
 // Keys owned by the cart/checkout flow. Cleared on logout and on account
 // switch so the next user never inherits the previous user's cart, saved
@@ -29,44 +42,44 @@ const clearCheckoutSession = () => {
 };
 
 const readAuth = () => {
-    try {
-        const raw = localStorage.getItem(AUTH_KEY);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        if (parsed && parsed.isAuthenticated && parsed.user) {
-            if (parsed.expiresAt && Date.now() > parsed.expiresAt) {
-                clearAuth();
-                return null;
+    for (const store of [localStorage, sessionStorage]) {
+        try {
+            const raw = store.getItem(AUTH_KEY);
+            if (!raw) continue;
+            const parsed = JSON.parse(raw);
+            if (parsed && parsed.isAuthenticated && parsed.user) {
+                if (parsed.expiresAt && Date.now() > parsed.expiresAt) {
+                    clearAuth();
+                    return null;
+                }
+                return parsed;
             }
-            return parsed;
+        } catch {
+            /* continue to the next storage */
         }
-        return null;
-    } catch {
-        return null;
     }
+    return null;
 };
 
 const persistAuth = (user) => {
     try {
-        localStorage.setItem(AUTH_KEY, JSON.stringify({
+        authStorage().setItem(AUTH_KEY, JSON.stringify({
             isAuthenticated: true,
             user,
             expiresAt: Date.now() + AUTH_TTL_MS
         }));
+        otherAuthStorage().removeItem(AUTH_KEY);
     } catch {
         /* storage unavailable — cookie session still works for the current tab */
     }
 };
 
 const clearAuth = () => {
-    try {
-        localStorage.removeItem(AUTH_KEY);
-    } catch {
-        /* ignore */
-    }
+    try { localStorage.removeItem(AUTH_KEY); } catch { /* ignore */ }
+    try { sessionStorage.removeItem(AUTH_KEY); } catch { /* ignore */ }
 };
 
-export { AUTH_KEY };
+export { AUTH_KEY, REMEMBER_KEY };
 
 const savedAuth = readAuth();
 
@@ -75,7 +88,10 @@ const authSlice = createSlice({
     initialState: {
         loading: true,
         isAuthenticated: !!savedAuth,
-        user: savedAuth ? savedAuth.user : null
+        user: savedAuth ? savedAuth.user : null,
+        otp: null,
+        otpLoading: false,
+        otpError: null
     },
     reducers: {
         loginRequest(state, action){
@@ -110,28 +126,33 @@ const authSlice = createSlice({
                 error:  null
             }
         },
-        registerRequest(state, action){
+        //Step 1 state: an OTP has been sent and awaits verification.
+        otpRequest(state, action){
             return {
                 ...state,
-                loading: true,
+                otpLoading: true,
+                otpError: null
             }
         },
-        registerSuccess(state, action){
-            if (state.user && state.user.id !== action.payload.user.id) {
-                clearCheckoutSession();
-            }
-            persistAuth(action.payload.user);
-            return {
-                loading: false,
-                isAuthenticated: true,
-                user: action.payload.user
-            }
-        },
-        registerFail(state, action){
+        otpRequestSuccess(state, action){
             return {
                 ...state,
-                loading: false,
-                error:  action.payload
+                otpLoading: false,
+                otp: {
+                    userId: action.payload.userId,
+                    to: action.payload.to,
+                    resendIn: action.payload.resendIn,
+                    expiresIn: action.payload.expiresIn,
+                    isNewUser: action.payload.isNewUser
+                },
+                otpError: null
+            }
+        },
+        otpRequestFail(state, action){
+            return {
+                ...state,
+                otpLoading: false,
+                otpError: action.payload
             }
         },
         loadUserRequest(state, action){
@@ -218,71 +239,6 @@ const authSlice = createSlice({
                 isUpdated: false
             }
         },
-
-        updatePasswordRequest(state, action){
-            return {
-                ...state,
-                loading: true,
-                isUpdated: false
-            }
-        },
-        updatePasswordSuccess(state, action){
-            return {
-                ...state,
-                loading: false,
-                isUpdated: true
-            }
-        },
-        updatePasswordFail(state, action){
-            return {
-                ...state,
-                loading: false,
-                error:  action.payload
-            }
-        },
-        forgotPasswordRequest(state, action){
-            return {
-                ...state,
-                loading: true,
-                message: null
-            }
-        },
-        forgotPasswordSuccess(state, action){
-            return {
-                ...state,
-                loading: false,
-                message: action.payload.message
-            }
-        },
-        forgotPasswordFail(state, action){
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            }
-        },
-        resetPasswordRequest(state, action){
-            return {
-                ...state,
-                loading: true,
-            }
-        },
-        resetPasswordSuccess(state, action){
-            persistAuth(action.payload.user);
-            return {
-                ...state,
-                loading: false,
-                isAuthenticated: true,
-                user: action.payload.user
-            }
-        },
-        resetPasswordFail(state, action){
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            }
-        },
         
     }
 });
@@ -294,9 +250,9 @@ export const {
     loginSuccess, 
     loginFail, 
     clearError,
-    registerRequest,
-    registerSuccess,
-    registerFail,
+    otpRequest,
+    otpRequestSuccess,
+    otpRequestFail,
     loadUserRequest,
     loadUserSuccess,
     loadUserFail,
@@ -306,15 +262,6 @@ export const {
     updateProfileRequest,
     updateProfileSuccess,
     clearUpdateProfile,
-    updatePasswordFail,
-    updatePasswordSuccess,
-    updatePasswordRequest,
-    forgotPasswordFail,
-    forgotPasswordSuccess,
-    forgotPasswordRequest,
-    resetPasswordFail,
-    resetPasswordRequest,
-    resetPasswordSuccess,
     
  } = actions;
 

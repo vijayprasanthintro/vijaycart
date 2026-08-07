@@ -11,13 +11,28 @@ const userSchema = new mongoose.Schema({
     },
     email:{
         type: String,
-        required: [true, 'Please enter email'],
         unique: true,
+        sparse: true,
         validate: [validator.isEmail, 'Please enter valid email address']
+    },
+    mobile: {
+        type: String,
+        trim: true,
+        unique: true,
+        sparse: true,
+        validate: {
+            validator: function (v) {
+                return !v || /^[6-9]\d{9}$/.test(String(v).replace(/\D/g, ''));
+            },
+            message: 'Please enter a valid 10-digit mobile number'
+        }
+    },
+    mobileVerifiedAt: {
+        type: Date,
+        default: null
     },
     password: {
         type: String,
-        required: [true, 'Please enter password'],
         minlength: [6, 'Password must be at least 6 characters'],
         maxlength: [64, 'Password cannot exceed 64 characters'],
         select: false

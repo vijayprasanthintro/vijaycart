@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
@@ -118,7 +118,14 @@ export default function Payment() {
         }
     }
 
+    // Once an order is placed, orderCompleted() clears the saved address.
+    // Without this guard the effect below would re-run and redirect a freshly
+    // created order back to the shipping step (users land on Order Summary and
+    // only reach the success page by pressing Back).
+    const orderPlacedRef = useRef(false);
+
     useEffect(() => {
+        if (orderPlacedRef.current) return;
         validateShipping(shippingInfo, navigate)
         if (orderError) {
             toast(orderError, {
@@ -211,8 +218,12 @@ export default function Payment() {
         const order = buildOrder(paymentInfo, paymentMethod, key);
         try {
             await dispatch(createOrder(order));
+            orderPlacedRef.current = true;
             dispatch(orderCompleted());
-            navigate('/order/success');
+            // Replace the payment screen in history so the Back button can
+            // never return the user to a payment page for an order that is
+            // already placed.
+            navigate('/order/success', { replace: true });
         } catch (err) {
             // The request may have failed AFTER the server already created the
             // order (dropped connection / timeout / cold start). Retrying with
@@ -221,8 +232,9 @@ export default function Payment() {
             // always reaches the success page — never only after going back.
             try {
                 await dispatch(createOrder(order));
+                orderPlacedRef.current = true;
                 dispatch(orderCompleted());
-                navigate('/order/success');
+                navigate('/order/success', { replace: true });
             } catch (retryErr) {
                 toast.error(retryErr?.response?.data?.message || 'Your order could not be created. Please retry.');
                 setProcessing(null);

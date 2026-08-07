@@ -1,6 +1,7 @@
 import './App.css';
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, Children, isValidElement, cloneElement } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion';
 import { HelmetProvider } from 'react-helmet-async'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,51 +15,49 @@ import BottomNavigation from './components/layouts/BottomNavigation';
 import CategoryNav from './components/home/CategoryNav';
 import ProtectedRoute from './components/route/ProtectedRoute';
 import Loader from './components/layouts/Loader';
+import PageTransition from './components/layouts/PageTransition';
 
 // Route-level code splitting: everything except the shell + landing page is
 // loaded on demand, shrinking the initial bundle and speeding up first paint.
-const ProductDetail = lazy(() => import('./components/product/ProductDetail'));
-const ProductSearch = lazy(() => import('./components/product/ProductSearch'));
-const Login = lazy(() => import('./components/user/Login'));
-const Register = lazy(() => import('./components/user/Register'));
-const Profile = lazy(() => import('./components/user/Profile'));
-const Wishlist = lazy(() => import('./components/user/Wishlist'));
-const UpdateProfile = lazy(() => import('./components/user/UpdateProfile'));
-const UpdatePassword = lazy(() => import('./components/user/UpdatePassword'));
-const ForgotPassword = lazy(() => import('./components/user/ForgotPassword'));
-const ResetPassword = lazy(() => import('./components/user/ResetPassword'));
-const Cart = lazy(() => import('./components/cart/Cart'));
-const Shipping = lazy(() => import('./components/cart/Shipping'));
-const ConfirmOrder = lazy(() => import('./components/cart/ConfirmOrder'));
-const StripeGate = lazy(() => import('./components/cart/StripeGate'));
-const OrderSuccess = lazy(() => import('./components/cart/OrderSuccess'));
-const UserOrders = lazy(() => import('./components/order/UserOrders'));
-const OrderDetail = lazy(() => import('./components/order/OrderDetail'));
+// Explicit chunk names keep filenames stable across builds (better caching).
+const ProductDetail = lazy(() => import(/* webpackChunkName: "product-detail" */ './components/product/ProductDetail'));
+const ProductSearch = lazy(() => import(/* webpackChunkName: "product-search" */ './components/product/ProductSearch'));
+const Login = lazy(() => import(/* webpackChunkName: "login" */ './components/user/Login'));
+const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './components/user/Profile'));
+const Wishlist = lazy(() => import(/* webpackChunkName: "wishlist" */ './components/user/Wishlist'));
+const UpdateProfile = lazy(() => import(/* webpackChunkName: "update-profile" */ './components/user/UpdateProfile'));
+const Cart = lazy(() => import(/* webpackChunkName: "cart" */ './components/cart/Cart'));
+const Shipping = lazy(() => import(/* webpackChunkName: "shipping" */ './components/cart/Shipping'));
+const ConfirmOrder = lazy(() => import(/* webpackChunkName: "confirm-order" */ './components/cart/ConfirmOrder'));
+const StripeGate = lazy(() => import(/* webpackChunkName: "stripe-gate" */ './components/cart/StripeGate'));
+const OrderSuccess = lazy(() => import(/* webpackChunkName: "order-success" */ './components/cart/OrderSuccess'));
+const UserOrders = lazy(() => import(/* webpackChunkName: "user-orders" */ './components/order/UserOrders'));
+const OrderDetail = lazy(() => import(/* webpackChunkName: "order-detail" */ './components/order/OrderDetail'));
 
 // Admin dashboard
-const AdminLayout = lazy(() => import('./components/admin/AdminLayout'));
-const Dashboard = lazy(() => import('./components/admin/Dashboard'));
-const ProductList = lazy(() => import('./components/admin/ProductList'));
-const NewProduct = lazy(() => import('./components/admin/NewProduct'));
-const UpdateProduct = lazy(() => import('./components/admin/UpdateProduct'));
-const OrderList = lazy(() => import('./components/admin/OrderList'));
-const UpdateOrder = lazy(() => import('./components/admin/UpdateOrder'));
-const UserList = lazy(() => import('./components/admin/UserList'));
-const UpdateUser = lazy(() => import('./components/admin/UpdateUser'));
-const ReviewList = lazy(() => import('./components/admin/ReviewList'));
-const CategoryList = lazy(() => import('./components/admin/CategoryList'));
-const CouponList = lazy(() => import('./components/admin/CouponList'));
-const DeliveryBoys = lazy(() => import('./components/admin/DeliveryBoys'));
-const Analytics = lazy(() => import('./components/admin/Analytics'));
-const Revenue = lazy(() => import('./components/admin/Revenue'));
-const Inventory = lazy(() => import('./components/admin/Inventory'));
-const Settings = lazy(() => import('./components/admin/Settings'));
-const Permissions = lazy(() => import('./components/admin/Permissions'));
-const AssignDelivery = lazy(() => import('./components/admin/AssignDelivery'));
+const AdminLayout = lazy(() => import(/* webpackChunkName: "admin-layout" */ './components/admin/AdminLayout'));
+const Dashboard = lazy(() => import(/* webpackChunkName: "admin-dashboard" */ './components/admin/Dashboard'));
+const ProductList = lazy(() => import(/* webpackChunkName: "admin-products" */ './components/admin/ProductList'));
+const NewProduct = lazy(() => import(/* webpackChunkName: "admin-new-product" */ './components/admin/NewProduct'));
+const UpdateProduct = lazy(() => import(/* webpackChunkName: "admin-update-product" */ './components/admin/UpdateProduct'));
+const OrderList = lazy(() => import(/* webpackChunkName: "admin-orders" */ './components/admin/OrderList'));
+const UpdateOrder = lazy(() => import(/* webpackChunkName: "admin-update-order" */ './components/admin/UpdateOrder'));
+const UserList = lazy(() => import(/* webpackChunkName: "admin-users" */ './components/admin/UserList'));
+const UpdateUser = lazy(() => import(/* webpackChunkName: "admin-update-user" */ './components/admin/UpdateUser'));
+const ReviewList = lazy(() => import(/* webpackChunkName: "admin-reviews" */ './components/admin/ReviewList'));
+const CategoryList = lazy(() => import(/* webpackChunkName: "admin-categories" */ './components/admin/CategoryList'));
+const CouponList = lazy(() => import(/* webpackChunkName: "admin-coupons" */ './components/admin/CouponList'));
+const DeliveryBoys = lazy(() => import(/* webpackChunkName: "admin-delivery-boys" */ './components/admin/DeliveryBoys'));
+const Analytics = lazy(() => import(/* webpackChunkName: "admin-analytics" */ './components/admin/Analytics'));
+const Revenue = lazy(() => import(/* webpackChunkName: "admin-revenue" */ './components/admin/Revenue'));
+const Inventory = lazy(() => import(/* webpackChunkName: "admin-inventory" */ './components/admin/Inventory'));
+const Settings = lazy(() => import(/* webpackChunkName: "admin-settings" */ './components/admin/Settings'));
+const Permissions = lazy(() => import(/* webpackChunkName: "admin-permissions" */ './components/admin/Permissions'));
+const AssignDelivery = lazy(() => import(/* webpackChunkName: "admin-assign-delivery" */ './components/admin/AssignDelivery'));
 
 // Delivery boy app
-const DeliveryLogin = lazy(() => import('./components/delivery/DeliveryLogin'));
-const DeliveryDashboard = lazy(() => import('./components/delivery/DeliveryDashboard'));
+const DeliveryLogin = lazy(() => import(/* webpackChunkName: "delivery-login" */ './components/delivery/DeliveryLogin'));
+const DeliveryDashboard = lazy(() => import(/* webpackChunkName: "delivery-dashboard" */ './components/delivery/DeliveryDashboard'));
 
 function RouteFallback() {
   return <Loader />;
@@ -68,61 +67,78 @@ function Shell() {
   const location = useLocation();
   const hideChrome = location.pathname.startsWith('/admin') || location.pathname.startsWith('/delivery');
 
+  // Wrap every route element in a page-transition layer so navigation
+  // cross-fades smoothly (the existing components/logic are untouched).
+  const animatedRoutes = (routes) => (
+    Children.map(routes, (child) => {
+      if (!isValidElement(child)) return child;
+      return cloneElement(child, {
+        element: <PageTransition>{child.props.element}</PageTransition>,
+      });
+    })
+  );
+
   return (
     <>
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       {!hideChrome && <Header />}
       {!hideChrome && <CategoryNav />}
-      <div className='container'>
+      <main id="main-content" className='container' role="main">
         <ToastContainer theme='dark' />
         <Suspense fallback={<RouteFallback />}>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/search/:keyword' element={<ProductSearch />} />
-            <Route path='/search/' element={<ProductSearch />} />
-            <Route path='/product/:id' element={<ProductDetail />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/myprofile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path='/myprofile/update' element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
-            <Route path='/myprofile/update/password' element={<ProtectedRoute><UpdatePassword /></ProtectedRoute>} />
-            <Route path='/password/forgot' element={<ForgotPassword />} />
-            <Route path='/password/reset/:token' element={<ResetPassword />} />
-            <Route path='/cart' element={<Cart />} />
-            <Route path='/wishlist' element={<Wishlist />} />
-            <Route path='/shipping' element={<ProtectedRoute><Shipping /></ProtectedRoute>} />
-            <Route path='/order/confirm' element={<ProtectedRoute><ConfirmOrder /></ProtectedRoute>} />
-            <Route path='/order/success' element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
-            <Route path='/orders' element={<ProtectedRoute><UserOrders /></ProtectedRoute>} />
-            <Route path='/order/:id' element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
-            <Route path='/payment' element={<ProtectedRoute><StripeGate /></ProtectedRoute>} />
+          <AnimatePresence mode="wait" initial={false}>
+            <Routes
+              location={location}
+              key={location.pathname.split('/')[1] || 'home'}
+            >
+              {animatedRoutes(
+                <>
+                  <Route path='/' element={<Home />} />
+                  <Route path='/search/:keyword' element={<ProductSearch />} />
+                  <Route path='/search/' element={<ProductSearch />} />
+                  <Route path='/product/:id' element={<ProductDetail />} />
+                  <Route path='/login' element={<Login />} />
+                  <Route path='/myprofile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                  <Route path='/myprofile/update' element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
+                  <Route path='/cart' element={<Cart />} />
+                  <Route path='/wishlist' element={<Wishlist />} />
+                  <Route path='/shipping' element={<ProtectedRoute><Shipping /></ProtectedRoute>} />
+                  <Route path='/order/confirm' element={<ProtectedRoute><ConfirmOrder /></ProtectedRoute>} />
+                  <Route path='/order/success' element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
+                  <Route path='/orders' element={<ProtectedRoute><UserOrders /></ProtectedRoute>} />
+                  <Route path='/order/:id' element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
+                  <Route path='/payment' element={<ProtectedRoute><StripeGate /></ProtectedRoute>} />
 
-            <Route path='/admin' element={<ProtectedRoute isAdmin={true}><AdminLayout /></ProtectedRoute>}>
-              <Route index element={<Navigate to='dashboard' replace />} />
-              <Route path='dashboard' element={<Dashboard />} />
-              <Route path='orders' element={<OrderList />} />
-              <Route path='order/:id' element={<UpdateOrder />} />
-              <Route path='products' element={<ProductList />} />
-              <Route path='products/create' element={<NewProduct />} />
-              <Route path='product/:id' element={<UpdateProduct />} />
-              <Route path='categories' element={<CategoryList />} />
-              <Route path='coupons' element={<CouponList />} />
-              <Route path='delivery-boys' element={<DeliveryBoys />} />
-              <Route path='users' element={<UserList />} />
-              <Route path='user/:id' element={<UpdateUser />} />
-              <Route path='analytics' element={<Analytics />} />
-              <Route path='revenue' element={<Revenue />} />
-              <Route path='inventory' element={<Inventory />} />
-              <Route path='reviews' element={<ReviewList />} />
-              <Route path='settings' element={<Settings />} />
-              <Route path='permissions' element={<Permissions />} />
-              <Route path='delivery' element={<AssignDelivery />} />
-            </Route>
+                  <Route path='/admin' element={<ProtectedRoute isAdmin={true}><AdminLayout /></ProtectedRoute>}>
+                    <Route index element={<Navigate to='dashboard' replace />} />
+                    <Route path='dashboard' element={<Dashboard />} />
+                    <Route path='orders' element={<OrderList />} />
+                    <Route path='order/:id' element={<UpdateOrder />} />
+                    <Route path='products' element={<ProductList />} />
+                    <Route path='products/create' element={<NewProduct />} />
+                    <Route path='product/:id' element={<UpdateProduct />} />
+                    <Route path='categories' element={<CategoryList />} />
+                    <Route path='coupons' element={<CouponList />} />
+                    <Route path='delivery-boys' element={<DeliveryBoys />} />
+                    <Route path='users' element={<UserList />} />
+                    <Route path='user/:id' element={<UpdateUser />} />
+                    <Route path='analytics' element={<Analytics />} />
+                    <Route path='revenue' element={<Revenue />} />
+                    <Route path='inventory' element={<Inventory />} />
+                    <Route path='reviews' element={<ReviewList />} />
+                    <Route path='settings' element={<Settings />} />
+                    <Route path='permissions' element={<Permissions />} />
+                    <Route path='delivery' element={<AssignDelivery />} />
+                  </Route>
 
-            <Route path='/delivery/login' element={<DeliveryLogin />} />
-            <Route path='/delivery/dashboard' element={<ProtectedRoute isDeliveryBoy={true}><DeliveryDashboard /></ProtectedRoute>} />
-          </Routes>
+                  <Route path='/delivery/login' element={<DeliveryLogin />} />
+                  <Route path='/delivery/dashboard' element={<ProtectedRoute isDeliveryBoy={true}><DeliveryDashboard /></ProtectedRoute>} />
+                </>
+              )}
+            </Routes>
+          </AnimatePresence>
         </Suspense>
-      </div>
+      </main>
       {!hideChrome && <Footer />}
       {!hideChrome && <BottomNavigation />}
     </>

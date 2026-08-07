@@ -1,9 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+
+const EASE = [0.16, 1, 0.3, 1];
 
 const SLIDES = [
   {
-    img: '/images/products/1.jpg',
+    img: '/images/products/smartphone-1.jpg',
     alt: 'Mega Sale — Up to 70% off on top brands',
     to: '/search/all',
     kicker: 'Mega Sale',
@@ -14,7 +17,7 @@ const SLIDES = [
     accent: '#ff6b35',
   },
   {
-    img: '/images/products/4.jpg',
+    img: '/images/products/smart-tv-1.jpg',
     alt: 'Electronics Fest — Laptops, phones & more',
     to: '/search/all?category=Electronics',
     kicker: 'Electronics Fest',
@@ -25,7 +28,7 @@ const SLIDES = [
     accent: '#00b4d8',
   },
   {
-    img: '/images/products/9.jpg',
+    img: '/images/products/women-dress-1.jpg',
     alt: 'Fashion Picks — Styles for every occasion',
     to: '/search/all?category=Clothes/Shoes',
     kicker: 'Fashion Week',
@@ -36,7 +39,7 @@ const SLIDES = [
     accent: '#ff3f6c',
   },
   {
-    img: '/images/products/13.jpg',
+    img: '/images/products/sofa-1.jpg',
     alt: 'Home & Lifestyle — Smart living essentials',
     to: '/search/all?category=Home',
     kicker: 'Home Living',
@@ -183,12 +186,42 @@ export default function HeroBanner() {
                 <div className="vc-hero__overlay" />
               </div>
               <div className="vc-hero__content">
-                <span className="vc-hero__kicker" style={{ color: s.accent }}>{s.kicker}</span>
-                <h2 className="vc-hero__title">{s.title}</h2>
-                <p className="vc-hero__subtitle">{s.subtitle}</p>
-                <span className="vc-hero__cta" style={{ background: s.accent }}>
+                <motion.span
+                  className="vc-hero__kicker"
+                  style={{ color: s.accent }}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={i === index ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                  transition={{ duration: 0.45, ease: EASE, delay: i === index ? 0.05 : 0 }}
+                >
+                  {s.kicker}
+                </motion.span>
+                <motion.h2
+                  className="vc-hero__title"
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={i === index ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
+                  transition={{ duration: 0.5, ease: EASE, delay: i === index ? 0.15 : 0 }}
+                >
+                  {s.title}
+                </motion.h2>
+                <motion.p
+                  className="vc-hero__subtitle"
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={i === index ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
+                  transition={{ duration: 0.5, ease: EASE, delay: i === index ? 0.25 : 0 }}
+                >
+                  {s.subtitle}
+                </motion.p>
+                <motion.span
+                  className="vc-hero__cta"
+                  style={{ background: s.accent }}
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={i === index ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+                  transition={{ duration: 0.45, ease: EASE, delay: i === index ? 0.35 : 0 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.97 }}
+                >
                   {s.cta} <i className="fa fa-arrow-right" aria-hidden="true"></i>
-                </span>
+                </motion.span>
               </div>
             </Link>
           ))}

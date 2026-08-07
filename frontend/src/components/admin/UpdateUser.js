@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 export default function UpdateUser() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+    const [mobile, setMobile] = useState("");
     const [role, setRole] = useState("");
 
     const { id: userId } = useParams();
@@ -17,10 +18,7 @@ export default function UpdateUser() {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('email', email);
-        formData.append('role', role);
+        const formData = { name, email, mobile, role };
         dispatch(updateUser(userId, formData));
     }
 
@@ -40,6 +38,7 @@ export default function UpdateUser() {
         if (user._id) {
             setName(user.name);
             setEmail(user.email);
+            setMobile(user.mobile || '');
             setRole(user.role);
         }
     }, [user]);
@@ -63,6 +62,10 @@ export default function UpdateUser() {
                         <div className="ad-field">
                             <label className="ad-label">Email</label>
                             <input className="ad-input" type="email" value={email} onChange={e => setEmail(e.target.value)} />
+                        </div>
+                        <div className="ad-field">
+                            <label className="ad-label">Mobile Number</label>
+                            <input className="ad-input" type="tel" maxLength="10" value={mobile} onChange={e => setMobile(e.target.value.replace(/\D/g, ''))} />
                         </div>
                         <div className="ad-field">
                             <label className="ad-label">Role</label>

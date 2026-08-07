@@ -377,8 +377,8 @@ export default function ProductSearch() {
             ) : (
               <Fragment>
                 <div className="row">
-                  {pagedProducts.map(product => (
-                    <Product key={product._id} product={product} col={4} />
+                  {pagedProducts.map((product, i) => (
+                    <Product key={product._id} product={product} col={4} index={i} />
                   ))}
                 </div>
 

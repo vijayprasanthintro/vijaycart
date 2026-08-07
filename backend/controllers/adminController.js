@@ -6,7 +6,7 @@ const User = require('../models/userModel');
 //Admin: Analytics overview - /api/v1/admin/analytics
 exports.getAnalytics = catchAsyncError(async (req, res, next) => {
     const [orders, products, users] = await Promise.all([
-        Order.find().sort('-createdAt'),
+        Order.find().populate('user', 'name email').sort('-createdAt'),
         Product.find(),
         User.find()
     ]);
@@ -19,7 +19,7 @@ exports.getAnalytics = catchAsyncError(async (req, res, next) => {
     let pendingRevenue = 0;
     const ACTIVE_STATUSES = ['Pending', 'Confirmed', 'Packed', 'Shipped', 'Out for Delivery'];
     orders.forEach(o => {
-        if (o.orderStatus === 'Cancelled') return;
+        if (o.orderStatus === 'Cancelled' || o.orderStatus === 'Cancelled by Customer') return;
         revenue += o.totalPrice;
         if (o.orderStatus === 'Delivered') paidRevenue += o.totalPrice;
         if (ACTIVE_STATUSES.includes(o.orderStatus)) pendingRevenue += o.totalPrice;
@@ -64,7 +64,7 @@ exports.getAnalytics = catchAsyncError(async (req, res, next) => {
         const entry = dayMap.get(d.toDateString());
         if (entry) {
             entry.orders += 1;
-            if (o.orderStatus !== 'Cancelled') entry.revenue += o.totalPrice;
+            if (o.orderStatus !== 'Cancelled' && o.orderStatus !== 'Cancelled by Customer') entry.revenue += o.totalPrice;
         }
     });
     const orderTrend = Array.from(dayMap.values());
@@ -97,6 +97,39 @@ exports.getAnalytics = catchAsyncError(async (req, res, next) => {
 
     const returnRequests = orders.filter(o => o.returnStatus && o.returnStatus !== 'None').length;
 
+    //Top customers by lifetime spend (cancelled orders excluded).
+    const customerMap = new Map();
+    orders.forEach(o => {
+        if (o.orderStatus === 'Cancelled' || o.orderStatus === 'Cancelled by Customer') return;
+        const key = String(o.user?._id || o.user || o.shippingInfo?.phoneNo || '');
+        if (!key) return;
+        if (!customerMap.has(key)) {
+            customerMap.set(key, {
+                userId: key,
+                name: (o.user && o.user.name) || o.shippingInfo?.name || 'Guest',
+                email: (o.user && o.user.email) || '',
+                phone: o.shippingInfo?.phoneNo || '',
+                orders: 0,
+                spend: 0,
+                lastOrderAt: o.createdAt
+            });
+        }
+        const rec = customerMap.get(key);
+        rec.orders += 1;
+        rec.spend += o.totalPrice;
+        if (!rec.lastOrderAt || new Date(o.createdAt) > new Date(rec.lastOrderAt)) rec.lastOrderAt = o.createdAt;
+    });
+    const topCustomers = Array.from(customerMap.values())
+        .sort((a, b) => b.spend - a.spend)
+        .slice(0, 10);
+
+    //Low-stock items surfaced as alerts on the dashboard/inventory page.
+    const lowStockProducts = products
+        .filter(p => p.stock > 0 && p.stock <= 5)
+        .sort((a, b) => a.stock - b.stock)
+        .slice(0, 12)
+        .map(p => ({ _id: p._id, name: p.name, category: p.category, stock: p.stock, price: p.price, image: p.images && p.images[0] ? p.images[0].image : '' }));
+
     res.status(200).json({
         success: true,
         analytics: {
@@ -117,7 +150,9 @@ exports.getAnalytics = catchAsyncError(async (req, res, next) => {
             categoryDistribution,
             topProducts,
             recentOrders,
-            returnRequests
+            returnRequests,
+            topCustomers,
+            lowStockProducts
         }
     })
 });

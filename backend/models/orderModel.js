@@ -59,6 +59,12 @@ const orderSchema = mongoose.Schema({
         unique: true,
         sparse: true
     },
+    //Human-readable sequential order number shown to customers (e.g. VC10001).
+    orderNumber: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
     deliveryBoy: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'User'
@@ -143,6 +149,11 @@ const orderSchema = mongoose.Schema({
     deliveredAt: {
         type: Date
     },
+    //When the delivery partner marks the order Out for Delivery. Used to show
+    //the customer an estimated arrival window on the tracking page.
+    estimatedArrivalTime: {
+        type: Date
+    },
     orderStatus: {
         type: String,
         required: true,
@@ -154,7 +165,8 @@ const orderSchema = mongoose.Schema({
             'Shipped',
             'Out for Delivery',
             'Delivered',
-            'Cancelled'
+            'Cancelled',
+            'Cancelled by Customer'
         ]
     },
     //Audit trail behind the visual order timeline. Every status change is

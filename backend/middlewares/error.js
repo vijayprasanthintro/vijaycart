@@ -1,5 +1,20 @@
+const logger = require('../utils/logger');
+
 module.exports = (err, req, res, next) =>{
     err.statusCode  = err.statusCode || 500;
+
+    const context = {
+        method: req.method,
+        url: req.originalUrl || req.url,
+        ip: req.ip,
+        user: req.user ? req.user.id : undefined
+    };
+
+    if (err.statusCode >= 500) {
+        logger.error(err.message, { ...context, stack: err.stack, name: err.name, code: err.code });
+    } else {
+        logger.warn(err.message, context);
+    }
 
     // CORS rejection from the cors middleware -> clean 403 JSON instead of a
     // bare 500 so the frontend can distinguish "origin not allowed" from a

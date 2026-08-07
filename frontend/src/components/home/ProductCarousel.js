@@ -1,7 +1,9 @@
 import { memo, useRef, useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import Product from '../product/Product';
 import { ProductRowSkeleton } from '../layouts/Skeletons';
+import { fadeUp, staggerContainer } from '../../utils/motion';
 
 export default memo(function ProductCarousel({
   title,
@@ -52,8 +54,14 @@ export default memo(function ProductCarousel({
   const showControls = !loading && !error && products.length > 0;
 
   return (
-    <section className={`section ${className}`}>
-      <div className="section-head">
+    <motion.section
+      className={`section ${className}`}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.1 }}
+      variants={staggerContainer(0.08, 0)}
+    >
+      <motion.div className="section-head" variants={fadeUp}>
         <div>
           <h2 className="section-title">{title}</h2>
           {subtitle && <p className="section-sub mt-1">{subtitle}</p>}
@@ -83,8 +91,9 @@ export default memo(function ProductCarousel({
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
 
+      <motion.div variants={fadeUp}>
       {loading ? (
         <ProductRowSkeleton count={4} />
       ) : error ? (
@@ -110,10 +119,11 @@ export default memo(function ProductCarousel({
       ) : (
         <div className="product-scroll">
           <div className="product-scroll-track" ref={trackRef}>
-            {products.map(product => <Product key={product._id} product={product} col={col} />)}
+            {products.map((product, i) => <Product key={product._id} product={product} col={col} index={i} />)}
           </div>
         </div>
       )}
-    </section>
+      </motion.div>
+    </motion.section>
   );
 })

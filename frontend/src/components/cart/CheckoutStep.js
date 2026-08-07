@@ -1,3 +1,6 @@
+import { motion } from 'framer-motion';
+import { easeOutExpo } from '../../utils/motion';
+
 const STEPS = [
     { key: 'account', icon: 'fa-user', label: 'Account' },
     { key: 'shipping', icon: 'fa-location-dot', label: 'Address' },
@@ -13,19 +16,30 @@ export default function CheckoutSteps({ shipping, confirmOrder, payment, confirm
     return (
         <div className="ck-steps" aria-label="Checkout progress">
             <div className="ck-track" aria-hidden="true">
-                <div className="ck-fill" style={{ width: `${progress}%` }}></div>
+                <motion.div
+                    className="ck-fill"
+                    initial={{ width: '0%' }}
+                    animate={{ width: `${progress}%` }}
+                    transition={{ duration: 0.7, ease: easeOutExpo }}
+                ></motion.div>
             </div>
             {STEPS.map((step, idx) => {
                 const state = idx < activeIndex ? 'done' : idx === activeIndex ? 'active' : 'future';
                 return (
-                    <div key={step.key} className={`ck-step ${state}`}>
+                    <motion.div
+                        key={step.key}
+                        className={`ck-step ${state}`}
+                        initial={{ opacity: 0, scale: 0.7 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3, ease: easeOutExpo, delay: 0.1 + idx * 0.07 }}
+                    >
                         <div className="ck-step-ico">
                             {state === 'done'
                                 ? <i className="fa fa-check" aria-hidden="true"></i>
                                 : <i className={`fa ${step.icon}`} aria-hidden="true"></i>}
                         </div>
                         <span className="ck-step-label">{step.label}</span>
-                    </div>
+                    </motion.div>
                 );
             })}
         </div>

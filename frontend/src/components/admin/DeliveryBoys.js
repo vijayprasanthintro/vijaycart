@@ -13,7 +13,7 @@ export default function DeliveryBoys() {
     const [showForm, setShowForm] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [toggling, setToggling] = useState(null);
-    const [form, setForm] = useState({ name: '', email: '', password: '', phone: '' });
+    const [form, setForm] = useState({ name: '', email: '', mobile: '', vehicleNumber: '' });
 
     useEffect(() => {
         dispatch(getDeliveryBoys());
@@ -50,8 +50,8 @@ export default function DeliveryBoys() {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        if (!form.name || !form.email || !form.password) {
-            toast.error('Please fill name, email and password', { position: toast.POSITION.BOTTOM_CENTER });
+        if (!form.name || !form.email || !form.mobile) {
+            toast.error('Please fill name, email and mobile number', { position: toast.POSITION.BOTTOM_CENTER });
             return;
         }
         setSubmitting(true);
@@ -59,7 +59,7 @@ export default function DeliveryBoys() {
         setSubmitting(false);
         if (res.success) {
             toast.success('Delivery boy added successfully!', { position: toast.POSITION.BOTTOM_CENTER });
-            setForm({ name: '', email: '', password: '', phone: '' });
+            setForm({ name: '', email: '', mobile: '', vehicleNumber: '' });
             setShowForm(false);
             dispatch(getDeliveryBoys());
         } else {
@@ -96,12 +96,12 @@ export default function DeliveryBoys() {
                                 <input type="email" name="email" value={form.email} onChange={changeHandler} placeholder="email@example.com" />
                             </div>
                             <div className="ad-list-item" style={{ padding: '0.45rem 0' }}>
-                                <span className="ad-label">Password</span>
-                                <input type="password" name="password" value={form.password} onChange={changeHandler} placeholder="Password" />
+                                <span className="ad-label">Mobile Number</span>
+                                <input type="tel" name="mobile" inputMode="numeric" maxLength="10" value={form.mobile} onChange={changeHandler} placeholder="10-digit mobile number" />
                             </div>
                             <div className="ad-list-item" style={{ padding: '0.45rem 0' }}>
-                                <span className="ad-label">Phone</span>
-                                <input type="text" name="phone" value={form.phone} onChange={changeHandler} placeholder="Phone number" />
+                                <span className="ad-label">Vehicle Number <em className="form-optional">(optional)</em></span>
+                                <input type="text" name="vehicleNumber" value={form.vehicleNumber} onChange={changeHandler} placeholder="e.g. MH 12 AB 1234" />
                             </div>
                             <button type="submit" className="ad-btn ad-btn--primary" disabled={submitting}>
                                 {submitting ? 'Adding...' : 'Add Delivery Boy'}

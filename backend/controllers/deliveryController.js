@@ -3,12 +3,18 @@ const Order = require('../models/orderModel');
 const User = require('../models/userModel');
 const DeliveryPerson = require('../models/deliveryPersonModel');
 const ErrorHandler = require('../utils/errorHandler');
+const { notifyOrderEvent } = require('../utils/orderSms');
+const { LOCKED_MESSAGE, isLocked } = require('../utils/orderLock');
 
 //Expected OTP for an order — last 4 digits of the customer's phone number.
 function orderOtp(order) {
     const digits = String(order.shippingInfo.phoneNo || '').replace(/\D/g, '');
     return digits.slice(-4);
 }
+
+//Estimated arrival window: shown to the customer once the rider is out for
+//delivery. Two hours out gives a realistic local-delivery horizon.
+const ETA_WINDOW_HOURS = 2;
 
 //Resolves the delivery profile (DeliveryPerson doc) for a delivery user,
 //creating one lazily for legacy delivery accounts created before the model.
@@ -19,15 +25,19 @@ async function ensureDeliveryPerson(user) {
             user: user._id,
             name: user.name,
             email: user.email,
-            phone: user.phone || ''
+            phone: user.mobile || ''
         });
+    } else if (user.mobile && person.phone !== user.mobile) {
+        // Keep the profile phone in step with the user's mobile number.
+        person.phone = user.mobile;
+        await person.save();
     }
     return person;
 }
 
 //Admin: List all delivery boys - /api/v1/admin/deliveryboys
 exports.getDeliveryBoys = catchAsyncError(async (req, res, next) => {
-    const users = await User.find({ role: 'deliveryboy' }).select('name email avatar role');
+    const users = await User.find({ role: 'deliveryboy' }).select('name email mobile avatar role');
 
     const boys = await Promise.all(users.map(async user => {
         const person = await ensureDeliveryPerson(user);
@@ -35,9 +45,11 @@ exports.getDeliveryBoys = catchAsyncError(async (req, res, next) => {
             _id: user._id,
             name: user.name,
             email: user.email,
+            mobile: user.mobile,
             avatar: user.avatar,
             role: user.role,
-            phone: person.phone || user.phone || '',
+            phone: person.phone || user.mobile || '',
+            vehicleNumber: person.vehicleNumber || '',
             availability: person.availability !== false,
             status: person.status,
             assignedOrders: person.assignedOrders || []
@@ -52,30 +64,43 @@ exports.getDeliveryBoys = catchAsyncError(async (req, res, next) => {
 
 //Admin: Create a new delivery boy - /api/v1/admin/deliveryboy
 exports.createDeliveryBoy = catchAsyncError(async (req, res, next) => {
-    const { name, email, password, phone } = req.body;
+    const { name, email, mobile, vehicleNumber } = req.body;
 
-    if (!name || !email || !password) {
-        return next(new ErrorHandler('Please enter name, email and password', 400))
+    if (!name || !email || !mobile) {
+        return next(new ErrorHandler('Please enter name, email and mobile number', 400))
     }
 
-    const existing = await User.findOne({ email });
+    const phone = String(mobile).replace(/\D/g, '');
+    if (!/^[6-9]\d{9}$/.test(phone)) {
+        return next(new ErrorHandler('Please enter a valid 10-digit mobile number', 400))
+    }
+
+    const existing = await User.findOne({ $or: [{ email }, { mobile: phone }] });
     if (existing) {
-        return next(new ErrorHandler('A user with this email already exists', 400))
+        return next(new ErrorHandler('A user already exists with this email or mobile number', 400))
     }
 
-    const deliveryBoy = await User.create({
-        name,
-        email,
-        password,
-        phone,
-        role: 'deliveryboy'
-    });
+    let deliveryBoy;
+    try {
+        deliveryBoy = await User.create({
+            name,
+            email,
+            mobile: phone,
+            role: 'deliveryboy'
+        });
+    } catch (error) {
+        if (error.code === 11000) {
+            return next(new ErrorHandler('A user already exists with this email or mobile number', 409))
+        }
+        throw error;
+    }
 
     await DeliveryPerson.create({
         user: deliveryBoy._id,
         name,
         email,
-        phone: phone || ''
+        phone,
+        vehicleNumber: String(vehicleNumber || '').trim()
     });
 
     res.status(201).json({
@@ -114,6 +139,9 @@ exports.assignOrder = catchAsyncError(async (req, res, next) => {
     const order = await Order.findById(req.params.id);
     if (!order) {
         return next(new ErrorHandler(`Order not found with this id: ${req.params.id}`, 404))
+    }
+    if (isLocked(order)) {
+        return next(new ErrorHandler(LOCKED_MESSAGE, 400))
     }
     if (order.orderStatus === 'Delivered' || order.orderStatus === 'Cancelled') {
         return next(new ErrorHandler(`A ${order.orderStatus.toLowerCase()} order cannot be assigned`, 400))
@@ -199,6 +227,9 @@ exports.updateDeliveryStatus = catchAsyncError(async (req, res, next) => {
     if (String(order.deliveryBoy) !== String(req.user.id)) {
         return next(new ErrorHandler('This order is not assigned to you', 401))
     }
+    if (isLocked(order)) {
+        return next(new ErrorHandler(LOCKED_MESSAGE, 400))
+    }
     if (order.orderStatus === 'Cancelled') {
         return next(new ErrorHandler('Cancelled orders cannot be delivered', 400))
     }
@@ -254,6 +285,19 @@ exports.updateDeliveryStatus = catchAsyncError(async (req, res, next) => {
         note: 'Delivery partner'
     });
     await order.save();
+
+    //Keep the customer posted as the package reaches them.
+    if (nextStatus === 'Out for Delivery') {
+        //Freeze an ETA the first time the order goes out for delivery so the
+        //timeline stays stable across repeated updates.
+        if (!order.estimatedArrivalTime) {
+            order.estimatedArrivalTime = new Date(Date.now() + ETA_WINDOW_HOURS * 60 * 60 * 1000);
+            await order.save();
+        }
+        notifyOrderEvent('out_for_delivery', order);
+    } else if (nextStatus === 'Delivered') {
+        notifyOrderEvent('delivered', order);
+    }
 
     //Free the delivery person once the order is completed.
     if (nextStatus === 'Delivered') {

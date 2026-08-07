@@ -20,6 +20,8 @@ export default function Analytics() {
     const revenueTrend = (analytics.orderTrend || []).map(d => ({ label: d.label, value: d.revenue }));
     const categories = (analytics.categoryDistribution || []).slice(0, 10).map(c => ({ label: c.name, value: c.count }));
     const maxTop = Math.max(1, ...(analytics.topProducts || []).map(p => p.quantity));
+    const topCustomers = analytics.topCustomers || [];
+    const maxSpend = Math.max(1, ...topCustomers.map(c => Number(c.spend) || 0));
 
     return (
         <Fragment>
@@ -75,30 +77,60 @@ export default function Analytics() {
                 </div>
             </div>
 
-            <div className="ad-card">
-                <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-fire" aria-hidden="true"></i> Top Selling Products</h3></div>
-                <div className="ad-card__body">
-                    {!loading && (analytics.topProducts || []).length === 0 && (
-                        <div className="ad-empty"><i className="fa fa-box-open" aria-hidden="true"></i><p>No sales data yet.</p></div>
-                    )}
-                    <div className="ad-form" style={{ gap: '0.9rem' }}>
-                        {(analytics.topProducts || []).map((p, i) => (
-                            <div key={i}>
-                                <div className="ad-list-item" style={{ padding: '0.45rem 0' }}>
-                                    <span className="ad-badge ad-badge--primary">{i + 1}</span>
-                                    <div style={{ flex: 1, minWidth: 0 }}>
-                                        <div className="ad-td-strong" style={{ fontSize: '0.82rem' }}>{p.name}</div>
-                                        <div className="ad-progress" style={{ marginTop: '0.35rem' }}>
-                                            <div className="ad-progress__fill" style={{ width: `${(p.quantity / maxTop) * 100}%` }}></div>
+            <div className="ad-chart-row">
+                <div className="ad-card">
+                    <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-fire" aria-hidden="true"></i> Top Selling Products</h3></div>
+                    <div className="ad-card__body">
+                        {!loading && (analytics.topProducts || []).length === 0 && (
+                            <div className="ad-empty"><i className="fa fa-box-open" aria-hidden="true"></i><p>No sales data yet.</p></div>
+                        )}
+                        <div className="ad-form" style={{ gap: '0.9rem' }}>
+                            {(analytics.topProducts || []).map((p, i) => (
+                                <div key={i}>
+                                    <div className="ad-list-item" style={{ padding: '0.45rem 0' }}>
+                                        <span className="ad-badge ad-badge--primary">{i + 1}</span>
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <div className="ad-td-strong" style={{ fontSize: '0.82rem' }}>{p.name}</div>
+                                            <div className="ad-progress" style={{ marginTop: '0.35rem' }}>
+                                                <div className="ad-progress__fill" style={{ width: `${(p.quantity / maxTop) * 100}%` }}></div>
+                                            </div>
+                                        </div>
+                                        <div style={{ textAlign: 'right' }}>
+                                            <div className="ad-td-strong">{p.quantity} sold</div>
+                                            <div className="ad-stat__label">{toINR(p.revenue)}</div>
                                         </div>
                                     </div>
-                                    <div style={{ textAlign: 'right' }}>
-                                        <div className="ad-td-strong">{p.quantity} sold</div>
-                                        <div className="ad-stat__label">{toINR(p.revenue)}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="ad-card">
+                    <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-users" aria-hidden="true"></i> Top Customers</h3></div>
+                    <div className="ad-card__body">
+                        {!loading && topCustomers.length === 0 && (
+                            <div className="ad-empty"><i className="fa fa-users" aria-hidden="true"></i><p>No customer data yet.</p></div>
+                        )}
+                        <div className="ad-form" style={{ gap: '0.9rem' }}>
+                            {topCustomers.map((c, i) => (
+                                <div key={i}>
+                                    <div className="ad-list-item" style={{ padding: '0.45rem 0' }}>
+                                        <span className="ad-avatar ad-avatar--sm">{String(c.name || '?').charAt(0).toUpperCase()}</span>
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <div className="ad-td-strong" style={{ fontSize: '0.82rem' }}>{c.name}</div>
+                                            <div className="ad-progress" style={{ marginTop: '0.35rem' }}>
+                                                <div className="ad-progress__fill" style={{ width: `${(Number(c.spend) || 0) / maxSpend * 100}%` }}></div>
+                                            </div>
+                                        </div>
+                                        <div style={{ textAlign: 'right' }}>
+                                            <div className="ad-td-strong">{toINR(c.spend)}</div>
+                                            <div className="ad-stat__label">{c.orders} orders</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { formatMoney, productImage, imgOnError } from '../../utils/productHelper';
+import { formatMoney, productImage } from '../../utils/productHelper';
+import OptimizedImage from '../common/OptimizedImage';
+import useDebounce from '../../hooks/useDebounce';
 
 const RECENT_KEY = 'vijaycart_recent_searches';
 const MAX_RECENT = 6;
@@ -154,27 +156,26 @@ export default function SearchSuggest({ variant = 'desktop', onDone }) {
   }, []);
 
   // Debounced suggestion lookup (client-side against the cached catalogue).
+  const debouncedKeyword = useDebounce(keyword, 250);
   useEffect(() => {
     setActive(-1);
     if (!open) return;
-    if (!keyword.trim()) {
+    if (!debouncedKeyword.trim()) {
       setSuggest({ products: [], categories: [], sellers: [] });
       setLoading(false);
       return;
     }
     let mounted = true;
     setLoading(true);
-    const t = setTimeout(async () => {
-      const products = await getCatalogue();
+    getCatalogue().then((products) => {
       if (!mounted) return;
-      setSuggest(computeSuggestions(products, keyword));
+      setSuggest(computeSuggestions(products, debouncedKeyword));
       setLoading(false);
-    }, 250);
+    });
     return () => {
       mounted = false;
-      clearTimeout(t);
     };
-  }, [keyword, open]);
+  }, [debouncedKeyword, open]);
 
   const rows = useMemo(() => {
     const list = [];
@@ -368,7 +369,7 @@ export default function SearchSuggest({ variant = 'desktop', onDone }) {
                           onMouseDown={(e) => e.preventDefault()}
                           onClick={() => selectRow({ kind: 'product', ref: p })}
                         >
-                          <img className="ss-thumb" src={productImage(p)} alt="" loading="lazy" onError={imgOnError} />
+                          <OptimizedImage className="ss-thumb" src={productImage(p)} alt="" width={44} height={44} />
                           <span className="ss-item-main">
                             <span className="ss-item-name"><Highlight text={p.name} query={keyword} /></span>
                             <span className="ss-item-sub">{p.category}</span>

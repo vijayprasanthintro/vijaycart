@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import ProductReview from "./ProductReview";
 import ProductCarousel from "../home/ProductCarousel";
 import GalleryLightbox from "./GalleryLightbox";
+import EmptyState from "../common/EmptyState";
 import axios from "axios";
 import { useWishlist } from "../../context/WishlistContext";
 import { getPricing, formatMoney, roundRating, getDelivery, getGalleryImages, getDemoReviews, imgOnError } from "../../utils/productHelper";
@@ -339,15 +340,46 @@ export default function ProductDetail () {
     return (
         <Fragment>
             {notFound ? (
-                <div className="empty-state mt-4">
-                    <div className="empty-icon"><i className="fa fa-cube" aria-hidden="true"></i></div>
-                    <h2 className="empty-title">Product Not Found</h2>
-                    <p className="empty-sub">We couldn't find the product you were looking for. It may have been removed or the link may be incorrect.</p>
-                    <Link to="/search/all" className="empty-cta"><i className="fa fa-shopping-bag mr-2" aria-hidden="true"></i>Browse Products</Link>
-                </div>
+                <EmptyState
+                    icon="fa-cube"
+                    title="Product Not Found"
+                    subtitle="We couldn't find the product you were looking for. It may have been removed or the link may be incorrect."
+                    action={<Link to="/search/all" className="empty-cta"><i className="fa fa-shopping-bag mr-2" aria-hidden="true"></i>Browse Products</Link>}
+                />
             ) : loading ? <ProductDetailSkeleton /> :
                 <Fragment>
-                    <MetaData title={product.name} />
+                    <MetaData
+                        title={product.name}
+                        description={String(product.description || '').slice(0, 160)}
+                        path={`/product/${product._id}`}
+                        image={images[0]}
+                        jsonLd={{
+                            '@context': 'https://schema.org',
+                            '@type': 'Product',
+                            name: product.name,
+                            image: images,
+                            description: String(product.description || '').slice(0, 500),
+                            sku: product._id,
+                            brand: { '@type': 'Brand', name: product.brand || product.seller || 'VijayCart' },
+                            offers: {
+                                '@type': 'Offer',
+                                url: `/product/${product._id}`,
+                                priceCurrency: 'INR',
+                                price: pricing.price,
+                                availability: product.stock > 0
+                                    ? 'https://schema.org/InStock'
+                                    : 'https://schema.org/OutOfStock',
+                                itemCondition: 'https://schema.org/NewCondition',
+                            },
+                            ...(product.ratings > 0 ? {
+                                aggregateRating: {
+                                    '@type': 'AggregateRating',
+                                    ratingValue: roundRating(product.ratings),
+                                    reviewCount: product.numOfReviews || 0,
+                                },
+                            } : {}),
+                        }}
+                    />
                     <div className="product-detail-layout">
                         <div className="row">
                             {/* Gallery */}

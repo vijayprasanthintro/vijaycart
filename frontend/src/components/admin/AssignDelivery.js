@@ -57,7 +57,7 @@ export default function AssignDelivery() {
         }
     }
 
-    const assignable = adminOrders.filter(o => o.orderStatus !== 'Delivered' && o.orderStatus !== 'Cancelled')
+    const assignable = adminOrders.filter(o => o.orderStatus !== 'Delivered' && o.orderStatus !== 'Cancelled' && o.orderStatus !== 'Cancelled by Customer')
 
     return (
         <div className="ad-assign">

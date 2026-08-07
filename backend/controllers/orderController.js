@@ -3,9 +3,32 @@ const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
 const Coupon = require('../models/couponModel');
 const Setting = require('../models/settingModel');
+const DeliveryPerson = require('../models/deliveryPersonModel');
 const ErrorHandler = require('../utils/errorHandler');
+const { nextOrderNumber } = require('../utils/sequence');
+const { notifyOrderEvent } = require('../utils/orderSms');
+const { LOCKED_STATUS, LOCKED_MESSAGE, isLocked } = require('../utils/orderLock');
 
 const ORDER_STATUSES = ['Pending', 'Confirmed', 'Packed', 'Shipped', 'Out for Delivery', 'Delivered', 'Cancelled'];
+
+//Map an order status to the SMS event sent to the customer.
+const STATUS_SMS_EVENT = {
+    'Confirmed': 'confirmed',
+    'Packed': 'packed',
+    'Shipped': 'shipped',
+    'Out for Delivery': 'out_for_delivery',
+    'Delivered': 'delivered',
+    'Cancelled': 'cancelled'
+};
+
+//Expected delivery date = order date + the store's configured estimate.
+async function estimateDeliveryDate() {
+    const settings = await Setting.findOne({ key: 'global' });
+    const days = Number(settings && settings.deliveryEstimateDays) || 5;
+    const d = new Date();
+    d.setDate(d.getDate() + days);
+    return d;
+}
 
 //Create New Order - api/v1/order/new
 exports.newOrder =  catchAsyncError( async (req, res, next) => {
@@ -73,6 +96,10 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
 
     const isPaid = paymentInfo && paymentInfo.status === 'succeeded';
 
+    //Sequential human-readable number (#VC10001) + expected delivery date so
+    //the confirmation SMS can reference both.
+    const [orderNumber, deliveryDate] = await Promise.all([nextOrderNumber(), estimateDeliveryDate()]);
+
     let order;
     try {
         order = await Order.create({
@@ -89,6 +116,8 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
             paidAt: isPaid ? Date.now() : undefined,
             user: req.user.id,
             orderKey,
+            orderNumber,
+            deliveryDate,
             orderStatus: 'Pending',
             statusHistory: [{
                 status: 'Pending',
@@ -120,6 +149,10 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
         );
     }
 
+    //Send the order-placed SMS confirmation to the customer's registered mobile
+    //(fire-and-forget — notifyOrderEvent never rejects).
+    notifyOrderEvent('placed', order, { customer: req.user, deliveryDate });
+
     res.status(200).json({
         success: true,
         order
@@ -128,9 +161,30 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
 
 //Get Single Order - api/v1/order/:id
 exports.getSingleOrder = catchAsyncError(async (req, res, next) => {
-    const order = await Order.findById(req.params.id).populate('user', 'name email');
-    if(!order) {
+    const orderDoc = await Order.findById(req.params.id)
+        .populate('user', 'name email')
+        .populate('deliveryBoy', 'name email mobile');
+    if(!orderDoc) {
         return next(new ErrorHandler(`Order not found with this id: ${req.params.id}`, 404))
+    }
+
+    const order = orderDoc.toObject();
+
+    //Attach the delivery partner details the tracking page shows (name, phone
+    //and vehicle number) once a rider has been assigned.
+    if (order.deliveryBoy) {
+        const person = await DeliveryPerson.findOne({ user: order.deliveryBoy._id });
+        order.deliveryPerson = person
+            ? {
+                name: person.name,
+                phone: person.phone || order.deliveryBoy.mobile || '',
+                vehicleNumber: person.vehicleNumber || ''
+            }
+            : {
+                name: order.deliveryBoy.name,
+                phone: order.deliveryBoy.mobile || '',
+                vehicleNumber: ''
+            };
     }
 
     res.status(200).json({
@@ -177,21 +231,35 @@ exports.cancelOrder = catchAsyncError(async (req, res, next) => {
     if (String(order.user) !== String(req.user.id)) {
         return next(new ErrorHandler('You are not authorized to cancel this order', 401))
     }
-    if (order.orderStatus === 'Cancelled') {
+    if (order.orderStatus === 'Cancelled' || isLocked(order)) {
         return next(new ErrorHandler('Order has already been cancelled', 400))
     }
     if (order.orderStatus !== 'Pending' && order.orderStatus !== 'Confirmed' && order.orderStatus !== 'Packed') {
         return next(new ErrorHandler('Order can no longer be cancelled after it has been shipped', 400))
     }
-    order.orderStatus = 'Cancelled';
+    order.orderStatus = LOCKED_STATUS;
     order.statusHistory = order.statusHistory || [];
     order.statusHistory.push({
-        status: 'Cancelled',
+        status: LOCKED_STATUS,
         changedAt: Date.now(),
         changedBy: req.user.id,
         note: 'Cancelled by customer'
     });
     await order.save();
+
+    //The order is now locked and immutable — release any delivery partner so
+    //it stops showing up on their dashboard.
+    await DeliveryPerson.updateMany(
+        { assignedOrders: order._id },
+        { $pull: { assignedOrders: order._id } }
+    );
+    const person = await DeliveryPerson.findOne({ user: order.deliveryBoy });
+    if (person && !person.assignedOrders.length) {
+        person.status = 'free';
+        await person.save();
+    }
+
+    notifyOrderEvent('cancelled', order, { customer: req.user });
 
     res.status(200).json({
         success: true,
@@ -207,6 +275,9 @@ exports.returnOrder = catchAsyncError(async (req, res, next) => {
     }
     if (String(order.user) !== String(req.user.id)) {
         return next(new ErrorHandler('You are not authorized to request a return on this order', 401))
+    }
+    if (isLocked(order)) {
+        return next(new ErrorHandler(LOCKED_MESSAGE, 400))
     }
     if (order.orderStatus === 'Cancelled') {
         return next(new ErrorHandler('Cancelled orders cannot be returned', 400))
@@ -246,7 +317,14 @@ exports.updateOrder =  catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler(`Order not found with this id: ${req.params.id}`, 404))
     }
 
+    if (isLocked(order)) {
+        return next(new ErrorHandler(LOCKED_MESSAGE, 400))
+    }
+
     const nextStatus = String(req.body.orderStatus || '').trim();
+    if (nextStatus === LOCKED_STATUS) {
+        return next(new ErrorHandler('This status can only be set by the customer', 400))
+    }
     if (!ORDER_STATUSES.includes(nextStatus)) {
         return next(new ErrorHandler(`Invalid order status. Choose from: ${ORDER_STATUSES.join(', ')}`, 400))
     }
@@ -274,6 +352,12 @@ exports.updateOrder =  catchAsyncError(async (req, res, next) => {
     }
     await order.save();
 
+    //Notify the customer as their order moves through the fulfilment pipeline.
+    const smsEvent = STATUS_SMS_EVENT[nextStatus];
+    if (smsEvent) {
+        notifyOrderEvent(smsEvent, order);
+    }
+
     res.status(200).json({
         success: true,
         order
@@ -292,6 +376,10 @@ exports.deleteOrder = catchAsyncError(async (req, res, next) => {
     const order = await Order.findById(req.params.id);
     if(!order) {
         return next(new ErrorHandler(`Order not found with this id: ${req.params.id}`, 404))
+    }
+
+    if (isLocked(order)) {
+        return next(new ErrorHandler(LOCKED_MESSAGE, 400))
     }
 
     await order.remove();
