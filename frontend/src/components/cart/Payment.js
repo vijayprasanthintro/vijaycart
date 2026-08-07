@@ -214,8 +214,19 @@ export default function Payment() {
             dispatch(orderCompleted());
             navigate('/order/success');
         } catch (err) {
-            toast.error(err?.response?.data?.message || 'Your order could not be created. Please retry.');
-            setProcessing(null);
+            // The request may have failed AFTER the server already created the
+            // order (dropped connection / timeout / cold start). Retrying with
+            // the SAME idempotency key makes the backend return the existing
+            // order instead of creating a duplicate, so a confirmed payment
+            // always reaches the success page — never only after going back.
+            try {
+                await dispatch(createOrder(order));
+                dispatch(orderCompleted());
+                navigate('/order/success');
+            } catch (retryErr) {
+                toast.error(retryErr?.response?.data?.message || 'Your order could not be created. Please retry.');
+                setProcessing(null);
+            }
         }
     };
 

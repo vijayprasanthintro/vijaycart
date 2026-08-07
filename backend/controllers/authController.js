@@ -20,12 +20,21 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
         avatar = `${BASE_URL}/uploads/user/${req.file.originalname}`
     }
 
-    const user = await User.create({
-        name,
-        email,
-        password,
-        avatar
-    });
+    let user;
+    try {
+        user = await User.create({
+            name,
+            email,
+            password,
+            avatar
+        });
+    } catch (error) {
+        // Duplicate email -> 409 Conflict (clean JSON, no internals).
+        if (error.code === 11000) {
+            return next(new ErrorHandler('An account already exists with this email. Please login.', 409));
+        }
+        throw error;
+    }
 
     sendToken(user, 201, res)
 

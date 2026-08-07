@@ -48,7 +48,7 @@ export const login = (email, password) => async (dispatch) => {
             const { data }  = await axios.post(`/api/v1/login`,{email,password});
             dispatch(loginSuccess(data))
         } catch (error) {
-            dispatch(loginFail(error.response.data.message))
+            dispatch(loginFail(error.response?.data?.message || error.message))
         }
 
 }
@@ -70,7 +70,7 @@ export const register = (userData) => async (dispatch) => {
         const { data }  = await axios.post(`/api/v1/register`,userData, config);
         dispatch(registerSuccess(data))
     } catch (error) {
-        dispatch(registerFail(error.response.data.message))
+        dispatch(registerFail(error.response?.data?.message || error.message))
     }
 
 }
@@ -119,7 +119,7 @@ export const updateProfile = (userData) => async (dispatch) => {
         const { data }  = await axios.put(`/api/v1/update`,userData, config);
         dispatch(updateProfileSuccess(data))
     } catch (error) {
-        dispatch(updateProfileFail(error.response.data.message))
+        dispatch(updateProfileFail(error.response?.data?.message || error.message))
     }
 
 }
@@ -136,7 +136,7 @@ export const updatePassword = (formData) => async (dispatch) => {
         await axios.put(`/api/v1/password/change`, formData, config);
         dispatch(updatePasswordSuccess())
     } catch (error) {
-        dispatch(updatePasswordFail(error.response.data.message))
+        dispatch(updatePasswordFail(error.response?.data?.message || error.message))
     }
 
 }
@@ -153,7 +153,7 @@ export const forgotPassword = (formData) => async (dispatch) => {
         const { data} =  await axios.post(`/api/v1/password/forgot`, formData, config);
         dispatch(forgotPasswordSuccess(data))
     } catch (error) {
-        dispatch(forgotPasswordFail(error.response.data.message))
+        dispatch(forgotPasswordFail(error.response?.data?.message || error.message))
     }
 
 }
@@ -170,7 +170,7 @@ export const resetPassword = (formData, token) => async (dispatch) => {
         const { data} =  await axios.post(`/api/v1/password/reset/${token}`, formData, config);
         dispatch(resetPasswordSuccess(data))
     } catch (error) {
-        dispatch(resetPasswordFail(error.response.data.message))
+        dispatch(resetPasswordFail(error.response?.data?.message || error.message))
     }
 
 }
@@ -182,7 +182,7 @@ export const getUsers =  async (dispatch) => {
         const { data }  = await axios.get(`/api/v1/admin/users`);
         dispatch(usersSuccess(data))
     } catch (error) {
-        dispatch(usersFail(error.response.data.message))
+        dispatch(usersFail(error.response?.data?.message || error.message))
     }
 
 }
@@ -194,7 +194,7 @@ export const getUser = id => async (dispatch) => {
         const { data }  = await axios.get(`/api/v1/admin/user/${id}`);
         dispatch(userSuccess(data))
     } catch (error) {
-        dispatch(userFail(error.response.data.message))
+        dispatch(userFail(error.response?.data?.message || error.message))
     }
 
 }
@@ -206,7 +206,7 @@ export const deleteUser = id => async (dispatch) => {
         await axios.delete(`/api/v1/admin/user/${id}`);
         dispatch(deleteUserSuccess())
     } catch (error) {
-        dispatch(deleteUserFail(error.response.data.message))
+        dispatch(deleteUserFail(error.response?.data?.message || error.message))
     }
 
 }
@@ -223,7 +223,7 @@ export const updateUser = (id, formData) => async (dispatch) => {
         await axios.put(`/api/v1/admin/user/${id}`, formData, config);
         dispatch(updateUserSuccess())
     } catch (error) {
-        dispatch(updateUserFail(error.response.data.message))
+        dispatch(updateUserFail(error.response?.data?.message || error.message))
     }
 
 }

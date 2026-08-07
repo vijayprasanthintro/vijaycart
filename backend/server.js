@@ -21,9 +21,15 @@ migrateOrderStatuses().catch(err => {
     console.log(`Migration warning: ${err.message}`);
 });
 
-const server = app.listen(process.env.PORT, '0.0.0.0', ()=>{
-    console.log(`My Server listening to the port: ${process.env.PORT} in  ${process.env.NODE_ENV} `)
-    console.log(`Access from network: http://<your-local-ip>:${process.env.PORT}`)
+// Railway injects the runtime port through process.env.PORT; fall back to the
+// local config value (config.env PORT=8000) so local development needs no extra
+// setup. Listening on 0.0.0.0 makes the port reachable from outside the
+// container (required by Railway) while http://localhost:8000 keeps working
+// locally.
+const PORT = process.env.PORT || 8000;
+const server = app.listen(PORT, '0.0.0.0', ()=>{
+    console.log(`My Server listening to the port: ${PORT} in ${process.env.NODE_ENV || 'development'}`)
+    console.log(`Local: http://localhost:${PORT}`)
 })
 
 process.on('unhandledRejection',(err)=>{

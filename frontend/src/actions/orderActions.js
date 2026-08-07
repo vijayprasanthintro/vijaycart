@@ -31,6 +31,7 @@ export const createOrder = order => async(dispatch) => {
        dispatch(createOrderRequest())
        const {data} = await axios.post(`/api/v1/order/new`, order)
        dispatch(createOrderSuccess(data))
+       return { success: true, order: data.order }
     } catch (error) {
         dispatch(createOrderFail(error.response?.data?.message || error.message))
         throw error
@@ -76,7 +77,7 @@ export const deleteOrder = id => async(dispatch) => {
        await axios.delete(`/api/v1/admin/order/${id}`)
        dispatch(deleteOrderSuccess())
     } catch (error) {
-       dispatch(deleteOrderFail(error.response.data.message))
+       dispatch(deleteOrderFail(error.response?.data?.message || error.message))
     }
 }
 
@@ -86,6 +87,6 @@ export const updateOrder = (id, orderData)  => async(dispatch) => {
        const { data} = await axios.put(`/api/v1/admin/order/${id}`, orderData)
        dispatch(updateOrderSuccess(data))
     } catch (error) {
-       dispatch(updateOrderFail(error.response.data.message))
+       dispatch(updateOrderFail(error.response?.data?.message || error.message))
     }
 }
