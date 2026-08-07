@@ -5,6 +5,7 @@ const Otp = require('../models/otpModel');
 const ErrorHandler = require('../utils/errorHandler');
 const sendEmail = require('../utils/email');
 const sendToken = require('../utils/jwt');
+const logger = require('../utils/logger');
 const crypto = require('crypto');
 
 const OTP_EXPIRES_MS = (Number(process.env.OTP_EXPIRES_MINUTES) || 5) * 60 * 1000;
@@ -133,6 +134,26 @@ exports.requestOtp = catchAsyncError(async (req, res, next) => {
                 `If you did not request this OTP, you can safely ignore this email.`
         });
     } catch (error) {
+        // Log the FULL nodemailer failure so the real cause surfaces in the
+        // logs (EAUTH = bad creds, ECONNECTION = wrong host/port/network,
+        // 535/550 response = provider rejecting auth or sender, etc.).
+        logger.error('OTP email could not be sent', {
+            error: {
+                message: error?.message,
+                name: error?.name,
+                code: error?.code,
+                command: error?.command,
+                response: error?.response,
+                stack: error?.stack
+            },
+            smtp: {
+                host: process.env.SMTP_HOST,
+                port: process.env.SMTP_PORT,
+                user: process.env.SMTP_USER,
+                from: process.env.SMTP_FROM_EMAIL
+            },
+            to: user?.email
+        });
         return next(new ErrorHandler('Could not send the OTP. Please try again in a moment.', 500));
     }
 
