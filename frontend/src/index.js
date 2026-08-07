@@ -17,9 +17,14 @@ import { API_BASE_URL } from './apiConfig';
 // defaults and the single API_BASE_URL from ./apiConfig:
 //   - local dev:  baseURL empty -> relative /api/v1 URLs, proxied to
 //                 http://localhost:8000 via the CRA "proxy" field in package.json
-//   - production: REACT_APP_API_URL (e.g. the Railway backend URL) -> direct
-//                 cross-origin calls with credentials (cookies) attached
+//   - production: REACT_APP_API_URL left empty -> relative /api/v1 URLs are
+//                 served by Vercel's /api + /uploads rewrites (vercel.json),
+//                 which forward to the Railway backend. The browser only ever
+//                 resolves the Vercel domain, so no Railway hostname needs to
+//                 be resolvable client-side.
 // withCredentials must stay true: the JWT session is an httpOnly cookie.
+// (With the rewrites, requests are same-origin, so the cookie is attached
+// automatically; with a direct REACT_APP_API_URL it is still sent cross-origin.)
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = API_BASE_URL;
 // Fail clearly instead of hanging forever if the backend is unreachable or a

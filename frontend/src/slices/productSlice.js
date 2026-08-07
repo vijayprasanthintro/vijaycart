@@ -23,10 +23,11 @@ const productSlice = createSlice({
             }
         },
         productSuccess(state, action){
+            const p = action.payload || {};
             return {
                 ...state,
                 loading: false,
-                product: action.payload.product,
+                product: p.product || {},
                 notFound: false
             }
         },

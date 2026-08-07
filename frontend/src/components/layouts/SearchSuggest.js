@@ -51,7 +51,7 @@ const getCatalogue = () => {
   if (!cataloguePromise) {
     cataloguePromise = axios
       .get('/api/v1/products?limit=200')
-      .then((res) => res.data.products || [])
+      .then((res) => res?.data?.products || [])
       .catch(() => {
         cataloguePromise = null;
         return [];

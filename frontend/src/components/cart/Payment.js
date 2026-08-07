@@ -147,7 +147,7 @@ export default function Payment() {
         let active = true;
         if (method === 'wallet' && walletBalance === null) {
             axios.get('/api/v1/wallet')
-                .then(res => { if (active) setWalletBalance(Number(res.data.balance)); })
+                .then(res => { if (active) setWalletBalance(Number(res?.data?.balance)); })
                 .catch(() => { if (active) setWalletBalance(Number(user.walletBalance) || 500); });
         }
         return () => { active = false; };
@@ -166,9 +166,9 @@ export default function Payment() {
             .then(res => {
                 if (active) setCodCheck({
                     loading: false,
-                    available: !!res.data.available,
-                    reason: res.data.reason || '',
-                    maxAmount: Number(res.data.maxAmount) || 5000
+                    available: !!res?.data?.available,
+                    reason: res?.data?.reason || '',
+                    maxAmount: Number(res?.data?.maxAmount) || 5000
                 });
             })
             .catch(() => {

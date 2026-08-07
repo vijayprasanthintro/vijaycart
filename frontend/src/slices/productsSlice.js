@@ -13,11 +13,12 @@ const productsSlice = createSlice({
             }
         },
         productsSuccess(state, action){
+            const p = action.payload || {};
             return {
                 loading: false,
-                products: action.payload.products,
-                productsCount: action.payload.count,
-                resPerPage : action.payload.resPerPage
+                products: p.products || [],
+                productsCount: p.count || 0,
+                resPerPage : p.resPerPage || 0
             }
         },
         productsFail(state, action){
@@ -32,9 +33,10 @@ const productsSlice = createSlice({
             }
         },
         adminProductsSuccess(state, action){
+            const p = action.payload || {};
             return {
                 loading: false,
-                products: action.payload.products,
+                products: p.products || [],
             }
         },
         adminProductsFail(state, action){
