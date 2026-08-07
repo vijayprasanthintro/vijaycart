@@ -8,6 +8,7 @@ export default function UpdateProfile () {
     const {  error, user, isUpdated } = useSelector(state => state.authState);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+    const [mobile, setMobile] = useState("");
     const [avatar, setAvatar] = useState("");
     const [avatarPreview, setAvatarPreview] = useState("/images/default_avatar.png");
     const dispatch = useDispatch();
@@ -30,6 +31,7 @@ export default function UpdateProfile () {
         const formData = new FormData();
         formData.append('name', name)
         formData.append('email', email)
+        formData.append('mobile', mobile)
         formData.append('avatar', avatar);
         dispatch(updateProfile(formData))
     }
@@ -38,6 +40,7 @@ export default function UpdateProfile () {
         if(user) {
             setName(user.name);
             setEmail(user.email);
+            setMobile(user.mobile || '');
             if(user?.avatar) {
                 setAvatarPreview(user?.avatar)
             }
@@ -91,6 +94,21 @@ export default function UpdateProfile () {
                         value={email}
                         onChange={e=>setEmail(e.target.value)}
                     />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="mobile_field">Mobile Number</label>
+                    <input
+                        type="tel"
+                        id="mobile_field"
+                        className="form-control"
+                        inputMode="numeric"
+                        maxLength="10"
+                        placeholder="10-digit mobile number"
+                        value={mobile}
+                        onChange={e=>setMobile(e.target.value.replace(/\D/g, ''))}
+                    />
+                    <p className="text-muted mt-1 mb-0" style={{fontSize:'0.8rem'}}>You'll receive login OTPs on this mobile number.</p>
                 </div>
 
                 <div className='form-group'>

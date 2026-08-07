@@ -4,6 +4,14 @@ const router = express.Router();
 const {isAuthenticatedUser, authorizeRoles } = require('../middlewares/authenticate');
 const multer = require('multer');
 const path = require('path')
+const {
+    validate,
+    objectIdParam,
+    productRules,
+    reviewRules,
+    reviewsQueryRules,
+    deleteReviewRules
+} = require('../middlewares/validate');
 
 const upload = multer({storage: multer.diskStorage({
     destination: function(req, file, cb) {
@@ -18,18 +26,18 @@ const upload = multer({storage: multer.diskStorage({
 router.route('/products').get( getProducts);
 router.route('/products/health').get(productsHealth);
 router.route('/product/:id')
-                            .get(getSingleProduct);
+                            .get(objectIdParam('id'), validate, getSingleProduct);
             
         
-router.route('/review').put(isAuthenticatedUser, createReview)
+router.route('/review').put(isAuthenticatedUser, reviewRules(), validate, createReview)
                       
 
 
 //Admin routes
-router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles('admin'), upload.array('images'), newProduct);
+router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles('admin'), upload.array('images'), productRules(), validate, newProduct);
 router.route('/admin/products').get(isAuthenticatedUser, authorizeRoles('admin'), getAdminProducts);
-router.route('/admin/product/:id').delete(isAuthenticatedUser, authorizeRoles('admin'), deleteProduct);
-router.route('/admin/product/:id').put(isAuthenticatedUser, authorizeRoles('admin'),upload.array('images'), updateProduct);
-router.route('/admin/reviews').get(isAuthenticatedUser, authorizeRoles('admin'),getReviews)
-router.route('/admin/review').delete(isAuthenticatedUser, authorizeRoles('admin'),deleteReview)
+router.route('/admin/product/:id').delete(isAuthenticatedUser, authorizeRoles('admin'), objectIdParam('id'), validate, deleteProduct);
+router.route('/admin/product/:id').put(isAuthenticatedUser, authorizeRoles('admin'),upload.array('images'), productRules(), validate, updateProduct);
+router.route('/admin/reviews').get(isAuthenticatedUser, authorizeRoles('admin'), reviewsQueryRules(), validate, getReviews)
+router.route('/admin/review').delete(isAuthenticatedUser, authorizeRoles('admin'), deleteReviewRules(), validate, deleteReview)
 module.exports = router;

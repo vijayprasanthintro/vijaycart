@@ -8,10 +8,13 @@ export const ORDER_STATUSES = [
     'Shipped',
     'Out for Delivery',
     'Delivered',
-    'Cancelled'
+    'Cancelled',
+    'Cancelled by Customer'
 ];
 
-export const ACTIVE_STATUSES = ORDER_STATUSES.filter(s => s !== 'Delivered' && s !== 'Cancelled');
+export const LOCKED_STATUS = 'Cancelled by Customer';
+
+export const ACTIVE_STATUSES = ORDER_STATUSES.filter(s => s !== 'Delivered' && s !== 'Cancelled' && s !== LOCKED_STATUS);
 
 export const STATUS_META = {
     'Pending': { color: '#e8a010', badge: 'ad-badge--warning' },
@@ -20,7 +23,8 @@ export const STATUS_META = {
     'Shipped': { color: '#8b5cf6', badge: 'ad-badge--primary' },
     'Out for Delivery': { color: '#fb641b', badge: 'ad-badge--primary' },
     'Delivered': { color: '#1f9d55', badge: 'ad-badge--success' },
-    'Cancelled': { color: '#e0483e', badge: 'ad-badge--danger' }
+    'Cancelled': { color: '#e0483e', badge: 'ad-badge--danger' },
+    'Cancelled by Customer': { color: '#e0483e', badge: 'ad-badge--danger' }
 };
 
 export const statusBadge = status => (STATUS_META[status] || {}).badge || 'ad-badge--muted';

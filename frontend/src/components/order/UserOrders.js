@@ -124,6 +124,7 @@ export default function UserOrders () {
                         {filtered.map(order => {
                             const meta = statusMeta(order.orderStatus);
                             const rbadge = returnBadge(order.returnStatus);
+                            const locked = order.orderStatus === 'Cancelled by Customer';
                             return (
                                 <div className="mo-card" key={order._id}>
                                     <div className="mo-card-top">
@@ -131,7 +132,7 @@ export default function UserOrders () {
                                             <div className="mo-order-id"><i className="fa fa-hashtag mr-1" aria-hidden="true"></i>Order #{order._id}</div>
                                             <div className="mo-date">Placed on {fmtDate(order.createdAt)}</div>
                                         </div>
-                                        <span className={`mo-status ${meta.cls}`}><i className={`fa mr-1 ${meta.cls === 'delivered' ? 'fa-check-circle' : meta.cls === 'cancelled' ? 'fa-times-circle' : meta.cls === 'shipped' ? 'fa-truck' : 'fa-hourglass-half'}`} aria-hidden="true"></i>{meta.label}</span>
+                                        <span className={`mo-status ${meta.cls}`}><i className={`fa mr-1 ${locked ? 'fa-lock' : meta.cls === 'delivered' ? 'fa-check-circle' : meta.cls === 'cancelled' ? 'fa-times-circle' : meta.cls === 'shipped' ? 'fa-truck' : 'fa-hourglass-half'}`} aria-hidden="true"></i>{meta.label}</span>
                                     </div>
 
                                     {rbadge && (

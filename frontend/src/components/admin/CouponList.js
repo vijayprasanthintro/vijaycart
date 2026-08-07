@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createCoupon, deleteCoupon, getCoupons, updateCoupon } from '../../actions/couponActions';
 import { clearCouponState } from '../../actions/couponActions';
 import { toast } from 'react-toastify';
+import AdminPagination from './AdminPagination';
+import AdminExport from './AdminExport';
 
 const EMPTY = {
     code: '',
@@ -25,6 +27,12 @@ export default function CouponList() {
     const [editing, setEditing] = useState(null);
     const [form, setForm] = useState(EMPTY);
     const [saving, setSaving] = useState(false);
+    const [page, setPage] = useState(1);
+    const PER_PAGE = 10;
+
+    useEffect(() => { setPage(1); }, [coupons.length]);
+
+    const pageItems = coupons.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
     useEffect(() => {
         dispatch(getCoupons());
@@ -110,6 +118,33 @@ export default function CouponList() {
         return true;
     };
 
+    const exportHeaders = [
+        { label: 'Code', key: 'code' },
+        { label: 'Description', key: 'description' },
+        { label: 'Discount Type', key: 'type' },
+        { label: 'Discount Value', key: 'value', type: 'number' },
+        { label: 'Max Discount', key: 'maxDiscount', type: 'number' },
+        { label: 'Min Amount', key: 'minAmount', type: 'number' },
+        { label: 'Used', key: 'used', type: 'number' },
+        { label: 'Usage Limit', key: 'limit', type: 'number' },
+        { label: 'Valid From', key: 'validFrom', type: 'date' },
+        { label: 'Valid Until', key: 'validUntil', type: 'date' },
+        { label: 'Status', key: 'status' }
+    ];
+    const exportRows = coupons.map(c => ({
+        code: c.code,
+        description: c.description || '',
+        type: c.discountType === 'percent' ? 'Percent' : 'Flat',
+        value: c.discountValue,
+        maxDiscount: c.maxDiscount || 0,
+        minAmount: c.minAmount || 0,
+        used: c.usedCount || 0,
+        limit: c.usageLimit || 0,
+        validFrom: c.validFrom || '',
+        validUntil: c.validUntil || '',
+        status: isActive(c) ? 'Active' : 'Inactive'
+    }));
+
     return (
         <Fragment>
             <div className="ad-page-head">
@@ -117,7 +152,10 @@ export default function CouponList() {
                     <h1>Coupons</h1>
                     <p>Discounts &amp; promotions · {coupons.length} coupons</p>
                 </div>
-                <button type="button" className="ad-btn ad-btn--primary" onClick={openCreate}><i className="fa fa-plus" aria-hidden="true"></i> New Coupon</button>
+                <div className="ad-toolbar">
+                    <AdminExport filename="coupons" headers={exportHeaders} rows={exportRows} />
+                    <button type="button" className="ad-btn ad-btn--primary" onClick={openCreate}><i className="fa fa-plus" aria-hidden="true"></i> New Coupon</button>
+                </div>
             </div>
 
             <div className="ad-card">
@@ -141,7 +179,7 @@ export default function CouponList() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {coupons.map(c => (
+                                    {pageItems.map(c => (
                                         <tr key={c._id}>
                                             <td>
                                                 <span className="ad-chip ad-td-mono">{c.code}</span>
@@ -169,6 +207,9 @@ export default function CouponList() {
                                 </tbody>
                             </table>
                         </div>
+                    )}
+                    {coupons.length > PER_PAGE && (
+                        <AdminPagination count={coupons.length} perPage={PER_PAGE} page={page} onChange={setPage} />
                     )}
                 </div>
             </div>

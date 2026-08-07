@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { motion, AnimatePresence } from 'framer-motion';
 import { logout } from '../../actions/userActions';
 import { useWishlist } from '../../context/WishlistContext';
 import { Dropdown, Image } from 'react-bootstrap';
@@ -92,9 +93,13 @@ export default function Header() {
   return (
     <>
       {/* ==================== DESKTOP HEADER ==================== */}
-      <header className={`vc-hd ${scrolled ? 'vc-hd--scrolled' : ''}`}>
+      <motion.header
+        className={`vc-hd ${scrolled ? 'vc-hd--scrolled' : ''}`}
+        initial={{ opacity: 0, y: -16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      >
         <div className="container vc-hd__inner">
-
           {/* Brand */}
           <Link to="/" className="vc-hd__brand">
             <span className="vc-hd__brand-icon">
@@ -139,30 +144,38 @@ export default function Header() {
                 <span className="vc-nav-btn-text d-none d-xl-inline">More</span>
                 <i className="fa fa-angle-down vc-nav-chevron d-none d-xl-inline" aria-hidden="true"></i>
               </button>
-              {moreOpen && (
-                <div className="vc-hd__dropdown">
-                  <Link to="/search/all" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
-                    <i className="fa fa-percent" aria-hidden="true"></i>All Offers
-                  </Link>
-                  <Link to="/wishlist" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
-                    <i className="fa fa-heart-o" aria-hidden="true"></i>Wishlist
-                  </Link>
-                  <Link to="/seller" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
-                    <i className="fa fa-briefcase" aria-hidden="true"></i>Become a Seller
-                  </Link>
-                  <Link to="/search/all?ratings=4" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
-                    <i className="fa fa-fire" aria-hidden="true"></i>Top Deals
-                  </Link>
-                  <div className="vc-hd__dropdown-divider"></div>
-                  <div className="vc-hd__dropdown-heading">Customer Service</div>
-                  <a href="mailto:help@vijaycart.com" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
-                    <i className="fa fa-envelope" aria-hidden="true"></i>help@vijaycart.com
-                  </a>
-                  <a href="tel:+918220477466" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
-                    <i className="fa fa-phone" aria-hidden="true"></i>+91 8220477466
-                  </a>
-                </div>
-              )}
+              <AnimatePresence>
+                {moreOpen && (
+                  <motion.div
+                    className="vc-hd__dropdown"
+                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                    transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <Link to="/search/all" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
+                      <i className="fa fa-percent" aria-hidden="true"></i>All Offers
+                    </Link>
+                    <Link to="/wishlist" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
+                      <i className="fa fa-heart-o" aria-hidden="true"></i>Wishlist
+                    </Link>
+                    <Link to="/seller" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
+                      <i className="fa fa-briefcase" aria-hidden="true"></i>Become a Seller
+                    </Link>
+                    <Link to="/search/all?ratings=4" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
+                      <i className="fa fa-fire" aria-hidden="true"></i>Top Deals
+                    </Link>
+                    <div className="vc-hd__dropdown-divider"></div>
+                    <div className="vc-hd__dropdown-heading">Customer Service</div>
+                    <a href="mailto:help@vijaycart.com" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
+                      <i className="fa fa-envelope" aria-hidden="true"></i>help@vijaycart.com
+                    </a>
+                    <a href="tel:+918220477466" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
+                      <i className="fa fa-phone" aria-hidden="true"></i>+91 8220477466
+                    </a>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <Link to="/wishlist" className="vc-hd__item vc-hd__item--icon" aria-label="Wishlist">
@@ -179,7 +192,7 @@ export default function Header() {
 
           </nav>
         </div>
-      </header>
+      </motion.header>
 
       {/* ==================== MOBILE HEADER ==================== */}
       <header className={`vc-mhd ${scrolled ? 'vc-mhd--scrolled' : ''}`}>

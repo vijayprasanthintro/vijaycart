@@ -12,11 +12,11 @@ const seedAdmin = async ()=>{
             admin = new User({ email: 'admin@vijaycart.com' });
         }
         admin.name = 'VijayCart Admin';
-        admin.password = '123456';
+        admin.mobile = '9999900000';
         admin.role = 'admin';
-        // save() (not updateOne) so the pre('save') hook hashes the password.
+        // save() (not updateOne) so the pre('save') hook keeps the record intact.
         await admin.save();
-        console.log('Admin seeded! (admin@vijaycart.com / 123456)');
+        console.log('Admin seeded! (admin@vijaycart.com / 9999900000)');
     }catch(error){
         console.log(error.message);
     }

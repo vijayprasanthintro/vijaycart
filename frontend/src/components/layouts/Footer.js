@@ -1,8 +1,14 @@
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 export default function Footer (){
     return (
-        <footer className="site-footer">
+        <motion.footer
+            className="site-footer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        >
             <div className="container">
                 <div className="footer-grid">
                     <div className="footer-col footer-brand-col">
@@ -44,6 +50,6 @@ export default function Footer (){
                     </p>
                 </div>
             </div>
-        </footer>
+        </motion.footer>
     )
 }

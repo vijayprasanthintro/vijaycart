@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { decreaseCartItemQty, increaseCartItemQty, removeItemFromCart } from '../../slices/cartSlice';
 import { addCartItem } from '../../actions/cartActions';
 import { getPricing, formatMoney, getDelivery, resolveProductImage, imgOnError } from '../../utils/productHelper';
@@ -83,7 +84,15 @@ export default function Cart() {
         const outOfStock = Number(item.stock) <= 0;
         const lineTotal = formatMoney(item.price * (item.quantity || 1));
         return (
-            <div className="cart-item" key={item.product}>
+            <motion.div
+                className="cart-item"
+                key={item.product}
+                layout
+                initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, height: 0, marginTop: 0, marginBottom: 0, overflow: 'hidden' }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            >
                 <div className="cart-item-main">
                     <Link to={`/product/${item.product}`} className="cart-item-img" title={item.name}>
                         <img src={resolveProductImage(item.image)} alt={item.name} loading="lazy" onError={imgOnError} />
@@ -125,7 +134,7 @@ export default function Cart() {
                         </Fragment>
                     )}
                 </div>
-            </div>
+            </motion.div>
         );
     };
 
@@ -157,7 +166,7 @@ export default function Cart() {
                                                     ? <Fragment>Yay! You have unlocked <strong>FREE delivery</strong>.</Fragment>
                                                     : <Fragment>Add <strong>{formatMoney(FREE_SHIPPING_THRESHOLD - itemsPrice)}</strong> more to get <strong>FREE delivery</strong>.</Fragment>}
                                             </span>
-                                            <div className="cart-free-progress" aria-hidden="true"><span style={{ width: `${freeProgress}%` }}></span></div>
+                                            <div className="cart-free-progress" aria-hidden="true"><motion.span initial={{ width: '0%' }} animate={{ width: `${freeProgress}%` }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}></motion.span></div>
                                         </div>
                                     </div>
                                 )}
@@ -170,14 +179,18 @@ export default function Cart() {
                                     </div>
                                 )}
 
-                                {items.map(item => renderItemCard(item, false))}
+                                <AnimatePresence initial={false}>
+                                    {items.map(item => renderItemCard(item, false))}
+                                </AnimatePresence>
 
                                 {saved.length > 0 && (
                                     <div className="cart-save-later">
                                         <div className="section-head">
                                             <h2 className="section-title" style={{ fontSize: '1.2rem' }}>Saved for Later <span className="section-accent">({saved.length})</span></h2>
                                         </div>
-                                        {saved.map(item => renderItemCard(item, true))}
+                                        <AnimatePresence initial={false}>
+                                            {saved.map(item => renderItemCard(item, true))}
+                                        </AnimatePresence>
                                     </div>
                                 )}
                             </div>

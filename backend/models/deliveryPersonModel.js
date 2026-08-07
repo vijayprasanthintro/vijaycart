@@ -21,6 +21,13 @@ const deliveryPersonSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    //Optional vehicle/registration number shown to the customer when the
+    //order is Out for Delivery so they can spot the right rider.
+    vehicleNumber: {
+        type: String,
+        trim: true,
+        default: ''
+    },
     availability: {
         type: Boolean,
         default: true

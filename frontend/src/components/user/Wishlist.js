@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { useWishlist } from '../../context/WishlistContext';
 import { addCartItem } from '../../actions/cartActions';
@@ -44,13 +45,22 @@ export default function Wishlist() {
                     <Link to="/search/all" className="empty-cta"><i className="fa fa-shopping-bag mr-2" aria-hidden="true"></i>Start Shopping</Link>
                 </div>
             ) : (
-                <div className="wishlist-grid">
-                    {items.map(product => {
+                <AnimatePresence>
+                    <div className="wishlist-grid">
+                    {items.map((product, i) => {
                         const pricing = getPricing(product);
                         const rating = roundRating(product.ratings);
                         const inStock = Number(product.stock) > 0;
                         return (
-                            <div key={product._id} className="card-premium card-product p-0">
+                            <motion.div
+                                key={product._id}
+                                className="card-premium card-product p-0"
+                                layout
+                                initial={{ opacity: 0, y: 24 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: (i % 4) * 0.06 }}
+                            >
                                 <div className="product-badges">
                                     <span className="product-badge bg-discount">-{pricing.discount}%</span>
                                 </div>
@@ -91,10 +101,11 @@ export default function Wishlist() {
                                         ><span>{inStock ? 'Move to Cart' : 'Out of Stock'}</span></button>
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         );
                     })}
-                </div>
+                    </div>
+                </AnimatePresence>
             )}
         </div>
     );

@@ -7,6 +7,8 @@ import { clearError, clearOrderDeleted } from '../../slices/orderSlice';
 import { toast } from 'react-toastify';
 import { toINR } from './Charts';
 import { ORDER_STATUSES, statusBadge } from '../../utils/orderStatuses';
+import AdminPagination from './AdminPagination';
+import AdminExport from './AdminExport';
 
 export default function OrderList() {
     const { adminOrders = [], loading = true, error, isOrderDeleted } = useSelector(state => state.orderState);
@@ -15,6 +17,8 @@ export default function OrderList() {
 
     const [query, setQuery] = useState('');
     const [status, setStatus] = useState('');
+    const [page, setPage] = useState(1);
+    const PER_PAGE = 10;
 
     useEffect(() => {
         dispatch(adminOrdersAction());
@@ -52,7 +56,36 @@ export default function OrderList() {
         return list;
     }, [adminOrders, query, status]);
 
-    const revenue = adminOrders.filter(o => o.orderStatus !== 'Cancelled').reduce((s, o) => s + o.totalPrice, 0);
+    useEffect(() => { setPage(1); }, [query, status]);
+
+    const pageItems = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+    const exportHeaders = [
+        { label: 'Order ID', key: 'id' },
+        { label: 'Customer', key: 'customer' },
+        { label: 'Phone', key: 'phone' },
+        { label: 'City', key: 'city' },
+        { label: 'Items', key: 'items', type: 'number' },
+        { label: 'Total', key: 'total', type: 'number' },
+        { label: 'Payment', key: 'payment' },
+        { label: 'Status', key: 'status' },
+        { label: 'Delivery Boy', key: 'deliveryBoy' },
+        { label: 'Placed', key: 'placed', type: 'date' }
+    ];
+    const exportRows = filtered.map(o => ({
+        id: o._id,
+        customer: o.shippingInfo?.name || o.user?.name || '',
+        phone: o.shippingInfo?.phoneNo || '',
+        city: o.shippingInfo?.city || '',
+        items: o.orderItems?.length || 0,
+        total: o.totalPrice,
+        payment: o.paymentMethod === 'cod' ? `COD (${o.codStatus === 'Collected' ? 'Collected' : 'Pending'})` : (o.paymentInfo?.status === 'succeeded' ? 'Paid' : 'Not Paid'),
+        status: o.orderStatus,
+        deliveryBoy: boyName(o.deliveryBoy) || '',
+        placed: o.createdAt
+    }));
+
+    const revenue = adminOrders.filter(o => o.orderStatus !== 'Cancelled' && o.orderStatus !== 'Cancelled by Customer').reduce((s, o) => s + o.totalPrice, 0);
 
     const deleteHandler = (id) => {
         dispatch(deleteOrder(id));
@@ -65,7 +98,10 @@ export default function OrderList() {
                     <h1>Orders</h1>
                     <p>{adminOrders.length} total · {toINR(revenue)} revenue (excl. cancelled)</p>
                 </div>
-                <Link to="/admin/delivery" className="ad-btn ad-btn--primary"><i className="fa fa-motorcycle" aria-hidden="true"></i> Assign Delivery</Link>
+                <div className="ad-toolbar">
+                    <AdminExport filename="orders" headers={exportHeaders} rows={exportRows} />
+                    <Link to="/admin/delivery" className="ad-btn ad-btn--primary"><i className="fa fa-motorcycle" aria-hidden="true"></i> Assign Delivery</Link>
+                </div>
             </div>
 
             <div className="ad-stat-grid">
@@ -125,8 +161,9 @@ export default function OrderList() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filtered.map(order => {
+                                    {pageItems.map(order => {
                                         const boy = boyName(order.deliveryBoy);
+                                        const locked = order.orderStatus === 'Cancelled by Customer';
                                         return (
                                             <tr key={order._id}>
                                                 <td><span className="ad-td-mono">#{order._id.slice(-8).toUpperCase()}</span></td>
@@ -154,6 +191,7 @@ export default function OrderList() {
                                                 </td>
                                                 <td>
                                                     <span className={`ad-badge ${statusBadge(order.orderStatus)}`}>
+                                                        {locked && <i className="fa fa-lock mr-1" aria-hidden="true"></i>}
                                                         {order.orderStatus}
                                                     </span>
                                                 </td>
@@ -161,10 +199,16 @@ export default function OrderList() {
                                                 <td><span className="ad-stat__label">{new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span></td>
                                                 <td>
                                                     <div className="ad-toolbar">
-                                                        <Link to={`/admin/order/${order._id}`} className="ad-btn ad-btn--ghost ad-btn--sm" title="Manage"><i className="fa fa-pencil" aria-hidden="true"></i></Link>
-                                                        <button type="button" className="ad-btn ad-btn--danger ad-btn--sm ad-btn--icon" title="Delete" onClick={() => deleteHandler(order._id)}>
-                                                            <i className="fa fa-trash" aria-hidden="true"></i>
-                                                        </button>
+                                                        {locked ? (
+                                                            <Link to={`/admin/order/${order._id}`} className="ad-btn ad-btn--ghost ad-btn--sm" title="View only"><i className="fa fa-eye" aria-hidden="true"></i></Link>
+                                                        ) : (
+                                                            <Link to={`/admin/order/${order._id}`} className="ad-btn ad-btn--ghost ad-btn--sm" title="Manage"><i className="fa fa-pencil" aria-hidden="true"></i></Link>
+                                                        )}
+                                                        {!locked && (
+                                                            <button type="button" className="ad-btn ad-btn--danger ad-btn--sm ad-btn--icon" title="Delete" onClick={() => deleteHandler(order._id)}>
+                                                                <i className="fa fa-trash" aria-hidden="true"></i>
+                                                            </button>
+                                                        )}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -173,6 +217,9 @@ export default function OrderList() {
                                 </tbody>
                             </table>
                         </div>
+                    )}
+                    {filtered.length > PER_PAGE && (
+                        <AdminPagination count={filtered.length} perPage={PER_PAGE} page={page} onChange={setPage} />
                     )}
                 </div>
             </div>

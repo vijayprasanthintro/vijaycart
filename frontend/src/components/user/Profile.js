@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { userOrders as userOrdersAction } from '../../actions/orderActions';
 import { logout } from '../../actions/userActions';
 import { useWishlist } from '../../context/WishlistContext';
@@ -8,6 +9,9 @@ import { formatMoney } from '../../utils/productHelper';
 import { toast } from 'react-toastify';
 import MetaData from '../layouts/MetaData';
 import Loader from '../layouts/Loader';
+import { fadeUp, staggerContainer, easeOutExpo } from '../../utils/motion';
+
+const MotionLink = motion(Link);
 
 const fmtDate = (d) => {
     try { return new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); } catch { return ''; }
@@ -63,8 +67,7 @@ export default function Profile () {
     ];
 
     const tiles = [
-        { to: '/myprofile/update', icon: 'fa-user-circle', label: 'Personal Information', sub: 'Name, email & avatar' },
-        { to: '/myprofile/update/password', icon: 'fa-lock', label: 'Account Settings', sub: 'Change your password' },
+        { to: '/myprofile/update', icon: 'fa-user-circle', label: 'Personal Information', sub: 'Name, email, mobile & avatar' },
         { to: '/shipping', icon: 'fa-location-dot', label: 'Delivery Addresses', sub: `${addrCount} saved address${addrCount === 1 ? '' : 'es'}` },
         { to: '/orders', icon: 'fa-shopping-bag', label: 'My Orders', sub: 'Track, cancel & re-order' },
         { to: '/wishlist', icon: 'fa-heart', label: 'Wishlist', sub: `${wishlistCount} saved item${wishlistCount === 1 ? '' : 's'}` },
@@ -77,7 +80,12 @@ export default function Profile () {
         <Fragment>
             <MetaData title="My Profile" />
             <div className="pr-page">
-                <div className="pr-head">
+                <motion.div
+                    className="pr-head"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.45, ease: easeOutExpo }}
+                >
                     <div className="pr-avatar">
                         {showInitials ? (
                             <span className="pr-avatar-initials">{getInitials(user.name)}</span>
@@ -89,6 +97,7 @@ export default function Profile () {
                         <h1 className="pr-name">{user.name}</h1>
                         <div className="pr-subline">
                             <span className="pr-email"><i className="fa fa-envelope" aria-hidden="true"></i>{user.email}</span>
+                            {user.mobile && <span className="pr-email"><i className="fa fa-mobile" aria-hidden="true"></i>{user.mobile}</span>}
                             <span className="pr-role">{user.role}</span>
                         </div>
                         <p className="pr-since"><i className="fa fa-calendar-o mr-1" aria-hidden="true"></i>Member since {user.createdAt ? fmtDate(user.createdAt) : '—'}</p>
@@ -96,37 +105,52 @@ export default function Profile () {
                     <button type="button" className="mo-btn danger" onClick={logoutHandler}>
                         <i className="fa fa-sign-out mr-1" aria-hidden="true"></i>Logout
                     </button>
-                </div>
+                </motion.div>
 
-                <div className="pr-stats">
+                <motion.div
+                    className="pr-stats"
+                    initial="hidden"
+                    animate="show"
+                    variants={staggerContainer(0.08, 0.15)}
+                >
                     {stats.map(stat => (
-                        <div className="pr-stat" key={stat.label}>
+                        <motion.div className="pr-stat" key={stat.label} variants={fadeUp}>
                             <div className="pr-stat-icon"><i className={`fa ${stat.icon}`} aria-hidden="true"></i></div>
                             <div>
                                 <div className="pr-stat-value">{stat.value}</div>
                                 <div className="pr-stat-label">{stat.label}</div>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
 
                 <div className="pr-section-title">Account</div>
-                <div className="dash-tiles">
+                <motion.div
+                    className="dash-tiles"
+                    initial="hidden"
+                    animate="show"
+                    variants={staggerContainer(0.06, 0.1)}
+                >
                     {tiles.map(tile => (
-                        <Link key={tile.to} to={tile.to} className="dash-tile">
+                        <MotionLink key={tile.to} to={tile.to} className="dash-tile" variants={fadeUp}>
                             <i className={`fa ${tile.icon}`} aria-hidden="true"></i>
                             <span>{tile.label}</span>
                             <small className="text-muted">{tile.sub}</small>
-                        </Link>
+                        </MotionLink>
                     ))}
-                </div>
+                </motion.div>
 
                 {recentOrders.length > 0 && (
                     <Fragment>
                         <div className="pr-section-title">Recent Orders</div>
-                        <div className="mo-list">
+                        <motion.div
+                            className="mo-list"
+                            initial="hidden"
+                            animate="show"
+                            variants={staggerContainer(0.1, 0.15)}
+                        >
                             {recentOrders.map(order => (
-                                <div className="mo-card" key={order._id}>
+                                <motion.div className="mo-card" key={order._id} variants={fadeUp}>
                                     <div className="mo-card-top">
                                         <div>
                                             <div className="mo-order-id"><i className="fa fa-hashtag mr-1" aria-hidden="true"></i>Order #{order._id}</div>
@@ -144,9 +168,9 @@ export default function Profile () {
                                         <Link to={`/order/${order._id}`} className="mo-btn primary"><i className="fa fa-eye mr-1" aria-hidden="true"></i>View Details</Link>
                                         <Link to="/orders" className="mo-btn">View All Orders</Link>
                                     </div>
-                                </div>
+                                </motion.div>
                             ))}
-                        </div>
+                        </motion.div>
                     </Fragment>
                 )}
             </div>

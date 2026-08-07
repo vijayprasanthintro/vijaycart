@@ -1,12 +1,17 @@
 import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import Loader from '../layouts/Loader';
 import { orderDetail as orderDetailAction, cancelOrder, requestReturn } from '../../actions/orderActions';
 import { addCartItem } from '../../actions/cartActions';
 import { toast } from 'react-toastify';
 import { formatMoney, getDeliveryLabel, resolveProductImage, imgOnError } from '../../utils/productHelper';
 import { openInvoice } from '../../utils/invoice';
+import { easeOutExpo } from '../../utils/motion';
+
+const fmtTime = (d) => d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+const fmtDate = (d) => d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
 
 const statusMeta = (status) => {
     const s = (status || '').toLowerCase();
@@ -50,12 +55,23 @@ function OrderTracking({ status }) {
 
     return (
         <div className="od-track">
-            <div className="od-track-fill" style={{ width: `${(Math.min(current, TRACK_STEPS.length - 1) / (TRACK_STEPS.length - 1)) * 100}%` }}></div>
+            <motion.div
+                className="od-track-fill"
+                initial={{ width: '0%' }}
+                animate={{ width: `${(Math.min(current, TRACK_STEPS.length - 1) / (TRACK_STEPS.length - 1)) * 100}%` }}
+                transition={{ duration: 0.8, ease: easeOutExpo }}
+            ></motion.div>
             {TRACK_STEPS.map((step, i) => (
-                <div key={step.label} className={`od-track-step ${i < current ? 'done' : ''} ${i === current ? 'active' : ''}`}>
+                <motion.div
+                    key={step.label}
+                    className={`od-track-step ${i < current ? 'done' : ''} ${i === current ? 'active' : ''}`}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, ease: easeOutExpo, delay: 0.15 + i * 0.08 }}
+                >
                     <span className="od-track-dot"><i className={`fa ${i < current ? 'fa-check' : step.icon}`} aria-hidden="true"></i></span>
                     <span className="od-track-label">{step.label}</span>
-                </div>
+                </motion.div>
             ))}
         </div>
     );
@@ -68,7 +84,7 @@ const RETURN_REASONS = {
 
 export default function OrderDetail () {
     const { orderDetail, loading } = useSelector(state => state.orderState)
-    const { shippingInfo = {}, user = {}, orderStatus = 'Pending', orderItems = [], totalPrice = 0, itemsPrice = 0, shippingPrice = 0, taxPrice = 0, discountPrice = 0, couponCode = '', paymentMethod = '', paymentInfo = {}, returnStatus = 'None', returnReason = '', codStatus = 'Pending' } = orderDetail;
+    const { shippingInfo = {}, user = {}, orderStatus = 'Pending', orderItems = [], totalPrice = 0, itemsPrice = 0, shippingPrice = 0, taxPrice = 0, discountPrice = 0, couponCode = '', paymentMethod = '', paymentInfo = {}, returnStatus = 'None', returnReason = '', codStatus = 'Pending', deliveryPerson = null, deliveryDate = null, estimatedArrivalTime = null, deliveredAt = null } = orderDetail;
     const isPaid = paymentInfo && paymentInfo.status === "succeeded";
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -128,6 +144,15 @@ export default function OrderDetail () {
 
     const meta = statusMeta(orderStatus);
     const isCancelled = meta.cls === 'cancelled';
+    const isLocked = orderStatus === 'Cancelled by Customer';
+    const isOutForDelivery = (orderStatus || '').toLowerCase().includes('out for delivery');
+    const showPartner = (isOutForDelivery || isDelivered) && !!deliveryPerson && !!deliveryPerson.name;
+    const etaWindow = estimatedArrivalTime
+        ? `between ${fmtTime(new Date(estimatedArrivalTime))} and ${fmtTime(new Date(new Date(estimatedArrivalTime).getTime() + 60 * 60 * 1000))}`
+        : null;
+    const deliveryEstimate = deliveryDate
+        ? fmtDate(new Date(deliveryDate))
+        : getDeliveryLabel(orderDetail._id || shippingInfo.postalCode);
 
     return (
         <Fragment>
@@ -144,25 +169,63 @@ export default function OrderDetail () {
                             <h1 className="cart-title">Order # {orderDetail._id}</h1>
                             <p className="addr-sub">Placed on {new Date(orderDetail.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                         </div>
-                        <span className={`mo-status ${meta.cls}`}><i className={`fa mr-1 ${meta.icon}`} aria-hidden="true"></i>{meta.label}</span>
+                        <span className={`mo-status ${meta.cls}`}><i className={`fa mr-1 ${isLocked ? 'fa-lock' : meta.icon}`} aria-hidden="true"></i>{meta.label}</span>
                     </div>
 
                     {isCancelled ? (
-                        <div className="od-cancelled">
-                            <i className="fa fa-times-circle" aria-hidden="true"></i>
-                            <div>
-                                <b>This order has been cancelled.</b>
-                                <p>The items were removed from your order. You can re-order them anytime with Buy Again.</p>
+                        isLocked ? (
+                            <div className="od-cancelled od-cancelled--locked">
+                                <i className="fa fa-lock" aria-hidden="true"></i>
+                                <div>
+                                    <b><i className="fa fa-lock mr-1" aria-hidden="true"></i>Locked · Cancelled by Customer</b>
+                                    <p>This order has been cancelled by the customer and cannot be modified.</p>
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className="od-cancelled">
+                                <i className="fa fa-times-circle" aria-hidden="true"></i>
+                                <div>
+                                    <b>This order has been cancelled.</b>
+                                    <p>The items were removed from your order. You can re-order them anytime with Buy Again.</p>
+                                </div>
+                            </div>
+                        )
                     ) : (
                         <div className="co-card">
                             <div className="co-card-head"><div><i className="fa fa-truck mr-2" aria-hidden="true"></i>Tracking</div></div>
                             <OrderTracking status={orderStatus} />
                             <div className="od-estimate">
-                                <i className="fa fa-clock-o mr-1" aria-hidden="true"></i>Estimated delivery by <b>{getDeliveryLabel(orderDetail._id || shippingInfo.postalCode)}</b>
+                                <i className="fa fa-clock-o mr-1" aria-hidden="true"></i>Estimated delivery by <b>{deliveryEstimate}</b>
                                 {isDelivered && <span className="od-estimate-delivered"><i className="fa fa-check-circle mr-1" aria-hidden="true"></i>Delivered</span>}
                             </div>
+                            {showPartner && (
+                                <div className="od-partner">
+                                    <div className="od-partner-head">
+                                        <span className="od-partner-avatar"><i className="fa fa-user-circle" aria-hidden="true"></i></span>
+                                        <div className="od-partner-id">
+                                            <div className="od-partner-name">{deliveryPerson.name}</div>
+                                            <div className="od-partner-role"><i className="fa fa-motorcycle mr-1" aria-hidden="true"></i>Delivery Partner</div>
+                                        </div>
+                                        {deliveryPerson.phone && (
+                                            <a className="od-partner-call" href={`tel:${String(deliveryPerson.phone).replace(/\s/g, '')}`}>
+                                                <i className="fa fa-phone mr-1" aria-hidden="true"></i>Call
+                                            </a>
+                                        )}
+                                    </div>
+                                    <div className="od-partner-grid">
+                                        <div className="od-partner-item">
+                                            <i className="fa fa-motorcycle" aria-hidden="true"></i>
+                                            <span>Vehicle No.</span>
+                                            <b>{deliveryPerson.vehicleNumber || 'Not available'}</b>
+                                        </div>
+                                        <div className="od-partner-item">
+                                            <i className="fa fa-clock-o" aria-hidden="true"></i>
+                                            <span>{isDelivered ? 'Delivered on' : 'Estimated arrival'}</span>
+                                            <b>{isDelivered ? (deliveredAt ? fmtDate(new Date(deliveredAt)) : '—') : (etaWindow || 'On the way')}</b>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
 

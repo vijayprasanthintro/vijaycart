@@ -2,7 +2,7 @@ const app = require('./app');
 const path = require('path');
 const connectDatabase = require('./config/database');
 const Order = require('./models/orderModel');
-
+const logger = require('./utils/logger');
 connectDatabase();
 
 //One-time data migration: older orders used 'Processing' as the initial
@@ -14,11 +14,11 @@ async function migrateOrderStatuses() {
         { $set: { orderStatus: 'Pending' } }
     );
     if (result && result.modifiedCount) {
-        console.log(`Migrated ${result.modifiedCount} order(s): Processing -> Pending`);
+        logger.info(`Migrated ${result.modifiedCount} order(s): Processing -> Pending`);
     }
 }
 migrateOrderStatuses().catch(err => {
-    console.log(`Migration warning: ${err.message}`);
+    logger.warn(`Migration warning: ${err.message}`);
 });
 
 // Railway injects the runtime port through process.env.PORT; fall back to the
@@ -28,21 +28,19 @@ migrateOrderStatuses().catch(err => {
 // locally.
 const PORT = process.env.PORT || 8000;
 const server = app.listen(PORT, '0.0.0.0', ()=>{
-    console.log(`My Server listening to the port: ${PORT} in ${process.env.NODE_ENV || 'development'}`)
-    console.log(`Local: http://localhost:${PORT}`)
+    logger.info(`Server listening on port ${PORT} (${process.env.NODE_ENV || 'development'})`);
+    logger.info(`Local: http://localhost:${PORT}`);
 })
 
 process.on('unhandledRejection',(err)=>{
-    console.log(`Error: ${err.message}`);
-    console.log('Shutting down the server due to unhandled rejection error');
+    logger.fatal(`Unhandled rejection, shutting down the server: ${err.message}`, { stack: err.stack });
     server.close(()=>{
         process.exit(1);
     })
 })
 
 process.on('uncaughtException',(err)=>{
-    console.log(`Error: ${err.message}`);
-    console.log('Shutting down the server due to uncaught exception error');
+    logger.fatal(`Uncaught exception, shutting down the server: ${err.message}`, { stack: err.stack });
     server.close(()=>{
         process.exit(1);
     })

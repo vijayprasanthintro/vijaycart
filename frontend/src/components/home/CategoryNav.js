@@ -1,5 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { easeOutExpo } from '../../utils/motion';
+
+const ddItemVariants = {
+  hidden: { opacity: 0, y: 6 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.2, ease: easeOutExpo } },
+};
 
 const NAV_CATEGORIES = [
   {
@@ -115,23 +122,34 @@ function CategoryDropdown({ cat, onClose }) {
   if (!cat.children || cat.children.length === 0) return null;
 
   return (
-    <div className="vc-cn-dd" role="menu">
-      <div className="vc-cn-dd__header">
+    <motion.div
+      className="vc-cn-dd"
+      role="menu"
+      initial="hidden"
+      animate="show"
+      exit="hidden"
+      variants={{
+        hidden: { opacity: 0, y: 8, scale: 0.98 },
+        show: { opacity: 1, y: 0, scale: 1, transition: { staggerChildren: 0.04, delayChildren: 0.03 } },
+      }}
+    >
+      <motion.div className="vc-cn-dd__header" variants={ddItemVariants}>
         <span className="vc-cn-dd__header-label">{cat.label}</span>
-      </div>
+      </motion.div>
       {cat.children.map((child) => (
-        <Link
-          key={child.label}
-          to={child.to}
-          className="vc-cn-dd__item"
-          role="menuitem"
-          onClick={onClose}
-        >
-          <i className={`fa ${child.icon} vc-cn-dd__item-icon`} aria-hidden="true"></i>
-          <span>{child.label}</span>
-        </Link>
+        <motion.div key={child.label} variants={ddItemVariants}>
+          <Link
+            to={child.to}
+            className="vc-cn-dd__item"
+            role="menuitem"
+            onClick={onClose}
+          >
+            <i className={`fa ${child.icon} vc-cn-dd__item-icon`} aria-hidden="true"></i>
+            <span>{child.label}</span>
+          </Link>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }
 
@@ -230,7 +248,11 @@ export default function CategoryNav() {
                       <i className={`fa fa-angle-down vc-cn__chevron ${isOpen ? 'vc-cn__chevron--open' : ''}`} aria-hidden="true"></i>
                     )}
                   </Link>
-                  {hasDropdown && isOpen && <CategoryDropdown cat={cat} onClose={() => setHoveredIdx(null)} />}
+                  {hasDropdown && (
+                    <AnimatePresence>
+                      {isOpen && <CategoryDropdown cat={cat} onClose={() => setHoveredIdx(null)} />}
+                    </AnimatePresence>
+                  )}
                 </div>
               );
             })}
@@ -281,21 +303,29 @@ export default function CategoryNav() {
           })}
         </div>
 
-        {mobileDropdown && (
-          <div className="vc-cn-m__dropdown">
-            {NAV_CATEGORIES.find((c) => c.label === mobileDropdown)?.children.map((child) => (
-              <Link
-                key={child.label}
-                to={child.to}
-                className="vc-cn-m__dd-item"
-                onClick={() => setMobileDropdown(null)}
-              >
-                <i className={`fa ${child.icon} vc-cn-m__dd-icon`} aria-hidden="true"></i>
-                <span>{child.label}</span>
-              </Link>
-            ))}
-          </div>
-        )}
+        <AnimatePresence>
+          {mobileDropdown && (
+            <motion.div
+              className="vc-cn-m__dropdown"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2, ease: easeOutExpo }}
+            >
+              {NAV_CATEGORIES.find((c) => c.label === mobileDropdown)?.children.map((child) => (
+                <Link
+                  key={child.label}
+                  to={child.to}
+                  className="vc-cn-m__dd-item"
+                  onClick={() => setMobileDropdown(null)}
+                >
+                  <i className={`fa ${child.icon} vc-cn-m__dd-icon`} aria-hidden="true"></i>
+                  <span>{child.label}</span>
+                </Link>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </>
   );

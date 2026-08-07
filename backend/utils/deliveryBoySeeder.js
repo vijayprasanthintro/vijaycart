@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const DeliveryPerson = require('../models/deliveryPersonModel');
 const dotenv = require('dotenv');
 const connectDatabase = require('../config/database')
 
@@ -12,11 +13,21 @@ const seedDeliveryBoys = async ()=>{
             deliveryBoy = new User({ email: 'deliveryboy@vijaycart.com' });
         }
         deliveryBoy.name = 'Delivery Boy';
-        deliveryBoy.password = '123456';
+        deliveryBoy.mobile = '8888800000';
         deliveryBoy.role = 'deliveryboy';
-        // save() (not updateOne) so the pre('save') hook hashes the password.
+        // save() (not updateOne) so the pre('save') hook keeps the record intact.
         await deliveryBoy.save();
-        console.log('Delivery boy seeded! (deliveryboy@vijaycart.com / 123456)');
+
+        let person = await DeliveryPerson.findOne({ user: deliveryBoy._id });
+        if (!person) {
+            person = await DeliveryPerson.create({
+                user: deliveryBoy._id,
+                name: deliveryBoy.name,
+                email: deliveryBoy.email,
+                phone: deliveryBoy.mobile
+            });
+        }
+        console.log('Delivery boy seeded! (deliveryboy@vijaycart.com / 8888800000)');
     }catch(error){
         console.log(error.message);
     }

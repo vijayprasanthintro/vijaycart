@@ -7,6 +7,8 @@ import { clearError, clearProductDeleted } from '../../slices/productSlice';
 import { toast } from 'react-toastify';
 import { toINR } from './Charts';
 import { productImage, imgOnError } from '../../utils/productHelper';
+import AdminPagination from './AdminPagination';
+import AdminExport from './AdminExport';
 
 export default function ProductList() {
     const { products = [], loading = true, error } = useSelector(state => state.productsState);
@@ -16,6 +18,8 @@ export default function ProductList() {
 
     const [query, setQuery] = useState('');
     const [category, setCategory] = useState('');
+    const [page, setPage] = useState(1);
+    const PER_PAGE = 10;
 
     useEffect(() => {
         dispatch(getAdminProducts);
@@ -43,6 +47,29 @@ export default function ProductList() {
         return list;
     }, [products, query, category]);
 
+    useEffect(() => { setPage(1); }, [query, category]);
+
+    const pageItems = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+    const exportHeaders = [
+        { label: 'Name', key: 'name' },
+        { label: 'Category', key: 'category' },
+        { label: 'Seller', key: 'seller' },
+        { label: 'Price', key: 'price', type: 'number' },
+        { label: 'Stock', key: 'stock', type: 'number' },
+        { label: 'Rating', key: 'ratings', type: 'number' },
+        { label: 'Reviews', key: 'numOfReviews', type: 'number' }
+    ];
+    const exportRows = filtered.map(p => ({
+        name: p.name,
+        category: p.category,
+        seller: p.seller || '',
+        price: p.price,
+        stock: p.stock,
+        ratings: p.ratings || 0,
+        numOfReviews: p.numOfReviews || 0
+    }));
+
     const outOfStock = products.filter(p => p.stock === 0).length;
     const lowStock = products.filter(p => p.stock > 0 && p.stock <= 5).length;
 
@@ -55,7 +82,10 @@ export default function ProductList() {
                     <h1>Products</h1>
                     <p>{products.length} total · {outOfStock} out of stock · {lowStock} low stock</p>
                 </div>
-                <Link to="/admin/products/create" className="ad-btn ad-btn--primary"><i className="fa fa-plus" aria-hidden="true"></i> New Product</Link>
+                <div className="ad-toolbar">
+                    <AdminExport filename="products" headers={exportHeaders} rows={exportRows} />
+                    <Link to="/admin/products/create" className="ad-btn ad-btn--primary"><i className="fa fa-plus" aria-hidden="true"></i> New Product</Link>
+                </div>
             </div>
 
             <div className="ad-card">
@@ -93,7 +123,7 @@ export default function ProductList() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filtered.map(product => (
+                                    {pageItems.map(product => (
                                         <tr key={product._id}>
                                             <td>
                                                 {product.images && product.images[0] ? (
@@ -129,6 +159,9 @@ export default function ProductList() {
                                 </tbody>
                             </table>
                         </div>
+                    )}
+                    {filtered.length > PER_PAGE && (
+                        <AdminPagination count={filtered.length} perPage={PER_PAGE} page={page} onChange={setPage} />
                     )}
                 </div>
             </div>
