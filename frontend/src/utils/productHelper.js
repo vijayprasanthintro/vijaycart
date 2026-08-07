@@ -1,6 +1,8 @@
 // Compute display pricing for a product. Stored `mrp` / `discount` (seeded or
 // set by admins) are preferred; older products without them fall back to a
 // stable deterministic discount so cards still look premium.
+import { API_BASE_URL } from '../apiConfig';
+
 export const getDiscountFor = (id = '', fallback = 18) => {
   if (!id) return fallback;
   let hash = 0;
@@ -101,7 +103,7 @@ export const resolveProductImage = (src) => {
   const s = String(src);
   if (/^https?:\/\//i.test(s)) return s;
   if (s.startsWith('/uploads/')) {
-    const base = (process.env.REACT_APP_API_URL || '').replace(/\/+$/, '');
+    const base = API_BASE_URL.replace(/\/+$/, '');
     return base + s;
   }
   return s;

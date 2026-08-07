@@ -1,12 +1,13 @@
 import axios from 'axios';
+import { API_BASE_URL } from '../apiConfig';
 import { productsFail, productsSuccess, productsRequest, adminProductsRequest, adminProductsSuccess, adminProductsFail } from '../slices/productsSlice';
 import { productFail, productSuccess, productRequest, productNotFound, createReviewRequest, createReviewSuccess, createReviewFail, newProductRequest, newProductSuccess, newProductFail, deleteProductRequest, deleteProductSuccess, deleteProductFail, updateProductRequest, updateProductSuccess, updateProductFail, reviewsRequest, reviewsSuccess, reviewsFail, deleteReviewRequest, deleteReviewSuccess, deleteReviewFail } from '../slices/productSlice';
 
-// API base: relative paths are used everywhere and resolved against an optional
-// REACT_APP_API_URL (set in some hosted builds). When it is unset the requests
-// go to the same origin (Vite/CRA proxy in dev, Express static in prod), so we
-// never build broken "undefined/api/..." URLs.
-const API = process.env.REACT_APP_API_URL || '';
+// API base: relative paths are used everywhere and resolved against the single
+// API_BASE_URL from ../apiConfig (REACT_APP_API_URL in production). When it is
+// unset the requests go to the same origin (CRA proxy in dev, Express static in
+// prod), so we never build broken "undefined/api/..." URLs.
+const API = API_BASE_URL;
 
 // Small in-memory cache for the two hottest reads (product detail + listing).
 // Prevents refetching the same product when navigating back to a detail page

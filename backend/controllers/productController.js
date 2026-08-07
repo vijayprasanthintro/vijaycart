@@ -25,6 +25,28 @@ function parseJsonField(value) {
     return Array.isArray(value) ? value : [];
 }
 
+// Diagnostic health check - /api/v1/products/health
+// Verifies the backend is up, MongoDB is reachable and the product query runs.
+// Returns counts only — no sensitive database information.
+exports.productsHealth = catchAsyncError(async (req, res, next) => {
+    const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+    const state = states[mongoose.connection.readyState] || 'unknown';
+    let productCount = null;
+    let inStockCount = null;
+    if (mongoose.connection.readyState === 1) {
+        productCount = await Product.countDocuments();
+        inStockCount = await Product.countDocuments({ stock: { $gt: 0 } });
+    }
+    res.status(200).json({
+        success: true,
+        message: 'Products service is running',
+        mongo: state,
+        productCount,
+        inStockCount,
+        time: new Date().toISOString()
+    });
+});
+
 //Get Products - /api/v1/products
 exports.getProducts = catchAsyncError(async (req, res, next)=>{
     const cacheKey = `products:${req.originalUrl}`;
