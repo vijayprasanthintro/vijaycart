@@ -5,6 +5,8 @@ import { deleteUser, getUsers } from '../../actions/userActions';
 import { adminOrders as adminOrdersAction } from '../../actions/orderActions';
 import { clearError, clearUserDeleted } from '../../slices/userSlice';
 import { toast } from 'react-toastify';
+import AdminPagination from './AdminPagination';
+import AdminExport from './AdminExport';
 
 export default function UserList() {
     const { users = [], loading = true, error, isUserDeleted } = useSelector(state => state.userState);
@@ -13,6 +15,8 @@ export default function UserList() {
 
     const [query, setQuery] = useState('');
     const [role, setRole] = useState('');
+    const [page, setPage] = useState(1);
+    const PER_PAGE = 10;
 
     useEffect(() => {
         dispatch(getUsers);
@@ -42,6 +46,25 @@ export default function UserList() {
         return list;
     }, [users, query, role]);
 
+    useEffect(() => { setPage(1); }, [query, role]);
+
+    const pageItems = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+    const exportHeaders = [
+        { label: 'Name', key: 'name' },
+        { label: 'Email', key: 'email' },
+        { label: 'Role', key: 'role' },
+        { label: 'Orders', key: 'orders', type: 'number' },
+        { label: 'Joined', key: 'joined', type: 'date' }
+    ];
+    const exportRows = filtered.map(u => ({
+        name: u.name,
+        email: u.email,
+        role: u.role,
+        orders: orderCount(u._id),
+        joined: u.createdAt || ''
+    }));
+
     const deleteHandler = id => dispatch(deleteUser(id));
 
     const roleBadge = roleVal => (
@@ -58,6 +81,7 @@ export default function UserList() {
                     <h1>Users</h1>
                     <p>{users.length} accounts</p>
                 </div>
+                <AdminExport filename="users" headers={exportHeaders} rows={exportRows} />
             </div>
 
             <div className="ad-card">
@@ -94,7 +118,7 @@ export default function UserList() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filtered.map(user => (
+                                    {pageItems.map(user => (
                                         <tr key={user._id}>
                                             <td>
                                                 <div className="ad-toolbar" style={{ justifyContent: 'flex-start' }}>
@@ -119,6 +143,9 @@ export default function UserList() {
                                 </tbody>
                             </table>
                         </div>
+                    )}
+                    {filtered.length > PER_PAGE && (
+                        <AdminPagination count={filtered.length} perPage={PER_PAGE} page={page} onChange={setPage} />
                     )}
                 </div>
             </div>

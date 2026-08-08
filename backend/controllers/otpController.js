@@ -123,7 +123,7 @@ exports.requestOtp = catchAsyncError(async (req, res, next) => {
         expiresAt: new Date(now + OTP_EXPIRES_MS)
     });
 
-    // Deliver the OTP through the existing SMTP transport.
+    // Deliver the OTP through the Brevo transactional email API.
     try {
         await sendEmail({
             email: user.email,
@@ -134,23 +134,22 @@ exports.requestOtp = catchAsyncError(async (req, res, next) => {
                 `If you did not request this OTP, you can safely ignore this email.`
         });
     } catch (error) {
-        // Log the FULL nodemailer failure so the real cause surfaces in the
-        // logs (EAUTH = bad creds, ECONNECTION = wrong host/port/network,
-        // 535/550 response = provider rejecting auth or sender, etc.).
+        // Log the FULL Brevo API failure so the real cause surfaces in the
+        // logs (401 = invalid/expired API key, 422 = rejected recipient,
+        // ECONNREFUSED/ETIMEDOUT = network blocked, etc.).
         logger.error('OTP email could not be sent', {
             error: {
                 message: error?.message,
                 name: error?.name,
                 code: error?.code,
-                command: error?.command,
-                response: error?.response,
+                status: error?.response?.status,
+                statusText: error?.response?.statusText,
+                data: error?.response?.data,
                 stack: error?.stack
             },
-            smtp: {
-                host: process.env.SMTP_HOST,
-                port: process.env.SMTP_PORT,
-                user: process.env.SMTP_USER,
-                from: process.env.SMTP_FROM_EMAIL
+            brevo: {
+                from: process.env.SMTP_FROM_EMAIL,
+                apiKeySet: Boolean(process.env.BREVO_API_KEY)
             },
             to: user?.email
         });
