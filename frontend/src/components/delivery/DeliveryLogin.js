@@ -28,10 +28,14 @@ export default function DeliveryLogin() {
         return Object.keys(errs).length === 0;
     };
 
-    const sendHandler = (e) => {
+    const sendHandler = async (e) => {
         e.preventDefault();
         if (!validateSend()) return;
-        dispatch(sendOtp({ mobile, purpose: 'delivery' }))
+        const data = await dispatch(sendOtp({ mobile, purpose: 'delivery' }))
+        if (data) {
+            setStep('verify')
+            setResendIn(data.resendIn || 0)
+        }
     }
 
     useEffect(() => {
@@ -51,9 +55,13 @@ export default function DeliveryLogin() {
         dispatch(verifyOtp({ userId: otpInfo.userId, otp: otpCode, purpose: 'delivery' }))
     }
 
-    const resendHandler = () => {
+    const resendHandler = async () => {
         if (resendIn > 0) return;
-        dispatch(sendOtp({ mobile, purpose: 'delivery' }))
+        const data = await dispatch(sendOtp({ mobile, purpose: 'delivery' }))
+        if (data) {
+            setStep('verify')
+            setResendIn(data.resendIn || 0)
+        }
     }
 
     const backToSend = () => {

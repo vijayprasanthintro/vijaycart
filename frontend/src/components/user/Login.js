@@ -77,10 +77,14 @@ export default function Login() {
         return Object.keys(errs).length === 0;
     };
 
-    const sendHandler = (e) => {
+    const sendHandler = async (e) => {
         e.preventDefault();
         if (!validateSend()) return;
-        dispatch(sendOtp(mode === 'mobile' ? { mobile } : { email }))
+        const data = await dispatch(sendOtp(mode === 'mobile' ? { mobile } : { email }))
+        if (data) {
+            setStep('verify')
+            setResendIn(data.resendIn || 0)
+        }
     }
 
     useEffect(() => {
@@ -100,9 +104,13 @@ export default function Login() {
         dispatch(verifyOtp({ userId: otpInfo.userId, otp: otpCode }))
     }
 
-    const resendHandler = () => {
+    const resendHandler = async () => {
         if (resendIn > 0) return;
-        dispatch(sendOtp(mode === 'mobile' ? { mobile } : { email }))
+        const data = await dispatch(sendOtp(mode === 'mobile' ? { mobile } : { email }))
+        if (data) {
+            setStep('verify')
+            setResendIn(data.resendIn || 0)
+        }
     }
 
     const backToSend = () => {

@@ -37,9 +37,13 @@ export const sendOtp = (payload) => async (dispatch) => {
     try {
         dispatch(otpRequest())
         const { data } = await axios.post(`/api/v1/otp/request`, payload);
+        console.log('[sendOtp] OTP request succeeded', data); // TEMP - remove after confirming UI transitions
         dispatch(otpRequestSuccess(data))
+        return data
     } catch (error) {
+        console.error('[sendOtp] OTP request failed', error.response?.data || error.message); // TEMP - remove after confirming
         dispatch(otpRequestFail(error.response?.data?.message || error.message))
+        return null
     }
 }
 
