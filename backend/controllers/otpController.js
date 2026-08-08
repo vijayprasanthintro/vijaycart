@@ -8,7 +8,11 @@ const sendToken = require('../utils/jwt');
 const logger = require('../utils/logger');
 const crypto = require('crypto');
 
-const OTP_EXPIRES_MS = (Number(process.env.OTP_EXPIRES_MINUTES) || 5) * 60 * 1000;
+const OTP_EXPIRES_MINUTES = Number(process.env.OTP_EXPIRES_MINUTES);
+// 10 minutes by default (matches config.env.example). Guards against a bad
+// env value (0, negative, or garbage) which would otherwise expire codes
+// instantly and lock users out.
+const OTP_EXPIRES_MS = (OTP_EXPIRES_MINUTES >= 1 ? OTP_EXPIRES_MINUTES : 10) * 60 * 1000;
 const RESEND_SECONDS = Number(process.env.OTP_RESEND_SECONDS) || 30;
 const MAX_ATTEMPTS = Number(process.env.OTP_MAX_ATTEMPTS) || 5;
 
