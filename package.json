@@ -19,6 +19,7 @@
     "@reduxjs/toolkit": "^2.11.2",
     "@stripe/react-stripe-js": "^6.3.0",
     "@stripe/stripe-js": "^9.4.0",
+    "axios": "^1.19.0",
     "bcrypt": "^5.1.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",

@@ -3,12 +3,35 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteReview, getReviews } from '../../actions/productActions';
 import { clearError, clearReviewDeleted } from '../../slices/productSlice';
 import { toast } from 'react-toastify';
+import AdminPagination from './AdminPagination';
+import AdminExport from './AdminExport';
 
 export default function ReviewList() {
     const { reviews = [], loading = true, error, isReviewDeleted } = useSelector(state => state.productState);
     const [productId, setProductId] = useState('');
     const [searchId, setSearchId] = useState('');
+    const [page, setPage] = useState(1);
+    const PER_PAGE = 10;
     const dispatch = useDispatch();
+
+    useEffect(() => { setPage(1); }, [reviews.length, productId]);
+
+    const pageItems = reviews.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+    const exportHeaders = [
+        { label: 'User', key: 'user' },
+        { label: 'Email', key: 'email' },
+        { label: 'Rating', key: 'rating', type: 'number' },
+        { label: 'Comment', key: 'comment' },
+        { label: 'Created', key: 'created', type: 'date' }
+    ];
+    const exportRows = reviews.map(r => ({
+        user: r.user?.name || '',
+        email: r.user?.email || '',
+        rating: r.rating,
+        comment: r.comment || '',
+        created: r.createdAt || ''
+    }));
 
     useEffect(() => {
         if (error) {
@@ -43,6 +66,7 @@ export default function ReviewList() {
                     <h1>Reviews</h1>
                     <p>Customer feedback &amp; ratings</p>
                 </div>
+                {reviews.length > 0 && <AdminExport filename={`reviews-${productId}`} headers={exportHeaders} rows={exportRows} />}
             </div>
 
             <div className="ad-card">
@@ -75,7 +99,7 @@ export default function ReviewList() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {reviews.map(review => (
+                                    {pageItems.map(review => (
                                         <tr key={review._id}>
                                             <td>
                                                 <span className="ad-toolbar" style={{ justifyContent: 'flex-start' }}>
@@ -97,6 +121,9 @@ export default function ReviewList() {
                                 </tbody>
                             </table>
                         </div>
+                    )}
+                    {reviews.length > PER_PAGE && (
+                        <AdminPagination count={reviews.length} perPage={PER_PAGE} page={page} onChange={setPage} />
                     )}
                 </div>
             </div>

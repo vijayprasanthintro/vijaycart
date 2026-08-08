@@ -1,8 +1,9 @@
 import { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAnalytics } from '../../actions/analyticsActions';
-import { BarChart, DonutChart, toINR } from './Charts';
+import { DonutChart, AreaChart, toINR } from './Charts';
 import { statusColor } from '../../utils/orderStatuses';
+import AdminExport from './AdminExport';
 
 export default function Revenue() {
     const { analytics, loading } = useSelector(state => state.analyticsState);
@@ -21,6 +22,19 @@ export default function Revenue() {
     const totalOrders = analytics.totalOrders || 0;
     const avgOrder = totalOrders > 0 ? (analytics.revenue || 0) / totalOrders : 0;
 
+    const exportHeaders = [
+        { label: 'Status', key: 'status' },
+        { label: 'Orders', key: 'orders', type: 'number' },
+        { label: 'Revenue', key: 'revenue', type: 'number' },
+        { label: 'Share', key: 'share', type: 'number' }
+    ];
+    const exportRows = Object.entries(analytics.statusRevenue || {}).map(([label, value]) => ({
+        status: label,
+        orders: analytics.statusCounts?.[label] || 0,
+        revenue: value,
+        share: analytics.revenue > 0 ? Number(((value / analytics.revenue) * 100).toFixed(1)) : 0
+    }));
+
     return (
         <Fragment>
             <div className="ad-page-head">
@@ -28,6 +42,7 @@ export default function Revenue() {
                     <h1>Revenue</h1>
                     <p>Earnings &amp; payment insights</p>
                 </div>
+                <AdminExport filename="revenue-breakdown" headers={exportHeaders} rows={exportRows} />
             </div>
 
             {loading && !analytics.totalOrders && (
@@ -55,8 +70,8 @@ export default function Revenue() {
 
             <div className="ad-chart-row">
                 <div className="ad-card">
-                    <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-chart-bar" aria-hidden="true"></i> Revenue — Last 14 Days</h3></div>
-                    <div className="ad-card__body"><BarChart data={revenueTrend} alt /></div>
+                    <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-chart-area" aria-hidden="true"></i> Revenue — Last 14 Days</h3></div>
+                    <div className="ad-card__body"><AreaChart data={revenueTrend} color="var(--ad-primary)" format={v => toINR(v)} /></div>
                 </div>
                 <div className="ad-card">
                     <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-pie-chart" aria-hidden="true"></i> Revenue by Status</h3></div>
