@@ -79,8 +79,12 @@ export default function Payment() {
     const navigate = useNavigate();
     const orderInfo = JSON.parse(sessionStorage.getItem('orderInfo'))
     const { user } = useSelector(state => state.authState)
-    const { items: cartItems, shippingInfo, orderKey } = useSelector(state => state.cartState)
+    const { items: cartItems, buyNowItems, shippingInfo, orderKey } = useSelector(state => state.cartState)
     const { error: orderError } = useSelector(state => state.orderState)
+
+    // A "Buy Now" checkout places an order for only the selected product;
+    // otherwise the whole cart is ordered as before.
+    const checkoutItems = buyNowItems.length ? buyNowItems : cartItems;
 
     const total = Number(orderInfo ? orderInfo.totalPrice : 0);
     const discountPrice = Number(orderInfo ? orderInfo.discountPrice : 0);
@@ -196,7 +200,7 @@ export default function Payment() {
             : `ord_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 
     const buildOrder = (paymentInfo, paymentMethod, key) => ({
-        orderItems: cartItems,
+        orderItems: checkoutItems,
         shippingInfo,
         itemsPrice: orderInfo ? orderInfo.itemsPrice : 0,
         shippingPrice: orderInfo ? orderInfo.shippingPrice : 0,
@@ -216,10 +220,12 @@ export default function Payment() {
         const key = orderKey || generateOrderKey();
         if (!orderKey) dispatch(setOrderKey(key));
         const order = buildOrder(paymentInfo, paymentMethod, key);
+        // A Buy Now order must not empty the user's real cart.
+        const keepCart = buyNowItems.length > 0;
         try {
             await dispatch(createOrder(order));
             orderPlacedRef.current = true;
-            dispatch(orderCompleted());
+            dispatch(orderCompleted({ keepCart }));
             // Replace the payment screen in history so the Back button can
             // never return the user to a payment page for an order that is
             // already placed.
@@ -233,7 +239,7 @@ export default function Payment() {
             try {
                 await dispatch(createOrder(order));
                 orderPlacedRef.current = true;
-                dispatch(orderCompleted());
+                dispatch(orderCompleted({ keepCart }));
                 navigate('/order/success', { replace: true });
             } catch (retryErr) {
                 toast.error(retryErr?.response?.data?.message || 'Your order could not be created. Please retry.');
@@ -548,7 +554,7 @@ export default function Payment() {
                             <div className="cart-summary-head">Order Summary</div>
                             <div className="summary-row">
                                 <span>Items</span>
-                                <b>{cartItems.reduce((acc, item) => acc + item.quantity, 0)}</b>
+                                <b>{checkoutItems.reduce((acc, item) => acc + item.quantity, 0)}</b>
                             </div>
                             <div className="summary-row">
                                 <span>Subtotal</span>

@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { decreaseCartItemQty, increaseCartItemQty, removeItemFromCart } from '../../slices/cartSlice';
+import { decreaseCartItemQty, increaseCartItemQty, removeItemFromCart, clearBuyNowItems } from '../../slices/cartSlice';
 import { addCartItem } from '../../actions/cartActions';
 import { getPricing, formatMoney, getDelivery, resolveProductImage, imgOnError } from '../../utils/productHelper';
 import { toast } from 'react-toastify';
@@ -23,6 +23,13 @@ export default function Cart() {
     useEffect(() => {
         try { localStorage.setItem(SAVED_KEY, JSON.stringify(saved)); } catch { /* ignore */ }
     }, [saved]);
+
+    // Visiting the cart page means the user is checking out from the cart (or
+    // abandoned a "Buy Now" flow). Drop any leftover buy-now checkout session
+    // so a stale single-product order can never hijack a later cart checkout.
+    useEffect(() => {
+        dispatch(clearBuyNowItems());
+    }, [dispatch]);
 
     const increaseQty = (item) => {
         if (item.stock === 0 || item.quantity >= item.stock) return;
