@@ -11,7 +11,8 @@
     "start": "node backend/server.js",
     "dev": "set NODE_ENV=development&&nodemon backend/server.js",
     "prod": "set NODE_ENV=production&&nodemon backend/server.js",
-    "seeder": "node backend/utils/seeder.js"
+    "seeder": "node backend/utils/seeder.js",
+    "seed:admin": "node backend/utils/adminSeeder.js"
   },
   "author": "Vijayprasanth",
   "license": "ISC",

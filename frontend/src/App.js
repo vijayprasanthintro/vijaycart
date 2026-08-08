@@ -55,6 +55,9 @@ const Settings = lazy(() => import(/* webpackChunkName: "admin-settings" */ './c
 const Permissions = lazy(() => import(/* webpackChunkName: "admin-permissions" */ './components/admin/Permissions'));
 const AssignDelivery = lazy(() => import(/* webpackChunkName: "admin-assign-delivery" */ './components/admin/AssignDelivery'));
 
+// Admin login (email + password, separate from customer OTP login)
+const AdminLogin = lazy(() => import(/* webpackChunkName: "admin-login" */ './components/admin/AdminLogin'));
+
 // Delivery boy app
 const DeliveryLogin = lazy(() => import(/* webpackChunkName: "delivery-login" */ './components/delivery/DeliveryLogin'));
 const DeliveryDashboard = lazy(() => import(/* webpackChunkName: "delivery-dashboard" */ './components/delivery/DeliveryDashboard'));
@@ -131,6 +134,7 @@ function Shell() {
                     <Route path='delivery' element={<AssignDelivery />} />
                   </Route>
 
+                  <Route path='/admin/login' element={<AdminLogin />} />
                   <Route path='/delivery/login' element={<DeliveryLogin />} />
                   <Route path='/delivery/dashboard' element={<ProtectedRoute isDeliveryBoy={true}><DeliveryDashboard /></ProtectedRoute>} />
                 </>

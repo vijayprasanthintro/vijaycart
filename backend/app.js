@@ -155,6 +155,7 @@ const admin = require('./routes/admin');
 app.use('/api/v1', apiLimiter);
 app.use('/api/v1/otp/verify', authLimiter);
 app.use('/api/v1/otp/request', otpRequestLimiter);
+app.use('/api/v1/admin/login', authLimiter);
 
 // Caching policy for the API: authenticated/stateful responses are never
 // cached; public product reads get a short browser cache so repeat visits

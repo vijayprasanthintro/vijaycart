@@ -2,6 +2,41 @@ const catchAsyncError = require('../middlewares/catchAsyncError');
 const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
 const User = require('../models/userModel');
+const ErrorHandler = require('../utils/errorHandler');
+const sendToken = require('../utils/jwt');
+
+//Admin login (email + password) - POST /api/v1/admin/login
+//A separate, simple password path for admin access that does not depend on
+//the customer OTP flow. Regular users keep using OTP.
+exports.loginAdmin = catchAsyncError(async (req, res, next) => {
+    const { email, password } = req.body || {};
+
+    if (!email || !password) {
+        return next(new ErrorHandler('Please enter email and password', 400));
+    }
+
+    // select('+password') overrides the field's select:false so bcrypt can run.
+    const user = await User.findOne({ email: String(email).trim().toLowerCase() }).select('+password');
+
+    if (!user || !user.password) {
+        // Same message for "no account" and "no password set yet" so the
+        // endpoint does not reveal which accounts exist.
+        return next(new ErrorHandler('Invalid credentials. Run the admin seeder if the password was never set.', 401));
+    }
+
+    if (user.role !== 'admin') {
+        return next(new ErrorHandler('Admin access only. This account is not an admin.', 403));
+    }
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+        return next(new ErrorHandler('Invalid credentials', 401));
+    }
+
+    // sendToken sets the JWT cookie with maxAge (never the old `expires`
+    // form) and returns the admin user without the password field.
+    sendToken(user, 200, res);
+});
 
 //Admin: Analytics overview - /api/v1/admin/analytics
 exports.getAnalytics = catchAsyncError(async (req, res, next) => {
