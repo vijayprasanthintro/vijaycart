@@ -153,7 +153,7 @@ export default function DeliveryLogin() {
                             <span className="vc-auth-name">Delivery Partner</span>
                         </div>
 
-                        <AnimatePresence mode="wait">
+                        <AnimatePresence>
                             {step === 'send' ? (
                                 <motion.form
                                     key="send"

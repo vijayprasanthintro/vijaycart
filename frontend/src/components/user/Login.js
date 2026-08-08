@@ -172,7 +172,7 @@ export default function Login() {
                             <span className="vc-auth-name">VijayCart</span>
                         </div>
 
-                        <AnimatePresence mode="wait">
+                        <AnimatePresence>
                             {step === 'send' ? (
                                 <motion.form
                                     key="send"
