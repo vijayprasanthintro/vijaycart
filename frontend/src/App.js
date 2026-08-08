@@ -169,9 +169,21 @@ function App() {
   // `storage` event only fires in the other tabs, never the one that changed.
   useEffect(() => {
     const onAuthStorageChange = (e) => {
-      if (e.key === AUTH_KEY) {
-        store.dispatch(loadUser());
-      }
+      if (e.key !== AUTH_KEY) return;
+      // Skip redundant re-persists: every successful loadUser() re-writes the
+      // auth cache (with a fresh expiry), which would otherwise fire this event
+      // in the other tabs, trigger another loadUser(), re-persist, and loop
+      // forever — flashing the Loader on protected pages. Only a real profile
+      // change (login/logout/profile edit) must propagate across tabs.
+      try {
+        const incoming = e.newValue ? JSON.parse(e.newValue) : null;
+        const current = store.getState().authState.user;
+        if (incoming && incoming.user && current
+            && JSON.stringify(incoming.user) === JSON.stringify(current)) {
+          return;
+        }
+      } catch { /* fall through and re-validate */ }
+      store.dispatch(loadUser());
     };
     window.addEventListener('storage', onAuthStorageChange);
     return () => window.removeEventListener('storage', onAuthStorageChange);
