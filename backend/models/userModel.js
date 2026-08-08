@@ -75,6 +75,10 @@ userSchema.methods.isValidPassword = async function(enteredPassword){
     return  bcrypt.compare(enteredPassword, this.password)
 }
 
+userSchema.methods.comparePassword = async function(candidatePassword){
+    return bcrypt.compare(candidatePassword, this.password)
+}
+
 userSchema.methods.getResetToken = function(){
     //Generate Token
     const token = crypto.randomBytes(20).toString('hex');

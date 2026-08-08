@@ -14,6 +14,10 @@ const seedAdmin = async ()=>{
         admin.name = 'VijayCart Admin';
         admin.mobile = '9999900000';
         admin.role = 'admin';
+        // Plain text here is fine — the pre('save') hook hashes it with bcrypt
+        // before the document is written (the hook also skips already-hashed
+        // "$2..." values on re-seeds).
+        admin.password = 'Admin@123';
         // save() (not updateOne) so the pre('save') hook keeps the record intact.
         await admin.save();
         console.log('Admin seeded! (admin@vijaycart.com / 9999900000)');

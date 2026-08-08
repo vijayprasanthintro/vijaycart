@@ -60,6 +60,19 @@ export const verifyOtp = (payload) => async (dispatch) => {
 
 }
 
+//Admin login (email + password) - separate from the OTP flow.
+export const adminLogin = (credentials) => async (dispatch) => {
+    try {
+        dispatch(loginRequest())
+        const { data } = await axios.post(`/api/v1/admin/login`, credentials);
+        dispatch(loginSuccess(data))
+        return data
+    } catch (error) {
+        dispatch(loginFail(error.response?.data?.message || error.message))
+        return null
+    }
+}
+
 export const clearAuthError = dispatch => {
     dispatch(clearError())
 }
