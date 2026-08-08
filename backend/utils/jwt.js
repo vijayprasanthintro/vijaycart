@@ -21,6 +21,7 @@ const sendToken = (user, statusCode, res) => {
         path: '/'
     }
 
+    console.log('COOKIE OPTIONS:', JSON.stringify(options));
     res.status(statusCode)
     .cookie('token', token, options)
     .json({
