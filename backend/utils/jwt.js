@@ -11,16 +11,17 @@ const sendToken = (user, statusCode, res) => {
     // which makes /myprofile fail with 401 and the app logs the user out
     // on every page refresh.
     const isProd = process.env.NODE_ENV === 'production';
+    const cookieDays = parseInt(process.env.COOKIE_EXPIRES_TIME, 10);
+    const cookieMaxAge = (Number.isFinite(cookieDays) && cookieDays > 0 ? cookieDays : 7) * 24 * 60 * 60 * 1000;
     const options = {
-        expires: new Date(
-                Date.now() + process.env.COOKIE_EXPIRES_TIME  * 24 * 60 * 60 * 1000 
-            ),
+        maxAge: cookieMaxAge,
         httpOnly: true,
         sameSite: isProd ? 'none' : 'lax',
         secure: isProd,
         path: '/'
     }
 
+    console.log('COOKIE OPTIONS:', JSON.stringify(options));
     res.status(statusCode)
     .cookie('token', token, options)
     .json({
