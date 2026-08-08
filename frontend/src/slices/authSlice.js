@@ -89,7 +89,7 @@ const authSlice = createSlice({
         loading: true,
         isAuthenticated: !!savedAuth,
         user: savedAuth ? savedAuth.user : null,
-        otp: null,
+        otpInfo: null,
         otpLoading: false,
         otpError: null
     },
@@ -138,7 +138,7 @@ const authSlice = createSlice({
             return {
                 ...state,
                 otpLoading: false,
-                otp: {
+                otpInfo: {
                     userId: action.payload.userId,
                     to: action.payload.to,
                     resendIn: action.payload.resendIn,
