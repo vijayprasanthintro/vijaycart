@@ -11,7 +11,7 @@ const sendToken = (user, statusCode, res) => {
     // which makes /myprofile fail with 401 and the app logs the user out
     // on every page refresh.
     const isProd = process.env.NODE_ENV === 'production';
-    const cookieDays = Number(process.env.COOKIE_EXPIRES_TIME);
+    const cookieDays = parseInt(process.env.COOKIE_EXPIRES_TIME, 10);
     const cookieMaxAge = (Number.isFinite(cookieDays) && cookieDays > 0 ? cookieDays : 7) * 24 * 60 * 60 * 1000;
     const options = {
         maxAge: cookieMaxAge,
