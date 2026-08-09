@@ -119,7 +119,12 @@ app.use(cors({
     origin: (origin, cb) => {
         // No Origin header: server-to-server / curl / Postman / mobile clients.
         if (!origin) return cb(null, true);
-        if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+        // Normalize before matching: some proxies (e.g. the CRA dev-server)
+        // forward the Origin with a trailing slash ("http://localhost:8000/"),
+        // which would otherwise fail an exact string match against the allow-list.
+        const norm = (s) => String(s || '').trim().replace(/\/+$/, '');
+        const normalized = ALLOWED_ORIGINS.map(norm);
+        if (normalized.includes(norm(origin))) return cb(null, true);
         return cb(new Error('Not allowed by CORS'));
     },
     credentials: true,

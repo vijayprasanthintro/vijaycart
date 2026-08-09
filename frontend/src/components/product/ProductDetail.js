@@ -5,6 +5,7 @@ import { createReview, getProduct, getProducts } from "../../actions/productActi
 import { ProductDetailSkeleton } from '../layouts/Skeletons';
 import MetaData from "../layouts/MetaData";
 import { addCartItem } from "../../actions/cartActions";
+import { setBuyNowItems } from "../../slices/cartSlice";
 import { clearReviewSubmitted, clearError, clearProduct } from '../../slices/productSlice';
 import { Modal } from 'react-bootstrap';
 import { toast } from "react-toastify";
@@ -69,7 +70,17 @@ export default function ProductDetail () {
     };
 
     const buyNow = () => {
-        dispatch(addCartItem(product._id, quantity));
+        // Buy Now starts a separate single-product checkout that never touches
+        // the cart: the selected product + quantity goes straight to the
+        // shipping step and the cart contents stay exactly as they were.
+        dispatch(setBuyNowItems([{
+            product: product._id,
+            name: product.name,
+            price: product.price,
+            image: (product.images && product.images[0] && product.images[0].image) || '',
+            stock: product.stock,
+            quantity
+        }]));
         navigate('/shipping');
     };
 

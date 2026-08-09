@@ -11,6 +11,10 @@
     "start": "node backend/server.js",
     "dev": "set NODE_ENV=development&&nodemon backend/server.js",
     "prod": "set NODE_ENV=production&&nodemon backend/server.js",
+<<<<<<< HEAD
+=======
+    "build": "npm --prefix frontend ci && npm --prefix frontend run build",
+>>>>>>> main
     "seeder": "node backend/utils/seeder.js",
     "seed:admin": "node backend/utils/adminSeeder.js"
   },

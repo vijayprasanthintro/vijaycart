@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const COUPON_KEY = 'vijaycart_coupon';
 const ORDER_KEY = 'vijaycart_orderKey';
+const BUY_NOW_KEY = 'vijaycart_buyNowItems';
 
 const readCoupon = () => {
     try { return JSON.parse(sessionStorage.getItem(COUPON_KEY)); } catch { return null; }
@@ -11,6 +12,13 @@ const readCoupon = () => {
 
 const readOrderKey = () => {
     try { return sessionStorage.getItem(ORDER_KEY) || null; } catch { return null; }
+};
+
+const readBuyNowItems = () => {
+    try {
+        const items = JSON.parse(sessionStorage.getItem(BUY_NOW_KEY));
+        return Array.isArray(items) ? items : [];
+    } catch { return []; }
 };
 
 const cartSlice = createSlice({
@@ -24,7 +32,11 @@ const cartSlice = createSlice({
         // user reaches the payment screen, cleared after the order is created,
         // so a refresh/retry of the same session can never create a duplicate
         // order on the server.
-        orderKey: readOrderKey()
+        orderKey: readOrderKey(),
+        // "Buy Now" checkout items — a session-scoped single-product checkout
+        // that is completely separate from the cart. Placed so a Buy Now
+        // purchase never adds to (or empties) the user's real cart.
+        buyNowItems: readBuyNowItems()
     },
     reducers: {
         addCartItemRequest(state, action){
@@ -118,18 +130,38 @@ const cartSlice = createSlice({
                 orderKey: null
             }
         },
+        setBuyNowItems(state, action) {
+            try { sessionStorage.setItem(BUY_NOW_KEY, JSON.stringify(action.payload)); } catch { /* ignore */ }
+            return {
+                ...state,
+                buyNowItems: action.payload
+            }
+        },
+        clearBuyNowItems(state, action) {
+            try { sessionStorage.removeItem(BUY_NOW_KEY); } catch { /* ignore */ }
+            return {
+                ...state,
+                buyNowItems: []
+            }
+        },
         orderCompleted(state, action) {
+            // A Buy Now checkout (keepCart) must clear only the buy-now session
+            // and leave the user's real cart untouched. A regular cart checkout
+            // clears the cart as before.
+            const { keepCart } = action.payload || {};
             localStorage.removeItem('shippingInfo');
-            localStorage.removeItem('cartItems');
+            if (!keepCart) localStorage.removeItem('cartItems');
             sessionStorage.removeItem('orderInfo');
             try { sessionStorage.removeItem(COUPON_KEY); } catch { /* ignore */ }
             try { sessionStorage.removeItem(ORDER_KEY); } catch { /* ignore */ }
+            try { sessionStorage.removeItem(BUY_NOW_KEY); } catch { /* ignore */ }
             return {
-                items: [],
+                items: keepCart ? state.items : [],
                 loading: false,
                 shippingInfo: {},
                 coupon: null,
-                orderKey: null
+                orderKey: null,
+                buyNowItems: []
             }
         }
 
@@ -149,6 +181,8 @@ export const {
     clearCoupon,
     setOrderKey,
     clearOrderKey,
+    setBuyNowItems,
+    clearBuyNowItems,
     orderCompleted
  } = actions;
 

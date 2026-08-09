@@ -28,7 +28,7 @@ const SUPPORT = {
 const COUPON_EXAMPLES = ['VJ10', 'SAVE20', 'FREESHIP'];
 
 export default function ConfirmOrder () {
-    const { shippingInfo, items:cartItems, coupon, orderKey } = useSelector(state => state.cartState);
+    const { shippingInfo, items: cartItems, buyNowItems, coupon, orderKey } = useSelector(state => state.cartState);
     const { user } = useSelector(state => state.authState);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -36,15 +36,19 @@ export default function ConfirmOrder () {
     const [couponBusy, setCouponBusy] = useState(false);
     const [couponError, setCouponError] = useState('');
 
-    const itemsPrice = cartItems.reduce((acc, item)=> (acc + item.price * item.quantity),0);
-    const mrpPrice = cartItems.reduce((acc, item)=> (acc + getPricing({ _id: item.product, price: item.price }).mrp * item.quantity),0);
+    // A "Buy Now" checkout checks out only the selected product; otherwise the
+    // whole cart is checked out as before.
+    const checkoutItems = buyNowItems.length ? buyNowItems : cartItems;
+
+    const itemsPrice = checkoutItems.reduce((acc, item)=> (acc + item.price * item.quantity),0);
+    const mrpPrice = checkoutItems.reduce((acc, item)=> (acc + getPricing({ _id: item.product, price: item.price }).mrp * item.quantity),0);
     const youSave = Math.max(0, mrpPrice - itemsPrice);
     const shippingPrice = itemsPrice > 499 ? 0 : 40;
     let taxPrice = Number(0.05 * itemsPrice);
     const couponDiscount = coupon ? Math.min(Number(coupon.discount) || 0, itemsPrice) : 0;
     const totalPrice = Number(itemsPrice + shippingPrice + taxPrice - couponDiscount).toFixed(2);
     taxPrice = Number(taxPrice).toFixed(2)
-    const totalQty = cartItems.reduce((acc, item)=> (acc + item.quantity),0);
+    const totalQty = checkoutItems.reduce((acc, item)=> (acc + item.quantity),0);
     const type = shippingInfo.type ? (TYPES[shippingInfo.type] || TYPES.other) : null;
 
     const applyCoupon = async (e) => {
@@ -132,7 +136,7 @@ export default function ConfirmOrder () {
                             <div className="co-card-head">
                                 <div><i className="fa fa-shopping-bag mr-2" aria-hidden="true"></i>Items in your order <span className="section-accent">({totalQty})</span></div>
                             </div>
-                            {cartItems.map((item, idx) => {
+                            {checkoutItems.map((item, idx) => {
                                 const lineTotal = formatMoney(item.price * item.quantity);
                                 return (
                                     <div className="co-item" key={item.product} style={{ animationDelay: `${idx * 0.06}s` }}>

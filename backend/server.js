@@ -23,11 +23,10 @@ migrateOrderStatuses().catch(err => {
 
 // Railway injects the runtime port through process.env.PORT; fall back to the
 // local config value (config.env PORT=8000) so local development needs no extra
-// setup. Listening on 0.0.0.0 makes the port reachable from outside the
-// container (required by Railway) while http://localhost:8000 keeps working
-// locally.
+// setup. Binding with no host listens on the dual-stack '::' interface so both
+// IPv4 and IPv6 clients (Railway's private network is IPv6) can reach the app.
 const PORT = process.env.PORT || 8000;
-const server = app.listen(PORT, '0.0.0.0', ()=>{
+const server = app.listen(PORT, ()=>{
     logger.info(`Server listening on port ${PORT} (${process.env.NODE_ENV || 'development'})`);
     logger.info(`Local: http://localhost:${PORT}`);
 })
