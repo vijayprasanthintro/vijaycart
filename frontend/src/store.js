@@ -10,6 +10,8 @@ import categoryReducer from './slices/categorySlice'
 import couponReducer from './slices/couponSlice'
 import settingReducer from './slices/settingSlice'
 import analyticsReducer from './slices/analyticsSlice'
+import bannerReducer from './slices/bannerSlice'
+import sellerReducer from './slices/sellerSlice'
 
 
 const reducer = combineReducers({
@@ -23,7 +25,9 @@ const reducer = combineReducers({
     categoryState: categoryReducer,
     couponState: couponReducer,
     settingState: settingReducer,
-    analyticsState: analyticsReducer
+    analyticsState: analyticsReducer,
+    bannerState: bannerReducer,
+    sellerState: sellerReducer
 })
 
 

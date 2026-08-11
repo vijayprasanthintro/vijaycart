@@ -105,7 +105,7 @@ export default function CategoryList() {
                                     <tr>
                                         <th>Icon</th>
                                         <th>Name</th>
-                                        <th>Sort Order</th>
+                                        <th className="ad-td-num">Sort Order</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -115,7 +115,7 @@ export default function CategoryList() {
                                         <tr key={cat._id}>
                                             <td><span className="ad-avatar"><i className={`fa ${cat.icon || 'fa-tag'}`} aria-hidden="true"></i></span></td>
                                             <td><span className="ad-td-strong">{cat.name}</span></td>
-                                            <td><span className="ad-td-mono">{cat.sortOrder || 0}</span></td>
+                                            <td className="ad-td-num"><span className="ad-td-mono">{cat.sortOrder || 0}</span></td>
                                             <td>
                                                 <label className="ad-toggle-row" style={{ padding: 0, border: 'none' }}>
                                                     <div className="ad-toggle">

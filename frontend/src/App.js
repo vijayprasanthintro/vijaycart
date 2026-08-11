@@ -1,5 +1,6 @@
 import './App.css';
 import { lazy, Suspense, useEffect, Children, isValidElement, cloneElement } from 'react';
+import { useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion';
 import { HelmetProvider } from 'react-helmet-async'
@@ -13,7 +14,9 @@ import Header from './components/layouts/Header';
 import Footer from './components/layouts/Footer';
 import BottomNavigation from './components/layouts/BottomNavigation';
 import CategoryNav from './components/home/CategoryNav';
+import LocationBar from './components/home/LocationBar';
 import ProtectedRoute from './components/route/ProtectedRoute';
+import ErrorBoundary from './components/layouts/ErrorBoundary';
 import Loader from './components/layouts/Loader';
 import PageTransition from './components/layouts/PageTransition';
 
@@ -26,6 +29,7 @@ const Login = lazy(() => import(/* webpackChunkName: "login" */ './components/us
 const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './components/user/Profile'));
 const Wishlist = lazy(() => import(/* webpackChunkName: "wishlist" */ './components/user/Wishlist'));
 const UpdateProfile = lazy(() => import(/* webpackChunkName: "update-profile" */ './components/user/UpdateProfile'));
+const SellerApply = lazy(() => import(/* webpackChunkName: "seller" */ './components/seller/SellerApply'));
 const Cart = lazy(() => import(/* webpackChunkName: "cart" */ './components/cart/Cart'));
 const Shipping = lazy(() => import(/* webpackChunkName: "shipping" */ './components/cart/Shipping'));
 const ConfirmOrder = lazy(() => import(/* webpackChunkName: "confirm-order" */ './components/cart/ConfirmOrder'));
@@ -54,6 +58,10 @@ const Inventory = lazy(() => import(/* webpackChunkName: "admin-inventory" */ '.
 const Settings = lazy(() => import(/* webpackChunkName: "admin-settings" */ './components/admin/Settings'));
 const Permissions = lazy(() => import(/* webpackChunkName: "admin-permissions" */ './components/admin/Permissions'));
 const AssignDelivery = lazy(() => import(/* webpackChunkName: "admin-assign-delivery" */ './components/admin/AssignDelivery'));
+const SellerApplications = lazy(() => import(/* webpackChunkName: "admin-seller-applications" */ './components/admin/SellerApplications'));
+const BannerList = lazy(() => import(/* webpackChunkName: "admin-banners" */ './components/admin/BannerList'));
+const Reports = lazy(() => import(/* webpackChunkName: "admin-reports" */ './components/admin/Reports'));
+const Pincodes = lazy(() => import(/* webpackChunkName: "admin-pincodes" */ './components/admin/Pincodes'));
 
 // Admin login (email + password, separate from customer OTP login)
 const AdminLogin = lazy(() => import(/* webpackChunkName: "admin-login" */ './components/admin/AdminLogin'));
@@ -66,15 +74,36 @@ function RouteFallback() {
   return <Loader />;
 }
 
+// Guards an admin route against the permission matrix saved on the
+// Permissions page. A module toggled off for the admin role redirects to the
+// dashboard. Before any matrix is saved the guard is open (all routes allowed),
+// matching the "default open" behavior of the sidebar.
+function RequireModule({ perm, children }) {
+  const { settings } = useSelector((state) => state.settingState);
+  const adminPerms = settings?.permissions?.admin;
+  // The dashboard is the admin landing page and the redirect target for
+  // denied modules — blocking it would strand the admin. It is always open.
+  const allowed = !adminPerms || perm === 'dashboard' || adminPerms[perm] !== false;
+  if (!allowed) return <Navigate to="/admin/dashboard" replace />;
+  return children;
+}
+
 function Shell() {
   const location = useLocation();
   const hideChrome = location.pathname.startsWith('/admin') || location.pathname.startsWith('/delivery');
 
   // Wrap every route element in a page-transition layer so navigation
   // cross-fades smoothly (the existing components/logic are untouched).
+  // Admin/delivery routes are skipped: their pages mount at opacity 0 and
+  // fade in on every navigation (the AnimatePresence key stays constant for
+  // all /admin subpaths, so no exit runs) — that flash is exactly the
+  // "Orders flicker". Dashboards should render instantly instead.
   const animatedRoutes = (routes) => (
     Children.map(routes, (child) => {
       if (!isValidElement(child)) return child;
+      const path = child.props.path || '';
+      const isDashboard = !path.startsWith('/') || path.startsWith('/admin') || path.startsWith('/delivery');
+      if (isDashboard) return child;
       return cloneElement(child, {
         element: <PageTransition>{child.props.element}</PageTransition>,
       });
@@ -85,14 +114,16 @@ function Shell() {
     <>
       <a href="#main-content" className="skip-link">Skip to main content</a>
       {!hideChrome && <Header />}
+      {!hideChrome && <LocationBar />}
       {!hideChrome && <CategoryNav />}
       <main id="main-content" className='container' role="main">
         <ToastContainer theme='dark' />
         <Suspense fallback={<RouteFallback />}>
-          <AnimatePresence mode="wait" initial={false}>
-            <Routes
-              location={location}
-              key={location.pathname.split('/')[1] || 'home'}
+          <ErrorBoundary>
+            <AnimatePresence mode="wait" initial={false}>
+              <Routes
+                location={location}
+                key={location.pathname.split('/')[1] || 'home'}
             >
               {animatedRoutes(
                 <>
@@ -105,6 +136,7 @@ function Shell() {
                   <Route path='/myprofile/update' element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
                   <Route path='/cart' element={<Cart />} />
                   <Route path='/wishlist' element={<Wishlist />} />
+                  <Route path='/seller' element={<SellerApply />} />
                   <Route path='/shipping' element={<ProtectedRoute><Shipping /></ProtectedRoute>} />
                   <Route path='/order/confirm' element={<ProtectedRoute><ConfirmOrder /></ProtectedRoute>} />
                   <Route path='/order/success' element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
@@ -114,24 +146,28 @@ function Shell() {
 
                   <Route path='/admin' element={<ProtectedRoute isAdmin={true}><AdminLayout /></ProtectedRoute>}>
                     <Route index element={<Navigate to='dashboard' replace />} />
-                    <Route path='dashboard' element={<Dashboard />} />
-                    <Route path='orders' element={<OrderList />} />
-                    <Route path='order/:id' element={<UpdateOrder />} />
-                    <Route path='products' element={<ProductList />} />
-                    <Route path='products/create' element={<NewProduct />} />
-                    <Route path='product/:id' element={<UpdateProduct />} />
-                    <Route path='categories' element={<CategoryList />} />
-                    <Route path='coupons' element={<CouponList />} />
-                    <Route path='delivery-boys' element={<DeliveryBoys />} />
-                    <Route path='users' element={<UserList />} />
-                    <Route path='user/:id' element={<UpdateUser />} />
-                    <Route path='analytics' element={<Analytics />} />
-                    <Route path='revenue' element={<Revenue />} />
-                    <Route path='inventory' element={<Inventory />} />
-                    <Route path='reviews' element={<ReviewList />} />
-                    <Route path='settings' element={<Settings />} />
-                    <Route path='permissions' element={<Permissions />} />
-                    <Route path='delivery' element={<AssignDelivery />} />
+                    <Route path='dashboard' element={<RequireModule perm="dashboard"><Dashboard /></RequireModule>} />
+                    <Route path='orders' element={<RequireModule perm="orders"><OrderList /></RequireModule>} />
+                    <Route path='order/:id' element={<RequireModule perm="orders"><UpdateOrder /></RequireModule>} />
+                    <Route path='products' element={<RequireModule perm="products"><ProductList /></RequireModule>} />
+                    <Route path='products/create' element={<RequireModule perm="products"><NewProduct /></RequireModule>} />
+                    <Route path='product/:id' element={<RequireModule perm="products"><UpdateProduct /></RequireModule>} />
+                    <Route path='categories' element={<RequireModule perm="categories"><CategoryList /></RequireModule>} />
+                    <Route path='coupons' element={<RequireModule perm="coupons"><CouponList /></RequireModule>} />
+                    <Route path='delivery-boys' element={<RequireModule perm="delivery"><DeliveryBoys /></RequireModule>} />
+                    <Route path='users' element={<RequireModule perm="users"><UserList /></RequireModule>} />
+                    <Route path='user/:id' element={<RequireModule perm="users"><UpdateUser /></RequireModule>} />
+                    <Route path='seller-applications' element={<RequireModule perm="sellers"><SellerApplications /></RequireModule>} />
+                    <Route path='analytics' element={<RequireModule perm="analytics"><Analytics /></RequireModule>} />
+                    <Route path='revenue' element={<RequireModule perm="revenue"><Revenue /></RequireModule>} />
+                    <Route path='inventory' element={<RequireModule perm="inventory"><Inventory /></RequireModule>} />
+                    <Route path='reviews' element={<RequireModule perm="reviews"><ReviewList /></RequireModule>} />
+                    <Route path='reports' element={<RequireModule perm="reports"><Reports /></RequireModule>} />
+                    <Route path='banners' element={<RequireModule perm="banners"><BannerList /></RequireModule>} />
+                    <Route path='settings' element={<RequireModule perm="settings"><Settings /></RequireModule>} />
+                    <Route path='permissions' element={<RequireModule perm="permissions"><Permissions /></RequireModule>} />
+                    <Route path='delivery' element={<RequireModule perm="delivery"><AssignDelivery /></RequireModule>} />
+                    <Route path='pincodes' element={<RequireModule perm="pincodes"><Pincodes /></RequireModule>} />
                   </Route>
 
                   <Route path='/admin/login' element={<AdminLogin />} />
@@ -140,7 +176,8 @@ function Shell() {
                 </>
               )}
             </Routes>
-          </AnimatePresence>
+            </AnimatePresence>
+          </ErrorBoundary>
         </Suspense>
       </main>
       {!hideChrome && <Footer />}

@@ -132,8 +132,8 @@ export default function Analytics() {
                                     <tr>
                                         <th>#</th>
                                         <th>Customer</th>
-                                        <th>Orders</th>
-                                        <th>Total Spend</th>
+                                        <th className="ad-td-num">Orders</th>
+                                        <th className="ad-td-num">Total Spend</th>
                                         <th>Last Order</th>
                                     </tr>
                                 </thead>
@@ -145,8 +145,8 @@ export default function Analytics() {
                                                 <div className="ad-td-strong">{c.name}</div>
                                                 <div className="ad-stat__label">{c.email || c.phone || '—'}</div>
                                             </td>
-                                            <td><span className="ad-td-strong">{c.orders}</span></td>
-                                            <td><span className="ad-td-strong">{toINR(c.spend)}</span></td>
+                                            <td className="ad-td-num"><span className="ad-td-strong">{c.orders}</span></td>
+                                            <td className="ad-td-num"><span className="ad-td-strong">{toINR(c.spend)}</span></td>
                                             <td><span className="ad-stat__label">{c.lastOrderAt ? new Date(c.lastOrderAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}</span></td>
                                         </tr>
                                     ))}

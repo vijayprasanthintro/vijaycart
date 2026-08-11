@@ -1,0 +1,1862 @@
+{
+  "samsung-galaxy-s24-ultra": {
+    "name": "Samsung Galaxy S24 Ultra",
+    "category": "Smartphones",
+    "images": [
+      {
+        "local": "/images/products/samsung-galaxy-s24-ultra-1.jpg",
+        "source": "File:SAMSUNG Galaxy S24 Ultra.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-s24-ultra-2.jpg",
+        "source": "File:SAMSUNG Galaxy S24 Ultra (2).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-s24-ultra-3.jpg",
+        "source": "File:Samsung Galaxy S24 Ultra 02.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-s24-ultra-4.jpg",
+        "source": "File:Samsung Galaxy S24 Ultra 03.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-s24-ultra-5.jpg",
+        "source": "File:Samsung Galaxy S24 Ultra and iPhone 13 Pro.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "apple-iphone-16-pro": {
+    "name": "Apple iPhone 16 Pro",
+    "category": "Smartphones",
+    "images": [
+      {
+        "local": "/images/products/apple-iphone-16-pro-1.jpg",
+        "source": "File:About iPhone 16 Pro White Titanium.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-iphone-16-pro-2.jpg",
+        "source": "File:Back view of iPhone 16 Pro White Titanium.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-iphone-16-pro-3.jpg",
+        "source": "File:Right view of iPhone 16 Pro White Titanium.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-iphone-16-pro-4.jpg",
+        "source": "File:IPhone 16 Pro (54251031612).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-iphone-16-pro-5.jpg",
+        "source": "File:IPhone 16 Pro (54252352825).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "apple-iphone-15-pro": {
+    "name": "Apple iPhone 15 Pro",
+    "category": "Smartphones",
+    "images": [
+      {
+        "local": "/images/products/apple-iphone-15-pro-1.jpg",
+        "source": "File:Apple iPhone 15 Pro.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-iphone-15-pro-2.jpg",
+        "source": "File:IPhone 15 Pro 2024.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-iphone-15-pro-3.jpg",
+        "source": "File:Back view of iPhone 15 Pro Natural titanium.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-iphone-15-pro-4.jpg",
+        "source": "File:IPhone 15 pro model.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-iphone-15-pro-5.png",
+        "source": "File:IPhone 15 pro.png",
+        "mime": "image/png"
+      }
+    ]
+  },
+  "google-pixel-8-pro": {
+    "name": "Google Pixel 8 Pro",
+    "category": "Smartphones",
+    "images": [
+      {
+        "local": "/images/products/google-pixel-8-pro-1.jpg",
+        "source": "File:Google Pixel 8 Pro, shown in Shibuya Stream.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/google-pixel-8-pro-2.jpg",
+        "source": "File:Google Pixel 8 Pro, shown in Shibuya Stream 2.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/google-pixel-8-pro-3.jpg",
+        "source": "File:Google Pixel 8 Pro.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/google-pixel-8-pro-4.jpg",
+        "source": "File:Google Pixel 8 Pro and Google Pixel 7 Pro.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/google-pixel-8-pro-5.jpg",
+        "source": "File:Google Pixel 8 Pro with Google Pixel 7 Pro.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "apple-macbook-air-m2": {
+    "name": "Apple MacBook Air 13 (M2)",
+    "category": "Laptops",
+    "images": [
+      {
+        "local": "/images/products/apple-macbook-air-m2-1.jpg",
+        "source": "File:M2 Macbook Air Starlight model.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-macbook-air-m2-2.jpg",
+        "source": "File:M2 Macbook Air Midnight model - 1.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-macbook-air-m2-3.jpg",
+        "source": "File:M2 Macbook Air Midnight model - 2.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-macbook-air-m2-4.jpg",
+        "source": "File:Magsafe 3 of M2 Macbook Air Midnight Model.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-macbook-air-m2-5.jpg",
+        "source": "File:MacBook Air (A2681) Interface.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "dell-xps-13": {
+    "name": "Dell XPS 13",
+    "category": "Laptops",
+    "images": [
+      {
+        "local": "/images/products/dell-xps-13-1.jpg",
+        "source": "File:DELL XPS 13 and 15 (37080600153).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/dell-xps-13-2.jpg",
+        "source": "File:DELL XPS 13 and 15 (37719146532).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/dell-xps-13-3.jpg",
+        "source": "File:DELL XPS 13 and 15 (37719153672).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/dell-xps-13-4.jpg",
+        "source": "File:DELL XPS 13 and 15 (23898130738).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/dell-xps-13-5.jpg",
+        "source": "File:DELL XPS 13 and 15 (37080596413).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "lenovo-thinkpad-x1-carbon": {
+    "name": "Lenovo ThinkPad X1 Carbon",
+    "category": "Laptops",
+    "images": [
+      {
+        "local": "/images/products/lenovo-thinkpad-x1-carbon-1.jpg",
+        "source": "File:Lenovo ThinkPad X1 Carbon (first gen) (10773963714).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/lenovo-thinkpad-x1-carbon-2.jpg",
+        "source": "File:Lenovo ThinkPad X1 Carbon 014 (10774123843).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/lenovo-thinkpad-x1-carbon-3.jpg",
+        "source": "File:Lenovo ThinkPad X1 Carbon 011 (10773851965).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/lenovo-thinkpad-x1-carbon-4.jpg",
+        "source": "File:Lenovo ThinkPad X1 Carbon Ultrabook.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/lenovo-thinkpad-x1-carbon-5.jpg",
+        "source": "File:Lenovo-ThinkPad X1 Carbon (7900573876).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "samsung-curved-uhd-55": {
+    "name": "Samsung Curved UHD Smart TV",
+    "category": "Televisions",
+    "images": [
+      {
+        "local": "/images/products/samsung-curved-uhd-55-1.jpg",
+        "source": "File:Samsung Panoramic Curved UHD TV 105\" (15021414598).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-curved-uhd-55-2.jpg",
+        "source": "File:Samsung Curved UHD TV (14390237784).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-curved-uhd-55-3.jpg",
+        "source": "File:Samsung Curved UHD TV (14462771533).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-curved-uhd-55-4.jpg",
+        "source": "File:Samsung Curved TV (15021199629).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-curved-uhd-55-5.jpg",
+        "source": "File:SAMSUNG CURVED VA LCD TV.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "tcl-h9700-55": {
+    "name": "TCL 55\" H9700 Quantum Dot 4K TV",
+    "category": "Televisions",
+    "images": [
+      {
+        "local": "/images/products/tcl-h9700-55-1.jpg",
+        "source": "File:TCL H9700 55” Quantum Dot TV with Color IQ (16675928890).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/tcl-h9700-55-2.jpg",
+        "source": "File:TCL H9700 55” Quantum Dot TV with Color IQ (16862287201).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/tcl-h9700-55-3.jpg",
+        "source": "File:TCL H9700 55” Quantum Dot TV with Color IQ (16862291531).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/tcl-h9700-55-4.jpg",
+        "source": "File:TCL 4K tv (24478123585).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/tcl-h9700-55-5.jpg",
+        "source": "File:TCL 4K tv (23851323683).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "sennheiser-hd800s": {
+    "name": "Sennheiser HD 800S Reference Headphones",
+    "category": "Headphones",
+    "images": [
+      {
+        "local": "/images/products/sennheiser-hd800s-1.jpg",
+        "source": "File:Sennheiser HD800S.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/sennheiser-hd800s-2.jpg",
+        "source": "File:Sennheiser HD800S (alternate view).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/sennheiser-hd800s-3.jpg",
+        "source": "File:Sennheiser HD800 (2010-03-07 19.29.01 by Chun Yip So).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/sennheiser-hd800s-4.jpg",
+        "source": "File:Sennheiser HD800 réponse.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/sennheiser-hd800s-5.jpg",
+        "source": "File:Senhheiser HD800 - Hifi Kopfhörer - 01.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "beyerdynamic-dt770-pro": {
+    "name": "Beyerdynamic DT 770 Pro Studio Headphones",
+    "category": "Headphones",
+    "images": [
+      {
+        "local": "/images/products/beyerdynamic-dt770-pro-1.jpg",
+        "source": "File:Ibanez SRC6 and Beyerdynamic DT770 pro headphones on a bed.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/beyerdynamic-dt770-pro-2.jpg",
+        "source": "File:Beyerdynamic DT 770 PRO Headphones.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/beyerdynamic-dt770-pro-3.jpg",
+        "source": "File:Beyerdynamic DT 770 PRO 80 Ohm and the FiiO Headphone Amplifier E11-01.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/beyerdynamic-dt770-pro-4.jpg",
+        "source": "File:Beyerdynamic DT 770 PRO 80 Ohm -01.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/beyerdynamic-dt770-pro-5.jpg",
+        "source": "File:Beyerdynamic DT 770 PRO 80 Ohm -02.JPG",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "bose-qc-ultra-earbuds": {
+    "name": "Bose QuietComfort Ultra Wireless Earbuds",
+    "category": "Audio",
+    "images": [
+      {
+        "local": "/images/products/bose-qc-ultra-earbuds-1.jpg",
+        "source": "File:Bose QuietComfort Ultra Earbuds - 1.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/bose-qc-ultra-earbuds-2.jpg",
+        "source": "File:Bose QuietComfort Ultra Earbuds - 2.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/bose-qc-ultra-earbuds-3.jpg",
+        "source": "File:Bose QuietComfort Ultra Earbuds - 3.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/bose-qc-ultra-earbuds-4.jpg",
+        "source": "File:Bose QuietComfort Ultra Earbuds - 4.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/bose-qc-ultra-earbuds-5.jpg",
+        "source": "File:Bose QuietComfort Earbuds II.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "apple-airpods-pro-2": {
+    "name": "Apple AirPods Pro (2nd Gen)",
+    "category": "Audio",
+    "images": [
+      {
+        "local": "/images/products/apple-airpods-pro-2-1.jpg",
+        "source": "File:AirPods Pro (2nd generation).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-airpods-pro-2-2.jpg",
+        "source": "File:AirPods 4 and AirPods Pro 2.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-airpods-pro-2-3.jpg",
+        "source": "File:AirPods Pro 2 im Case, Sonderanfertigung in dunkelblau.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-airpods-pro-2-4.jpg",
+        "source": "File:AirPods Pro 2 in dunkelblauem Case.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-airpods-pro-2-5.jpg",
+        "source": "File:2025-10-24 AirPods Pro 2 dunkelblau.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "samsung-galaxy-buds2-pro": {
+    "name": "Samsung Galaxy Buds2 Pro",
+    "category": "Audio",
+    "images": [
+      {
+        "local": "/images/products/samsung-galaxy-buds2-pro-1.jpg",
+        "source": "File:Samsung Galaxy Buds2 Pro.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-buds2-pro-2.jpg",
+        "source": "File:Samsung Galaxy Buds2 Pro (Graphite).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-buds2-pro-3.jpg",
+        "source": "File:Samsung Galaxy Buds2 Pro (Graphite) (2).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-buds2-pro-4.jpg",
+        "source": "File:Samsung Galaxy Buds2 Pro (Graphite) (3).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-buds2-pro-5.jpg",
+        "source": "File:Pair of lavender Samsung Galaxy Buds2 Pro.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "nothing-ear-2": {
+    "name": "Nothing Ear Wireless Earbuds",
+    "category": "Audio",
+    "images": [
+      {
+        "local": "/images/products/nothing-ear-2-1.jpg",
+        "source": "File:Nothing ear (1) wireless charging case (pocket).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nothing-ear-2-2.jpg",
+        "source": "File:Nothing ear (1) open wireless charging case (black).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nothing-ear-2-3.jpg",
+        "source": "File:Nothing ear (1) wireless charging case (black).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nothing-ear-2-4.jpg",
+        "source": "File:Nothing ear (1) wireless charging case.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nothing-ear-2-5.jpg",
+        "source": "File:Nothing ear2.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "apple-watch-ultra": {
+    "name": "Apple Watch Ultra 2",
+    "category": "Wearables",
+    "images": [
+      {
+        "local": "/images/products/apple-watch-ultra-1.jpg",
+        "source": "File:Apple Watch Ultra - 2.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-watch-ultra-2.jpg",
+        "source": "File:Apple Watch Ultra 1 2023-11-14.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-watch-ultra-3.jpg",
+        "source": "File:Apple-Watch-Ultra-3-hero-250909 big.jpg.large.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-watch-ultra-4.jpg",
+        "source": "File:Apple Watch Ultra - 3.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-watch-ultra-5.jpg",
+        "source": "File:Apple Watch Ultra - 4.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "samsung-galaxy-watch-6": {
+    "name": "Samsung Galaxy Watch 6 Classic",
+    "category": "Wearables",
+    "images": [
+      {
+        "local": "/images/products/samsung-galaxy-watch-6-1.jpg",
+        "source": "File:Samsung Galaxy Watch 6 Classic.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-watch-6-2.jpg",
+        "source": "File:Samsung Galaxy Watch 6 Classic 01.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-watch-6-3.jpg",
+        "source": "File:Samsung Galaxy Watch 6 Classic 01 2.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-watch-6-4.jpg",
+        "source": "File:Samsung Galaxy Watch6 Classic 43mm.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-watch-6-5.jpg",
+        "source": "File:Samsung Galaxy Watch 6.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "canon-eos-r50": {
+    "name": "Canon EOS R50 Mirrorless Camera",
+    "category": "Cameras",
+    "images": [
+      {
+        "local": "/images/products/canon-eos-r50-1.jpg",
+        "source": "File:Canon EOS R50+RF-S 55-210mm f5-7.1 IS STM.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/canon-eos-r50-2.jpg",
+        "source": "File:Canon EOS R50 (52694437103).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/canon-eos-r50-3.jpg",
+        "source": "File:Canon EOS R50, White, 1.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/canon-eos-r50-4.jpg",
+        "source": "File:Canon EOS R50, White, 2.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/canon-eos-r50-5.jpg",
+        "source": "File:Canon EOS R50, White, 3.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "sony-alpha-7r-iv": {
+    "name": "Sony Alpha 7R IV Mirrorless Camera",
+    "category": "Cameras",
+    "images": [
+      {
+        "local": "/images/products/sony-alpha-7r-iv-1.jpg",
+        "source": "File:Sony Alpha 7R IV elevated front view of camera body with exposed sensor.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/sony-alpha-7r-iv-2.jpg",
+        "source": "File:Sony Alpha 7R IV front view with exposed sensor.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/sony-alpha-7r-iv-3.jpg",
+        "source": "File:Sony Alpha 7R IV rear view from elevated position, display extended.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/sony-alpha-7r-iv-4.jpg",
+        "source": "File:Sony Alpha 7R IV body with Sony Zeiss 55mm lens.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/sony-alpha-7r-iv-5.jpg",
+        "source": "File:Sony Alpha 7R IV body with Canon MP-E 65mm F2.8 1-5x macro lens (fully extended).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "fujifilm-x-t5": {
+    "name": "Fujifilm X-T5 Mirrorless Camera",
+    "category": "Cameras",
+    "images": [
+      {
+        "local": "/images/products/fujifilm-x-t5-1.jpg",
+        "source": "File:Fujifilm X-T5 with Fujinon XF 35mm F2 R WR - by Henry Söderlund (52536299126).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/fujifilm-x-t5-2.jpg",
+        "source": "File:Scan the Wild Fujifilm X-T5.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/fujifilm-x-t5-3.jpg",
+        "source": "File:Fujifilm X-T5 4 nov 2022g.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/fujifilm-x-t5-4.jpg",
+        "source": "File:Fujifilm X-T5 4 nov 2022c.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/fujifilm-x-t5-5.jpg",
+        "source": "File:Fujifilm X-T5 4 nov 2022a.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "apple-ipad-pro-11": {
+    "name": "Apple iPad Pro 11-inch",
+    "category": "Tablets",
+    "images": [
+      {
+        "local": "/images/products/apple-ipad-pro-11-1.jpg",
+        "source": "File:Apple iPad Pro 11-inch 2026-08-09 M5-powered 01.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-ipad-pro-11-2.jpg",
+        "source": "File:Back side Apple iPad Pro 11-inch 2026-08-09 M5-powered 02.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-ipad-pro-11-3.jpg",
+        "source": "File:11-inch iPad Pro M5 with Apple Pencil Pro.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-ipad-pro-11-4.jpg",
+        "source": "File:About iPad Pro 11-inch (M4).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/apple-ipad-pro-11-5.jpeg",
+        "source": "File:IPad Pro M4 11-inch.jpeg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "samsung-galaxy-tab-a-10-1": {
+    "name": "Samsung Galaxy Tab A 10.1",
+    "category": "Tablets",
+    "images": [
+      {
+        "local": "/images/products/samsung-galaxy-tab-a-10-1-1.jpg",
+        "source": "File:Samsung Galaxy Tab A 10.1 (2016) сзади.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-tab-a-10-1-2.jpg",
+        "source": "File:Samsung Galaxy Tab A 10.1 (2016) в фирменном чехле 01.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-tab-a-10-1-3.jpg",
+        "source": "File:Samsung Galaxy Tab A 10.1 (2016) в фирменном чехле 02.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-tab-a-10-1-4.jpg",
+        "source": "File:Samsung Galaxy Tab A 10.1 (2019), Oude Pekela (2019) 02.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-galaxy-tab-a-10-1-5.jpg",
+        "source": "File:Samsung Galaxy Tab A 10.1 (2019), Oude Pekela (2019) 03.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "logitech-mx-anywhere-3": {
+    "name": "Logitech MX Anywhere 3 Wireless Mouse",
+    "category": "Components",
+    "images": [
+      {
+        "local": "/images/products/logitech-mx-anywhere-3-1.jpg",
+        "source": "File:Logitech Anywhere MX Mouse (6172967149).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/logitech-mx-anywhere-3-2.jpg",
+        "source": "File:Logitech Anywhere MX Mouse (6172971125).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/logitech-mx-anywhere-3-3.jpg",
+        "source": "File:Logitech Anywhere MX Mouse (6172967157).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/logitech-mx-anywhere-3-4.jpg",
+        "source": "File:Logitech M555b vs. Anywhere MX (6172967165).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/logitech-mx-anywhere-3-5.jpg",
+        "source": "File:Logi MX Anywhare 3 Mouse.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "logitech-g502-hero": {
+    "name": "Logitech G502 Hero RGB Gaming Mouse",
+    "category": "Components",
+    "images": [
+      {
+        "local": "/images/products/logitech-g502-hero-1.jpg",
+        "source": "File:Logitech G502 Hero.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/logitech-g502-hero-2.jpg",
+        "source": "File:Logitech G502 1 2017-01-01.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/logitech-g502-hero-3.jpg",
+        "source": "File:Ratón Logitech G502.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/logitech-g502-hero-4.jpg",
+        "source": "File:G502 Hero.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/logitech-g502-hero-5.jpg",
+        "source": "File:Logitech-g502 (13971851940).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "keychron-k8": {
+    "name": "Keychron K8 Wireless Mechanical Keyboard",
+    "category": "Components",
+    "images": [
+      {
+        "local": "/images/products/keychron-k8-1.jpg",
+        "source": "File:End - Keychron K8 Non-Backlight Wireless Mechanical Keyboard.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/keychron-k8-2.jpg",
+        "source": "File:Keychron K8 Non-Backlight Wireless Mechanical Keyboard.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/keychron-k8-3.jpg",
+        "source": "File:Keychron K8 Non-Backlight Wireless Mechanical Keyboard - 52766711146.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/keychron-k8-4.jpg",
+        "source": "File:Home - Keychron K8 Non-Backlight Wireless Mechanical Keyboard.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/keychron-k8-5.jpg",
+        "source": "File:F1 - Keychron K8 Non-Backlight Wireless Mechanical Keyboard.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "samsung-odyssey-g7-monitor": {
+    "name": "Samsung 32\" Odyssey Neo G7 4K Monitor",
+    "category": "Components",
+    "images": [
+      {
+        "local": "/images/products/samsung-odyssey-g7-monitor-1.jpg",
+        "source": "File:Samsung Monitor 1 2018-11-19.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-odyssey-g7-monitor-2.jpg",
+        "source": "File:Samsung Monitor 1 2018-12-18.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-odyssey-g7-monitor-3.jpg",
+        "source": "File:PlayStation 5 and Samsung S32BG850NC at K7 Entertainment live studio 20230624.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-odyssey-g7-monitor-4.jpg",
+        "source": "File:2020-09-26 Ein ausgestellter MSI-PC mit Samsung-Monitor 20200926 133146.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/samsung-odyssey-g7-monitor-5.jpg",
+        "source": "File:Samsung monitor with VESA mount.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "usb-c-hub": {
+    "name": "7-in-1 USB-C Hub Adapter",
+    "category": "Accessories",
+    "images": [
+      {
+        "local": "/images/products/usb-c-hub-1.jpg",
+        "source": "File:USB-C Hubb 5 portar.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/usb-c-hub-2.png",
+        "source": "File:USB C Hub.png",
+        "mime": "image/png"
+      },
+      {
+        "local": "/images/products/usb-c-hub-3.jpg",
+        "source": "File:TUNEWEAR-ALMIGHTY-DOCK-nano1 03.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/usb-c-hub-4.jpg",
+        "source": "File:TUNEWEAR-ALMIGHTY-DOCK-nano1 01.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/usb-c-hub-5.jpg",
+        "source": "File:TUNEWEAR-ALMIGHTY-DOCK-nano1 02.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "xbox-series-x": {
+    "name": "Microsoft Xbox Series X Console",
+    "category": "Gaming",
+    "images": [
+      {
+        "local": "/images/products/xbox-series-x-1.jpg",
+        "source": "File:Xbox series X (50648118708).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/xbox-series-x-2.jpg",
+        "source": "File:Xbox series X (50648958937).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/xbox-series-x-3.jpg",
+        "source": "File:Xbox series X (50648958962).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/xbox-series-x-4.jpg",
+        "source": "File:Xbox Series (X) 1.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/xbox-series-x-5.jpg",
+        "source": "File:Xbox Series X 2.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "nintendo-switch-oled": {
+    "name": "Nintendo Switch OLED Console",
+    "category": "Gaming",
+    "images": [
+      {
+        "local": "/images/products/nintendo-switch-oled-1.jpg",
+        "source": "File:Nintendo Switch OLED Model - 5.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nintendo-switch-oled-2.jpg",
+        "source": "File:Nintendo Switch OLED Model - 7.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nintendo-switch-oled-3.jpg",
+        "source": "File:Nintendo Switch OLED Model.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nintendo-switch-oled-4.jpg",
+        "source": "File:Nintendo Switch OLED Model - 3.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nintendo-switch-oled-5.png",
+        "source": "File:Nintendo Switch – OLED-Modell mit gedockter Konsole 20230506 HOF01624 RAW-Export.png",
+        "mime": "image/png"
+      }
+    ]
+  },
+  "dji-mini-3-pro": {
+    "name": "DJI Mini 3 Pro Drone",
+    "category": "Drones",
+    "images": [
+      {
+        "local": "/images/products/dji-mini-3-pro-1.jpg",
+        "source": "File:Drone dji mini 3 pro.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/dji-mini-3-pro-2.jpg",
+        "source": "File:DJI MT3M3VD Mini 3 Pro (2-3-2023).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/dji-mini-3-pro-3.jpg",
+        "source": "File:DJI MT3M3VD Mini 3 Pro (4-22-2023).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/dji-mini-3-pro-4.jpg",
+        "source": "File:DJI MT3M3VD Mini 3 Pro (4-9-2024).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/dji-mini-3-pro-5.jpg",
+        "source": "File:DJI MT3M3VD Mini 3 Pro (8-14-2025).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "instant-pot-duo": {
+    "name": "Instant Pot Duo 6QT Multi-Cooker",
+    "category": "Home",
+    "images": [
+      {
+        "local": "/images/products/instant-pot-duo-1.jpg",
+        "source": "File:Instant Pot DUO60 pressure cooker.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/instant-pot-duo-2.jpg",
+        "source": "File:Instant Pot Pressure Cooker Vegetables and Quinoa (44383321600).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/instant-pot-duo-3.jpg",
+        "source": "File:Instant Pot (49907000991).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/instant-pot-duo-4.jpg",
+        "source": "File:Instant Pot Veggies (53833203818).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/instant-pot-duo-5.jpg",
+        "source": "File:Wild Rice in the Instant Pot (46195389775).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "nespresso-vertuo": {
+    "name": "Nespresso Vertuo Coffee Machine",
+    "category": "Home",
+    "images": [
+      {
+        "local": "/images/products/nespresso-vertuo-1.jpg",
+        "source": "File:Nespresso Vertuo Pop.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nespresso-vertuo-2.jpg",
+        "source": "File:A new coffee system from Nespresso.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nespresso-vertuo-3.jpg",
+        "source": "File:Vertuo Selection.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nespresso-vertuo-4.jpg",
+        "source": "File:Vertuo Selector.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nespresso-vertuo-5.jpg",
+        "source": "File:Vertuo Pods Pair.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "fabric-3-seater-sofa": {
+    "name": "3-Seater Fabric Sofa (Grey)",
+    "category": "Home",
+    "images": [
+      {
+        "local": "/images/products/fabric-3-seater-sofa-1.jpg",
+        "source": "File:Sven Skipper 3 seater sofa-1.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/fabric-3-seater-sofa-2.jpg",
+        "source": "File:Sven Skipper 3 seater sofa-2.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/fabric-3-seater-sofa-3.jpg",
+        "source": "File:Couch-furniture-living-room-sofa (24300293356).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/fabric-3-seater-sofa-4.jpg",
+        "source": "File:HK CWB 銅鑼灣 Causeway Bay 柏寧酒店 Park Lane Hotel basement 宜家家居 IKEA shop living room sofa furniture September 2022 Px3 02.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/fabric-3-seater-sofa-5.jpg",
+        "source": "File:HK CWB 銅鑼灣 Causeway Bay 柏寧酒店 Park Lane Hotel basement 宜家家居 IKEA shop living room sofa furniture September 2022 Px3 01.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "wooden-coffee-table": {
+    "name": "Modern Solid Wood Coffee Table",
+    "category": "Home",
+    "images": [
+      {
+        "local": "/images/products/wooden-coffee-table-1.jpg",
+        "source": "File:EFTA00002057 - Cozy living room with stone walls a fireplace and modern furniture featuring a wooden coffee table and plush armchairs.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/wooden-coffee-table-2.jpeg",
+        "source": "File:Carleson Solid Wood Coffee Table In Provincial Tea (264060733).jpeg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/wooden-coffee-table-3.jpg",
+        "source": "File:HK 香港會展 HKCEC 灣仔北 Wan Chai North 蘇富比 Sotheby's Preview 拍賣 預展 wooden coffee table October 2023 R12S 03.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/wooden-coffee-table-4.jpg",
+        "source": "File:HK 香港會展 HKCEC 灣仔北 Wan Chai North 蘇富比 Sotheby's Preview 拍賣 預展 wooden coffee table October 2023 R12S 02.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/wooden-coffee-table-5.jpg",
+        "source": "File:HK 香港會展 HKCEC 灣仔北 Wan Chai North 蘇富比 Sotheby's Preview 拍賣 預展 wooden coffee table October 2023 R12S.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "ergonomic-office-chair": {
+    "name": "Ergonomic Mesh Office Chair",
+    "category": "Home",
+    "images": [
+      {
+        "local": "/images/products/ergonomic-office-chair-1.jpg",
+        "source": "File:Sihoo M57 mesh office chair 03.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/ergonomic-office-chair-2.jpg",
+        "source": "File:Sihoo M57 mesh office chair 02.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/ergonomic-office-chair-3.jpg",
+        "source": "File:Sihoo M57 mesh office chair 01.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/ergonomic-office-chair-4.jpg",
+        "source": "File:Sihoo M57 mesh office chair 06.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/ergonomic-office-chair-5.jpg",
+        "source": "File:Sihoo M57 mesh office chair 05.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "converse-chuck-taylor": {
+    "name": "Converse Chuck Taylor All Star Canvas Shoes",
+    "category": "Clothes/Shoes",
+    "images": [
+      {
+        "local": "/images/products/converse-chuck-taylor-1.jpg",
+        "source": "File:Converse All-Star Chuck Taylor Shoe - DPLA - 215e6f66263950c10d6cb1bf4f7e222e (page 1).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/converse-chuck-taylor-2.jpg",
+        "source": "File:Converse All-Star Chuck Taylor Shoe - DPLA - 215e6f66263950c10d6cb1bf4f7e222e (page 2).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/converse-chuck-taylor-3.jpg",
+        "source": "File:Converse Chuck Taylor All-Stars (51091002425).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/converse-chuck-taylor-4.jpg",
+        "source": "File:Emo beat up chuck taylor all star converse.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/converse-chuck-taylor-5.jpg",
+        "source": "File:Pair of Converse All Stars shoes, one shoe worn beyond use, the other new.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "denim-skinny-jeans": {
+    "name": "Classic Blue Denim Jeans",
+    "category": "Clothes/Shoes",
+    "images": [
+      {
+        "local": "/images/products/denim-skinny-jeans-1.jpg",
+        "source": "File:Broken twill denim Wrangler 13MWZ jeans (2026-01-21).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/denim-skinny-jeans-2.jpg",
+        "source": "File:Crinkle on Denim Jeans Pant.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/denim-skinny-jeans-3.jpg",
+        "source": "File:Denim Jeans Pant QA checking.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/denim-skinny-jeans-4.jpg",
+        "source": "File:Close-Up of Denim Jeans.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/denim-skinny-jeans-5.jpg",
+        "source": "File:Denim jeans wrinkled.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "mens-formal-shirt": {
+    "name": "Classic Slim-Fit Formal Shirt",
+    "category": "Clothes/Shoes",
+    "images": [
+      {
+        "local": "/images/products/mens-formal-shirt-1.jpg",
+        "source": "File:Men's shirt formal Slovaks.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/mens-formal-shirt-2.jpg",
+        "source": "File:Men's shirt formal 2 Slovaks.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/mens-formal-shirt-3.jpg",
+        "source": "File:Button down dress shirts for men.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/mens-formal-shirt-4.jpg",
+        "source": "File:Dress Shirt (3161023616).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/mens-formal-shirt-5.jpg",
+        "source": "File:Man's Off-White Cotton Dress Shirt Belonging to Charles Lindbergh - DPLA - 73ccccda3e1162ece8676944970eeea4 (page 3).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "womens-floral-dress": {
+    "name": "Women's Floral Midi Dress",
+    "category": "Clothes/Shoes",
+    "images": [
+      {
+        "local": "/images/products/womens-floral-dress-1.jpg",
+        "source": "File:Laughing woman in floral dress (Unsplash).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/womens-floral-dress-2.jpg",
+        "source": "File:Floral Dress - Goodwood Revival 2019 - The Fashion (2019-09-13 12.19.36 by David Merrett - 48749515191).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/womens-floral-dress-3.jpg",
+        "source": "File:Beautiful woman in a floral dress serving desserts in a bright, cozy kitchen.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/womens-floral-dress-4.jpg",
+        "source": "File:Fashion Study- Woman in a White Floral Dress MET DP809410.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/womens-floral-dress-5.jpg",
+        "source": "File:Woman in floral dress, standing by chair, facing right LCCN2016653154.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "urban-laptop-backpack": {
+    "name": "Urban 28L Laptop Backpack",
+    "category": "Accessories",
+    "images": [
+      {
+        "local": "/images/products/urban-laptop-backpack-1.jpg",
+        "source": "File:Laptop backpacks from Mr. DIY at Ayala Center Cebu (2025-02-24).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/urban-laptop-backpack-2.jpg",
+        "source": "File:Clothes-travel-voyage-backpack (24324553095).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/urban-laptop-backpack-3.jpg",
+        "source": "File:With a worn-out backpack and a notebook (3).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/urban-laptop-backpack-4.jpg",
+        "source": "File:With a worn-out backpack and a notebook (1).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/urban-laptop-backpack-5.jpg",
+        "source": "File:With a worn-out backpack and a notebook (2).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "leather-bifold-wallet": {
+    "name": "Genuine Leather Bifold Wallet",
+    "category": "Accessories",
+    "images": [
+      {
+        "local": "/images/products/leather-bifold-wallet-1.jpg",
+        "source": "File:Leather wallets 01.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/leather-bifold-wallet-2.jpg",
+        "source": "File:Leather wallets 02.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/leather-bifold-wallet-3.jpg",
+        "source": "File:Leather wallets 03.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/leather-bifold-wallet-4.jpg",
+        "source": "File:Leather wallets 04.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/leather-bifold-wallet-5.jpg",
+        "source": "File:Leather wallets 05.JPG",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "anker-20000mah-powerbank": {
+    "name": "Anker Portable Power Bank",
+    "category": "Accessories",
+    "images": [
+      {
+        "local": "/images/products/anker-20000mah-powerbank-1.jpg",
+        "source": "File:Anker power bank lit.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/anker-20000mah-powerbank-2.jpg",
+        "source": "File:Anker 521 Power Bank.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/anker-20000mah-powerbank-3.jpg",
+        "source": "File:モバイルバッテリー ANKER Power Bank 4,500mAh (9716810135).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/anker-20000mah-powerbank-4.jpg",
+        "source": "File:モバイルバッテリー ANKER Power Bank 4,500mAh (9716812225).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/anker-20000mah-powerbank-5.jpg",
+        "source": "File:モバイルバッテリー ANKER Power Bank 4,500mAh (9716813167).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "aviator-sunglasses": {
+    "name": "Classic Aviator Sunglasses",
+    "category": "Accessories",
+    "images": [
+      {
+        "local": "/images/products/aviator-sunglasses-1.jpg",
+        "source": "File:American Optical Original Pilot Aviator sunglasses.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/aviator-sunglasses-2.jpg",
+        "source": "File:Ray-Ban Aviator sunglasses.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/aviator-sunglasses-3.jpg",
+        "source": "File:Aviator sunglasses 2.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/aviator-sunglasses-4.jpg",
+        "source": "File:Aviator sunglasses.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/aviator-sunglasses-5.jpg",
+        "source": "File:Sunglasses on a Table.JPG",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "wireless-charging-pad": {
+    "name": "15W Wireless Charging Pad",
+    "category": "Accessories",
+    "images": [
+      {
+        "local": "/images/products/wireless-charging-pad-1.jpg",
+        "source": "File:Wireless Charging Pad 2018.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/wireless-charging-pad-2.jpg",
+        "source": "File:Wireless Charging Pad.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/wireless-charging-pad-3.jpg",
+        "source": "File:Samsung Wireless Charger Pad, IFA 2018, Berlin (P1070294).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/wireless-charging-pad-4.jpg",
+        "source": "File:Wireless Mobile Phone Charger Expanded.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/wireless-charging-pad-5.jpg",
+        "source": "File:Wireless Mobile Phone Charger Closed.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "alice-wonderland-book": {
+    "name": "Alice's Adventures in Wonderland (Hardcover)",
+    "category": "Books",
+    "images": [
+      {
+        "local": "/images/products/alice-wonderland-book-1.jpg",
+        "source": "File:Alice's Adventures in Wonderland by Lewis Carroll, 1907 book cover (cropped).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/alice-wonderland-book-2.jpg",
+        "source": "File:Alice's Adventures in Wonderland - Carroll, Robinson - S001 - Cover.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/alice-wonderland-book-3.jpg",
+        "source": "File:Unifon - Alice's Adventures in Wonderland - book cover.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/alice-wonderland-book-4.jpg",
+        "source": "File:Shavian alphabet - Alice's Adventures in Wonderland - book cover.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/alice-wonderland-book-5.jpg",
+        "source": "File:Alice's Adventures in Wonderland cover (1865).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "harry-potter-book": {
+    "name": "Harry Potter and the Philosopher's Stone (Hardcover)",
+    "category": "Books",
+    "images": [
+      {
+        "local": "/images/products/harry-potter-book-1.jpg",
+        "source": "File:Harry potter and the sorcerer s stone by pludonuto.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/harry-potter-book-2.jpg",
+        "source": "File:RIAN archive 168852 The seventh book about Harry Potter goes on sale.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/harry-potter-book-3.jpg",
+        "source": "File:Harry Potter books in Georgian1768.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/harry-potter-book-4.jpg",
+        "source": "File:Harry Potter Book 1, 1st American ed. without dust jacket.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/harry-potter-book-5.jpg",
+        "source": "File:Harry Potter Book 2, 1st American ed. without dust jacket.JPG",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "nivea-creme": {
+    "name": "Nivea Crème Moisturising Cream (150g)",
+    "category": "Beauty/Health",
+    "images": [
+      {
+        "local": "/images/products/nivea-creme-1.jpg",
+        "source": "File:Nivea Creme BW 2025-07-05 16-51-45 s.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nivea-creme-2.jpg",
+        "source": "File:NIVEA CREME für Haus und Sport.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nivea-creme-3.jpg",
+        "source": "File:Cilindrisch blauw blik, met los deksel waarop binnen witte concentrische cirkel “Nivea Creme”, op zijkant “Beiersdorf-Amsterdam, fabriek te Hilversum …”, objectnr 77887-A-B.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nivea-creme-4.jpg",
+        "source": "File:Nivea creme-by-RaBoe-01.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nivea-creme-5.webp",
+        "source": "File:Nivea Creme.webp",
+        "mime": "image/webp"
+      }
+    ]
+  },
+  "oral-b-electric-toothbrush": {
+    "name": "Oral-B Electric Toothbrush",
+    "category": "Beauty/Health",
+    "images": [
+      {
+        "local": "/images/products/oral-b-electric-toothbrush-1.jpg",
+        "source": "File:Oral-B Genius X Electric Toothbrush - 48263287232.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/oral-b-electric-toothbrush-2.jpg",
+        "source": "File:Oral-B Genius X Electric Toothbrush - 48263286097.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/oral-b-electric-toothbrush-3.jpg",
+        "source": "File:Electric toothbrush Oral-B Vitality by Oral-B & Braun, from 2009 or 2010 (1).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/oral-b-electric-toothbrush-4.jpg",
+        "source": "File:Electric toothbrush Oral-B Vitality by Oral-B & Braun from 2009 or 2010.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/oral-b-electric-toothbrush-5.jpg",
+        "source": "File:Oral-B Genius X Electric Toothbrush - 48263212181.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "twinings-tea": {
+    "name": "Twinings English Breakfast Tea (100 Teabags)",
+    "category": "Food",
+    "images": [
+      {
+        "local": "/images/products/twinings-tea-1.jpg",
+        "source": "File:HKU 香港大學 canteen yellow plastic water cups hot water Twinings English tea bag Nov 2016 Lnvs.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/twinings-tea-2.jpg",
+        "source": "File:Tea tins in kitchen, mostly Twinings.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/twinings-tea-3.jpg",
+        "source": "File:Tea canisters in the Twinings Strand Heritage Shop, London, UK - 20120129.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/twinings-tea-4.jpg",
+        "source": "File:Twinings gunpowder green tea.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/twinings-tea-5.jpg",
+        "source": "File:Twinings Gunpowder tea in tin.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "nescafe-classic-coffee": {
+    "name": "Nescafé Classic Coffee Jar",
+    "category": "Food",
+    "images": [
+      {
+        "local": "/images/products/nescafe-classic-coffee-1.jpg",
+        "source": "File:Nescafe Classic.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nescafe-classic-coffee-2.jpg",
+        "source": "File:Nescafé tin Classic.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nescafe-classic-coffee-3.jpg",
+        "source": "File:Nescafè instant coffee, 2019-(01).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nescafe-classic-coffee-4.jpg",
+        "source": "File:Nescafe 3 in 1.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nescafe-classic-coffee-5.jpg",
+        "source": "File:Malty Nescafe.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "irobot-roomba-vacuum": {
+    "name": "iRobot Roomba Robot Vacuum",
+    "category": "Home",
+    "images": [
+      {
+        "local": "/images/products/irobot-roomba-vacuum-1.jpg",
+        "source": "File:IRobot Roomba 870 (15860914940).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/irobot-roomba-vacuum-2.jpg",
+        "source": "File:IRobot Roomba 785 04 (fcm).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/irobot-roomba-vacuum-3.jpg",
+        "source": "File:IRobot Roomba 785 08 (fcm).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/irobot-roomba-vacuum-4.jpg",
+        "source": "File:IRobot-Roomba-Top-view-01.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/irobot-roomba-vacuum-5.jpg",
+        "source": "File:IRobot Roomba 870 (13058836075).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "electric-kettle": {
+    "name": "Stainless Steel Electric Kettle (1.7L)",
+    "category": "Home",
+    "images": [
+      {
+        "local": "/images/products/electric-kettle-1.jpg",
+        "source": "File:HK goods made in China 小米 Xiaomi 電熱水瓶 Mi electric product white 水煲 Kettle June 2021 SS2 03.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/electric-kettle-2.jpg",
+        "source": "File:HK goods made in China 小米 Xiaomi 電熱水瓶 Mi electric product white 水煲 Kettle June 2021 SS2 02.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/electric-kettle-3.jpg",
+        "source": "File:HK goods made in China 小米 Xiaomi 電熱水瓶 Mi electric product white 水煲 Kettle June 2021 SS2 05.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/electric-kettle-4.jpg",
+        "source": "File:HK goods made in China 小米 Xiaomi 電熱水瓶 Mi electric product white 水煲 Kettle June 2021 SS2 01.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/electric-kettle-5.jpg",
+        "source": "File:HK goods made in China 小米 Xiaomi 電熱水瓶 Mi electric product white 水煲 Kettle June 2021 SS2 04.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "cricket-bat": {
+    "name": "English Willow Cricket Bat",
+    "category": "Sports",
+    "images": [
+      {
+        "local": "/images/products/cricket-bat-1.jpg",
+        "source": "File:Kashmir willow Cricket Bat.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/cricket-bat-2.jpg",
+        "source": "File:Cricket bat at Walker Cricket Ground, Southgate, London, England 01.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/cricket-bat-3.jpg",
+        "source": "File:A Modern Cricket Bat.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/cricket-bat-4.jpg",
+        "source": "File:My cricket bat tsc.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/cricket-bat-5.jpg",
+        "source": "File:Cricket bat at Wanstead & Snaresbrook CC, Wanstead, London.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "nike-running-shoes": {
+    "name": "Nike Running Shoes",
+    "category": "Sports",
+    "images": [
+      {
+        "local": "/images/products/nike-running-shoes-1.jpg",
+        "source": "File:Nike Running Shoes.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nike-running-shoes-2.jpg",
+        "source": "File:HK clothing NIKE brand Vaporfly Next sneakers white n silver shoes October 2022 Px3 03.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nike-running-shoes-3.jpg",
+        "source": "File:HK clothing NIKE brand Vaporfly Next sneakers white n silver shoes October 2022 Px3 02.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nike-running-shoes-4.jpg",
+        "source": "File:HK clothing NIKE brand Vaporfly Next sneakers white n silver shoes October 2022 Px3 01.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nike-running-shoes-5.jpg",
+        "source": "File:HK clothing NIKE brand Vaporfly Next sneakers white n silver shoes October 2022 Px3 04.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "camping-dome-tent": {
+    "name": "2-Person Camping Dome Tent (Green)",
+    "category": "Outdoor",
+    "images": [
+      {
+        "local": "/images/products/camping-dome-tent-1.jpg",
+        "source": "File:Dome tent, Red Shoot Inn Caravan and Camping site, Linwood - geograph.org.uk - 2799202.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/camping-dome-tent-2.jpg",
+        "source": "File:Dome tent, Tolve, Italy (PPL1-Corrected) julesvernex2.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/camping-dome-tent-3.jpg",
+        "source": "File:Dome tents - Camp Lewallen, Missouri - July 2007.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/camping-dome-tent-4.jpg",
+        "source": "File:Dome tent in the BWCA (CDM11452CT).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/camping-dome-tent-5.jpg",
+        "source": "File:Tent Camping on Mountain (8419052724).jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "insulated-water-bottle": {
+    "name": "Insulated Steel Water Bottle (750ml)",
+    "category": "Outdoor",
+    "images": [
+      {
+        "local": "/images/products/insulated-water-bottle-1.jpg",
+        "source": "File:Niksun stainless steel water bottle.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/insulated-water-bottle-2.jpg",
+        "source": "File:Stainless steel water bottle.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/insulated-water-bottle-3.jpg",
+        "source": "File:Waterbottle.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/insulated-water-bottle-4.jpg",
+        "source": "File:Polar Bottle® Insulated Bottles.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/insulated-water-bottle-5.jpeg",
+        "source": "File:Insulated Rod in Bottle.jpeg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "jbl-flip-speaker": {
+    "name": "JBL Flip 6 Portable Bluetooth Speaker",
+    "category": "Audio",
+    "images": [
+      {
+        "local": "/images/products/jbl-flip-speaker-1.jpg",
+        "source": "File:JBL Flip bluetooth speaker.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/jbl-flip-speaker-2.jpg",
+        "source": "File:JBL Bluetooth speaker, Winschoten (2019) 16.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/jbl-flip-speaker-3.jpg",
+        "source": "File:JBL Bluetooth speaker, Winschoten (2019) 15.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/jbl-flip-speaker-4.jpg",
+        "source": "File:JBL Bluetooth speaker, Winschoten (2019) 02.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/jbl-flip-speaker-5.jpg",
+        "source": "File:JBL Bluetooth speaker, Winschoten (2019) 03.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "playstation-5-console": {
+    "name": "Sony PlayStation 5 Console",
+    "category": "Gaming",
+    "images": [
+      {
+        "local": "/images/products/playstation-5-console-1.jpg",
+        "source": "File:Playstation 5 base edition with controller (original).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/playstation-5-console-2.jpg",
+        "source": "File:PlayStation 5 and DualSense (2).jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/playstation-5-console-3.png",
+        "source": "File:PlayStation 5 and DualSense with transparent background.png",
+        "mime": "image/png"
+      },
+      {
+        "local": "/images/products/playstation-5-console-4.png",
+        "source": "File:PlayStation 5 Media Remote - back (cover removed).png",
+        "mime": "image/png"
+      },
+      {
+        "local": "/images/products/playstation-5-console-5.png",
+        "source": "File:Black and white Playstation 5 base edition with controller.png",
+        "mime": "image/png"
+      }
+    ]
+  },
+  "asus-proart-monitor": {
+    "name": "ASUS ProArt 24\" Professional Monitor",
+    "category": "Monitors",
+    "images": [
+      {
+        "local": "/images/products/asus-proart-monitor-1.jpg",
+        "source": "File:Asus ProArt PA246Q monitor 1.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/asus-proart-monitor-2.jpg",
+        "source": "File:Asus ProArt PA246Q monitor 2.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/asus-proart-monitor-3.jpg",
+        "source": "File:Asus ProArt PA246Q monitor 3.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/asus-proart-monitor-4.jpg",
+        "source": "File:Asus ProArt PA246Q monitor 4.JPG",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/asus-proart-monitor-5.jpg",
+        "source": "File:Asus ProArt PA246Q monitor 5.JPG",
+        "mime": "image/jpeg"
+      }
+    ]
+  },
+  "nike-air-force-1": {
+    "name": "Nike Air Force 1 Sneakers",
+    "category": "Clothes/Shoes",
+    "images": [
+      {
+        "local": "/images/products/nike-air-force-1-1.jpg",
+        "source": "File:Nike air Force 1 white on white.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nike-air-force-1-2.jpg",
+        "source": "File:Nike Air Force 1 Hi Just Don.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nike-air-force-1-3.jpg",
+        "source": "File:Nike Air Force 1's.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nike-air-force-1-4.jpg",
+        "source": "File:Nike Air Force 1 Low Flax 2019.jpg",
+        "mime": "image/jpeg"
+      },
+      {
+        "local": "/images/products/nike-air-force-1-5.jpg",
+        "source": "File:Nike Air Force 1 Browns.jpg",
+        "mime": "image/jpeg"
+      }
+    ]
+  }
+}

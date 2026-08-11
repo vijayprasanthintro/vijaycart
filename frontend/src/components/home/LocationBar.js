@@ -5,12 +5,15 @@ const DEFAULT_ADDRESS = '2/42, Mallampalayam, Arasanarham (Post), Tamil Nadu';
 
 export default function LocationBar() {
   const { shippingInfo } = useSelector((state) => state.cartState);
+  const { user, isAuthenticated } = useSelector((state) => state.authState);
 
   let address = DEFAULT_ADDRESS;
   if (shippingInfo && shippingInfo.address) {
     const parts = [shippingInfo.address, shippingInfo.city, shippingInfo.postalCode].filter(Boolean);
     address = parts.join(', ');
   }
+
+  const coins = Math.floor(Number(user && user.vijayCoins) || 0);
 
   return (
     <div className="location-bar">
@@ -26,9 +29,15 @@ export default function LocationBar() {
             </span>
             <i className="fa fa-chevron-down location-chevron" aria-hidden="true"></i>
           </Link>
-          <span className="location-reward">
+          <Link
+            to={isAuthenticated ? '/myprofile' : '/login'}
+            className="location-reward"
+            title={isAuthenticated ? `${coins} VijayCoins available — redeem at checkout` : 'Login to earn VijayCoins'}
+            aria-label="VijayCoins balance"
+          >
             <i className="fa fa-star" aria-hidden="true"></i> VijayCoins
-          </span>
+            {isAuthenticated && coins > 0 && <b className="location-coins">{coins}</b>}
+          </Link>
         </div>
       </div>
     </div>

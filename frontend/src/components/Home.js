@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import HeroBanner from "./home/HeroBanner";
 import PersonalizedSection from "./home/PersonalizedSection";
 import ProductCarousel from "./home/ProductCarousel";
-import { getDiscountFor } from "../utils/productHelper";
+import { buildHomeFeed } from "../utils/homeFeed";
 import { SectionTitleSkeleton, ProductRowSkeleton } from "./layouts/Skeletons";
 const FLASH_KEY = 'vijaycart_flash_ends';
 
@@ -34,9 +34,6 @@ const QUICK_ACCESS = [
   { name: 'Beauty', icon: 'fa-heartbeat', cls: 'cat-icon-beauty', to: '/search/all?category=Beauty%2FHealth' },
   { name: 'Sports', icon: 'fa-futbol-o', cls: 'cat-icon-sports', to: '/search/all?category=Sports' },
 ];
-
-const TECH_CATEGORIES = ['Laptops', 'Smartphones', 'Televisions', 'Audio', 'Headphones', 'Cameras', 'Gaming', 'Drones', 'Wearables', 'Monitors', 'Components', 'Tablets'];
-const FASHION_CATEGORIES = ['Accessories', 'Sports', 'Outdoor', 'Wearables'];
 
 const FULL_CATALOG_LIMIT = 200;
 
@@ -111,16 +108,14 @@ export default function Home() {
   const allProducts = useMemo(() => products || [], [products]);
   const anyProduct = allProducts.length > 0;
 
-  // Memoize derived slices so their array identity is stable across renders.
-  // This lets ProductCarousel/Product skip re-rendering (and avoids tearing
-  // down/rebuilding scroll listeners every render).
-  const dealsOfTheDay = useMemo(() => allProducts.filter(p => getDiscountFor(p._id) >= 26).slice(0, 10), [allProducts]);
-  const trending = useMemo(() => allProducts.filter(p => getDiscountFor(p._id) >= 18).slice(0, 10), [allProducts]);
-  const bestSellers = useMemo(() => allProducts.filter(p => Number(p.ratings) >= 4).slice(0, 10), [allProducts]);
-  const electronics = useMemo(() => allProducts.filter(p => TECH_CATEGORIES.includes(p.category)).slice(0, 10), [allProducts]);
-  const fashion = useMemo(() => allProducts.filter(p => FASHION_CATEGORIES.includes(p.category)).slice(0, 10), [allProducts]);
-  const recommended = useMemo(() => allProducts.slice(0, 10), [allProducts]);
-  const moreProducts = useMemo(() => allProducts.slice(0, 24), [allProducts]);
+  // One shared feed build so every section gets its own ranking and the page
+  // never repeats the same products across rows (see utils/homeFeed.js).
+  const feed = useMemo(() => buildHomeFeed(allProducts), [allProducts]);
+
+  // Active tab for the "Top Categories" product grid. Falls back to the first
+  // tab until the user picks one.
+  const [activeTopCat, setActiveTopCat] = useState('');
+  const activeTopCategory = feed.topCategories.find((t) => t.category === activeTopCat) || feed.topCategories[0] || null;
 
   const carouselLoading = loading && !anyProduct;
 
@@ -184,7 +179,7 @@ export default function Home() {
               </span>
             }
             viewAll="/search/all"
-            products={dealsOfTheDay}
+            products={feed.deals}
             loading={carouselLoading}
             error={error}
             onRetry={retry}
@@ -196,7 +191,7 @@ export default function Home() {
             title={<span>Best <span className="section-accent">Sellers</span></span>}
             subtitle="Highly rated, top picked"
             viewAll="/search/all?ratings=4"
-            products={bestSellers}
+            products={feed.bestSellers}
             loading={carouselLoading}
             error={error}
             onRetry={retry}
@@ -208,7 +203,7 @@ export default function Home() {
             title={<span>Trending <span className="section-accent">Products</span></span>}
             subtitle="What everyone's loving right now"
             viewAll="/search/all"
-            products={trending}
+            products={feed.trending}
             loading={carouselLoading}
             error={error}
             onRetry={retry}
@@ -220,7 +215,7 @@ export default function Home() {
             title={<span>Electronics <span className="section-accent">Deals</span></span>}
             subtitle="Gadgets at their best prices"
             viewAll="/search/all?category=Electronics"
-            products={electronics}
+            products={feed.electronics}
             loading={carouselLoading}
             error={error}
             onRetry={retry}
@@ -232,7 +227,7 @@ export default function Home() {
             title={<span>Fashion &amp; <span className="section-accent">Lifestyle</span></span>}
             subtitle="Styles for every occasion"
             viewAll="/search/all?category=Accessories"
-            products={fashion}
+            products={feed.fashion}
             loading={carouselLoading}
             error={error}
             onRetry={retry}
@@ -254,11 +249,23 @@ export default function Home() {
             title={<span>Recommended <span className="section-accent">For You</span></span>}
             subtitle="Picked just for you"
             viewAll="/search/all"
-            products={recommended}
+            products={feed.recommended}
             loading={carouselLoading}
             error={error}
             onRetry={retry}
             emptyText="No recommendations yet."
+          />
+
+          {/* New Arrivals */}
+          <ProductCarousel
+            title={<span>New <span className="section-accent">Arrivals</span></span>}
+            subtitle="Freshly added to the catalogue"
+            viewAll="/search/all"
+            products={feed.newArrivals}
+            loading={carouselLoading}
+            error={error}
+            onRetry={retry}
+            emptyText="New arrivals will show up here soon."
           />
 
           {/* Recently Viewed */}
@@ -272,15 +279,49 @@ export default function Home() {
             />
           )}
 
+          {/* Top Categories */}
+          {feed.topCategories.length > 0 && (
+            <section className="section">
+              <div className="section-head">
+                <div>
+                  <h2 className="section-title">Top <span className="section-accent">Categories</span></h2>
+                  <p className="section-sub mt-1">Best-rated picks in the biggest categories</p>
+                </div>
+                <Link to="/search/all" className="view-all-link">View All <i className="fa fa-arrow-right" aria-hidden="true"></i></Link>
+              </div>
+              <div className="category-tabs" role="tablist">
+                {feed.topCategories.map((t) => (
+                  <button
+                    key={t.category}
+                    type="button"
+                    role="tab"
+                    aria-selected={activeTopCategory && activeTopCategory.category === t.category}
+                    className={`category-tab${activeTopCategory && activeTopCategory.category === t.category ? ' active' : ''}`}
+                    onClick={() => setActiveTopCat(t.category)}
+                  >
+                    {t.category}
+                  </button>
+                ))}
+              </div>
+              {activeTopCategory && (
+                <div className="row home-grid">
+                  {activeTopCategory.products.map((product, i) => (
+                    <Product key={product._id} product={product} col={3} index={i} />
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+
           {/* More Products */}
-          {moreProducts.length > 0 && (
+          {feed.moreProducts.length > 0 && (
             <section className="section">
               <div className="section-head">
                 <h2 className="section-title">More <span className="section-accent">Products</span></h2>
                 <Link to="/search/all" className="view-all-link">View All <i className="fa fa-arrow-right" aria-hidden="true"></i></Link>
               </div>
-              <div className="row">
-                {moreProducts.map((product, i) => <Product key={product._id} product={product} col={3} index={i} />)}
+              <div className="row home-grid">
+                {feed.moreProducts.map((product, i) => <Product key={product._id} product={product} col={3} index={i} />)}
               </div>
             </section>
           )}

@@ -12,19 +12,17 @@ export default function BottomNavigation() {
 
   const itemsList = [
     { to: '/', icon: 'fa-home', label: 'Home', end: true },
-    { to: '/search/all', icon: 'fa-play-circle', label: 'Play' },
-    { to: '/search/all?ratings=4', icon: 'fa-tags', label: 'Top Deals' },
-    { to: accountPath, icon: 'fa-user', label: 'Account' },
     { to: '/cart', icon: 'fa-shopping-cart', label: 'Cart', badge: cartCount },
+    { to: '/wishlist', icon: 'fa-heart', label: 'Wishlist' },
+    { to: accountPath, icon: 'fa-user', label: 'Profile' },
   ];
-
-  const onSearch = location.pathname.startsWith('/search/all');
-  const onSearchWithRatings = onSearch && new URLSearchParams(location.search).get('ratings');
 
   const isItemActive = (item) => {
     if (item.to === '/') return location.pathname === '/';
-    if (item.to === '/search/all') return onSearch && !onSearchWithRatings;
-    if (item.to.includes('ratings')) return onSearch && Boolean(onSearchWithRatings);
+    if (item.to === '/wishlist') return location.pathname.startsWith('/wishlist');
+    if (item.to === '/myprofile' || item.to === '/login') {
+      return location.pathname.startsWith('/myprofile') || location.pathname === '/login';
+    }
     return location.pathname.startsWith(item.to.split('?')[0]);
   };
 

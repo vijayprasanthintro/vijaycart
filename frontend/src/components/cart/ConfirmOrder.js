@@ -4,7 +4,7 @@ import { validateShipping } from './Shipping';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import CheckoutSteps from './CheckoutStep';
-import { setCoupon, clearCoupon, setOrderKey } from '../../slices/cartSlice';
+import { setCoupon, clearCoupon, setOrderKey, setCoinsRedeemed } from '../../slices/cartSlice';
 import { formatMoney, getPricing, getDeliveryLabel, getDeliveryDay, resolveProductImage, imgOnError } from '../../utils/productHelper';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -28,28 +28,46 @@ const SUPPORT = {
 const COUPON_EXAMPLES = ['VJ10', 'SAVE20', 'FREESHIP'];
 
 export default function ConfirmOrder () {
-    const { shippingInfo, items: cartItems, buyNowItems, coupon, orderKey } = useSelector(state => state.cartState);
+    const { shippingInfo, items: cartItems, buyNowItems, coupon, orderKey, coinsRedeemed } = useSelector(state => state.cartState);
     const { user } = useSelector(state => state.authState);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [couponInput, setCouponInput] = useState(coupon ? coupon.code : '');
     const [couponBusy, setCouponBusy] = useState(false);
     const [couponError, setCouponError] = useState('');
+    const [vijayCoins, setVijayCoins] = useState(Number(user && user.vijayCoins) || 0);
 
     // A "Buy Now" checkout checks out only the selected product; otherwise the
     // whole cart is checked out as before.
     const checkoutItems = buyNowItems.length ? buyNowItems : cartItems;
 
     const itemsPrice = checkoutItems.reduce((acc, item)=> (acc + item.price * item.quantity),0);
-    const mrpPrice = checkoutItems.reduce((acc, item)=> (acc + getPricing({ _id: item.product, price: item.price }).mrp * item.quantity),0);
+    const mrpPrice = checkoutItems.reduce((acc, item)=> (acc + getPricing({ _id: item.product, price: item.price, mrp: item.mrp, discount: item.discount }).mrp * item.quantity),0);
     const youSave = Math.max(0, mrpPrice - itemsPrice);
     const shippingPrice = itemsPrice > 499 ? 0 : 40;
-    let taxPrice = Number(0.05 * itemsPrice);
+    const taxPrice = Number(0.05 * itemsPrice).toFixed(2);
     const couponDiscount = coupon ? Math.min(Number(coupon.discount) || 0, itemsPrice) : 0;
-    const totalPrice = Number(itemsPrice + shippingPrice + taxPrice - couponDiscount).toFixed(2);
-    taxPrice = Number(taxPrice).toFixed(2)
+    const payableBeforeCoins = itemsPrice + shippingPrice + Number(taxPrice) - couponDiscount;
+    // Clamp the redeemed coins to what this order can actually absorb (and what
+    // the customer owns) so a stale/edited session can never over-redeem.
+    const maxRedeemableCoins = Math.min(Math.floor(payableBeforeCoins), vijayCoins);
+    const coinsApplied = Math.min(Math.floor(coinsRedeemed) || 0, Math.max(0, maxRedeemableCoins));
+    const totalPrice = Number(payableBeforeCoins - coinsApplied).toFixed(2);
     const totalQty = checkoutItems.reduce((acc, item)=> (acc + item.quantity),0);
-    const type = shippingInfo.type ? (TYPES[shippingInfo.type] || TYPES.other) : null;
+    const type = shippingInfo && shippingInfo.type ? (TYPES[shippingInfo.type] || TYPES.other) : null;
+
+    // Fresh coin balance from the server: the optimistic auth cache may be
+    // older than the last delivery (coins are credited on delivery).
+    useEffect(() => {
+        let cancelled = false;
+        if (!user) return () => { cancelled = true; };
+        axios.get('/api/v1/myprofile')
+            .then(res => {
+                if (!cancelled) setVijayCoins(Number(res?.data?.user?.vijayCoins) || 0);
+            })
+            .catch(() => { /* keep the optimistic balance */ });
+        return () => { cancelled = true; };
+    }, [user]);
 
     const applyCoupon = async (e) => {
         e.preventDefault();
@@ -92,7 +110,8 @@ export default function ConfirmOrder () {
             taxPrice,
             totalPrice,
             couponCode: coupon ? coupon.code : '',
-            discountPrice: couponDiscount
+            discountPrice: couponDiscount,
+            coinsRedeemed: coinsApplied
         }
         sessionStorage.setItem('orderInfo', JSON.stringify(data))
         // Idempotency key for this checkout session. Generated once here and
@@ -206,11 +225,17 @@ export default function ConfirmOrder () {
                                     <b className="text-coupon">&minus;{formatMoney(couponDiscount)}</b>
                                 </div>
                             )}
+                            {coinsApplied > 0 && (
+                                <div className="summary-row summary-coupon-row">
+                                    <span><i className="fa fa-star mr-1" aria-hidden="true"></i>VijayCoins</span>
+                                    <b className="text-coupon">&minus;{formatMoney(coinsApplied)}</b>
+                                </div>
+                            )}
                             <div className="summary-row summary-total">
                                 <span>Total Amount</span>
                                 <b>{formatMoney(totalPrice)}</b>
                             </div>
-                            <div className="summary-save-note"><i className="fa fa-check-circle mr-1" aria-hidden="true"></i>You will save <strong>{formatMoney(youSave + couponDiscount)}</strong> on this order</div>
+                            <div className="summary-save-note"><i className="fa fa-check-circle mr-1" aria-hidden="true"></i>You will save <strong>{formatMoney(youSave + couponDiscount + coinsApplied)}</strong> on this order</div>
 
                             <div className={`co-coupon ${coupon ? 'applied' : ''}`}>
                                 {coupon ? (
@@ -248,6 +273,35 @@ export default function ConfirmOrder () {
                                     </form>
                                 )}
                             </div>
+
+                            {user && vijayCoins > 0 && payableBeforeCoins > 0 && (
+                                <div className={`co-coins ${coinsApplied > 0 ? 'applied' : ''}`}>
+                                    <div className="co-coins-head">
+                                        <span className="co-coins-icon"><i className="fa fa-star" aria-hidden="true"></i></span>
+                                        <span className="co-coins-info">
+                                            <b>VijayCoins Balance</b>
+                                            <small>{vijayCoins} coins &middot; worth {formatMoney(vijayCoins)}</small>
+                                        </span>
+                                    </div>
+                                    {coinsApplied > 0 ? (
+                                        <div className="co-coins-applied">
+                                            <span><i className="fa fa-check-circle" aria-hidden="true"></i> Redeeming <b>{coinsApplied} coins</b> (save {formatMoney(coinsApplied)})</span>
+                                            <button type="button" className="co-coupon-remove" onClick={() => dispatch(setCoinsRedeemed(0))}><i className="fa fa-times mr-1" aria-hidden="true"></i>Remove</button>
+                                        </div>
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            className="co-coins-btn"
+                                            disabled={maxRedeemableCoins <= 0}
+                                            onClick={() => dispatch(setCoinsRedeemed(maxRedeemableCoins))}
+                                            title={maxRedeemableCoins <= 0 ? 'Your VijayCoins can only be used after the coupon discount is applied' : undefined}
+                                        >
+                                            <i className="fa fa-star mr-1" aria-hidden="true"></i>
+                                            Redeem {maxRedeemableCoins > 0 ? `${maxRedeemableCoins} coins` : 'coins'} &amp; save {formatMoney(Math.max(0, maxRedeemableCoins))}
+                                        </button>
+                                    )}
+                                </div>
+                            )}
 
                             <div className="de-pill de-pill--summary"><i className="fa fa-truck mr-1" aria-hidden="true"></i>Delivery by <b>{getDeliveryDay(shippingInfo.postalCode)}</b> &middot; Free</div>
                             <button className="checkout-btn w-100" onClick={processPayment}>

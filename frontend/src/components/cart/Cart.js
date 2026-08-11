@@ -13,6 +13,7 @@ const SHIPPING_CHARGE = 40;
 
 export default function Cart() {
     const { items } = useSelector(state => state.cartState)
+    const { isAuthenticated } = useSelector(state => state.authState)
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -59,7 +60,7 @@ export default function Cart() {
 
     const totalQty = items.reduce((acc, item) => acc + item.quantity, 0);
     const itemsPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const mrpPrice = items.reduce((acc, item) => acc + getPricing({ _id: item.product, price: item.price }).mrp * item.quantity, 0);
+    const mrpPrice = items.reduce((acc, item) => acc + getPricing({ _id: item.product, price: item.price, mrp: item.mrp, discount: item.discount }).mrp * item.quantity, 0);
     const youSave = Math.max(0, mrpPrice - itemsPrice);
     const freeShipping = itemsPrice > FREE_SHIPPING_THRESHOLD;
     const shippingPrice = freeShipping ? 0 : SHIPPING_CHARGE;
@@ -68,7 +69,9 @@ export default function Cart() {
 
     const checkoutHandler = () => {
         if (items.length === 0) return;
-        navigate('/login?redirect=shipping');
+        // Logged-in users go straight to the address step. Guests are routed to
+        // login with a redirect back to checkout so they never lose their cart.
+        navigate(isAuthenticated ? '/shipping' : '/login?redirect=shipping');
     }
 
     const renderStockWarn = (item) => {
@@ -86,7 +89,7 @@ export default function Cart() {
     };
 
     const renderItemCard = (item, isSaved) => {
-        const pricing = getPricing({ _id: item.product, price: item.price });
+        const pricing = getPricing({ _id: item.product, price: item.price, mrp: item.mrp, discount: item.discount });
         const delivery = getDelivery(item);
         const outOfStock = Number(item.stock) <= 0;
         const lineTotal = formatMoney(item.price * (item.quantity || 1));

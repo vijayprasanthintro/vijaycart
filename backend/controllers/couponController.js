@@ -111,7 +111,14 @@ exports.updateCoupon = catchAsyncError(async (req, res, next) => {
 
     const { code, description, discountType, discountValue, minAmount, maxDiscount, validFrom, validUntil, usageLimit, active } = req.body;
 
-    if (code !== undefined) coupon.code = String(code).trim().toUpperCase();
+    if (code !== undefined) {
+        const codeClean = String(code).trim().toUpperCase();
+        const duplicate = await Coupon.findOne({ code: codeClean, _id: { $ne: coupon._id } });
+        if (duplicate) {
+            return next(new ErrorHandler('A coupon with this code already exists', 400))
+        }
+        coupon.code = codeClean;
+    }
     if (description !== undefined) coupon.description = description;
     if (discountType !== undefined) coupon.discountType = discountType;
     if (discountValue !== undefined) coupon.discountValue = Number(discountValue);
@@ -135,7 +142,7 @@ exports.deleteCoupon = catchAsyncError(async (req, res, next) => {
     if (!coupon) {
         return next(new ErrorHandler(`Coupon not found with this id: ${req.params.id}`, 404))
     }
-    await coupon.remove();
+    await coupon.deleteOne();
     res.status(200).json({
         success: true
     })

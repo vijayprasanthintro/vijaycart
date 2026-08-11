@@ -49,8 +49,10 @@ const productSchema = new mongoose.Schema({
         trim: true
     },
     ratings: {
-        type: String,
-        default: 0
+        type: Number,
+        default: 0,
+        min: [0, 'Rating cannot be negative'],
+        max: [5, 'Rating cannot exceed 5']
     },
     images: [
         {
@@ -115,13 +117,28 @@ const productSchema = new mongoose.Schema({
                 trim: true
             },
             rating: {
+                type: Number,
+                required: true,
+                min: [1, 'Rating must be between 1 and 5'],
+                max: [5, 'Rating must be between 1 and 5']
+            },
+            title: {
                 type: String,
-                required: true
+                trim: true,
+                maxLength: [80, 'Review title cannot exceed 80 characters']
             },
             comment: {
                 type: String,
                 required: true
-            }
+            },
+            images: [
+                {
+                    image: {
+                        type: String,
+                        required: true
+                    }
+                }
+            ]
         }
     ],
     user: {

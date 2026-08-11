@@ -1,9 +1,11 @@
+const mongoose = require('mongoose');
 const catchAsyncError = require('../middlewares/catchAsyncError');
 const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
 const Coupon = require('../models/couponModel');
 const Setting = require('../models/settingModel');
 const DeliveryPerson = require('../models/deliveryPersonModel');
+const User = require('../models/userModel');
 const ErrorHandler = require('../utils/errorHandler');
 const { nextOrderNumber } = require('../utils/sequence');
 const { notifyOrderEvent } = require('../utils/orderSms');
@@ -43,7 +45,8 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
         totalPrice,
         paymentInfo,
         paymentMethod = 'card',
-        orderKey
+        orderKey,
+        coinsRedeemed = 0
     } = req.body;
 
     if (!Array.isArray(orderItems) || orderItems.length === 0) {
@@ -51,6 +54,22 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
     }
     if (!shippingInfo || !shippingInfo.address || !shippingInfo.city || !shippingInfo.postalCode || !shippingInfo.phoneNo) {
         return next(new ErrorHandler('Shipping address is incomplete. Please provide a valid address.', 400))
+    }
+
+    // VijayCoins redemption: the customer can pay part of the order with their
+    // loyalty balance (1 coin = ₹1). The amount is validated and clamped
+    // server-side — never more than the available balance and never more than
+    // the order total before coins — then the payable total is recomputed so
+    // the stored totalPrice is authoritative and the client cannot underpay.
+    const user = await User.findById(req.user.id);
+    const payableBeforeCoins = Math.max(0,
+        Number(itemsPrice || 0) + Number(shippingPrice || 0) + Number(taxPrice || 0) - Number(discountPrice || 0));
+    let coinsToRedeem = Math.max(0, Math.floor(Number(coinsRedeemed) || 0));
+    const maxRedeemable = Math.max(0, Math.floor(Number(user && user.vijayCoins) || 0));
+    coinsToRedeem = Math.min(coinsToRedeem, maxRedeemable, Math.floor(payableBeforeCoins));
+    let effectiveTotalPrice = Number(totalPrice);
+    if (coinsToRedeem > 0) {
+        effectiveTotalPrice = Math.max(0, Math.round((payableBeforeCoins - coinsToRedeem) * 100) / 100);
     }
 
     // Idempotency: a checkout session can only ever produce one order. If the
@@ -82,7 +101,7 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
             return next(new ErrorHandler('Cash on Delivery is currently disabled. Please choose another payment method.', 400))
         }
         const codMaxAmount = Number(settings && settings.codMaxAmount !== undefined ? settings.codMaxAmount : 5000) || 5000;
-        if (Number(totalPrice) > codMaxAmount) {
+        if (effectiveTotalPrice > codMaxAmount) {
             return next(new ErrorHandler(`Cash on Delivery is available only for orders up to ₹${codMaxAmount.toLocaleString('en-IN')}`, 400))
         }
         const codPincodes = Array.isArray(settings && settings.codPincodes)
@@ -95,6 +114,14 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
     }
 
     const isPaid = paymentInfo && paymentInfo.status === 'succeeded';
+
+    //The store can choose to auto-confirm new orders from Settings. Confirmed
+    //orders reserve stock immediately instead of waiting for manual approval.
+    const storeSettings = await Setting.findOne({ key: 'global' });
+    const startStatus = storeSettings && storeSettings.defaultOrderStatus === 'Confirmed' ? 'Confirmed' : 'Pending';
+    if (startStatus === 'Confirmed') {
+        await Promise.all((orderItems || []).map(item => updateStock(item.product, item.quantity)));
+    }
 
     //Sequential human-readable number (#VC10001) + expected delivery date so
     //the confirmation SMS can reference both.
@@ -110,7 +137,8 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
             shippingPrice,
             discountPrice,
             couponCode,
-            totalPrice,
+            totalPrice: effectiveTotalPrice,
+            coinsUsed: coinsToRedeem,
             paymentInfo,
             paymentMethod,
             paidAt: isPaid ? Date.now() : undefined,
@@ -118,9 +146,9 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
             orderKey,
             orderNumber,
             deliveryDate,
-            orderStatus: 'Pending',
+            orderStatus: startStatus,
             statusHistory: [{
-                status: 'Pending',
+                status: startStatus,
                 changedAt: Date.now(),
                 changedBy: req.user.id,
                 note: isPaid ? 'Order placed (paid)' : 'Order placed'
@@ -147,6 +175,22 @@ exports.newOrder =  catchAsyncError( async (req, res, next) => {
             { code: String(couponCode).toUpperCase().trim() },
             { $inc: { usedCount: 1 } }
         );
+    }
+
+    //Deduct the redeemed VijayCoins from the customer's balance and record the
+    //debit in their coin history. Runs only on the successful creation path
+    //(never on an idempotent re-submit), so a retried checkout can not deduct
+    //the same coins twice.
+    if (coinsToRedeem > 0) {
+        user.vijayCoins = Math.round((Number(user.vijayCoins || 0) - coinsToRedeem) * 100) / 100;
+        user.coinHistory = user.coinHistory || [];
+        user.coinHistory.push({
+            amount: -coinsToRedeem,
+            type: 'redeemed',
+            note: `Coins redeemed on order ${order.orderNumber || order._id}`,
+            orderNumber: order.orderNumber || String(order._id)
+        });
+        await user.save({ validateBeforeSave: false });
     }
 
     //Send the order-placed SMS confirmation to the customer's registered mobile
@@ -352,6 +396,12 @@ exports.updateOrder =  catchAsyncError(async (req, res, next) => {
     }
     await order.save();
 
+    //Credit VijayCoins the first time an order reaches Delivered.
+    if (nextStatus === 'Delivered') {
+        const { creditOrderCoins } = require('../utils/coins');
+        await creditOrderCoins(order);
+    }
+
     //Notify the customer as their order moves through the fulfilment pipeline.
     const smsEvent = STATUS_SMS_EVENT[nextStatus];
     if (smsEvent) {
@@ -382,9 +432,92 @@ exports.deleteOrder = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler(LOCKED_MESSAGE, 400))
     }
 
-    await order.remove();
+    await order.deleteOne();
     res.status(200).json({
         success: true
     })
 })
+
+//Admin: Bulk update order status - PUT /api/v1/admin/orders/bulk-status
+//Payload: { ids: [...], orderStatus }. Applies the same transition logic as
+//the single-order endpoint (stock reservation on leaving Pending, coins on
+//delivery, SMS on meaningful moves). Customer-locked orders are skipped so a
+//cancelled order can never be re-opened by a bulk action.
+exports.bulkUpdateOrderStatus = catchAsyncError(async (req, res, next) => {
+    const rawIds = Array.isArray(req.body.ids) ? req.body.ids : [];
+    const ids = rawIds.map(id => String(id).trim()).filter(id => mongoose.isValidObjectId(id));
+    const nextStatus = String(req.body.orderStatus || '').trim();
+
+    if (ids.length === 0) {
+        return next(new ErrorHandler('Select at least one order', 400));
+    }
+    if (!ORDER_STATUSES.includes(nextStatus)) {
+        return next(new ErrorHandler(`Invalid order status. Choose from: ${ORDER_STATUSES.join(', ')}`, 400))
+    }
+
+    const orders = await Order.find({ _id: { $in: ids } });
+    let updated = 0;
+    let skipped = 0;
+
+    await Promise.all(orders.map(async order => {
+        if (isLocked(order) || order.orderStatus === 'Cancelled') { skipped += 1; return; }
+        if (order.orderStatus === 'Delivered') { skipped += 1; return; }
+
+        if (order.orderStatus === 'Pending') {
+            await Promise.all((order.orderItems || []).map(item => updateStock(item.product, item.quantity)));
+        }
+
+        order.orderStatus = nextStatus;
+        order.statusHistory = order.statusHistory || [];
+        order.statusHistory.push({
+            status: nextStatus,
+            changedAt: Date.now(),
+            changedBy: req.user.id,
+            note: 'Bulk admin update'
+        });
+        if (nextStatus === 'Delivered') order.deliveredAt = Date.now();
+        await order.save();
+        updated += 1;
+
+        if (nextStatus === 'Delivered') {
+            const { creditOrderCoins } = require('../utils/coins');
+            await creditOrderCoins(order);
+        }
+        const smsEvent = STATUS_SMS_EVENT[nextStatus];
+        if (smsEvent) notifyOrderEvent(smsEvent, order);
+    }));
+
+    res.status(200).json({
+        success: true,
+        updated,
+        skipped,
+        status: nextStatus
+    })
+});
+
+//Admin: Bulk delete orders - POST /api/v1/admin/orders/bulk-delete
+//Deletes the selected orders. Customer-locked orders (cancelled by customer)
+//are always skipped — they are immutable records.
+exports.bulkDeleteOrders = catchAsyncError(async (req, res, next) => {
+    const rawIds = Array.isArray(req.body.ids) ? req.body.ids : [];
+    const ids = rawIds.map(id => String(id).trim()).filter(id => mongoose.isValidObjectId(id));
+
+    if (ids.length === 0) {
+        return next(new ErrorHandler('Select at least one order to delete', 400));
+    }
+
+    const orders = await Order.find({ _id: { $in: ids } });
+    let deleted = 0;
+    await Promise.all(orders.map(async order => {
+        if (isLocked(order)) return;
+        await order.deleteOne();
+        deleted += 1;
+    }));
+
+    res.status(200).json({
+        success: true,
+        deleted,
+        requested: ids.length
+    })
+});
 

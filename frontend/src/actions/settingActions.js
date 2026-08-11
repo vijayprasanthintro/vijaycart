@@ -29,6 +29,6 @@ export const updateSettings = (formData) => async (dispatch) => {
     }
 }
 
-export const clearSettingsState = dispatch => {
+export const clearSettingsState = () => async (dispatch) => {
     dispatch(clearSettingsUpdated())
 }

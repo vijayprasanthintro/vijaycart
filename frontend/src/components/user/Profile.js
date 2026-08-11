@@ -124,6 +124,33 @@ export default function Profile () {
                     ))}
                 </motion.div>
 
+                <div className="pr-coins">
+                    <div className="pr-coins-balance">
+                        <span className="pr-coins-icon"><i className="fa fa-star" aria-hidden="true"></i></span>
+                        <div>
+                            <div className="pr-coins-label">VijayCoins Balance</div>
+                            <b className="pr-coins-amt">{Math.floor(Number(user.vijayCoins) || 0)} <small>coins</small></b>
+                            <div className="pr-coins-worth">Worth {formatMoney(Math.floor(Number(user.vijayCoins) || 0))} — redeemable at checkout</div>
+                        </div>
+                    </div>
+                    {Array.isArray(user.coinHistory) && user.coinHistory.length > 0 && (
+                        <div className="pr-coins-history">
+                            <div className="pr-coins-history-title">Recent Activity</div>
+                            <ul>
+                                {user.coinHistory.slice(-6).reverse().map((entry, idx) => (
+                                    <li key={`${entry.orderNumber || entry._id}-${idx}`}>
+                                        <i className={`fa ${entry.type === 'earned' ? 'fa-arrow-down pr-coin-earned' : 'fa-arrow-up pr-coin-redeemed'}`} aria-hidden="true"></i>
+                                        <span className="pr-coin-note">{entry.note}</span>
+                                        <b className={entry.type === 'earned' ? 'pr-coin-earned' : 'pr-coin-redeemed'}>
+                                            {entry.type === 'earned' ? '+' : '\u2212'}{Math.abs(Number(entry.amount) || 0)}
+                                        </b>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+
                 <div className="pr-section-title">Account</div>
                 <motion.div
                     className="dash-tiles"
@@ -149,27 +176,35 @@ export default function Profile () {
                             animate="show"
                             variants={staggerContainer(0.1, 0.15)}
                         >
-                            {recentOrders.map(order => (
-                                <motion.div className="mo-card" key={order._id} variants={fadeUp}>
-                                    <div className="mo-card-top">
-                                        <div>
-                                            <div className="mo-order-id"><i className="fa fa-hashtag mr-1" aria-hidden="true"></i>Order #{order._id}</div>
-                                            <div className="mo-date">Placed on {fmtDate(order.createdAt)}</div>
-                                        </div>
-                                        <span className={`mo-status ${(order.orderStatus || '').toLowerCase().includes('cancel') ? 'cancelled' : (order.orderStatus || '').toLowerCase().includes('deliver') ? 'delivered' : (order.orderStatus || '').toLowerCase().includes('ship') ? 'shipped' : 'processing'}`}>{order.orderStatus}</span>
+                            {recentOrders.map(order => {
+                        const status = String(order.orderStatus || '');
+                        const statusClass = status.toLowerCase().includes('cancel') ? 'cancelled'
+                            : status.toLowerCase().includes('out for delivery') ? 'shipped'
+                            : /(^|\s)delivered($|\s)/i.test(status) ? 'delivered'
+                            : status.toLowerCase().includes('ship') ? 'shipped'
+                            : 'processing';
+                        return (
+                            <motion.div className="mo-card" key={order._id} variants={fadeUp}>
+                                <div className="mo-card-top">
+                                    <div>
+                                        <div className="mo-order-id"><i className="fa fa-hashtag mr-1" aria-hidden="true"></i>Order #{order._id}</div>
+                                        <div className="mo-date">Placed on {fmtDate(order.createdAt)}</div>
                                     </div>
-                                    <div className="mo-card-mid">
-                                        <div className="mo-summary-line">
-                                            <span>{order.orderItems.reduce((a, it) => a + it.quantity, 0)} item{order.orderItems.reduce((a, it) => a + it.quantity, 0) === 1 ? '' : 's'}</span>
-                                            <b>{formatMoney(order.totalPrice)}</b>
-                                        </div>
+                                    <span className={`mo-status ${statusClass}`}>{order.orderStatus}</span>
+                                </div>
+                                <div className="mo-card-mid">
+                                    <div className="mo-summary-line">
+                                        <span>{order.orderItems.reduce((a, it) => a + it.quantity, 0)} item{order.orderItems.reduce((a, it) => a + it.quantity, 0) === 1 ? '' : 's'}</span>
+                                        <b>{formatMoney(order.totalPrice)}</b>
                                     </div>
-                                    <div className="mo-actions">
-                                        <Link to={`/order/${order._id}`} className="mo-btn primary"><i className="fa fa-eye mr-1" aria-hidden="true"></i>View Details</Link>
-                                        <Link to="/orders" className="mo-btn">View All Orders</Link>
-                                    </div>
-                                </motion.div>
-                            ))}
+                                </div>
+                                <div className="mo-actions">
+                                    <Link to={`/order/${order._id}`} className="mo-btn primary"><i className="fa fa-eye mr-1" aria-hidden="true"></i>View Details</Link>
+                                    <Link to="/orders" className="mo-btn">View All Orders</Link>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
                         </motion.div>
                     </Fragment>
                 )}

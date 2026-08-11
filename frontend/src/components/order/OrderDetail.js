@@ -48,10 +48,16 @@ const TRACK_STEPS = [
 function OrderTracking({ status }) {
     const s = (status || '').toLowerCase();
     let current = 0;
+    // "Out for Delivery" must map to its own step (4). Checking it before the
+    // generic "ship"/"deliver" matchers is critical: the substring "out for
+    // delivery" does NOT contain "ship", but it DOES contain "deliver" — so a
+    // naive includes('deliver') would light up the "Delivered" step for an
+    // order that is still on the road.
     if (s.includes('confirm')) current = 1;
     else if (s.includes('pack')) current = 2;
-    else if (s.includes('ship')) current = s.includes('out for delivery') ? 4 : 3;
-    else if (s.includes('deliver')) current = 5;
+    else if (s.includes('out for delivery')) current = 4;
+    else if (s.includes('ship')) current = 3;
+    else if (s.includes('delivered')) current = 5;
 
     return (
         <div className="od-track">
@@ -99,7 +105,9 @@ export default function OrderDetail () {
     }, [id, dispatch])
 
     const canCancel = ['pending', 'confirm', 'process', 'pack'].some(k => (orderStatus || '').toLowerCase().includes(k));
-    const isDelivered = (orderStatus || '').toLowerCase().includes('deliver');
+    // Must match the full word "delivered" — "Out for Delivery" contains the
+    // substring "deliver" but the order is NOT delivered yet.
+    const isDelivered = (orderStatus || '').toLowerCase().includes('delivered');
     const ret = returnMeta(returnStatus);
     const canRequestReturn = isDelivered && (!ret || String(returnStatus).toLowerCase().includes('rejected'));
 

@@ -1,18 +1,31 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
-import { clearAuthError, sendOtp, verifyOtp } from '../../actions/userActions';
+import { clearAuthError, sendOtp, verifyOtp, googleLogin } from '../../actions/userActions';
 import MetaData from '../layouts/MetaData';
 import { toast } from 'react-toastify';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { easeOutExpo } from '../../utils/motion';
 import { REMEMBER_KEY } from '../../slices/authSlice';
+import axios from 'axios';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const readRemember = () => {
     try { return localStorage.getItem(REMEMBER_KEY) !== '0'; } catch { return true; }
 };
+
+const GSI_SRC = 'https://accounts.google.com/gsi/client';
+
+// Official Google "G" logo (Google's own multi-color mark).
+const GoogleIcon = () => (
+    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+    </svg>
+);
 
 export default function Login() {
     const [mode, setMode] = useState('mobile');
@@ -23,7 +36,12 @@ export default function Login() {
     const [resendIn, setResendIn] = useState(0)
     const [errors, setErrors] = useState({})
     const [remember, setRemember] = useState(readRemember)
+    const [googleClientId, setGoogleClientId] = useState(null);
+    const [googleReady, setGoogleReady] = useState(false);
+    const [googleLoading, setGoogleLoading] = useState(false);
     const otpRefs = useRef([]);
+    const googleBtnRef = useRef(null);
+    const googleRenderedRef = useRef(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -33,7 +51,9 @@ export default function Login() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate(redirect)
+            // redirect may be a bare path (e.g. "shipping" from the cart) —
+            // resolve it against the app root so navigation is always absolute.
+            navigate(redirect.startsWith('/') ? redirect : `/${redirect}`)
         }
     }, [isAuthenticated, navigate, redirect])
 
@@ -157,6 +177,124 @@ export default function Login() {
 
     const stepTransition = { duration: 0.3, ease: easeOutExpo };
 
+    // -------- Google Sign-In --------
+
+    // 1. Fetch the public auth config so we know whether Google is enabled and
+    //    can render the official button with the right client id.
+    useEffect(() => {
+        let cancelled = false;
+        const loadConfig = async () => {
+            try {
+                const { data } = await axios.get('/api/v1/auth/config');
+                if (cancelled) return;
+                setGoogleClientId(data?.config?.googleClientId || null);
+            } catch {
+                if (!cancelled) setGoogleClientId(null);
+            }
+        };
+        loadConfig();
+        return () => { cancelled = true; };
+    }, []);
+
+    // 2. Verify the ID token the browser hands back from Google.
+    const handleCredentialResponse = useCallback(async (response) => {
+        const credential = response && response.credential;
+        if (!credential) {
+            toast('Google sign-in was cancelled or failed. Please try again.', {
+                type: 'error',
+                position: toast.POSITION.BOTTOM_CENTER
+            });
+            return;
+        }
+        setGoogleLoading(true);
+        try {
+            const data = await dispatch(googleLogin(credential));
+            if (data) {
+                // loginSuccess flips isAuthenticated and the effect above
+                // navigates to `redirect`.
+            }
+        } finally {
+            setGoogleLoading(false);
+        }
+    }, [dispatch]);
+
+    // 3. Load the Google Identity Services script and initialize it. Re-runs
+    //    whenever the config arrives.
+    useEffect(() => {
+        if (!googleClientId) {
+            setGoogleReady(false);
+            return;
+        }
+        let cancelled = false;
+
+        const loadScript = () => new Promise((resolve, reject) => {
+            if (window.google && window.google.accounts && window.google.accounts.id) return resolve();
+            const existing = document.querySelector(`script[src="${GSI_SRC}"]`);
+            if (existing) {
+                existing.addEventListener('load', resolve, { once: true });
+                existing.addEventListener('error', () => reject(new Error('GSI load failed')), { once: true });
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = GSI_SRC;
+            script.async = true;
+            script.defer = true;
+            script.onload = resolve;
+            script.onerror = () => reject(new Error('GSI load failed'));
+            document.body.appendChild(script);
+        });
+
+        loadScript()
+            .then(() => {
+                if (cancelled) return;
+                if (window.google && window.google.accounts && window.google.accounts.id) {
+                    window.google.accounts.id.initialize({
+                        client_id: googleClientId,
+                        callback: handleCredentialResponse,
+                        auto_select: false,
+                        cancel_on_tap_outside: false,
+                        ux_mode: 'popup'
+                    });
+                    setGoogleReady(true);
+                } else {
+                    setGoogleReady(false);
+                }
+            })
+            .catch(() => {
+                if (!cancelled) setGoogleReady(false);
+            });
+
+        return () => { cancelled = true; };
+    }, [googleClientId, handleCredentialResponse]);
+
+    // 4. Render the official Google button into the container once the script
+    //    is ready and the container is on screen (the "send" step).
+    useEffect(() => {
+        if (step !== 'send') {
+            googleRenderedRef.current = false;
+            return;
+        }
+        if (!googleReady || !googleClientId || !googleBtnRef.current) return;
+        if (googleRenderedRef.current) return;
+        if (!window.google || !window.google.accounts || !window.google.accounts.id) return;
+
+        const container = googleBtnRef.current;
+        const width = Math.max(240, Math.min(360, (container.clientWidth || 340) - 4));
+        try {
+            window.google.accounts.id.renderButton(container, {
+                theme: 'outline',
+                size: 'large',
+                shape: 'rect',
+                text: 'continue_with',
+                width,
+                logo_alignment: 'left'
+            });
+            googleRenderedRef.current = true;
+        } catch (e) {
+            /* the button may already be rendered or the container re-created */
+        }
+    }, [step, googleReady, googleClientId]);
+
     return (
         <Fragment>
             <MetaData title={`Login`} />
@@ -171,6 +309,34 @@ export default function Login() {
                             <span className="vc-auth-logo"><i className="fa fa-shopping-bag" aria-hidden="true"></i></span>
                             <span className="vc-auth-name">VijayCart</span>
                         </div>
+
+                        {step === 'send' && (
+                            <Fragment>
+                                <div className="vc-google-wrap">
+                                    {googleClientId ? (
+                                        <div className="vc-google-btn" ref={googleBtnRef}></div>
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            className="vc-google-btn vc-google-btn--disabled"
+                                            disabled
+                                            title="Google sign-in will be enabled shortly"
+                                        >
+                                            <GoogleIcon />
+                                            Continue with Google
+                                        </button>
+                                    )}
+                                    {googleClientId && !googleReady && (
+                                        <p className="vc-google-note"><i className="fa fa-spinner fa-spin mr-1" aria-hidden="true"></i>Loading Google sign-in…</p>
+                                    )}
+                                    {googleLoading && (
+                                        <p className="vc-google-note"><i className="fa fa-spinner fa-spin mr-1" aria-hidden="true"></i>Signing you in…</p>
+                                    )}
+                                </div>
+
+                                <div className="vc-divider"><span>or sign in with OTP</span></div>
+                            </Fragment>
+                        )}
 
                         <AnimatePresence>
                             {step === 'send' ? (

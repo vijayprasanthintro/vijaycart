@@ -9,7 +9,10 @@ import AdminExport from './AdminExport';
 
 export default function Inventory() {
     const { products = [], loading = true } = useSelector(state => state.productsState);
+    const { analytics } = useSelector(state => state.analyticsState);
     const dispatch = useDispatch();
+
+    const threshold = analytics.lowStockThreshold || 5;
 
     const [query, setQuery] = useState('');
     const [stock, setStock] = useState('all');
@@ -21,20 +24,20 @@ export default function Inventory() {
     }, [dispatch]);
 
     const outOfStock = products.filter(p => p.stock === 0).length;
-    const lowStock = products.filter(p => p.stock > 0 && p.stock <= 5).length;
+    const lowStock = products.filter(p => p.stock > 0 && p.stock <= threshold).length;
     const inventoryValue = products.reduce((s, p) => s + (p.stock * p.price), 0);
 
     const filtered = useMemo(() => {
         let list = products;
         if (stock === 'out') list = list.filter(p => p.stock === 0);
-        else if (stock === 'low') list = list.filter(p => p.stock > 0 && p.stock <= 5);
-        else if (stock === 'in') list = list.filter(p => p.stock > 5);
+        else if (stock === 'low') list = list.filter(p => p.stock > 0 && p.stock <= threshold);
+        else if (stock === 'in') list = list.filter(p => p.stock > threshold);
         if (query.trim()) {
             const q = query.trim().toLowerCase();
             list = list.filter(p => p.name.toLowerCase().includes(q) || (p.seller || '').toLowerCase().includes(q));
         }
         return list;
-    }, [products, query, stock]);
+    }, [products, query, stock, threshold]);
 
     useEffect(() => { setPage(1); }, [query, stock]);
 
@@ -113,8 +116,8 @@ export default function Inventory() {
                                     <tr>
                                         <th>Product</th>
                                         <th>Category</th>
-                                        <th>Stock</th>
-                                        <th>Stock Value</th>
+                                        <th className="ad-td-num">Stock</th>
+                                        <th className="ad-td-num">Stock Value</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -128,12 +131,12 @@ export default function Inventory() {
                                                 </div>
                                             </td>
                                             <td><span className="ad-chip">{product.category}</span></td>
-                                            <td>
-                                                <span className={`ad-badge ${product.stock === 0 ? 'ad-badge--danger' : product.stock <= 5 ? 'ad-badge--warning' : 'ad-badge--success'}`}>
-                                                    {product.stock === 0 ? 'Out of stock' : product.stock <= 5 ? `Low · ${product.stock}` : `${product.stock} in stock`}
+                                            <td className="ad-td-num">
+                                                <span className={`ad-badge ${product.stock === 0 ? 'ad-badge--danger' : product.stock <= threshold ? 'ad-badge--warning' : 'ad-badge--success'}`}>
+                                                    {product.stock === 0 ? 'Out of stock' : product.stock <= threshold ? `Low · ${product.stock}` : `${product.stock} in stock`}
                                                 </span>
                                             </td>
-                                            <td><span className="ad-td-strong">{toINR(product.stock * product.price)}</span></td>
+                                            <td className="ad-td-num"><span className="ad-td-strong">{toINR(product.stock * product.price)}</span></td>
                                             <td>
                                                 <Link to={`/admin/product/${product._id}`} className="ad-btn ad-btn--ghost ad-btn--sm"><i className="fa fa-pencil" aria-hidden="true"></i> Edit</Link>
                                             </td>

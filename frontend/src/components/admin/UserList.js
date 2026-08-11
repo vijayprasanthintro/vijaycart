@@ -112,7 +112,7 @@ export default function UserList() {
                                         <th>User</th>
                                         <th>Email</th>
                                         <th>Role</th>
-                                        <th>Orders</th>
+                                        <th className="ad-td-num">Orders</th>
                                         <th>Joined</th>
                                         <th>Actions</th>
                                     </tr>
@@ -128,7 +128,7 @@ export default function UserList() {
                                             </td>
                                             <td>{user.email}</td>
                                             <td>{roleBadge(user.role)}</td>
-                                            <td><span className="ad-td-strong">{orderCount(user._id)}</span></td>
+                                            <td className="ad-td-num"><span className="ad-td-strong">{orderCount(user._id)}</span></td>
                                             <td><span className="ad-stat__label">{user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-IN') : '—'}</span></td>
                                             <td>
                                                 <div className="ad-toolbar">

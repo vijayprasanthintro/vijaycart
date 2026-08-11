@@ -40,7 +40,12 @@ const validateCatalog = () => {
                 problems.push(`${label}: missing required field "${f}"`);
             }
         });
-        if (!Array.isArray(p.images) || !p.images.length) problems.push(`${label}: images must be a non-empty array`);
+        if (!Array.isArray(p.images) || p.images.length !== 5) problems.push(`${label}: images must contain exactly 5 entries`);
+        (p.images || []).forEach((img, idx) => {
+            if (!img || typeof img.image !== 'string' || !img.image.trim()) {
+                problems.push(`${label}: image #${idx + 1} must have a non-empty "image" path`);
+            }
+        });
         if (typeof p.price !== 'number' || p.price <= 0) problems.push(`${label}: price must be a positive number`);
         if (typeof p.discount !== 'number' || p.discount < 0 || p.discount > 95) problems.push(`${label}: discount must be 0-95`);
         if (typeof p.stock !== 'number' || p.stock < 0) problems.push(`${label}: stock must be a non-negative number`);

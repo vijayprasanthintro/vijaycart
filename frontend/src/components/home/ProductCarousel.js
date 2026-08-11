@@ -51,7 +51,9 @@ export default memo(function ProductCarousel({
     if (el) el.scrollBy({ left: dir * scrollBy, behavior: 'smooth' });
   };
 
-  const showControls = !loading && !error && products.length > 0;
+  // The track is a responsive grid now, so the buttons only appear if the
+  // track genuinely overflows its container (e.g. when the CSS is overridden).
+  const showControls = !loading && !error && products.length > 0 && (canLeft || canRight);
 
   return (
     <motion.section

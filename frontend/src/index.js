@@ -6,6 +6,9 @@ import ReactDOM from 'react-dom/client';
 // Font Awesome icons). Importing these before App.css keeps the same cascade.
 import './vendor/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
+// Premium variable font (bundled locally, no CDN) used for admin numeric
+// values and display type via --ad-font-display.
+import '@fontsource-variable/manrope';
 import App from './App';
 import store from './store'
 import {Provider } from 'react-redux';
@@ -33,10 +36,10 @@ axios.defaults.timeout = 45000;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <WishlistProvider>
-    <Provider store={store}>
+  <Provider store={store}>
+    <WishlistProvider>
       <App />
-    </Provider>
-  </WishlistProvider>
+    </WishlistProvider>
+  </Provider>
 );
 

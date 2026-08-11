@@ -156,7 +156,7 @@ export default function UpdateOrder() {
                     <div className="ad-table-wrap">
                         <table className="ad-table">
                             <thead>
-                                <tr><th>Product</th><th>Price</th><th>Qty</th><th>Total</th></tr>
+                                <tr><th>Product</th><th className="ad-td-num">Price</th><th className="ad-td-num">Qty</th><th className="ad-td-num">Total</th></tr>
                             </thead>
                             <tbody>
                                 {orderItems && orderItems.map(item => (
@@ -167,9 +167,9 @@ export default function UpdateOrder() {
                                                 <Link to={`/product/${item.product}`} className="ad-td-strong">{item.name}</Link>
                                             </div>
                                         </td>
-                                        <td>{toINR(item.price)}</td>
-                                        <td>{item.quantity}</td>
-                                        <td><span className="ad-td-strong">{toINR(item.price * item.quantity)}</span></td>
+                                        <td className="ad-td-num">{toINR(item.price)}</td>
+                                        <td className="ad-td-num">{item.quantity}</td>
+                                        <td className="ad-td-num"><span className="ad-td-strong">{toINR(item.price * item.quantity)}</span></td>
                                     </tr>
                                 ))}
                             </tbody>

@@ -1,5 +1,5 @@
 const express = require('express');
-const { newOrder, getSingleOrder, myOrders, orders, updateOrder, deleteOrder, cancelOrder, returnOrder } = require('../controllers/orderController');
+const { newOrder, getSingleOrder, myOrders, orders, updateOrder, deleteOrder, cancelOrder, returnOrder, bulkUpdateOrderStatus, bulkDeleteOrders } = require('../controllers/orderController');
 const router = express.Router();
 const {isAuthenticatedUser, authorizeRoles} = require('../middlewares/authenticate');
 const { validate, objectIdParam, orderRules, updateOrderStatusRules, returnOrderRules } = require('../middlewares/validate');
@@ -12,6 +12,8 @@ router.route('/myorders').get(isAuthenticatedUser,myOrders);
 
 //Admin Routes
 router.route('/admin/orders').get(isAuthenticatedUser, authorizeRoles('admin'), orders)
+router.route('/admin/orders/bulk-status').put(isAuthenticatedUser, authorizeRoles('admin'), bulkUpdateOrderStatus)
+router.route('/admin/orders/bulk-delete').post(isAuthenticatedUser, authorizeRoles('admin'), bulkDeleteOrders)
 router.route('/admin/order/:id').put(isAuthenticatedUser, authorizeRoles('admin'), objectIdParam('id'), updateOrderStatusRules(), validate, updateOrder)
                         .delete(isAuthenticatedUser, authorizeRoles('admin'), objectIdParam('id'), validate, deleteOrder)
 

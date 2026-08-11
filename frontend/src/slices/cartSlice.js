@@ -5,6 +5,21 @@ import { createSlice } from "@reduxjs/toolkit";
 const COUPON_KEY = 'vijaycart_coupon';
 const ORDER_KEY = 'vijaycart_orderKey';
 const BUY_NOW_KEY = 'vijaycart_buyNowItems';
+const COINS_KEY = 'vijaycart_coinsRedeemed';
+
+const readCartItems = () => {
+    try {
+        const items = JSON.parse(localStorage.getItem('cartItems'));
+        return Array.isArray(items) ? items : [];
+    } catch { return []; }
+};
+
+const readShippingInfo = () => {
+    try {
+        const info = JSON.parse(localStorage.getItem('shippingInfo'));
+        return info && typeof info === 'object' ? info : {};
+    } catch { return {}; }
+};
 
 const readCoupon = () => {
     try { return JSON.parse(sessionStorage.getItem(COUPON_KEY)); } catch { return null; }
@@ -21,12 +36,16 @@ const readBuyNowItems = () => {
     } catch { return []; }
 };
 
+const readCoinsRedeemed = () => {
+    try { return Math.max(0, Number(sessionStorage.getItem(COINS_KEY)) || 0); } catch { return 0; }
+};
+
 const cartSlice = createSlice({
     name: 'cart',
     initialState: {
-        items: localStorage.getItem('cartItems')? JSON.parse(localStorage.getItem('cartItems')): [],
+        items: readCartItems(),
         loading: false,
-        shippingInfo: localStorage.getItem('shippingInfo')? JSON.parse(localStorage.getItem('shippingInfo')): {},
+        shippingInfo: readShippingInfo(),
         coupon: readCoupon(),
         // Idempotency key for the current checkout session. Created when the
         // user reaches the payment screen, cleared after the order is created,
@@ -36,7 +55,11 @@ const cartSlice = createSlice({
         // "Buy Now" checkout items — a session-scoped single-product checkout
         // that is completely separate from the cart. Placed so a Buy Now
         // purchase never adds to (or empties) the user's real cart.
-        buyNowItems: readBuyNowItems()
+        buyNowItems: readBuyNowItems(),
+        // VijayCoins redeemed in the current checkout session (1 coin = ₹1).
+        // Session-scoped like the coupon: it belongs to the order being placed
+        // and is cleared the moment that order is created.
+        coinsRedeemed: readCoinsRedeemed()
     },
     reducers: {
         addCartItemRequest(state, action){
@@ -144,6 +167,21 @@ const cartSlice = createSlice({
                 buyNowItems: []
             }
         },
+        setCoinsRedeemed(state, action) {
+            const value = Math.max(0, Math.floor(Number(action.payload) || 0));
+            try { sessionStorage.setItem(COINS_KEY, String(value)); } catch { /* ignore */ }
+            return {
+                ...state,
+                coinsRedeemed: value
+            }
+        },
+        clearCoinsRedeemed(state, action) {
+            try { sessionStorage.removeItem(COINS_KEY); } catch { /* ignore */ }
+            return {
+                ...state,
+                coinsRedeemed: 0
+            }
+        },
         orderCompleted(state, action) {
             // A Buy Now checkout (keepCart) must clear only the buy-now session
             // and leave the user's real cart untouched. A regular cart checkout
@@ -155,13 +193,15 @@ const cartSlice = createSlice({
             try { sessionStorage.removeItem(COUPON_KEY); } catch { /* ignore */ }
             try { sessionStorage.removeItem(ORDER_KEY); } catch { /* ignore */ }
             try { sessionStorage.removeItem(BUY_NOW_KEY); } catch { /* ignore */ }
+            try { sessionStorage.removeItem(COINS_KEY); } catch { /* ignore */ }
             return {
                 items: keepCart ? state.items : [],
                 loading: false,
                 shippingInfo: {},
                 coupon: null,
                 orderKey: null,
-                buyNowItems: []
+                buyNowItems: [],
+                coinsRedeemed: 0
             }
         }
 
@@ -183,6 +223,8 @@ export const {
     clearOrderKey,
     setBuyNowItems,
     clearBuyNowItems,
+    setCoinsRedeemed,
+    clearCoinsRedeemed,
     orderCompleted
  } = actions;
 

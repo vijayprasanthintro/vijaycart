@@ -32,7 +32,7 @@ const matchesTab = (status, tab) => {
     switch (tab) {
         case 'pending': return s.includes('pending') || s.includes('process');
         case 'transit': return s.includes('confirm') || s.includes('pack') || s.includes('ship') || s.includes('out for delivery');
-        case 'delivered': return s.includes('deliver');
+        case 'delivered': return s.includes('delivered');
         case 'cancelled': return s.includes('cancel');
         default: return true;
     }
@@ -159,7 +159,7 @@ export default function UserOrders () {
                                             {order.paymentMethod === 'cod'
                                                 ? <Fragment>
                                                     <i className="fa fa-hand-holding-dollar mr-1" aria-hidden="true"></i>
-                                                    COD{String(order.orderStatus || '').toLowerCase().includes('deliver') ? (order.codStatus === 'Collected' ? ' · Cash Collected' : ' · Cash Pending') : ''}
+                                                    COD{String(order.orderStatus || '').toLowerCase().includes('delivered') ? (order.codStatus === 'Collected' ? ' · Cash Collected' : ' · Cash Pending') : ''}
                                                   </Fragment>
                                                 : <Fragment>
                                                     <i className={`fa ${order.paymentInfo?.status === 'succeeded' ? 'fa-check-circle' : 'fa-clock-o'} mr-1`} aria-hidden="true"></i>

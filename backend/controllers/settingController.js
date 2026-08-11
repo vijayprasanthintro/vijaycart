@@ -24,7 +24,12 @@ exports.updateSettings = catchAsyncError(async (req, res, next) => {
     const allowed = [
         'storeName', 'storeTagline', 'currency', 'supportEmail', 'supportPhone',
         'shippingFee', 'freeShippingAbove', 'deliveryEstimateDays', 'announcement', 'permissions',
-        'codEnabled', 'codMaxAmount', 'codPincodes'
+        'codEnabled', 'codMaxAmount', 'codPincodes',
+        'prepaidEnabled', 'stripeEnabled',
+        'metaTitle', 'metaDescription',
+        'enableRatings', 'enableWishlist', 'enableReviews', 'showDeliveryEstimate',
+        'lowStockThreshold', 'defaultOrderStatus',
+        'enableWaitlist', 'waitlistMessage'
     ];
 
     allowed.forEach(field => {

@@ -54,6 +54,58 @@ const settingSchema = new mongoose.Schema({
         type: [String],
         default: []
     },
+    prepaidEnabled: {
+        type: Boolean,
+        default: true
+    },
+    stripeEnabled: {
+        type: Boolean,
+        default: true
+    },
+    //SEO
+    metaTitle: {
+        type: String,
+        default: ''
+    },
+    metaDescription: {
+        type: String,
+        default: ''
+    },
+    //Storefront toggles
+    enableRatings: {
+        type: Boolean,
+        default: true
+    },
+    enableWishlist: {
+        type: Boolean,
+        default: true
+    },
+    enableReviews: {
+        type: Boolean,
+        default: true
+    },
+    showDeliveryEstimate: {
+        type: Boolean,
+        default: true
+    },
+    //Order / stock defaults
+    lowStockThreshold: {
+        type: Number,
+        default: 5
+    },
+    defaultOrderStatus: {
+        type: String,
+        default: 'Pending'
+    },
+    //Launch / waitlist
+    enableWaitlist: {
+        type: Boolean,
+        default: false
+    },
+    waitlistMessage: {
+        type: String,
+        default: ''
+    },
     permissions: {
         type: Object,
         default: {}

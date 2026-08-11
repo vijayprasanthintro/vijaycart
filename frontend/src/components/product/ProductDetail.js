@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import { createReview, getProduct, getProducts } from "../../actions/productActions"
 import { ProductDetailSkeleton } from '../layouts/Skeletons';
 import MetaData from "../layouts/MetaData";
@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import ProductReview from "./ProductReview";
 import ProductCarousel from "../home/ProductCarousel";
 import GalleryLightbox from "./GalleryLightbox";
+import ShareSheet from "./ShareSheet";
 import EmptyState from "../common/EmptyState";
 import axios from "axios";
 import { useWishlist } from "../../context/WishlistContext";
@@ -29,12 +30,19 @@ export default function ProductDetail () {
     const { user } = useSelector(state => state.authState);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
     const { id } = useParams()
     const [quantity, setQuantity] = useState(1);
     const [activeImage, setActiveImage] = useState(0);
     const [show, setShow] = useState(false);
     const [rating, setRating] = useState(1);
     const [comment, setComment] = useState("");
+    const [reviewTitle, setReviewTitle] = useState("");
+    const [reviewImages, setReviewImages] = useState([]);
+    // null = unknown, true = user has a Delivered order for this product,
+    // false = not eligible yet (the server enforces this too, but the UI
+    // should say so instead of silently failing the request).
+    const [deliveredForReview, setDeliveredForReview] = useState(null);
     const [canZoom, setCanZoom] = useState(false);
     const [zoom, setZoom] = useState({ active: false, x: 50, y: 50 });
     const [pincode, setPincode] = useState('');
@@ -44,6 +52,9 @@ export default function ProductDetail () {
     const [poolLoaded, setPoolLoaded] = useState(false);
     const [lightbox, setLightbox] = useState(null);
     const [stickyVisible, setStickyVisible] = useState(false);
+    const [shareOpen, setShareOpen] = useState(false);
+    const [waitlisted, setWaitlisted] = useState(false);
+    const [waitlistLoading, setWaitlistLoading] = useState(false);
     const actionsRef = useRef(null);
     const prevIdRef = useRef(id);
     const lastErrorToastRef = useRef('');
@@ -77,6 +88,8 @@ export default function ProductDetail () {
             product: product._id,
             name: product.name,
             price: product.price,
+            mrp: product.mrp,
+            discount: product.discount,
             image: (product.images && product.images[0] && product.images[0].image) || '',
             stock: product.stock,
             quantity
@@ -84,21 +97,130 @@ export default function ProductDetail () {
         navigate('/shipping');
     };
 
-    const toggleWish = () => {
-        wish.toggleWishlist(product);
-        toast(isWished ? 'Removed from Wishlist' : 'Added to Wishlist', {
-            type: isWished ? 'info' : 'success',
-            position: toast.POSITION.BOTTOM_CENTER
-        });
+    const toggleWish = async () => {
+        if (!user) {
+            toast('Please login to add items to your wishlist', {
+                type: 'info',
+                position: toast.POSITION.BOTTOM_CENTER
+            });
+            navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`);
+            return;
+        }
+        const res = await wish.toggleWishlist(product);
+        if (res && res.ok) {
+            toast(res.added ? 'Added to Wishlist' : 'Removed from Wishlist', {
+                type: res.added ? 'success' : 'info',
+                position: toast.POSITION.BOTTOM_CENTER
+            });
+        } else {
+            toast('Could not update wishlist. Please try again.', {
+                type: 'error',
+                position: toast.POSITION.BOTTOM_CENTER
+            });
+        }
+    };
+
+    const shareProduct = async () => {
+        const shareUrl = `${window.location.origin}/product/${product._id}`;
+        const shareText = `${product.name} — ${formatMoney(pricing.price)} on VijayCart. Check it out!`;
+        if (navigator.share) {
+            try {
+                await navigator.share({ title: product.name, text: shareText, url: shareUrl });
+                return;
+            } catch (e) {
+                // AbortError = the user closed the native sheet; anything else
+                // falls back to the in-app share sheet.
+                if (e && e.name === 'AbortError') return;
+            }
+        }
+        setShareOpen(true);
+    };
+
+    // If this product is out of stock the user can join the waitlist and be
+    // notified when it's back. Check the current status once when logged in.
+    useEffect(() => {
+        let cancelled = false;
+        if (user && product._id && product.stock === 0) {
+            axios.get(`/api/v1/waitlist/status/${product._id}`)
+                .then(res => { if (!cancelled) setWaitlisted(!!res?.data?.joined); })
+                .catch(() => { /* non-fatal */ });
+        } else {
+            setWaitlisted(false);
+        }
+        return () => { cancelled = true; };
+    }, [user, product._id, product.stock]);
+
+    const toggleWaitlist = async () => {
+        if (!user) {
+            toast('Please login to join the waitlist', {
+                type: 'info',
+                position: toast.POSITION.BOTTOM_CENTER
+            });
+            navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`);
+            return;
+        }
+        setWaitlistLoading(true);
+        try {
+            if (waitlisted) {
+                await axios.delete(`/api/v1/waitlist/${product._id}`);
+                setWaitlisted(false);
+                toast('Removed from waitlist', { type: 'info', position: toast.POSITION.BOTTOM_CENTER });
+            } else {
+                await axios.post('/api/v1/waitlist', { productId: product._id });
+                setWaitlisted(true);
+                toast('You will be notified when this product is back in stock', { type: 'success', position: toast.POSITION.BOTTOM_CENTER });
+            }
+        } catch (err) {
+            toast(err?.response?.data?.message || 'Could not update waitlist. Please try again.', {
+                type: 'error',
+                position: toast.POSITION.BOTTOM_CENTER
+            });
+        } finally {
+            setWaitlistLoading(false);
+        }
     };
 
     const reviewHandler = () => {
         const formData = new FormData();
         formData.append('rating', rating);
         formData.append('comment', comment);
+        if (reviewTitle.trim()) formData.append('title', reviewTitle.trim());
         formData.append('productId', id);
+        reviewImages.forEach(file => formData.append('reviewImages', file));
         dispatch(createReview(formData))
     }
+
+    // Reviews are reserved for customers who actually received the product
+    // (exact 'Delivered' status). Show the gate up-front so a user who has not
+    // had this product delivered cannot even open the form.
+    useEffect(() => {
+        if (!user || !product._id) {
+            setDeliveredForReview(null);
+            return;
+        }
+        let cancelled = false;
+        axios.get('/api/v1/myorders')
+            .then(res => {
+                const orders = Array.isArray(res?.data?.orders) ? res.data.orders : [];
+                const eligible = orders.some(o =>
+                    String(o.orderStatus) === 'Delivered' &&
+                    (o.orderItems || []).some(it => String(it.product) === String(product._id))
+                );
+                if (!cancelled) setDeliveredForReview(eligible);
+            })
+            .catch(() => { if (!cancelled) setDeliveredForReview(null); });
+        return () => { cancelled = true; };
+    }, [user, product._id]);
+
+    const onReviewImageChange = (e) => {
+        const files = Array.from(e.target.files || []).slice(0, Math.max(0, 5 - reviewImages.length));
+        if (files.length) setReviewImages(prev => [...prev, ...files]);
+        e.target.value = '';
+    };
+
+    const removeReviewImage = (idx) => {
+        setReviewImages(prev => prev.filter((_, i) => i !== idx));
+    };
 
     // Fetch the product. When the :id changes we clear the previous product so
     // the skeleton shows for the new one; otherwise we leave prior state alone
@@ -412,6 +534,22 @@ export default function ProductDetail () {
                                         </div>
                                     )}
 
+                                    {/* Floating share + wishlist on the image (mobile) */}
+                                    <div className="pd-gallery-actions">
+                                        <button
+                                            type="button"
+                                            onClick={(e) => { e.stopPropagation(); shareProduct(); }}
+                                            aria-label="Share this product"
+                                            className="share-btn pd-gallery-action"
+                                        ><i className="fa fa-share-alt" aria-hidden="true"></i></button>
+                                        <button
+                                            type="button"
+                                            onClick={(e) => { e.stopPropagation(); toggleWish(); }}
+                                            aria-label={isWished ? 'Remove from wishlist' : 'Add to wishlist'}
+                                            className={`wishlist-btn pd-gallery-action ${isWished ? 'active' : ''}`}
+                                        ><i className={`fa ${isWished ? 'fa-heart' : 'fa-heart-o'}`} aria-hidden="true"></i></button>
+                                    </div>
+
                                     <div
                                         className="gallery-main"
                                         onMouseMove={canZoom ? handleZoomMove : undefined}
@@ -522,6 +660,22 @@ export default function ProductDetail () {
                                     <p id="product_id" className="mb-0">Product # {product._id}</p>
                                 </div>
 
+                                {product.stock === 0 && (
+                                    <div className="pd-waitlist">
+                                        <div className="pd-waitlist-head"><i className="fa fa-bell" aria-hidden="true"></i> This product is out of stock.</div>
+                                        <p className="pd-waitlist-sub">Join the waitlist and we'll notify you the moment it's back.</p>
+                                        <button
+                                            type="button"
+                                            className={`pd-waitlist-btn ${waitlisted ? 'joined' : ''}`}
+                                            onClick={toggleWaitlist}
+                                            disabled={waitlistLoading}
+                                        >
+                                            {waitlistLoading ? <i className="fa fa-spinner fa-spin mr-2" aria-hidden="true"></i> : <i className={`fa ${waitlisted ? 'fa-check-circle' : 'fa-bell'} mr-2`} aria-hidden="true"></i>}
+                                            {waitlisted ? 'You will be notified' : 'Notify Me When Available'}
+                                        </button>
+                                    </div>
+                                )}
+
                                 <hr style={{ borderColor: '#e0e0e0' }} />
 
                                 <div className="qty-box">
@@ -553,6 +707,12 @@ export default function ProductDetail () {
                                         aria-label={isWished ? 'Remove from wishlist' : 'Add to wishlist'}
                                         className={`wishlist-btn detail-wish ${isWished ? 'active' : ''}`}
                                     ><i className={`fa ${isWished ? 'fa-heart' : 'fa-heart-o'}`} aria-hidden="true"></i></button>
+                                    <button
+                                        type="button"
+                                        onClick={shareProduct}
+                                        aria-label="Share this product"
+                                        className="share-btn detail-share"
+                                    ><i className="fa fa-share-alt" aria-hidden="true"></i></button>
                                 </div>
 
                                 <div className="pd-trust">
@@ -564,9 +724,13 @@ export default function ProductDetail () {
                                 <p id="product_seller" className="mt-3 mb-0">Sold by: <strong>{product.seller}</strong></p>
 
                                 {user ? (
-                                    <button onClick={() => setShow(true)} id="review_btn" type="button" className="btn btn-primary mt-3">
-                                        <i className="fa fa-star mr-2" aria-hidden="true"></i>Submit Your Review
-                                    </button>
+                                    deliveredForReview === false ? (
+                                        <p className="mt-3 mb-0 text-muted"><i className="fa fa-lock mr-2" aria-hidden="true"></i>You can review this product once it has been <strong>Delivered</strong> to you.</p>
+                                    ) : (
+                                        <button onClick={() => setShow(true)} id="review_btn" type="button" className="btn btn-primary mt-3">
+                                            <i className="fa fa-star mr-2" aria-hidden="true"></i>Submit Your Review
+                                        </button>
+                                    )
                                 ) : (
                                     <div className="alert alert-danger mt-3"> Login to Post Review</div>
                                 )}
@@ -642,13 +806,17 @@ export default function ProductDetail () {
                                     </div>
                                 </div>
                                 {user ? (
-                                    <button type="button" className="review-btn px-4" onClick={() => setShow(true)}><i className="fa fa-pencil mr-1" aria-hidden="true"></i>Write Review</button>
+                                    deliveredForReview === false ? (
+                                        <span className="review-btn px-4 review-btn--disabled" title="Reviews can be posted only after this product is delivered to you"><i className="fa fa-lock mr-1" aria-hidden="true"></i>Review after Delivery</span>
+                                    ) : (
+                                        <button type="button" className="review-btn px-4" onClick={() => setShow(true)}><i className="fa fa-pencil mr-1" aria-hidden="true"></i>Write Review</button>
+                                    )
                                 ) : (
                                     <Link to="/login" className="review-btn px-4"><i className="fa fa-star mr-1" aria-hidden="true"></i>Login to Review</Link>
                                 )}
                             </div>
                             {displayReviews.length > 0
-                                ? <ProductReview reviews={displayReviews} />
+                                ? <ProductReview reviews={displayReviews} product={product} />
                                 : <p className="text-muted mt-3">No reviews yet. Be the first to review this product!</p>}
                         </section>
 
@@ -699,6 +867,15 @@ export default function ProductDetail () {
                         />
                     )}
 
+                    {/* Share sheet (fallback when native share is unavailable) */}
+                    <ShareSheet
+                        open={shareOpen}
+                        onClose={() => setShareOpen(false)}
+                        title={product.name}
+                        text={`${product.name} — ${formatMoney(pricing.price)} on VijayCart. Check it out!`}
+                        url={`${window.location.origin}/product/${product._id}`}
+                    />
+
                     {/* Sticky Add to Cart / Buy Now (mobile) */}
                     {!loading && product._id && stickyVisible && (
                         <div className="pd-sticky">
@@ -736,20 +913,65 @@ export default function ProductDetail () {
                             <Modal.Title>Submit Review</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <ul className="stars">
-                                {[1, 2, 3, 4, 5].map(star => (
-                                    <li
-                                        key={star}
-                                        value={star}
-                                        onClick={() => setRating(star)}
-                                        className={`star ${star <= rating ? 'orange' : ''}`}
-                                        onMouseOver={(e) => e.target.classList.add('yellow')}
-                                        onMouseOut={(e) => e.target.classList.remove('yellow')}
-                                    ><i className="fa fa-star"></i></li>
-                                ))}
-                            </ul>
-                            <textarea onChange={(e) => setComment(e.target.value)} name="review" id="review" className="form-control mt-3"></textarea>
-                            <button disabled={loading} onClick={reviewHandler} aria-label="Close" className="btn my-3 float-right review-btn px-4 text-white">Submit</button>
+                            {deliveredForReview === false ? (
+                                <div className="pd-review-gate">
+                                    <i className="fa fa-lock" aria-hidden="true"></i>
+                                    <p>You can review this product only after it has been <strong>delivered</strong> to you.</p>
+                                    <button type="button" className="btn btn-primary" onClick={handleClose}>Got it</button>
+                                </div>
+                            ) : (
+                                <Fragment>
+                                    <ul className="stars">
+                                        {[1, 2, 3, 4, 5].map(star => (
+                                            <li
+                                                key={star}
+                                                value={star}
+                                                onClick={() => setRating(star)}
+                                                className={`star ${star <= rating ? 'orange' : ''}`}
+                                                onMouseOver={(e) => e.target.classList.add('yellow')}
+                                                onMouseOut={(e) => e.target.classList.remove('yellow')}
+                                            ><i className="fa fa-star"></i></li>
+                                        ))}
+                                    </ul>
+                                    <input
+                                        type="text"
+                                        className="form-control mt-3"
+                                        placeholder="Review title (optional)"
+                                        maxLength="80"
+                                        value={reviewTitle}
+                                        onChange={(e) => setReviewTitle(e.target.value)}
+                                    />
+                                    <textarea onChange={(e) => setComment(e.target.value)} name="review" id="review" className="form-control mt-3" placeholder="Share your experience with this product…"></textarea>
+
+                                    <div className="review-upload mt-3">
+                                        <label className="review-upload-label" htmlFor="review_images">
+                                            <i className="fa fa-camera mr-1" aria-hidden="true"></i>
+                                            Add photos ({reviewImages.length}/5)
+                                        </label>
+                                        <input
+                                            id="review_images"
+                                            type="file"
+                                            accept="image/*"
+                                            multiple
+                                            disabled={reviewImages.length >= 5}
+                                            onChange={onReviewImageChange}
+                                            hidden
+                                        />
+                                        {reviewImages.length > 0 && (
+                                            <div className="review-upload-previews">
+                                                {reviewImages.map((file, idx) => (
+                                                    <span className="review-upload-preview" key={idx}>
+                                                        <img src={URL.createObjectURL(file)} alt={`Review photo ${idx + 1}`} />
+                                                        <button type="button" className="review-upload-remove" onClick={() => removeReviewImage(idx)} aria-label="Remove photo"><i className="fa fa-times" aria-hidden="true"></i></button>
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <button disabled={loading} onClick={reviewHandler} className="btn my-3 float-right review-btn px-4 text-white">Submit</button>
+                                </Fragment>
+                            )}
                         </Modal.Body>
                     </Modal>
                 </Fragment>}

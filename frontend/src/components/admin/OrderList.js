@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { adminOrders as adminOrdersAction, deleteOrder } from '../../actions/orderActions';
+import { adminOrders as adminOrdersAction, deleteOrder, bulkUpdateOrderStatus, bulkDeleteOrders } from '../../actions/orderActions';
 import { getDeliveryBoys } from '../../actions/deliveryActions';
 import { clearError, clearOrderDeleted } from '../../slices/orderSlice';
 import { toast } from 'react-toastify';
@@ -18,6 +18,8 @@ export default function OrderList() {
     const [query, setQuery] = useState('');
     const [status, setStatus] = useState('');
     const [page, setPage] = useState(1);
+    const [selected, setSelected] = useState(() => new Set());
+    const [bulkStatus, setBulkStatus] = useState('');
     const PER_PAGE = 10;
 
     useEffect(() => {
@@ -91,6 +93,56 @@ export default function OrderList() {
         dispatch(deleteOrder(id));
     };
 
+    const toggleSelect = id => setSelected(prev => {
+        const next = new Set(prev);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        return next;
+    });
+
+    const allChecked = pageItems.length > 0 && pageItems.every(o => selected.has(o._id));
+
+    const toggleSelectAll = () => setSelected(prev => {
+        const next = new Set(prev);
+        if (allChecked) pageItems.forEach(o => next.delete(o._id));
+        else pageItems.forEach(o => next.add(o._id));
+        return next;
+    });
+
+    const clearSelection = () => setSelected(new Set());
+
+    const bulkStatusHandler = async () => {
+        const ids = Array.from(selected);
+        if (!ids.length || !bulkStatus) return;
+        if (!window.confirm(`Set ${ids.length} order${ids.length === 1 ? '' : 's'} to "${bulkStatus}"?`)) return;
+        const res = await dispatch(bulkUpdateOrderStatus(ids, bulkStatus));
+        if (res && res.success) {
+            const msg = res.skipped > 0
+                ? `${res.updated} updated · ${res.skipped} skipped (locked)`
+                : `${res.updated} order${res.updated === 1 ? '' : 's'} set to ${res.status}`;
+            toast(msg, { type: 'success', position: toast.POSITION.BOTTOM_CENTER });
+            dispatch(adminOrdersAction());
+            clearSelection();
+            setBulkStatus('');
+        } else {
+            toast(res?.error || 'Status update failed', { type: 'error', position: toast.POSITION.BOTTOM_CENTER });
+        }
+    };
+
+    const bulkDeleteHandler = async () => {
+        const ids = Array.from(selected);
+        if (!ids.length) return;
+        if (!window.confirm(`Delete ${ids.length} order${ids.length === 1 ? '' : 's'}? Customer-locked orders will be kept.`)) return;
+        const res = await dispatch(bulkDeleteOrders(ids));
+        if (res && res.success) {
+            toast(`${res.deleted} order${res.deleted === 1 ? '' : 's'} deleted`, { type: 'success', position: toast.POSITION.BOTTOM_CENTER });
+            dispatch(adminOrdersAction());
+            clearSelection();
+        } else {
+            toast(res?.error || 'Delete failed', { type: 'error', position: toast.POSITION.BOTTOM_CENTER });
+        }
+    };
+
     return (
         <Fragment>
             <div className="ad-page-head">
@@ -138,8 +190,27 @@ export default function OrderList() {
                         </select>
                     </div>
                 </div>
+                {selected.size > 0 && (
+                    <div className="ad-bulk-bar">
+                        <span className="ad-bulk-bar__count"><i className="fa fa-check-square-o" aria-hidden="true"></i> {selected.size} selected</span>
+                        <div className="ad-bulk-bar__stock">
+                            <select className="ad-input ad-input--sm" value={bulkStatus} onChange={e => setBulkStatus(e.target.value)} aria-label="Set status for selected orders">
+                                <option value="">Set status…</option>
+                                {ORDER_STATUSES.map(s => (
+                                    <option key={s} value={s}>{s}</option>
+                                ))}
+                            </select>
+                            <button type="button" className="ad-btn ad-btn--soft ad-btn--sm" onClick={bulkStatusHandler}><i className="fa fa-tag" aria-hidden="true"></i> Apply</button>
+                        </div>
+                        <button type="button" className="ad-btn ad-btn--danger ad-btn--sm" onClick={bulkDeleteHandler}><i className="fa fa-trash" aria-hidden="true"></i> Delete</button>
+                        <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" onClick={clearSelection}>Clear</button>
+                    </div>
+                )}
                 <div className="ad-card__body ad-card__body--flush">
-                    {loading ? (
+                    <div className="ad-refresh-bar">
+                        {loading && adminOrders.length > 0 && <div className="ad-refresh-bar__fill" />}
+                    </div>
+                    {loading && adminOrders.length === 0 ? (
                         <div className="ad-loading"><i className="fa fa-spinner fa-spin" aria-hidden="true"></i> Loading orders…</div>
                     ) : filtered.length === 0 ? (
                         <div className="ad-empty"><i className="fa fa-inbox" aria-hidden="true"></i><p>No orders match your filters.</p></div>
@@ -148,11 +219,14 @@ export default function OrderList() {
                             <table className="ad-table">
                                 <thead>
                                     <tr>
+                                        <th className="ad-th-check">
+                                            <input type="checkbox" checked={allChecked} onChange={toggleSelectAll} aria-label="Select all orders on this page" />
+                                        </th>
                                         <th>Order</th>
                                         <th>Customer</th>
                                         <th>Ship To</th>
-                                        <th>Items</th>
-                                        <th>Total</th>
+                                        <th className="ad-td-num">Items</th>
+                                        <th className="ad-td-num">Total</th>
                                         <th>Payment</th>
                                         <th>Status</th>
                                         <th>Delivery Boy</th>
@@ -166,6 +240,9 @@ export default function OrderList() {
                                         const locked = order.orderStatus === 'Cancelled by Customer';
                                         return (
                                             <tr key={order._id}>
+                                                <td className="ad-th-check">
+                                                    <input type="checkbox" checked={selected.has(order._id)} onChange={() => toggleSelect(order._id)} aria-label={`Select order ${order._id}`} />
+                                                </td>
                                                 <td><span className="ad-td-mono">#{order._id.slice(-8).toUpperCase()}</span></td>
                                                 <td>
                                                     <div className="ad-td-strong">{order.shippingInfo?.name || order.user?.name || '—'}</div>
@@ -176,8 +253,8 @@ export default function OrderList() {
                                                         {[order.shippingInfo?.city, order.shippingInfo?.state, order.shippingInfo?.postalCode].filter(Boolean).join(', ') || '—'}
                                                     </span>
                                                 </td>
-                                                <td>{order.orderItems?.length || 0}</td>
-                                                <td><span className="ad-td-strong">{toINR(order.totalPrice)}</span></td>
+                                                <td className="ad-td-num">{order.orderItems?.length || 0}</td>
+                                                <td className="ad-td-num"><span className="ad-td-strong">{toINR(order.totalPrice)}</span></td>
                                                 <td>
                                                     {order.paymentMethod === 'cod' ? (
                                                         <span className={`ad-badge ${order.codStatus === 'Collected' ? 'ad-badge--success' : 'ad-badge--warning'}`}>

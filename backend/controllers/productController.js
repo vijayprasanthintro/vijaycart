@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Product = require('../models/productModel');
+const Order = require('../models/orderModel');
 const ErrorHandler = require('../utils/errorHandler')
 const catchAsyncError = require('../middlewares/catchAsyncError')
 const APIFeatures = require('../utils/apiFeatures');
@@ -210,7 +211,7 @@ exports.deleteProduct = catchAsyncError(async (req, res, next) =>{
         });
     }
 
-    await product.remove();
+    await product.deleteOne();
     cache.flush();
 
     res.status(200).json({
@@ -221,17 +222,49 @@ exports.deleteProduct = catchAsyncError(async (req, res, next) =>{
 })
 
 //Create Review - api/v1/review
+//A review can only be posted after the customer has received the product
+//(exact 'Delivered' status, never 'Out for Delivery'). This gate is enforced
+//server-side so the UI can not be bypassed, and it also links each review to a
+//real purchase.
 exports.createReview = catchAsyncError(async (req, res, next) =>{
-    const  { productId, rating, comment } = req.body;
-
-    const review = {
-        user : req.user.id,
-        rating,
-        comment
-    }
+    const { productId, rating, comment, title } = req.body;
 
     const product = await Product.findById(productId);
-   //finding user review exists
+    if (!product) {
+        return next(new ErrorHandler(`Product not found with id: ${productId}`, 404))
+    }
+
+    //Only a customer who actually received this product can review it.
+    const deliveredOrder = await Order.findOne({
+        user: req.user.id,
+        orderStatus: 'Delivered',
+        'orderItems.product': productId
+    });
+    if (!deliveredOrder) {
+        return next(new ErrorHandler('You can review this product only after it has been delivered to you.', 403))
+    }
+
+    //Uploaded review photos -> absolute URLs under /uploads/review/.
+    //file.filename matches the collision-proof name stored by multer.
+    let reviewImages = [];
+    if (req.files && req.files.length) {
+        let BASE_URL = process.env.BACKEND_URL;
+        if (process.env.NODE_ENV === "production") {
+            BASE_URL = `${req.protocol}://${req.get('host')}`
+        }
+        reviewImages = req.files.map(file => ({ image: `${BASE_URL}/uploads/review/${file.filename}` }));
+    }
+
+    const review = {
+        user: req.user.id,
+        userName: req.user.name,
+        rating: Number(rating),
+        title: title ? String(title).trim() : undefined,
+        comment,
+        images: reviewImages
+    }
+
+    //finding user review exists
     const isReviewed = product.reviews.find(review => {
        return review.user.toString() == req.user.id.toString()
     })
@@ -242,6 +275,8 @@ exports.createReview = catchAsyncError(async (req, res, next) =>{
             if(review.user.toString() == req.user.id.toString()){
                 review.comment = comment
                 review.rating = rating
+                if (typeof title === 'string') review.title = String(title).trim()
+                if (reviewImages.length) review.images = reviewImages
             }
 
         })
@@ -253,7 +288,7 @@ exports.createReview = catchAsyncError(async (req, res, next) =>{
     }
     //find the average of the product reviews
     product.ratings = product.reviews.reduce((acc, review) => {
-        return review.rating + acc;
+        return Number(review.rating) + acc;
     }, 0) / product.reviews.length;
     product.ratings = isNaN(product.ratings)?0:product.ratings;
 
@@ -277,6 +312,40 @@ exports.getReviews = catchAsyncError(async (req, res, next) =>{
     })
 })
 
+//Admin: Get all reviews across every product - /api/v1/admin/reviews/all
+//Returns each review with its product (name + image) so the admin panel can
+//render a single, complete reviews table.
+exports.getAllReviews = catchAsyncError(async (req, res, next) => {
+    const products = await Product.find({}).select('name images ratings numOfReviews reviews');
+    const reviews = [];
+
+    products.forEach(product => {
+        (product.reviews || []).forEach(review => {
+            reviews.push({
+                _id: review._id,
+                rating: review.rating,
+                comment: review.comment,
+                user: review.user,
+                userName: review.userName,
+                createdAt: review.createdAt,
+                product: {
+                    _id: product._id,
+                    name: product.name,
+                    image: (product.images && product.images[0]) ? product.images[0].image : ''
+                }
+            });
+        });
+    });
+
+    reviews.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+    res.status(200).json({
+        success: true,
+        total: reviews.length,
+        reviews
+    });
+})
+
 //Delete Review - api/v1/review
 exports.deleteReview = catchAsyncError(async (req, res, next) =>{
     const product = await Product.findById(req.query.productId);
@@ -290,7 +359,7 @@ exports.deleteReview = catchAsyncError(async (req, res, next) =>{
 
     //finding the average with the filtered reviews
     let ratings = reviews.reduce((acc, review) => {
-        return review.rating + acc;
+        return Number(review.rating) + acc;
     }, 0) / reviews.length;
     ratings = isNaN(ratings)?0:ratings;
 
@@ -315,4 +384,49 @@ exports.getAdminProducts = catchAsyncError(async (req, res, next) =>{
         success: true,
         products
     })
+});
+
+//Admin: Bulk delete products - POST /api/v1/admin/products/bulk-delete
+//Removes every product id in the payload. Invalid/missing ids are ignored so
+//a stale row can never take the whole batch down.
+exports.bulkDeleteProducts = catchAsyncError(async (req, res, next) => {
+    const raw = Array.isArray(req.body.ids) ? req.body.ids : [];
+    const ids = raw
+        .map(id => String(id).trim())
+        .filter(id => mongoose.isValidObjectId(id));
+
+    if (ids.length === 0) {
+        return next(new ErrorHandler('Select at least one product to delete', 400));
+    }
+
+    const result = await Product.deleteMany({ _id: { $in: ids } });
+    cache.flush();
+
+    res.status(200).json({
+        success: true,
+        deleted: result.deletedCount,
+        requested: ids.length
+    });
+});
+
+//Admin: Bulk update stock - PUT /api/v1/admin/products/bulk-stock
+//Payload: { updates: [{ id, stock }] }. Lets the admin set stock levels for
+//many products in one request (used by the bulk bar on the products table).
+exports.bulkUpdateStock = catchAsyncError(async (req, res, next) => {
+    const raw = Array.isArray(req.body.updates) ? req.body.updates : [];
+    const updates = raw
+        .filter(u => u && mongoose.isValidObjectId(String(u.id).trim()))
+        .map(u => ({ id: String(u.id).trim(), stock: Math.max(0, Math.floor(Number(u.stock) || 0)) }));
+
+    if (updates.length === 0) {
+        return next(new ErrorHandler('Provide at least one product with a stock value', 400));
+    }
+
+    await Promise.all(updates.map(u => Product.updateOne({ _id: u.id }, { $set: { stock: u.stock } })));
+    cache.flush();
+
+    res.status(200).json({
+        success: true,
+        updated: updates.length
+    });
 });

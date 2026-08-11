@@ -74,10 +74,19 @@ const simulateGateway = (shouldFail) => new Promise((resolve) => {
     }, 1700 + Math.random() * 900);
 });
 
+const readOrderInfo = () => {
+    try {
+        const raw = sessionStorage.getItem('orderInfo');
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === 'object' ? parsed : null;
+    } catch { return null; }
+};
+
 export default function Payment() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const orderInfo = JSON.parse(sessionStorage.getItem('orderInfo'))
+    const orderInfo = readOrderInfo()
     const { user } = useSelector(state => state.authState)
     const { items: cartItems, buyNowItems, shippingInfo, orderKey } = useSelector(state => state.cartState)
     const { error: orderError } = useSelector(state => state.orderState)
@@ -88,6 +97,7 @@ export default function Payment() {
 
     const total = Number(orderInfo ? orderInfo.totalPrice : 0);
     const discountPrice = Number(orderInfo ? orderInfo.discountPrice : 0);
+    const coinsRedeemed = Math.max(0, Math.floor(Number(orderInfo ? orderInfo.coinsRedeemed : 0) || 0));
 
     const [method, setMethod] = useState('upi');
     const [processing, setProcessing] = useState(null);
@@ -208,6 +218,7 @@ export default function Payment() {
         totalPrice: total,
         discountPrice,
         couponCode: orderInfo ? orderInfo.couponCode : '',
+        coinsRedeemed,
         paymentInfo,
         paymentMethod,
         // Idempotency key so a retried submit can never duplicate the order.
@@ -226,6 +237,10 @@ export default function Payment() {
             await dispatch(createOrder(order));
             orderPlacedRef.current = true;
             dispatch(orderCompleted({ keepCart }));
+            // Refresh the profile so the spent VijayCoins / wallet balance and
+            // any future coins reflect immediately in the header, profile and
+            // next checkout.
+            dispatch(loadUser());
             // Replace the payment screen in history so the Back button can
             // never return the user to a payment page for an order that is
             // already placed.
@@ -240,6 +255,7 @@ export default function Payment() {
                 await dispatch(createOrder(order));
                 orderPlacedRef.current = true;
                 dispatch(orderCompleted({ keepCart }));
+                dispatch(loadUser());
                 navigate('/order/success', { replace: true });
             } catch (retryErr) {
                 toast.error(retryErr?.response?.data?.message || 'Your order could not be created. Please retry.');
@@ -572,6 +588,12 @@ export default function Payment() {
                                 <div className="summary-row summary-coupon-row">
                                     <span><i className="fa fa-tag mr-1" aria-hidden="true"></i>Coupon {orderInfo.couponCode ? `(${orderInfo.couponCode})` : 'Discount'}</span>
                                     <b className="text-coupon">&minus;{formatMoney(discountPrice)}</b>
+                                </div>
+                            )}
+                            {coinsRedeemed > 0 && (
+                                <div className="summary-row summary-coupon-row">
+                                    <span><i className="fa fa-star mr-1" aria-hidden="true"></i>VijayCoins</span>
+                                    <b className="text-coupon">&minus;{formatMoney(coinsRedeemed)}</b>
                                 </div>
                             )}
                             <div className="summary-row summary-total">

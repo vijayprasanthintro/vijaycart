@@ -115,6 +115,17 @@ const orderSchema = mongoose.Schema({
     couponCode: {
         type: String
     },
+    //VijayCoins redeemed on this order (1 coin = ₹1). Total stays the payable
+    //amount; coinsUsed records how many were spent so the invoice is accurate.
+    coinsUsed: {
+        type: Number,
+        default: 0
+    },
+    //VijayCoins earned when this order is delivered (5% of totalPrice).
+    coinsEarned: {
+        type: Number,
+        default: 0
+    },
     totalPrice: {
         type: Number,
         required: true,

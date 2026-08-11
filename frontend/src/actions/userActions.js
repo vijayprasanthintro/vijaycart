@@ -73,7 +73,21 @@ export const adminLogin = (credentials) => async (dispatch) => {
     }
 }
 
-export const clearAuthError = dispatch => {
+//Google Sign-In - the frontend passes the ID token (credential) issued by
+//Google Identity Services; the backend verifies it and logs the user in.
+export const googleLogin = (credential) => async (dispatch) => {
+    try {
+        dispatch(loginRequest())
+        const { data } = await axios.post(`/api/v1/google`, { credential });
+        dispatch(loginSuccess(data))
+        return data
+    } catch (error) {
+        dispatch(loginFail(error.response?.data?.message || error.message))
+        return null
+    }
+}
+
+export const clearAuthError = () => async (dispatch) => {
     dispatch(clearError())
 }
 

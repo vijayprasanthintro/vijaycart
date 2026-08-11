@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { getBanners } from '../../actions/bannerActions';
 
 const EASE = [0.16, 1, 0.3, 1];
 
-const SLIDES = [
+const DEFAULT_SLIDES = [
   {
     img: '/images/products/smartphone-1.jpg',
     alt: 'Mega Sale — Up to 70% off on top brands',
@@ -49,6 +51,17 @@ const SLIDES = [
     gradient: 'linear-gradient(135deg, #1b4332 0%, #2d6a4f 40%, #40916c 100%)',
     accent: '#95d5b2',
   },
+  {
+    img: '/images/products/headphones-1.jpg',
+    alt: 'Mega Deals — Massive discounts on your favourites',
+    to: '/search/all',
+    kicker: 'Mega Deals',
+    title: 'Big Savings',
+    subtitle: 'Grab massive discounts across every category',
+    cta: 'Shop Mega Deals',
+    gradient: 'linear-gradient(135deg, #3a0ca3 0%, #4cc9f0 100%)',
+    accent: '#ffd60a',
+  },
 ];
 
 const TRANSITION_MS = 500;
@@ -89,8 +102,45 @@ export default function HeroBanner() {
   const [transitioning, setTransitioning] = useState(false);
   const [touchStart, setTouchStart] = useState(null);
   const [progress, setProgress] = useState(0);
+  const [slides, setSlides] = useState([]);
   const progressRef = useRef(null);
   const touchTimerRef = useRef(null);
+
+  const dispatch = useDispatch();
+  const { publicBanners, loading } = useSelector((state) => state.bannerState);
+
+  // Load active banners from the API on mount so the homepage always reflects
+  // the latest admin banner edits.
+  useEffect(() => {
+    dispatch(getBanners());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (loading) return;
+    if (publicBanners && publicBanners.length) {
+      setSlides(publicBanners.map((b, i) => ({
+        img: b.image || DEFAULT_SLIDES[i % DEFAULT_SLIDES.length]?.img || '',
+        alt: `${b.kicker || b.title} — ${b.subtitle || b.title}`,
+        to: b.linkTo || '/search/all',
+        kicker: b.kicker || '',
+        title: b.title,
+        subtitle: b.subtitle || '',
+        cta: b.cta || 'Shop Now',
+        gradient: b.gradient || DEFAULT_SLIDES[i % DEFAULT_SLIDES.length]?.gradient,
+        accent: b.accent || '#ff6b35',
+      })));
+    } else {
+      // No active banners: the admin turned them all off (or deleted them), so
+      // the homepage must NOT keep showing the built-in defaults — otherwise
+      // admin deactivate/delete would appear to have no effect.
+      setSlides([]);
+    }
+  }, [publicBanners, loading]);
+
+  // Keep the active index valid whenever the banner list changes.
+  useEffect(() => {
+    if (index >= slides.length) setIndex(0);
+  }, [slides.length, index]);
 
   const goTo = useCallback((next) => {
     if (transitioning) return;
@@ -100,8 +150,8 @@ export default function HeroBanner() {
     setTimeout(() => setTransitioning(false), TRANSITION_MS);
   }, [transitioning]);
 
-  const next = useCallback(() => goTo((index + 1) % SLIDES.length), [goTo, index]);
-  const prev = useCallback(() => goTo((index - 1 + SLIDES.length) % SLIDES.length), [goTo, index]);
+  const next = useCallback(() => goTo((index + 1) % slides.length), [goTo, index, slides.length]);
+  const prev = useCallback(() => goTo((index - 1 + slides.length) % slides.length), [goTo, index, slides.length]);
 
   // Auto-advance with progress
   useEffect(() => {
@@ -149,7 +199,8 @@ export default function HeroBanner() {
     touchTimerRef.current = setTimeout(() => setPaused(false), 300);
   };
 
-  if (!SLIDES || SLIDES.length === 0) return <HeroFallback />;
+  if (loading && slides.length === 0) return <HeroSkeleton />;
+  if (!slides || slides.length === 0) return <HeroFallback />;
 
   return (
     <div
@@ -167,7 +218,7 @@ export default function HeroBanner() {
           className="vc-hero__track"
           style={{ transform: `translateX(-${index * 100}%)` }}
         >
-          {SLIDES.map((s, i) => (
+          {slides.map((s, i) => (
             <Link
               to={s.to}
               key={i}
@@ -248,7 +299,7 @@ export default function HeroBanner() {
 
       {/* Progress dots */}
       <div className="vc-hero__dots" role="tablist" aria-label="Slide navigation">
-        {SLIDES.map((s, i) => (
+        {slides.map((s, i) => (
           <button
             key={i}
             type="button"

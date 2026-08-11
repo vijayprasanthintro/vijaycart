@@ -140,9 +140,9 @@ export default function DeliveryBoys() {
                                         <th>Partner</th>
                                         <th>Email</th>
                                         <th>Phone</th>
-                                        <th>Assigned</th>
-                                        <th>Out for Delivery</th>
-                                        <th>Delivered</th>
+                                        <th className="ad-td-num">Assigned</th>
+                                        <th className="ad-td-num">Out for Delivery</th>
+                                        <th className="ad-td-num">Delivered</th>
                                         <th>Availability</th>
                                     </tr>
                                 </thead>
@@ -160,9 +160,9 @@ export default function DeliveryBoys() {
                                                 </td>
                                                 <td>{boy.email}</td>
                                                 <td>{boy.phone || '—'}</td>
-                                                <td><span className="ad-td-strong">{s.assigned}</span></td>
-                                                <td><span className={`ad-badge ${s.outForDelivery > 0 ? 'ad-badge--primary' : ''}`}>{s.outForDelivery}</span></td>
-                                                <td><span className={`ad-badge ${s.delivered > 0 ? 'ad-badge--success' : ''}`}>{s.delivered}</span></td>
+                                                <td className="ad-td-num"><span className="ad-td-strong">{s.assigned}</span></td>
+                                                <td className="ad-td-num"><span className={`ad-badge ${s.outForDelivery > 0 ? 'ad-badge--primary' : ''}`}>{s.outForDelivery}</span></td>
+                                                <td className="ad-td-num"><span className={`ad-badge ${s.delivered > 0 ? 'ad-badge--success' : ''}`}>{s.delivered}</span></td>
                                                 <td>
                                                     <div className="ad-toolbar" style={{ justifyContent: 'flex-start' }}>
                                                         <span className={`ad-badge ${boy.availability === false ? 'ad-badge--danger' : 'ad-badge--success'}`}>

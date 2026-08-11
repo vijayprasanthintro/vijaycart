@@ -9,7 +9,7 @@ const avatarInitial = (name) => {
     return raw ? raw[0].toUpperCase() : 'U';
 };
 
-function ReviewCard({ review }) {
+function ReviewCard({ review, product }) {
     const [helpful, setHelpful] = useState(() => {
         try {
             return !!JSON.parse(localStorage.getItem(HELP_KEY) || '{}')[review._id || review.comment];
@@ -19,7 +19,7 @@ function ReviewCard({ review }) {
     });
     const [lightbox, setLightbox] = useState(null);
 
-    const images = useMemo(() => getReviewImages(review), [review]);
+    const images = useMemo(() => getReviewImages(review, product), [review, product]);
     const shown = images.slice(0, 4);
     const more = images.length - shown.length;
     const helpfulCount = getHelpfulBase(review) + (helpful ? 1 : 0);
@@ -107,13 +107,13 @@ function ReviewCard({ review }) {
     );
 }
 
-export default function ProductReview({ reviews }) {
+export default function ProductReview({ reviews, product }) {
     if (!reviews || reviews.length === 0) return null;
 
     return (
         <div className="review-list" style={{ animation: 'fadeInUp 0.5s ease' }}>
             {reviews.map(review => (
-                <ReviewCard key={review._id || review.comment} review={review} />
+                <ReviewCard key={review._id || review.comment} review={review} product={product} />
             ))}
         </div>
     );

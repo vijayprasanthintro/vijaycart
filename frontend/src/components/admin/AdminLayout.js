@@ -3,41 +3,57 @@ import { NavLink, Link, Outlet, useLocation, useNavigate } from 'react-router-do
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../actions/userActions';
 import { clearAuthError } from '../../actions/userActions';
+import { getSettings } from '../../actions/settingActions';
+import { getAnalytics } from '../../actions/analyticsActions';
 import './admin.css';
 
 const NAV = [
     {
         group: 'Overview',
         items: [
-            { to: '/admin/dashboard', icon: 'fa-tachometer-alt', label: 'Dashboard' }
+            { to: '/admin/dashboard', icon: 'fa-tachometer-alt', label: 'Dashboard', perm: 'dashboard' }
         ]
     },
     {
         group: 'Management',
         items: [
-            { to: '/admin/orders', icon: 'fa-shopping-basket', label: 'Orders' },
-            { to: '/admin/delivery', icon: 'fa-truck', label: 'Assign Delivery' },
-            { to: '/admin/products', icon: 'fa-box', label: 'Products' },
-            { to: '/admin/categories', icon: 'fa-th-large', label: 'Categories' },
-            { to: '/admin/coupons', icon: 'fa-ticket', label: 'Coupons' },
-            { to: '/admin/delivery-boys', icon: 'fa-motorcycle', label: 'Delivery Boys' },
-            { to: '/admin/users', icon: 'fa-users', label: 'Users' }
+            { to: '/admin/orders', icon: 'fa-shopping-basket', label: 'Orders', perm: 'orders' },
+            { to: '/admin/products', icon: 'fa-box', label: 'Products', perm: 'products' },
+            { to: '/admin/categories', icon: 'fa-th-large', label: 'Categories', perm: 'categories' },
+            { to: '/admin/coupons', icon: 'fa-ticket', label: 'Coupons', perm: 'coupons' },
+            { to: '/admin/banners', icon: 'fa-image', label: 'Banners', perm: 'banners' },
+            { to: '/admin/users', icon: 'fa-users', label: 'Users', perm: 'users' },
+            { to: '/admin/pincodes', icon: 'fa-map-marker', label: 'Pincode & COD', perm: 'pincodes' }
+        ]
+    },
+    {
+        group: 'Delivery',
+        items: [
+            { to: '/admin/delivery', icon: 'fa-truck', label: 'Assign Delivery', perm: 'delivery' },
+            { to: '/admin/delivery-boys', icon: 'fa-motorcycle', label: 'Delivery Boys', perm: 'delivery' }
+        ]
+    },
+    {
+        group: 'Sellers',
+        items: [
+            { to: '/admin/seller-applications', icon: 'fa-briefcase', label: 'Seller Applications', perm: 'sellers' }
         ]
     },
     {
         group: 'Insights',
         items: [
-            { to: '/admin/analytics', icon: 'fa-chart-line', label: 'Analytics' },
-            { to: '/admin/revenue', icon: 'fa-indian-rupee', label: 'Revenue' },
-            { to: '/admin/inventory', icon: 'fa-warehouse', label: 'Inventory' },
-            { to: '/admin/reviews', icon: 'fa-star', label: 'Reviews' }
+            { to: '/admin/analytics', icon: 'fa-chart-line', label: 'Analytics', perm: 'analytics' },
+            { to: '/admin/revenue', icon: 'fa-indian-rupee', label: 'Revenue', perm: 'revenue' },
+            { to: '/admin/inventory', icon: 'fa-warehouse', label: 'Inventory', perm: 'inventory' },
+            { to: '/admin/reviews', icon: 'fa-star', label: 'Reviews', perm: 'reviews' },
+            { to: '/admin/reports', icon: 'fa-file-excel-o', label: 'Reports & Exports', perm: 'reports' }
         ]
     },
     {
         group: 'System',
         items: [
-            { to: '/admin/settings', icon: 'fa-cog', label: 'Settings' },
-            { to: '/admin/permissions', icon: 'fa-shield-alt', label: 'Permissions' }
+            { to: '/admin/settings', icon: 'fa-cog', label: 'Settings', perm: 'settings' },
+            { to: '/admin/permissions', icon: 'fa-shield-alt', label: 'Permissions', perm: 'permissions' }
         ]
     }
 ];
@@ -51,12 +67,16 @@ const TITLES = {
     '/admin/delivery-boys': { title: 'Delivery Boys', sub: 'Delivery partners & assignments' },
     '/admin/delivery': { title: 'Assign Delivery', sub: 'Map orders to delivery partners' },
     '/admin/users': { title: 'Users', sub: 'Customers & accounts' },
+    '/admin/seller-applications': { title: 'Seller Applications', sub: 'Review "Become a Seller" requests' },
     '/admin/analytics': { title: 'Analytics', sub: 'Orders, revenue & customer insights' },
     '/admin/revenue': { title: 'Revenue', sub: 'Earnings & payment insights' },
     '/admin/inventory': { title: 'Inventory', sub: 'Stock levels & alerts' },
     '/admin/reviews': { title: 'Reviews', sub: 'Customer feedback & ratings' },
+    '/admin/banners': { title: 'Banners', sub: 'Homepage promotional banners' },
     '/admin/settings': { title: 'Settings', sub: 'Store configuration' },
-    '/admin/permissions': { title: 'Permissions', sub: 'Roles & access control' }
+    '/admin/permissions': { title: 'Permissions', sub: 'Roles & access control' },
+    '/admin/reports': { title: 'Reports & Exports', sub: 'Download Orders, Products, Customers, Inventory & Revenue' },
+    '/admin/pincodes': { title: 'Pincode & COD', sub: 'Serviceable pincodes & COD availability' }
 };
 
 // Quick global jump — maps a keyword to the most relevant admin section.
@@ -66,23 +86,48 @@ const SEARCH_ROUTES = [
     { re: /user|customer|account|admin/i, to: '/admin/users', label: 'Users', icon: 'fa-users' },
     { re: /coupon|promo|discount|code/i, to: '/admin/coupons', label: 'Coupons', icon: 'fa-ticket' },
     { re: /review|rating|feedback/i, to: '/admin/reviews', label: 'Reviews', icon: 'fa-star' },
+    { re: /banner|hero|carousel|slide|promo/i, to: '/admin/banners', label: 'Banners', icon: 'fa-image' },
     { re: /inventory|stock|warehouse/i, to: '/admin/inventory', label: 'Inventory', icon: 'fa-warehouse' },
     { re: /analytic|traffic|trend|sales/i, to: '/admin/analytics', label: 'Analytics', icon: 'fa-chart-line' },
     { re: /revenue|earning|money|profit/i, to: '/admin/revenue', label: 'Revenue', icon: 'fa-indian-rupee' },
     { re: /categor|collection/i, to: '/admin/categories', label: 'Categories', icon: 'fa-th-large' },
     { re: /setting|config|permission|role/i, to: '/admin/settings', label: 'Settings', icon: 'fa-cog' },
-    { re: /boy|rider|partner/i, to: '/admin/delivery-boys', label: 'Delivery Boys', icon: 'fa-motorcycle' }
+    { re: /boy|rider|partner/i, to: '/admin/delivery-boys', label: 'Delivery Boys', icon: 'fa-motorcycle' },
+    { re: /seller|become a seller|application|store/i, to: '/admin/seller-applications', label: 'Seller Applications', icon: 'fa-briefcase' },
+    { re: /report|export|csv|excel|download/i, to: '/admin/reports', label: 'Reports & Exports', icon: 'fa-file-excel-o' },
+    { re: /pincode|postal|zip|cod|serviceable/i, to: '/admin/pincodes', label: 'Pincode & COD', icon: 'fa-map-marker' }
 ];
 
-const NOTIFICATIONS = [
-    { icon: 'fa-shopping-basket', tone: 'ad-stat--info', title: 'New order placed', time: '2 min ago' },
-    { icon: 'fa-exclamation-triangle', tone: 'ad-stat--warning', title: '5 products running low on stock', time: '24 min ago' },
-    { icon: 'fa-star', tone: 'ad-stat--violet', title: 'New product review submitted', time: '1 hr ago' },
-    { icon: 'fa-refresh', tone: 'ad-stat--danger', title: 'Return request received', time: '3 hrs ago' }
-];
+// Build real notifications from the live analytics aggregate. Only non-zero
+// items are shown so the bell badge always reflects actual store activity.
+const buildNotifications = (a = {}) => {
+    const statusCounts = a.statusCounts || {};
+    const pending = statusCounts['Pending'] || 0;
+    const low = a.lowStock || 0;
+    const oos = a.outOfStock || 0;
+    const returns = a.returnRequests || 0;
+    const list = [];
+    if (pending) list.push({ icon: 'fa-shopping-basket', tone: 'ad-stat--info', title: `${pending} order${pending === 1 ? '' : 's'} pending confirmation`, time: 'Live' });
+    if (low) list.push({ icon: 'fa-exclamation-triangle', tone: 'ad-stat--warning', title: `${low} product${low === 1 ? '' : 's'} running low on stock`, time: 'Live' });
+    if (oos) list.push({ icon: 'fa-box', tone: 'ad-stat--danger', title: `${oos} product${oos === 1 ? '' : 's'} out of stock`, time: 'Live' });
+    if (returns) list.push({ icon: 'fa-refresh', tone: 'ad-stat--danger', title: `${returns} return request${returns === 1 ? '' : 's'} received`, time: 'Live' });
+    return list;
+};
+
+// Group + title for the current route (exact match, then detail-page prefix).
+const findNav = path => {
+    const exact = (g, item) => item.to === path;
+    for (const g of NAV) for (const item of g.items) if (exact(g, item)) return { group: g.group, title: (TITLES[item.to] || {}).title || item.label, sub: (TITLES[item.to] || {}).sub || '' };
+    for (const g of NAV) for (const item of g.items) {
+        if (item.to !== '/admin/dashboard' && path.startsWith(item.to + '/')) return { group: g.group, title: (TITLES[item.to] || {}).title || item.label, sub: (TITLES[item.to] || {}).sub || '' };
+    }
+    return { group: '', title: (TITLES[path] || {}).title || 'Admin', sub: (TITLES[path] || {}).sub || '' };
+};
 
 export default function AdminLayout() {
     const { user } = useSelector(state => state.authState);
+    const { settings } = useSelector(state => state.settingState);
+    const { analytics } = useSelector(state => state.analyticsState);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -93,6 +138,21 @@ export default function AdminLayout() {
     const [query, setQuery] = useState('');
     const [notifOpen, setNotifOpen] = useState(false);
     const [userMenu, setUserMenu] = useState(false);
+
+    useEffect(() => {
+        dispatch(getSettings());
+        dispatch(getAnalytics());
+    }, [dispatch]);
+
+    // Enforce the admin permission matrix on the sidebar: modules toggled off
+    // for the admin role are hidden from the menu. No saved matrix yet = show
+    // everything (default open) so nothing breaks before the first save.
+    const adminPerms = settings?.permissions?.admin || null;
+    const visibleNav = adminPerms
+        ? NAV
+            .map(group => ({ ...group, items: group.items.filter(i => adminPerms[i.perm] !== false) }))
+            .filter(group => group.items.length > 0)
+        : NAV;
 
     useEffect(() => {
         localStorage.setItem('vc-admin-theme', theme);
@@ -130,7 +190,8 @@ export default function AdminLayout() {
         if (match) navigate(match.to);
     };
 
-    const page = TITLES[location.pathname] || { title: 'Admin', sub: '' };
+    const nav = findNav(location.pathname);
+    const notifications = buildNotifications(analytics);
     const firstName = (user?.name || 'Admin').split(' ')[0];
 
     return (
@@ -141,9 +202,10 @@ export default function AdminLayout() {
                 <div className="ad-sidebar__brand">
                     <span className="ad-sidebar__brand-logo"><i className="fa fa-shopping-bag" aria-hidden="true"></i></span>
                     <span className="ad-sidebar__brand-word">Vijay<span>Cart</span> Admin</span>
+                    <span className="ad-sidebar__brand-pro">PRO</span>
                 </div>
                 <nav className="ad-sidebar__nav">
-                    {NAV.map(group => (
+                    {visibleNav.map(group => (
                         <div key={group.group}>
                             <div className="ad-sidebar__group-title">{group.group}</div>
                             {group.items.map(item => (
@@ -160,6 +222,15 @@ export default function AdminLayout() {
                         </div>
                     ))}
                 </nav>
+                <div className="ad-sidebar__user">
+                    <span className="ad-sidebar__user-avatar">
+                        {user?.avatar ? <img src={user.avatar} alt={user?.name || 'Admin'} /> : <i className="fa fa-user" aria-hidden="true"></i>}
+                    </span>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                        <div className="ad-sidebar__user-name">{user?.name || 'Administrator'}</div>
+                        <div className="ad-sidebar__user-role">Store Admin · VijayCart</div>
+                    </div>
+                </div>
                 <div className="ad-sidebar__foot">
                     <Link to="/"><i className="fa fa-globe" aria-hidden="true"></i><span>View Store</span></Link>
                     <button type="button" className="ad-sidebar__collapse" onClick={toggleCollapsed} title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
@@ -175,8 +246,13 @@ export default function AdminLayout() {
                         <i className="fa fa-bars" aria-hidden="true"></i>
                     </button>
                     <div>
-                        <div className="ad-topbar__title">{page.title}</div>
-                        <div className="ad-topbar__sub">{page.sub}</div>
+                        <div className="ad-topbar__title">{nav.title}</div>
+                        <nav className="ad-crumb" aria-label="Breadcrumb">
+                            <span>Home</span>
+                            {nav.group && <><i className="fa fa-angle-right" aria-hidden="true"></i><span>{nav.group}</span></>}
+                            <i className="fa fa-angle-right" aria-hidden="true"></i>
+                            <b>{nav.title}</b>
+                        </nav>
                     </div>
                     <div className="ad-topbar__spacer"></div>
                     <div className="ad-topbar__actions">
@@ -218,15 +294,18 @@ export default function AdminLayout() {
                                 onClick={() => { setNotifOpen(o => !o); setUserMenu(false); }}
                             >
                                 <i className="fa fa-bell-o" aria-hidden="true"></i>
-                                <span className="ad-iconbtn__badge">{NOTIFICATIONS.length}</span>
+                                {notifications.length > 0 && <span className="ad-iconbtn__badge">{notifications.length}</span>}
                             </button>
                             {notifOpen && (
                                 <div className="ad-dropdown ad-dropdown--notif">
                                     <div className="ad-dropdown__head">
                                         <b>Notifications</b>
-                                        <span>{NOTIFICATIONS.length} unread updates</span>
+                                        <span>{notifications.length > 0 ? `${notifications.length} update${notifications.length === 1 ? '' : 's'}` : 'All clear'}</span>
                                     </div>
-                                    {NOTIFICATIONS.map((n, i) => (
+                                    {notifications.length === 0 && (
+                                        <div className="ad-dropdown__empty"><i className="fa fa-check-circle" aria-hidden="true"></i> No pending alerts right now.</div>
+                                    )}
+                                    {notifications.map((n, i) => (
                                         <div className="ad-dropdown__notif" key={i}>
                                             <i className={`fa ${n.icon} ${n.tone}`} aria-hidden="true"></i>
                                             <div style={{ minWidth: 0, flex: 1 }}>

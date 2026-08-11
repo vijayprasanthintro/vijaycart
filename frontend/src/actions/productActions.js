@@ -132,12 +132,10 @@ export const createReview = reviewData => async (dispatch) => {
 
     try {  
         dispatch(createReviewRequest()) 
-        const config = {
-            headers : {
-                'Content-type': 'application/json'
-            }
-        }
-        const { data }  =  await axios.put(`/api/v1/review`,reviewData, config);
+        // multipart/form-data so review photos (reviewImages) upload with the
+        // rating/comment. No Content-Type header is set: the browser generates
+        // the multipart boundary automatically when it sees a FormData body.
+        const { data }  =  await axios.put(`/api/v1/review`, reviewData);
         cacheClear(PRODUCT_DETAIL_PREFIX);
         dispatch(createReviewSuccess(data))
     } catch (error) {
@@ -205,6 +203,31 @@ export const updateProduct  =  (id, productData) => async (dispatch) => {
     
 }
 
+// Bulk product actions (used by the selection bar on the products table).
+// They resolve directly to a { success, ... } object so the caller can toast
+// the real counts instead of reusing the single-item slice flags.
+export const bulkDeleteProducts = (ids) => async () => {
+    try {
+        const { data } = await axios.post(`/api/v1/admin/products/bulk-delete`, { ids });
+        cacheClear(PRODUCT_DETAIL_PREFIX);
+        cacheClear(PRODUCTS_LIST_PREFIX);
+        return { success: true, deleted: data.deleted, requested: data.requested };
+    } catch (error) {
+        return { success: false, error: error?.response?.data?.message || error?.message || 'Something went wrong' };
+    }
+};
+
+export const bulkUpdateStock = (updates) => async () => {
+    try {
+        const { data } = await axios.put(`/api/v1/admin/products/bulk-stock`, { updates });
+        cacheClear(PRODUCT_DETAIL_PREFIX);
+        cacheClear(PRODUCTS_LIST_PREFIX);
+        return { success: true, updated: data.updated };
+    } catch (error) {
+        return { success: false, error: error?.response?.data?.message || error?.message || 'Something went wrong' };
+    }
+};
+
 
 export const getReviews =  id => async (dispatch) => {
 
@@ -217,6 +240,18 @@ export const getReviews =  id => async (dispatch) => {
         dispatch(reviewsFail(error?.response?.data?.message || error?.message || 'Something went wrong'))
     }
     
+}
+
+export const getAllReviews = () => async (dispatch) => {
+    try {
+        dispatch(reviewsRequest())
+        const { data } = await axios.get(`/api/v1/admin/reviews/all`);
+        dispatch(reviewsSuccess(data))
+        return data
+    } catch (error) {
+        dispatch(reviewsFail(error?.response?.data?.message || error?.message || 'Something went wrong'))
+        return null
+    }
 }
 
 export const deleteReview =  (productId, id) => async (dispatch) => {

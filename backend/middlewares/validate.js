@@ -74,6 +74,19 @@ const profileUpdateRules = () => [
         .withMessage('Please enter a valid 10-digit mobile number')
 ];
 
+const googleLoginRules = () => [
+    body('credential')
+        .isString().withMessage('Invalid Google credential')
+        .isLength({ min: 10, max: 4096 }).withMessage('Invalid Google credential')
+];
+
+const productIdParam = (name = 'productId') =>
+    param(name).isMongoId().withMessage('Invalid product id');
+
+const waitlistRules = () => [
+    body('productId').isMongoId().withMessage('Invalid product id')
+];
+
 // ---------- Products ----------
 const productRules = () => [
     body('name')
@@ -267,7 +280,30 @@ const adminUserUpdateRules = () => [
         .withMessage('Please enter a valid 10-digit mobile number'),
     body('role')
         .optional({ values: 'falsy' })
-        .isIn(['user', 'admin', 'deliveryboy']).withMessage('Invalid role')
+        .isIn(['user', 'admin', 'deliveryboy', 'seller']).withMessage('Invalid role')
+];
+
+// ---------- Seller applications ----------
+const sellerApplyRules = () => [
+    body('storeName')
+        .isLength({ min: 2, max: 80 }).withMessage('Store name must be between 2 and 80 characters'),
+    body('storeCategory')
+        .isLength({ min: 2, max: 80 }).withMessage('Please choose a store category'),
+    body('storePhone')
+        .custom((v) => /^[6-9]\d{9}$/.test(String(v).replace(/\D/g, '')))
+        .withMessage('Please enter a valid 10-digit mobile number'),
+    body('storeCity')
+        .isLength({ min: 2, max: 80 }).withMessage('Please enter a valid city'),
+    body('gstin')
+        .optional({ values: 'falsy' })
+        .isLength({ max: 15 }).withMessage('GSTIN cannot exceed 15 characters')
+];
+
+const sellerStatusRules = () => [
+    body('status').isIn(['approved', 'rejected']).withMessage('Please choose either approve or reject'),
+    body('adminNote')
+        .optional({ values: 'falsy' })
+        .isLength({ max: 300 }).withMessage('Note cannot exceed 300 characters')
 ];
 
 // Sanitize string fields (trim + strip control chars). Applied separately so
@@ -289,6 +325,9 @@ module.exports = {
     otpRequestRules,
     otpVerifyRules,
     profileUpdateRules,
+    googleLoginRules,
+    productIdParam,
+    waitlistRules,
     productRules,
     reviewRules,
     reviewsQueryRules,
@@ -302,5 +341,7 @@ module.exports = {
     assignOrderRules,
     deliveryStatusRules,
     adminUserUpdateRules,
+    sellerApplyRules,
+    sellerStatusRules,
     sanitizeBody
 };

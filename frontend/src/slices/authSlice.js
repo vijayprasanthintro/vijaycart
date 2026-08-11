@@ -30,7 +30,7 @@ const otherAuthStorage = () => readRemember() ? sessionStorage : localStorage;
 // addresses, or half-finished checkout (which would reuse the previous user's
 // idempotency key and could surface their order on the success page).
 const CART_STORAGE_KEYS = ['cartItems', 'shippingInfo', 'vijaycart_addresses'];
-const CHECKOUT_SESSION_KEYS = ['orderInfo', 'vijaycart_orderKey', 'vijaycart_coupon', 'vijaycart_buyNowItems'];
+const CHECKOUT_SESSION_KEYS = ['orderInfo', 'vijaycart_orderKey', 'vijaycart_coupon', 'vijaycart_buyNowItems', 'vijaycart_coinsRedeemed'];
 
 const clearCheckoutSession = () => {
     try {

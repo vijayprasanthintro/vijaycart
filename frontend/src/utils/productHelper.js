@@ -367,18 +367,29 @@ export const getGalleryImages = (product = {}) => {
   return out.slice(0, 6);
 };
 
-export const getReviewImages = (review = {}, max = 8) => {
+export const getReviewImages = (review = {}, product = {}, max = 8) => {
   const h = hashId(review._id || review.comment || '');
   const count = Math.min(max, 3 + (h % 6)); // 3..8 photos per review
+  // Review photos must belong to the product the review was posted on: the
+  // product's own images come first (cycled with a hash offset so different
+  // reviews show a different order), and the shared pool is only used to top
+  // up when the product ships fewer than the target count.
+  const own = (product.images || []).map(i => (i && i.image ? resolveProductImage(i.image) : '')).filter(Boolean);
   const out = [];
   const seen = new Set();
+  if (own.length) {
+    for (let i = 0; out.length < count && i < own.length * 3; i++) {
+      const img = own[(h + i) % own.length];
+      if (!seen.has(img)) { seen.add(img); out.push(img); }
+    }
+  }
   let step = 0;
   while (out.length < count && step < PRODUCT_IMAGE_POOL.length * 3) {
     const img = resolveProductImage(PRODUCT_IMAGE_POOL[(h + step * 17) % PRODUCT_IMAGE_POOL.length]);
     if (!seen.has(img)) { seen.add(img); out.push(img); }
     step++;
   }
-  return out;
+  return out.slice(0, max);
 };
 
 export const getHelpfulBase = (review = {}) => 4 + (hashId(review._id || review.comment || '') % 90);

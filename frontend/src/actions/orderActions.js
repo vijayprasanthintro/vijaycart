@@ -75,7 +75,7 @@ export const deleteOrder = id => async(dispatch) => {
     try {
        dispatch(deleteOrderRequest())
        await axios.delete(`/api/v1/admin/order/${id}`)
-       dispatch(deleteOrderSuccess())
+       dispatch(deleteOrderSuccess({ id }))
     } catch (error) {
        dispatch(deleteOrderFail(error.response?.data?.message || error.message))
     }
@@ -90,3 +90,23 @@ export const updateOrder = (id, orderData)  => async(dispatch) => {
        dispatch(updateOrderFail(error.response?.data?.message || error.message))
     }
 }
+
+// Bulk order actions (selection bar on the orders table). Resolve to a plain
+// result object so callers can toast real counts.
+export const bulkUpdateOrderStatus = (ids, orderStatus) => async() => {
+    try {
+        const { data } = await axios.put(`/api/v1/admin/orders/bulk-status`, { ids, orderStatus });
+        return { success: true, updated: data.updated, skipped: data.skipped, status: data.status };
+    } catch (error) {
+        return { success: false, error: error.response?.data?.message || error.message };
+    }
+};
+
+export const bulkDeleteOrders = (ids) => async() => {
+    try {
+        const { data } = await axios.post(`/api/v1/admin/orders/bulk-delete`, { ids });
+        return { success: true, deleted: data.deleted };
+    } catch (error) {
+        return { success: false, error: error.response?.data?.message || error.message };
+    }
+};

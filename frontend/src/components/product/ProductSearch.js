@@ -310,7 +310,7 @@ export default function ProductSearch() {
     <Fragment>
       <MetaData title={pageTitle} />
 
-      <div className="container ls-page">
+      <div className="ls-page">
         <nav className="ls-breadcrumb" aria-label="breadcrumb">
           {crumbs.map((c, i) => (
             <Fragment key={i}>
@@ -376,7 +376,7 @@ export default function ProductSearch() {
               </div>
             ) : (
               <Fragment>
-                <div className="row">
+                <div className="row product-grid">
                   {pagedProducts.map((product, i) => (
                     <Product key={product._id} product={product} col={4} index={i} />
                   ))}

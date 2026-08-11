@@ -11,14 +11,18 @@ const MODULE_GROUPS = [
             { key: 'dashboard', label: 'Dashboard' },
             { key: 'orders', label: 'Orders' },
             { key: 'products', label: 'Products' },
+            { key: 'banners', label: 'Banners' },
             { key: 'categories', label: 'Categories' },
             { key: 'coupons', label: 'Coupons' },
             { key: 'delivery', label: 'Delivery Boys' },
+            { key: 'sellers', label: 'Seller Applications' },
             { key: 'users', label: 'Users' },
             { key: 'analytics', label: 'Analytics' },
             { key: 'revenue', label: 'Revenue' },
             { key: 'inventory', label: 'Inventory' },
             { key: 'reviews', label: 'Reviews' },
+            { key: 'reports', label: 'Reports & Exports' },
+            { key: 'pincodes', label: 'Pincode & COD' },
             { key: 'settings', label: 'Settings' },
             { key: 'permissions', label: 'Permissions' }
         ]
@@ -45,8 +49,8 @@ const ALL_KEYS = MODULE_GROUPS.flatMap(g => g.modules.map(m => m.key));
 
 const DEFAULTS = {
     admin: Object.fromEntries(ALL_KEYS.map(k => [k, true])),
-    deliveryboy: Object.fromEntries(ALL_KEYS.map(k => ['orders', 'delivery', 'track'].includes(k))),
-    user: Object.fromEntries(ALL_KEYS.map(k => ['browse', 'checkout', 'track', 'reviews', 'wishlist'].includes(k)))
+    deliveryboy: Object.fromEntries(ALL_KEYS.map(k => [k, ['orders', 'delivery', 'track'].includes(k)])),
+    user: Object.fromEntries(ALL_KEYS.map(k => [k, ['browse', 'checkout', 'track', 'reviews', 'wishlist'].includes(k)]))
 };
 
 export default function Permissions() {
@@ -82,10 +86,13 @@ export default function Permissions() {
     }, [dispatch, error, isUpdated]);
 
     const toggle = (role, module) => {
-        setMatrix(m => ({
-            ...m,
-            [role]: { ...m[role], [module]: !m[role][module] }
-        }));
+        setMatrix(m => {
+            const base = m || JSON.parse(JSON.stringify(DEFAULTS));
+            return {
+                ...base,
+                [role]: { ...base[role], [module]: !base[role][module] }
+            };
+        });
     };
 
     const save = async () => {
@@ -113,8 +120,23 @@ export default function Permissions() {
                 </div>
             </div>
 
-            {loading && !matrix ? (
-                <div className="ad-loading"><i className="fa fa-spinner fa-spin" aria-hidden="true"></i> Loading permissions…</div>
+            {!matrix ? (
+                <div className="ad-loading">
+                    {loading ? (
+                        <><i className="fa fa-spinner fa-spin" aria-hidden="true"></i> Loading permissions…</>
+                    ) : (
+                        <>
+                            <p style={{ marginBottom: '0.75rem' }}>Couldn't load permissions.</p>
+                            <button
+                                type="button"
+                                className="ad-btn ad-btn--ghost"
+                                onClick={() => dispatch(getSettings())}
+                            >
+                                <i className="fa fa-refresh" aria-hidden="true"></i> Try Again
+                            </button>
+                        </>
+                    )}
+                </div>
             ) : (
                 <div className="ad-card">
                     <div className="ad-card__head">

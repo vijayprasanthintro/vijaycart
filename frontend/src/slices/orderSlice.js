@@ -8,7 +8,9 @@ const orderSlice = createSlice({
         orderDetail: {},
         userOrders : [],
         adminOrders: [],
-        loading: false,
+        // Start `loading` true so consumers that fetch on mount render a
+        // spinner instead of flashing their empty/placeholder state first.
+        loading: true,
         isOrderDeleted: false,
         isOrderUpdated: false
     },
@@ -107,10 +109,12 @@ const orderSlice = createSlice({
             }
         },
         deleteOrderSuccess(state, action) {
+            const id = action.payload?.id;
             return {
                 ...state,
                 loading: false,
-                isOrderDeleted: true
+                isOrderDeleted: true,
+                adminOrders: id ? state.adminOrders.filter(o => o._id !== id) : state.adminOrders
             }
         },
         deleteOrderFail(state, action) {

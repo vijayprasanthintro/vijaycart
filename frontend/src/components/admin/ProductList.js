@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { deleteProduct, getAdminProducts } from '../../actions/productActions';
+import { deleteProduct, getAdminProducts, bulkDeleteProducts, bulkUpdateStock } from '../../actions/productActions';
 import { getCategories } from '../../actions/categoryActions';
 import { clearError, clearProductDeleted } from '../../slices/productSlice';
 import { toast } from 'react-toastify';
@@ -14,11 +14,16 @@ export default function ProductList() {
     const { products = [], loading = true, error } = useSelector(state => state.productsState);
     const { isProductDeleted, error: productError } = useSelector(state => state.productState);
     const { categories = [] } = useSelector(state => state.categoryState);
+    const { analytics } = useSelector(state => state.analyticsState);
     const dispatch = useDispatch();
+
+    const lowStockThreshold = analytics.lowStockThreshold || 5;
 
     const [query, setQuery] = useState('');
     const [category, setCategory] = useState('');
     const [page, setPage] = useState(1);
+    const [selected, setSelected] = useState(() => new Set());
+    const [bulkStock, setBulkStock] = useState('');
     const PER_PAGE = 10;
 
     useEffect(() => {
@@ -71,9 +76,56 @@ export default function ProductList() {
     }));
 
     const outOfStock = products.filter(p => p.stock === 0).length;
-    const lowStock = products.filter(p => p.stock > 0 && p.stock <= 5).length;
+    const lowStock = products.filter(p => p.stock > 0 && p.stock <= lowStockThreshold).length;
 
     const deleteHandler = id => dispatch(deleteProduct(id));
+
+    const toggleSelect = id => setSelected(prev => {
+        const next = new Set(prev);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        return next;
+    });
+
+    const allChecked = pageItems.length > 0 && pageItems.every(p => selected.has(p._id));
+
+    const toggleSelectAll = () => setSelected(prev => {
+        const next = new Set(prev);
+        if (allChecked) pageItems.forEach(p => next.delete(p._id));
+        else pageItems.forEach(p => next.add(p._id));
+        return next;
+    });
+
+    const clearSelection = () => setSelected(new Set());
+
+    const bulkDeleteHandler = async () => {
+        const ids = Array.from(selected);
+        if (!ids.length) return;
+        if (!window.confirm(`Delete ${ids.length} product${ids.length === 1 ? '' : 's'}? This cannot be undone.`)) return;
+        const res = await dispatch(bulkDeleteProducts(ids));
+        if (res && res.success) {
+            toast(`${res.deleted} product${res.deleted === 1 ? '' : 's'} deleted`, { type: 'success', position: toast.POSITION.BOTTOM_CENTER });
+            dispatch(getAdminProducts);
+            clearSelection();
+        } else {
+            toast(res?.error || 'Delete failed', { type: 'error', position: toast.POSITION.BOTTOM_CENTER });
+        }
+    };
+
+    const bulkStockHandler = async () => {
+        const ids = Array.from(selected);
+        const stock = Math.max(0, Math.floor(Number(bulkStock)));
+        if (!ids.length || !Number.isFinite(stock)) return;
+        const res = await dispatch(bulkUpdateStock(ids.map(id => ({ id, stock }))));
+        if (res && res.success) {
+            toast(`Stock updated for ${res.updated} product${res.updated === 1 ? '' : 's'}`, { type: 'success', position: toast.POSITION.BOTTOM_CENTER });
+            dispatch(getAdminProducts);
+            clearSelection();
+            setBulkStock('');
+        } else {
+            toast(res?.error || 'Stock update failed', { type: 'error', position: toast.POSITION.BOTTOM_CENTER });
+        }
+    };
 
     return (
         <Fragment>
@@ -103,6 +155,17 @@ export default function ProductList() {
                         </select>
                     </div>
                 </div>
+                {selected.size > 0 && (
+                    <div className="ad-bulk-bar">
+                        <span className="ad-bulk-bar__count"><i className="fa fa-check-square-o" aria-hidden="true"></i> {selected.size} selected</span>
+                        <div className="ad-bulk-bar__stock">
+                            <input className="ad-input ad-input--sm" type="number" min="0" placeholder="New stock" value={bulkStock} onChange={e => setBulkStock(e.target.value)} aria-label="Set stock for selected products" />
+                            <button type="button" className="ad-btn ad-btn--soft ad-btn--sm" onClick={bulkStockHandler}><i className="fa fa-boxes" aria-hidden="true"></i> Set Stock</button>
+                        </div>
+                        <button type="button" className="ad-btn ad-btn--danger ad-btn--sm" onClick={bulkDeleteHandler}><i className="fa fa-trash" aria-hidden="true"></i> Delete</button>
+                        <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" onClick={clearSelection}>Clear</button>
+                    </div>
+                )}
                 <div className="ad-card__body ad-card__body--flush">
                     {loading ? (
                         <div className="ad-loading"><i className="fa fa-spinner fa-spin" aria-hidden="true"></i> Loading products…</div>
@@ -113,18 +176,24 @@ export default function ProductList() {
                             <table className="ad-table">
                                 <thead>
                                     <tr>
+                                        <th className="ad-th-check">
+                                            <input type="checkbox" checked={allChecked} onChange={toggleSelectAll} aria-label="Select all products on this page" />
+                                        </th>
                                         <th></th>
                                         <th>Product</th>
                                         <th>Category</th>
-                                        <th>Price</th>
-                                        <th>Stock</th>
-                                        <th>Rating</th>
+                                        <th className="ad-td-num">Price</th>
+                                        <th className="ad-td-num">Stock</th>
+                                        <th className="ad-td-num">Rating</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {pageItems.map(product => (
                                         <tr key={product._id}>
+                                            <td className="ad-th-check">
+                                                <input type="checkbox" checked={selected.has(product._id)} onChange={() => toggleSelect(product._id)} aria-label={`Select ${product.name}`} />
+                                            </td>
                                             <td>
                                                 {product.images && product.images[0] ? (
                                                     <img src={productImage(product)} alt={product.name} className="ad-avatar" style={{ width: 42, height: 42 }} onError={imgOnError} />
@@ -137,13 +206,13 @@ export default function ProductList() {
                                                 <div className="ad-stat__label">{product.seller || ''}</div>
                                             </td>
                                             <td><span className="ad-chip"><i className="fa fa-th-large" aria-hidden="true"></i>{product.category}</span></td>
-                                            <td><span className="ad-td-strong">{toINR(product.price)}</span></td>
-                                            <td>
-                                                <span className={`ad-badge ${product.stock === 0 ? 'ad-badge--danger' : product.stock <= 5 ? 'ad-badge--warning' : 'ad-badge--success'}`}>
+                                            <td className="ad-td-num"><span className="ad-td-strong">{toINR(product.price)}</span></td>
+                                            <td className="ad-td-num">
+                                                <span className={`ad-badge ${product.stock === 0 ? 'ad-badge--danger' : product.stock <= lowStockThreshold ? 'ad-badge--warning' : 'ad-badge--success'}`}>
                                                     {product.stock === 0 ? 'Out of stock' : `${product.stock} left`}
                                                 </span>
                                             </td>
-                                            <td>
+                                            <td className="ad-td-num">
                                                 <span className="ad-td-strong"><i className="fa fa-star mr-1" style={{ color: '#e8a010' }} aria-hidden="true"></i>{product.ratings || 0}</span>
                                             </td>
                                             <td>

@@ -6,8 +6,8 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 exports.processPayment  = catchAsyncError(async(req, res, next) => {
     const paymentIntent = await stripe.paymentIntents.create({
         amount: req.body.amount,
-        currency: "usd",
-        description: "TEST PAYMENT",
+        currency: "inr",
+        description: "VijayCart order payment",
         metadata: { integration_check: "accept_payment"},
         shipping: req.body.shipping
     })
@@ -29,7 +29,7 @@ exports.getWallet = catchAsyncError(async (req, res, next) => {
     const user = await User.findById(req.user.id);
     res.status(200).json({
         success: true,
-        balance: Number(user.walletBalance) || 500
+        balance: user.walletBalance ?? 500
     })
 })
 
@@ -41,7 +41,7 @@ exports.payWithWallet = catchAsyncError(async (req, res, next) => {
     }
 
     const user = await User.findById(req.user.id);
-    const balance = Number(user.walletBalance) || 500;
+    const balance = user.walletBalance ?? 500;
     if (balance < amount) {
         return next(new ErrorHandler('Insufficient wallet balance', 400))
     }

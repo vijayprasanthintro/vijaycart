@@ -170,10 +170,10 @@ export default function CouponList() {
                                 <thead>
                                     <tr>
                                         <th>Code</th>
-                                        <th>Discount</th>
-                                        <th>Min Order</th>
+                                        <th className="ad-td-num">Discount</th>
+                                        <th className="ad-td-num">Min Order</th>
                                         <th>Valid Until</th>
-                                        <th>Used</th>
+                                        <th className="ad-td-num">Used</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -185,12 +185,12 @@ export default function CouponList() {
                                                 <span className="ad-chip ad-td-mono">{c.code}</span>
                                                 <button type="button" className="ad-btn ad-btn--link" onClick={() => copyCode(c.code)}><i className="fa fa-copy" aria-hidden="true"></i></button>
                                             </td>
-                                            <td><span className="ad-td-strong">{c.discountType === 'percent' ? `${c.discountValue}%` : `₹${c.discountValue}`}</span>
+                                            <td className="ad-td-num"><span className="ad-td-strong">{c.discountType === 'percent' ? `${c.discountValue}%` : `₹${c.discountValue}`}</span>
                                                 {c.maxDiscount > 0 && <span className="ad-stat__label"> (max ₹{c.maxDiscount})</span>}
                                             </td>
-                                            <td>{c.minAmount > 0 ? `₹${c.minAmount}` : '—'}</td>
+                                            <td className="ad-td-num">{c.minAmount > 0 ? `₹${c.minAmount}` : '—'}</td>
                                             <td><span className="ad-stat__label">{c.validUntil ? new Date(c.validUntil).toLocaleDateString('en-IN') : 'Never'}</span></td>
-                                            <td>{c.usageLimit > 0 ? `${c.usedCount}/${c.usageLimit}` : `${c.usedCount}`}</td>
+                                            <td className="ad-td-num">{c.usageLimit > 0 ? `${c.usedCount}/${c.usageLimit}` : `${c.usedCount}`}</td>
                                             <td>
                                                 <span className={`ad-badge ${isActive(c) ? 'ad-badge--success' : 'ad-badge--muted'}`}>
                                                     {isActive(c) ? 'Active' : 'Inactive'}

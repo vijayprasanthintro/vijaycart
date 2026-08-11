@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { memo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -13,6 +13,9 @@ const EASE = [0.16, 1, 0.3, 1];
 
 export default memo(function Product ({product, col, index = 0}) {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { isAuthenticated } = useSelector(state => state.authState);
     const { isWishlisted, toggleWishlist } = useWishlist();
     const [showQuick, setShowQuick] = useState(false);
     const pricing = getPricing(product);
@@ -32,14 +35,29 @@ export default memo(function Product ({product, col, index = 0}) {
         toast('Cart Item Added!', { type: 'success', position: toast.POSITION.BOTTOM_CENTER });
     };
 
-    const handleWishlist = (e) => {
+    const handleWishlist = async (e) => {
         e.preventDefault();
         e.stopPropagation();
-        toggleWishlist(product);
-        toast(wish ? 'Removed from Wishlist' : 'Added to Wishlist', {
-            type: wish ? 'info' : 'success',
-            position: toast.POSITION.BOTTOM_CENTER
-        });
+        if (!isAuthenticated) {
+            toast('Please login to add items to your wishlist', {
+                type: 'info',
+                position: toast.POSITION.BOTTOM_CENTER
+            });
+            navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`);
+            return;
+        }
+        const res = await toggleWishlist(product);
+        if (res && res.ok) {
+            toast(res.added ? 'Added to Wishlist' : 'Removed from Wishlist', {
+                type: res.added ? 'success' : 'info',
+                position: toast.POSITION.BOTTOM_CENTER
+            });
+        } else {
+            toast('Could not update wishlist. Please try again.', {
+                type: 'error',
+                position: toast.POSITION.BOTTOM_CENTER
+            });
+        }
     };
 
     return (

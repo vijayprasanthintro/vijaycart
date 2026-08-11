@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Modal, Button } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import { formatMoney, productImage } from '../../utils/productHelper';
 import OptimizedImage from '../common/OptimizedImage';
@@ -109,6 +111,140 @@ function computeSuggestions(products, rawQuery) {
   };
 }
 
+function CameraSearchModal({ show, onClose }) {
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
+  const [captured, setCaptured] = useState(null);
+  const [error, setError] = useState(null);
+  const [starting, setStarting] = useState(false);
+
+  const stopStream = useCallback(() => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+  }, []);
+
+  const startCamera = useCallback(async () => {
+    setError(null);
+    setCaptured(null);
+    setStarting(true);
+    try {
+      if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== 'function') {
+        throw new Error('unsupported');
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play();
+      }
+    } catch (err) {
+      let msg = 'Camera unavailable. Please allow camera access in your browser.';
+      if (err && err.name === 'NotAllowedError') {
+        msg = 'Camera permission denied. Allow camera access and try again.';
+      } else if (err && err.message === 'unsupported') {
+        msg = 'Camera is not supported in this browser.';
+      }
+      setError(msg);
+      toast(msg, { type: 'error' });
+    } finally {
+      setStarting(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (show) {
+      startCamera();
+      return () => stopStream();
+    }
+    return undefined;
+  }, [show, startCamera, stopStream]);
+
+  const capture = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    setCaptured(canvas.toDataURL('image/jpeg', 0.85));
+  };
+
+  return (
+    <Modal show={show} onHide={() => { stopStream(); onClose(); }} centered className="ss-cam-modal">
+      <Modal.Header closeButton>
+        <Modal.Title><i className="fa fa-camera mr-2" aria-hidden="true"></i>Search by Camera</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {error ? (
+          <div className="ss-cam-error">
+            <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            <span>{error}</span>
+          </div>
+        ) : (
+          <div className="ss-cam-stage">
+            <video ref={videoRef} className="ss-cam-video" playsInline muted />
+            {starting && <div className="ss-cam-starting"><i className="fa fa-spinner fa-spin" aria-hidden="true"></i> Starting camera…</div>}
+            {captured && <img src={captured} alt="Captured" className="ss-cam-captured" />}
+          </div>
+        )}
+        <p className="ss-cam-hint">Point the camera at a product or its barcode. Visual recognition is coming soon — for now you can capture the frame to save or share.</p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" size="sm" onClick={() => { stopStream(); onClose(); }}>Close</Button>
+        {!error && !captured && (
+          <Button variant="primary" size="sm" onClick={capture} disabled={starting}>
+            <i className="fa fa-camera mr-1" aria-hidden="true"></i> Capture
+          </Button>
+        )}
+        {captured && (
+          <Button variant="success" size="sm" onClick={() => { stopStream(); onClose(); }}>
+            <i className="fa fa-check mr-1" aria-hidden="true"></i> Done
+          </Button>
+        )}
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
+function startVoiceSearch(onTranscript, onError) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    toast('Voice search is not supported in this browser. Try Chrome or Edge.', { type: 'error' });
+    return;
+  }
+  const rec = new SR();
+  rec.lang = 'en-IN';
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+  rec.onresult = (e) => {
+    const text = (e.results[0][0].transcript || '').trim();
+    if (text) onTranscript(text);
+  };
+  rec.onerror = (e) => {
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+      toast('Microphone permission denied. Allow mic access and try again.', { type: 'error' });
+    } else if (e.error === 'no-speech') {
+      toast('No speech detected. Please try again.', { type: 'info' });
+    } else {
+      toast('Voice search failed. Please try again.', { type: 'error' });
+    }
+    onError && onError();
+  };
+  rec.onend = () => onError && onError();
+  try {
+    rec.start();
+    toast('Listening… speak now', { type: 'info', autoClose: 2000 });
+  } catch (err) {
+    toast('Could not start voice search.', { type: 'error' });
+    onError && onError();
+  }
+}
+
 export default function SearchSuggest({ variant = 'desktop', onDone }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -119,6 +255,8 @@ export default function SearchSuggest({ variant = 'desktop', onDone }) {
   const [recent, setRecent] = useState([]);
   const [suggest, setSuggest] = useState({ products: [], categories: [], sellers: [] });
   const [active, setActive] = useState(-1);
+  const [camOpen, setCamOpen] = useState(false);
+  const [listening, setListening] = useState(false);
 
   const rootRef = useRef(null);
   const inputRef = useRef(null);
@@ -249,6 +387,16 @@ export default function SearchSuggest({ variant = 'desktop', onDone }) {
     }
   };
 
+  const handleVoice = () => {
+    setListening(true);
+    startVoiceSearch((text) => {
+      setListening(false);
+      setKeyword(text);
+      setOpen(false);
+      goSearch(text);
+    }, () => setListening(false));
+  };
+
   const selectRow = (row) => {
     if (!row) return;
     if (row.kind === 'product') {
@@ -336,6 +484,26 @@ export default function SearchSuggest({ variant = 'desktop', onDone }) {
             <i className="fa fa-times-circle" aria-hidden="true"></i>
           </button>
         )}
+        <button
+          type="button"
+          className={`ss-aux-btn ${isMobile ? 'ss-aux-btn--mobile' : 'ss-aux-btn--desktop'} ${listening ? 'ss-aux-btn--active' : ''}`}
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={handleVoice}
+          aria-label="Search by voice"
+          title="Search by voice"
+        >
+          <i className="fa fa-microphone" aria-hidden="true"></i>
+        </button>
+        <button
+          type="button"
+          className={`ss-aux-btn ${isMobile ? 'ss-aux-btn--mobile' : 'ss-aux-btn--desktop'}`}
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => setCamOpen(true)}
+          aria-label="Search by camera"
+          title="Search by camera"
+        >
+          <i className="fa fa-camera" aria-hidden="true"></i>
+        </button>
         {isMobile ? (
           <button type="submit" className="vc-ms-overlay__submit" aria-label="Search">
             <i className="fa fa-search" aria-hidden="true"></i>
@@ -521,6 +689,8 @@ export default function SearchSuggest({ variant = 'desktop', onDone }) {
           )}
         </div>
       )}
+
+      <CameraSearchModal show={camOpen} onClose={() => setCamOpen(false)} />
     </div>
   );
 }

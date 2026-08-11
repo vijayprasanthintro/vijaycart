@@ -178,6 +178,11 @@ export default function Header() {
               </AnimatePresence>
             </div>
 
+            <Link to="/orders" className="vc-hd__item vc-hd__item--icon" aria-label="Orders">
+              <i className="fa fa-box-open" aria-hidden="true"></i>
+              <span className="vc-nav-btn-text d-none d-xl-inline">Orders</span>
+            </Link>
+
             <Link to="/wishlist" className="vc-hd__item vc-hd__item--icon" aria-label="Wishlist">
               <i className="fa fa-heart-o" aria-hidden="true"></i>
               {wishlistCount > 0 && <span className="vc-hd__badge">{wishlistCount > 9 ? '9+' : wishlistCount}</span>}
@@ -197,7 +202,7 @@ export default function Header() {
       {/* ==================== MOBILE HEADER ==================== */}
       <header className={`vc-mhd ${scrolled ? 'vc-mhd--scrolled' : ''}`}>
 
-        {/* Row 1: brand + action icons */}
+        {/* Row 1: brand only — cart/wishlist/profile live in the bottom nav */}
         <div className="vc-mhd__row">
           <Link to="/" className="vc-mhd__brand" aria-label="VijayCart Home">
             <span className="vc-mhd__brand-icon">
@@ -205,30 +210,6 @@ export default function Header() {
             </span>
             <span className="vc-mhd__brand-name">Vijay<span>Cart</span></span>
           </Link>
-
-          <div className="vc-mhd__actions">
-            {wishlistCount > 0 && (
-              <Link to="/wishlist" className="vc-mhd__icon" aria-label="Wishlist">
-                <i className="fa fa-heart-o" aria-hidden="true"></i>
-                <span className="vc-mhd__badge">{wishlistCount > 9 ? '9+' : wishlistCount}</span>
-              </Link>
-            )}
-
-            <Link to="/cart" className="vc-mhd__icon" aria-label="Cart">
-              <i className="fa fa-shopping-cart" aria-hidden="true"></i>
-              {cartCount > 0 && <span className="vc-mhd__badge">{cartCount > 9 ? '9+' : cartCount}</span>}
-            </Link>
-
-            {isAuthenticated ? (
-              <Link to="/myprofile" className="vc-mhd__icon" aria-label="Account">
-                <i className="fa fa-user" aria-hidden="true"></i>
-              </Link>
-            ) : (
-              <Link to="/login" className="vc-mhd__icon" aria-label="Login">
-                <i className="fa fa-user" aria-hidden="true"></i>
-              </Link>
-            )}
-          </div>
         </div>
 
         {/* Row 2: search bar (tap to expand) */}

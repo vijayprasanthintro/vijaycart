@@ -27,12 +27,12 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://accounts.google.com"],
             styleSrc: ["'self'", "'unsafe-inline'"],
             imgSrc: ["'self'", "data:", "blob:", "https:"],
             fontSrc: ["'self'", "data:"],
-            connectSrc: ["'self'", ...String(process.env.CSP_CONNECT_SRC || '').split(',').map(s => s.trim()).filter(Boolean)],
-            frameSrc: ["'self'", "https://js.stripe.com"],
+            connectSrc: ["'self'", "https://accounts.google.com", ...String(process.env.CSP_CONNECT_SRC || '').split(',').map(s => s.trim()).filter(Boolean)],
+            frameSrc: ["'self'", "https://js.stripe.com", "https://accounts.google.com"],
             objectSrc: ["'none'"],
             frameAncestors: ["'none'"],
             upgradeInsecureRequests: []
@@ -155,12 +155,15 @@ const delivery = require('./routes/delivery');
 const category = require('./routes/category');
 const coupon = require('./routes/coupon');
 const setting = require('./routes/setting');
+const banner = require('./routes/banner');
 const admin = require('./routes/admin');
+const waitlist = require('./routes/waitlist');
 
 app.use('/api/v1', apiLimiter);
 app.use('/api/v1/otp/verify', authLimiter);
 app.use('/api/v1/otp/request', otpRequestLimiter);
 app.use('/api/v1/admin/login', authLimiter);
+app.use('/api/v1/google', authLimiter);
 
 // Caching policy for the API: authenticated/stateful responses are never
 // cached; public product reads get a short browser cache so repeat visits
@@ -188,7 +191,9 @@ app.use('/api/v1/',delivery);
 app.use('/api/v1/',category);
 app.use('/api/v1/',coupon);
 app.use('/api/v1/',setting);
+app.use('/api/v1/',banner);
 app.use('/api/v1/',admin);
+app.use('/api/v1/',waitlist);
 
 // Health check — mounted before the production SPA catch-all so it is never
 // swallowed by the frontend fallback route. Works locally and on Railway and

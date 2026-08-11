@@ -5,6 +5,7 @@ const DeliveryPerson = require('../models/deliveryPersonModel');
 const ErrorHandler = require('../utils/errorHandler');
 const { notifyOrderEvent } = require('../utils/orderSms');
 const { LOCKED_MESSAGE, isLocked } = require('../utils/orderLock');
+const { creditOrderCoins } = require('../utils/coins');
 
 //Expected OTP for an order — last 4 digits of the customer's phone number.
 function orderOtp(order) {
@@ -310,6 +311,11 @@ exports.updateDeliveryStatus = catchAsyncError(async (req, res, next) => {
             if (!person.assignedOrders.length) person.status = 'free';
             await person.save();
         }
+    }
+
+    //Credit VijayCoins to the customer the first time delivery completes.
+    if (nextStatus === 'Delivered') {
+        await creditOrderCoins(order);
     }
 
     res.status(200).json({

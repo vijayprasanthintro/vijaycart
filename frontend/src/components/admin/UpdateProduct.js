@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getProduct, updateProduct } from "../../actions/productActions";
 import { getCategories } from "../../actions/categoryActions";
 import { clearError, clearProductUpdated } from "../../slices/productSlice";
@@ -20,19 +20,22 @@ export default function UpdateProduct() {
     const [images, setImages] = useState([]);
     const [imagesCleared, setImagesCleared] = useState(false);
     const [imagesPreview, setImagesPreview] = useState([]);
+    const [errors, setErrors] = useState({});
+    const [drag, setDrag] = useState(false);
 
     const { id: productId } = useParams();
     const { loading, isProductUpdated, error, product } = useSelector(state => state.productState);
     const { categories = [] } = useSelector(state => state.categoryState);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(getCategories());
     }, [dispatch]);
 
-    const onImagesChange = (e) => {
-        const files = Array.from(e.target.files);
-        files.forEach(file => {
+    const onImagesChange = (files) => {
+        if (!files || !files.length) return;
+        Array.from(files).forEach(file => {
             const reader = new FileReader();
             reader.onload = () => {
                 if (reader.readyState === 2) {
@@ -44,14 +47,30 @@ export default function UpdateProduct() {
         });
     };
 
+    const validate = () => {
+        const e = {};
+        if (!name.trim()) e.name = 'Product name is required';
+        if (!price || Number(price) <= 0) e.price = 'Enter a valid price';
+        if (!description.trim()) e.description = 'Description is required';
+        if (!category) e.category = 'Select a category';
+        if (!seller.trim()) e.seller = 'Seller name is required';
+        if (Number(stock) < 0) e.stock = 'Stock cannot be negative';
+        setErrors(e);
+        return Object.keys(e).length === 0;
+    };
+
     const submitHandler = (e) => {
         e.preventDefault();
+        if (!validate()) {
+            toast('Please fix the highlighted fields', { type: 'warning', position: toast.POSITION.BOTTOM_CENTER });
+            return;
+        }
         const formData = new FormData();
-        formData.append('name', name);
+        formData.append('name', name.trim());
         formData.append('price', price);
         formData.append('stock', stock);
-        formData.append('description', description);
-        formData.append('seller', seller);
+        formData.append('description', description.trim());
+        formData.append('seller', seller.trim());
         formData.append('category', category);
         if (brand.trim()) formData.append('brand', brand.trim());
         if (mrp) formData.append('mrp', mrp);
@@ -75,6 +94,11 @@ export default function UpdateProduct() {
         setImages([]);
         setImagesPreview([]);
         setImagesCleared(true);
+    };
+
+    const removePreview = (i) => {
+        setImagesPreview(imagesPreview.filter((_, idx) => idx !== i));
+        setImages(images.filter((_, idx) => idx !== i));
     };
 
     useEffect(() => {
@@ -110,6 +134,15 @@ export default function UpdateProduct() {
         }
     }, [product]);
 
+    const Section = ({ icon, title, children }) => (
+        <div className="ad-form-section">
+            <div className="ad-form-section__head"><i className={`fa ${icon}`} aria-hidden="true"></i>{title}</div>
+            <div className="ad-form-section__body">{children}</div>
+        </div>
+    );
+
+    const Err = ({ field }) => errors[field] ? <div className="ad-form-error"><i className="fa fa-exclamation-circle" aria-hidden="true"></i> {errors[field]}</div> : null;
+
     return (
         <Fragment>
             <div className="ad-page-head">
@@ -119,92 +152,125 @@ export default function UpdateProduct() {
                 </div>
             </div>
 
-            <div className="ad-card" style={{ maxWidth: 680 }}>
-                <div className="ad-card__body">
-                    <form className="ad-form" onSubmit={submitHandler} encType='multipart/form-data'>
-                        <div className="ad-form--grid">
-                            <div className="ad-field ad-field--full">
-                                <label className="ad-label">Name *</label>
-                                <input className="ad-input" value={name} onChange={e => setName(e.target.value)} />
-                            </div>
-                            <div className="ad-field">
-                                <label className="ad-label">Brand</label>
-                                <input className="ad-input" value={brand} onChange={e => setBrand(e.target.value)} placeholder="e.g. Samsung, Apple" />
-                            </div>
-                            <div className="ad-field">
-                                <label className="ad-label">Category *</label>
-                                <select className="ad-select" value={category} onChange={e => setCategory(e.target.value)}>
-                                    <option value="">Select</option>
-                                    {categories.map(c => (
-                                        <option key={c._id} value={c.name}>{c.name}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="ad-field">
-                                <label className="ad-label">Price (₹) *</label>
-                                <input className="ad-input" type="number" value={price} onChange={e => setPrice(e.target.value)} />
-                            </div>
-                            <div className="ad-field">
-                                <label className="ad-label">Original Price / MRP (₹)</label>
-                                <input className="ad-input" type="number" value={mrp} onChange={e => setMrp(e.target.value)} />
-                            </div>
-                            <div className="ad-field">
-                                <label className="ad-label">Discount (%)</label>
-                                <input className="ad-input" type="number" min="0" max="95" value={discount} onChange={e => setDiscount(e.target.value)} />
-                            </div>
-                            <div className="ad-field">
-                                <label className="ad-label">Stock *</label>
-                                <input className="ad-input" type="number" value={stock} onChange={e => setStock(e.target.value)} />
-                            </div>
-                            <div className="ad-field">
-                                <label className="ad-label">Seller Name *</label>
-                                <input className="ad-input" value={seller} onChange={e => setSeller(e.target.value)} />
-                            </div>
-                            <div className="ad-field ad-field--full">
-                                <label className="ad-label">Specifications (Model, RAM, Storage, Color…)</label>
-                                <div className="ad-specs">
-                                    {specs.map((sp, i) => (
-                                        <div className="ad-specs__row" key={i}>
-                                            <input className="ad-input" placeholder="Label (e.g. RAM)" value={sp.label} onChange={e => onSpecChange(i, 'label', e.target.value)} />
-                                            <input className="ad-input" placeholder="Value (e.g. 8 GB)" value={sp.value} onChange={e => onSpecChange(i, 'value', e.target.value)} />
-                                            <button type="button" className="ad-btn ad-btn--danger ad-btn--sm ad-btn--icon" onClick={() => removeSpec(i)} title="Remove" disabled={specs.length <= 1}>
-                                                <i className="fa fa-trash" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
-                                    ))}
-                                    <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" onClick={addSpec} style={{ alignSelf: 'flex-start' }}>
-                                        <i className="fa fa-plus" aria-hidden="true"></i> Add spec
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="ad-field ad-field--full">
-                                <label className="ad-label">Description *</label>
-                                <textarea className="ad-textarea" rows={6} value={description} onChange={e => setDescription(e.target.value)}></textarea>
-                            </div>
-                            <div className="ad-field ad-field--full">
-                                <label className="ad-label">Images</label>
-                                <input type="file" className="ad-input" multiple onChange={onImagesChange} />
-                                <div className="ad-toolbar" style={{ marginTop: '0.6rem' }}>
-                                    {imagesPreview.length > 0 && (
-                                        <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" onClick={clearImagesHandler}>
-                                            <i className="fa fa-trash" aria-hidden="true"></i> Clear images
-                                        </button>
-                                    )}
-                                    {imagesPreview.map(image => (
-                                        <img key={image} src={image} alt="Preview" width="56" height="52" style={{ borderRadius: 8, objectFit: 'cover', border: '1px solid var(--ad-border)' }} />
-                                    ))}
-                                </div>
-                            </div>
+            <form className="ad-form" onSubmit={submitHandler} encType='multipart/form-data' style={{ maxWidth: 860 }}>
+                <Section icon="fa-info-circle" title="Basic Information">
+                    <div className="ad-form--grid">
+                        <div className="ad-field ad-field--full">
+                            <label className="ad-label">Name *</label>
+                            <input className="ad-input" value={name} onChange={e => setName(e.target.value)} />
+                            <Err field="name" />
                         </div>
-                        <div className="ad-modal__actions" style={{ marginTop: 0 }}>
-                            <button type="submit" className="ad-btn ad-btn--primary" disabled={loading}>
-                                {loading ? <i className="fa fa-spinner fa-spin" aria-hidden="true"></i> : <i className="fa fa-save" aria-hidden="true"></i>}
-                                Update Product
+                        <div className="ad-field">
+                            <label className="ad-label">Brand</label>
+                            <input className="ad-input" value={brand} onChange={e => setBrand(e.target.value)} placeholder="e.g. Samsung, Apple" />
+                        </div>
+                        <div className="ad-field">
+                            <label className="ad-label">Category *</label>
+                            <select className="ad-select" value={category} onChange={e => setCategory(e.target.value)}>
+                                <option value="">Select</option>
+                                {categories.map(c => (
+                                    <option key={c._id} value={c.name}>{c.name}</option>
+                                ))}
+                            </select>
+                            <Err field="category" />
+                        </div>
+                    </div>
+                </Section>
+
+                <Section icon="fa-tags" title="Pricing & Inventory">
+                    <div className="ad-form--grid">
+                        <div className="ad-field">
+                            <label className="ad-label">Selling Price (₹) *</label>
+                            <input className="ad-input" type="number" min="0" value={price} onChange={e => setPrice(e.target.value)} />
+                            <Err field="price" />
+                        </div>
+                        <div className="ad-field">
+                            <label className="ad-label">Original Price / MRP (₹)</label>
+                            <input className="ad-input" type="number" min="0" value={mrp} onChange={e => setMrp(e.target.value)} />
+                        </div>
+                        <div className="ad-field">
+                            <label className="ad-label">Discount (%)</label>
+                            <input className="ad-input" type="number" min="0" max="95" value={discount} onChange={e => setDiscount(e.target.value)} />
+                        </div>
+                        <div className="ad-field">
+                            <label className="ad-label">Stock *</label>
+                            <input className="ad-input" type="number" min="0" value={stock} onChange={e => setStock(e.target.value)} />
+                            <Err field="stock" />
+                        </div>
+                        <div className="ad-field ad-field--full">
+                            <label className="ad-label">Seller Name *</label>
+                            <input className="ad-input" value={seller} onChange={e => setSeller(e.target.value)} />
+                            <Err field="seller" />
+                        </div>
+                    </div>
+                </Section>
+
+                <Section icon="fa-list-alt" title="Specifications">
+                    <div className="ad-specs">
+                        {specs.map((sp, i) => (
+                            <div className="ad-specs__row" key={i}>
+                                <input className="ad-input" placeholder="Label (e.g. RAM)" value={sp.label} onChange={e => onSpecChange(i, 'label', e.target.value)} />
+                                <input className="ad-input" placeholder="Value (e.g. 8 GB)" value={sp.value} onChange={e => onSpecChange(i, 'value', e.target.value)} />
+                                <button type="button" className="ad-btn ad-btn--danger ad-btn--sm ad-btn--icon" onClick={() => removeSpec(i)} title="Remove" disabled={specs.length <= 1}>
+                                    <i className="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        ))}
+                        <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" onClick={addSpec} style={{ alignSelf: 'flex-start' }}>
+                            <i className="fa fa-plus" aria-hidden="true"></i> Add spec
+                        </button>
+                    </div>
+                </Section>
+
+                <Section icon="fa-image" title="Images">
+                    <label
+                        className={`ad-upload__drop ${drag ? 'ad-upload__drop--drag' : ''}`}
+                        onDragOver={e => { e.preventDefault(); setDrag(true); }}
+                        onDragLeave={() => setDrag(false)}
+                        onDrop={e => { e.preventDefault(); setDrag(false); onImagesChange(e.dataTransfer.files); }}
+                    >
+                        <input type="file" multiple accept="image/*" style={{ display: 'none' }} onChange={e => onImagesChange(e.target.files)} />
+                        <i className="fa fa-cloud-upload" aria-hidden="true"></i>
+                        <b>Drop images here or click to browse</b>
+                        <span>PNG, JPG, WebP — first image is the product thumbnail</span>
+                    </label>
+                    {imagesPreview.length > 0 && (
+                        <div className="ad-upload__preview">
+                            {imagesPreview.map((image, i) => (
+                                <span className="ad-thumb" key={image}>
+                                    <img src={image} alt="Preview" />
+                                    <button type="button" className="ad-thumb__remove" onClick={() => removePreview(i)} title="Remove">
+                                        <i className="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </span>
+                            ))}
+                        </div>
+                    )}
+                    {imagesPreview.length > 0 && (
+                        <div className="ad-upload__actions">
+                            <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" onClick={clearImagesHandler}>
+                                <i className="fa fa-trash" aria-hidden="true"></i> Clear all images
                             </button>
                         </div>
-                    </form>
+                    )}
+                </Section>
+
+                <Section icon="fa-align-left" title="Description">
+                    <div className="ad-field">
+                        <textarea className="ad-textarea" rows={6} value={description} onChange={e => setDescription(e.target.value)}></textarea>
+                        <Err field="description" />
+                    </div>
+                </Section>
+
+                <div className="ad-settings-savebar">
+                    <span className="ad-settings-savebar__hint"><i className="fa fa-info-circle" aria-hidden="true"></i> Required fields are marked with *</span>
+                    <button type="button" className="ad-btn ad-btn--ghost" onClick={() => navigate('/admin/products')}>Cancel</button>
+                    <button type="submit" className="ad-btn ad-btn--primary" disabled={loading}>
+                        {loading ? <i className="fa fa-spinner fa-spin" aria-hidden="true"></i> : <i className="fa fa-save" aria-hidden="true"></i>}
+                        Update Product
+                    </button>
                 </div>
-            </div>
+            </form>
         </Fragment>
     );
 }
