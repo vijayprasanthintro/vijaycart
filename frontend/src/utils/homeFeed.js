@@ -22,7 +22,6 @@ export const FASHION_CATEGORIES = ['Clothes/Shoes', 'Accessories', 'Sports', 'Ou
 export const LIFESTYLE_CATEGORIES = ['Home', 'Food', 'Beauty/Health', 'Books'];
 
 const SORT_DIR_DESC = -1;
-const SORT_DIR_ASC = 1;
 
 // Deterministic tiebreak so ordering never depends on Mongo's insertion order.
 const byId = (a, b) => String(a._id).localeCompare(String(b._id));

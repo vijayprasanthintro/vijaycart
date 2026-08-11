@@ -7,3 +7,5 @@ backend/config/config.env
 frontend/.env
 frontend/.env.*
 !frontend/.env.example
+.vercel
+.env*

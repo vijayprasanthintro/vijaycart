@@ -961,7 +961,7 @@ export default function ProductDetail () {
                                             <div className="review-upload-previews">
                                                 {reviewImages.map((file, idx) => (
                                                     <span className="review-upload-preview" key={idx}>
-                                                        <img src={URL.createObjectURL(file)} alt={`Review photo ${idx + 1}`} />
+                                                        <img src={URL.createObjectURL(file)} alt={`Review ${idx + 1}`} />
                                                         <button type="button" className="review-upload-remove" onClick={() => removeReviewImage(idx)} aria-label="Remove photo"><i className="fa fa-times" aria-hidden="true"></i></button>
                                                     </span>
                                                 ))}
