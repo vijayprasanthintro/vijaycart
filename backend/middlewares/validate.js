@@ -319,6 +319,54 @@ const sanitizeBody = (fields) => (req, _res, next) => {
     return next();
 };
 
+// ---------- Saved delivery addresses ----------
+const ADDRESS_TYPES = ['home', 'work', 'other'];
+
+// Field-level rules shared by POST and PUT. With { partial: true } (PUT) the
+// same chains simply skip absent fields, so a single field can be updated
+// without resending the whole address. Completeness on POST is enforced as
+// the final guard by the required fields in the mongoose address schema —
+// user.save() rejects an address missing name/phone/address/city/state/
+// postalCode/country and the error middleware surfaces the message.
+//
+// Chain order matters for express-validator: config (optional) -> sanitizers
+// (trim) -> validators -> withMessage. withMessage must always follow an
+// actual validator, never optional()/trim().
+const addressRules = ({ partial = false } = {}) => {
+    const opt = (chain) => chain.optional({ values: 'falsy' });
+    return [
+        opt(body('name')).trim()
+            .isLength({ min: 2, max: 50 }).withMessage('Name must be between 2 and 50 characters'),
+        opt(body('phoneNo'))
+            .custom((v) => /^[0-9+\-\s()]{10,16}$/.test(String(v || '')))
+            .withMessage('Enter a valid phone number'),
+        opt(body('address')).trim()
+            .isLength({ min: 3, max: 300 }).withMessage('Please provide a valid address'),
+        opt(body('landmark')).trim()
+            .isLength({ max: 120 }).withMessage('Landmark cannot exceed 120 characters'),
+        opt(body('instructions')).trim()
+            .isLength({ max: 120 }).withMessage('Instructions cannot exceed 120 characters'),
+        opt(body('city')).trim()
+            .isLength({ min: 1, max: 80 }).withMessage('Please provide a valid city'),
+        opt(body('state')).trim()
+            .isLength({ min: 1, max: 80 }).withMessage('Please provide a valid state'),
+        opt(body('district')).trim()
+            .isLength({ max: 80 }).withMessage('District cannot exceed 80 characters'),
+        opt(body('locality')).trim()
+            .isLength({ max: 120 }).withMessage('Locality cannot exceed 120 characters'),
+        opt(body('postalCode')).trim()
+            .custom((v) => /^[0-9]{5,10}$/.test(String(v || '')))
+            .withMessage('Please provide a valid postal code'),
+        opt(body('country')).trim()
+            .isLength({ min: 2, max: 80 }).withMessage('Please provide a valid country'),
+        opt(body('type'))
+            .isIn(ADDRESS_TYPES).withMessage('Invalid address type'),
+        body('isDefault')
+            .optional()
+            .isBoolean().withMessage('Invalid default flag')
+    ];
+};
+
 module.exports = {
     validate,
     objectIdParam,
@@ -343,5 +391,6 @@ module.exports = {
     adminUserUpdateRules,
     sellerApplyRules,
     sellerStatusRules,
+    addressRules,
     sanitizeBody
 };

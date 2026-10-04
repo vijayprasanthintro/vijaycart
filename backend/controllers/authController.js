@@ -195,6 +195,147 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
 
 })
 
+// ---------- Saved delivery addresses (per authenticated user) ----------
+//
+// Every lookup starts from req.user.id, which the authenticate middleware
+// resolves from the JWT cookie — never from a body/param supplied by the
+// client. That makes cross-user access structurally impossible: there is no
+// endpoint that accepts a user id for addresses at all.
+
+const ADDRESS_FIELDS = [
+    'name', 'phoneNo', 'address', 'landmark', 'instructions',
+    'city', 'state', 'district', 'locality', 'postalCode', 'country', 'type'
+];
+
+const pickAddressFields = (body = {}) => {
+    const out = {};
+    for (const field of ADDRESS_FIELDS) {
+        if (body[field] !== undefined) out[field] = body[field];
+    }
+    if (typeof out.name === 'string') out.name = out.name.trim();
+    if (typeof out.phoneNo === 'string') out.phoneNo = String(out.phoneNo).replace(/\s/g, '');
+    if (typeof out.postalCode === 'string') out.postalCode = out.postalCode.trim();
+    return out;
+};
+
+const ensureSingleDefault = (user, preferredId) => {
+    const list = user.addresses || [];
+    const hasDefault = list.some(a => a.isDefault);
+    if (!hasDefault && list.length) {
+        const target = (preferredId && list.find(a => String(a._id) === String(preferredId))) || list[0];
+        target.isDefault = true;
+    }
+};
+
+//Get saved addresses - GET /api/v1/myaddresses
+exports.getAddresses = catchAsyncError(async (req, res, next) => {
+    const user = await User.findById(req.user.id).select('addresses');
+    let addresses = user?.addresses || [];
+    // Safety net: exactly one default must exist once any address is saved.
+    if (addresses.length && !addresses.some(a => a.isDefault)) {
+        await User.updateOne(
+            { _id: req.user.id },
+            { $set: { 'addresses.0.isDefault': true } }
+        );
+        addresses = addresses.map((a, i) => (i === 0 ? { ...a.toObject?.() || a, isDefault: true } : a));
+    }
+    res.status(200).json({
+        success: true,
+        addresses
+    });
+});
+
+//Add address - POST /api/v1/myaddresses
+exports.addAddress = catchAsyncError(async (req, res, next) => {
+    const user = await User.findById(req.user.id).select('addresses');
+    if (!user) return next(new ErrorHandler('Please login to continue', 401));
+
+    const data = pickAddressFields(req.body);
+    // Completeness guard for new addresses (PUT may legitimately patch one
+    // field, so this check only applies when creating).
+    const REQUIRED_ADDRESS_FIELDS = ['name', 'phoneNo', 'address', 'city', 'state', 'postalCode', 'country'];
+    const missing = REQUIRED_ADDRESS_FIELDS.filter(f => !String(data[f] || '').trim());
+    if (missing.length) {
+        return next(new ErrorHandler('Please fill all the required address fields', 400));
+    }
+
+    const makeDefault = Boolean(req.body.isDefault) || (user.addresses || []).length === 0;
+
+    if (makeDefault) {
+        (user.addresses || []).forEach(a => { a.isDefault = false; });
+    }
+    user.addresses.push({ ...data, isDefault: makeDefault });
+    await user.save({ validateBeforeSave: false });
+
+    res.status(201).json({
+        success: true,
+        addresses: user.addresses
+    });
+});
+
+//Update address - PUT /api/v1/myaddresses/:id
+exports.updateAddress = catchAsyncError(async (req, res, next) => {
+    const user = await User.findById(req.user.id).select('addresses');
+    if (!user) return next(new ErrorHandler('Please login to continue', 401));
+
+    const addr = (user.addresses || []).id(req.params.id);
+    if (!addr) return next(new ErrorHandler('Address not found', 404));
+
+    const data = pickAddressFields(req.body);
+    Object.assign(addr, data);
+
+    if (req.body.isDefault === true) {
+        user.addresses.forEach(a => { a.isDefault = false; });
+        addr.isDefault = true;
+    }
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+        success: true,
+        addresses: user.addresses
+    });
+});
+
+//Delete address - DELETE /api/v1/myaddresses/:id
+exports.deleteAddress = catchAsyncError(async (req, res, next) => {
+    const user = await User.findById(req.user.id).select('addresses');
+    if (!user) return next(new ErrorHandler('Please login to continue', 401));
+
+    const addr = (user.addresses || []).id(req.params.id);
+    if (!addr) return next(new ErrorHandler('Address not found', 404));
+
+    addr.deleteOne();
+
+    // If the removed one was the default, promote the first remaining address.
+    if (!(user.addresses || []).some(a => a.isDefault)) {
+        ensureSingleDefault(user);
+    }
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+        success: true,
+        addresses: user.addresses
+    });
+});
+
+//Set default address - PATCH /api/v1/myaddresses/:id/default
+exports.setDefaultAddress = catchAsyncError(async (req, res, next) => {
+    const user = await User.findById(req.user.id).select('addresses');
+    if (!user) return next(new ErrorHandler('Please login to continue', 401));
+
+    const addr = (user.addresses || []).id(req.params.id);
+    if (!addr) return next(new ErrorHandler('Address not found', 404));
+
+    user.addresses.forEach(a => { a.isDefault = false; });
+    addr.isDefault = true;
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+        success: true,
+        addresses: user.addresses
+    });
+});
+
 //Admin: Get All Users - /api/v1/admin/users
 exports.getAllUsers = catchAsyncError(async (req, res, next) => {
    const users = await User.find();

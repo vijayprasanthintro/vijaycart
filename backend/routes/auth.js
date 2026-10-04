@@ -25,7 +25,12 @@ const {
     addToWishlist,
     removeFromWishlist,
     clearWishlist,
-    getPublicConfig
+    getPublicConfig,
+    getAddresses,
+    addAddress,
+    updateAddress,
+    deleteAddress,
+    setDefaultAddress
  } = require('../controllers/authController');
 const { requestOtp, verifyOtp } = require('../controllers/otpController');
 const { applySeller, getMySellerApplication } = require('../controllers/sellerController');
@@ -40,7 +45,8 @@ const {
     googleLoginRules,
     productIdParam,
     adminUserUpdateRules,
-    sellerApplyRules
+    sellerApplyRules,
+    addressRules
 } = require('../middlewares/validate');
 
 router.route('/auth/config').get(getPublicConfig);
@@ -57,6 +63,18 @@ router.route('/wishlist').get(isAuthenticatedUser, getWishlist)
 router.route('/wishlist/:productId')
     .put(isAuthenticatedUser, productIdParam(), validate, addToWishlist)
     .delete(isAuthenticatedUser, productIdParam(), validate, removeFromWishlist);
+
+//Saved delivery addresses — always scoped to the authenticated user (JWT
+//cookie); the id in the URL refers to an address inside that user's account,
+//so one user can never read or mutate another user's address.
+router.route('/myaddresses')
+    .get(isAuthenticatedUser, getAddresses)
+    .post(isAuthenticatedUser, addressRules(), validate, addAddress);
+router.route('/myaddresses/:id')
+    .put(isAuthenticatedUser, objectIdParam('id'), addressRules({ partial: true }), validate, updateAddress)
+    .delete(isAuthenticatedUser, objectIdParam('id'), validate, deleteAddress);
+router.route('/myaddresses/:id/default')
+    .patch(isAuthenticatedUser, objectIdParam('id'), validate, setDefaultAddress);
 
 //Become a Seller (customer-facing)
 router.route('/seller/apply').post(isAuthenticatedUser, sellerApplyRules(), validate, applySeller);
