@@ -130,7 +130,7 @@ export default function ReviewList() {
                                                     {review.product?.image ? (
                                                         <img src={resolveProductImage(review.product.image)} alt={review.product.name} onError={imgOnError} />
                                                     ) : (
-                                                        <span className="ad-avatar"><i className="fa fa-box" aria-hidden="true"></i></span>
+                                                        <span className="ad-avatar"><i className="fa fa-cube" aria-hidden="true"></i></span>
                                                     )}
                                                     <span>{review.product?.name || '—'}</span>
                                                 </div>

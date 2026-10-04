@@ -99,7 +99,7 @@ export default function Pincodes() {
                     </div>
                     <div className="ad-card__body">
                         <div className="ad-help ad-help--box">
-                            <i className="fa fa-hand-holding-dollar" aria-hidden="true"></i>
+                            <i className="fa fa-money" aria-hidden="true"></i>
                             &nbsp;COD is {settings.codEnabled === false ? 'disabled store-wide' : 'enabled'} · max order amount {settings.codMaxAmount ? `₹${Number(settings.codMaxAmount).toLocaleString('en-IN')}` : '₹5,000'}.
                             When a list is present, COD is only offered at these pincodes.
                         </div>
@@ -138,7 +138,7 @@ export default function Pincodes() {
                 {/* Lookup */}
                 <div className="ad-card ad-card--lift">
                     <div className="ad-card__head">
-                        <h3 className="ad-card__title"><i className="fa fa-search-location" aria-hidden="true"></i> Pincode Lookup</h3>
+                        <h3 className="ad-card__title"><i className="fa fa-map-marker" aria-hidden="true"></i> Pincode Lookup</h3>
                         <span className="ad-help">Live postal database</span>
                     </div>
                     <div className="ad-card__body">

@@ -140,7 +140,7 @@ export default function Permissions() {
             ) : (
                 <div className="ad-card">
                     <div className="ad-card__head">
-                        <h3 className="ad-card__title"><i className="fa fa-shield-alt" aria-hidden="true"></i> Access Matrix</h3>
+                        <h3 className="ad-card__title"><i className="fa fa-shield" aria-hidden="true"></i> Access Matrix</h3>
                         <span className="ad-help"><i className="fa fa-info-circle mr-1" aria-hidden="true"></i>Toggle which modules each role can access.</span>
                     </div>
                     <div className="ad-card__body">

@@ -11,14 +11,14 @@ const NAV = [
     {
         group: 'Overview',
         items: [
-            { to: '/admin/dashboard', icon: 'fa-tachometer-alt', label: 'Dashboard', perm: 'dashboard' }
+            { to: '/admin/dashboard', icon: 'fa-tachometer', label: 'Dashboard', perm: 'dashboard' }
         ]
     },
     {
         group: 'Management',
         items: [
             { to: '/admin/orders', icon: 'fa-shopping-basket', label: 'Orders', perm: 'orders' },
-            { to: '/admin/products', icon: 'fa-box', label: 'Products', perm: 'products' },
+            { to: '/admin/products', icon: 'fa-cube', label: 'Products', perm: 'products' },
             { to: '/admin/categories', icon: 'fa-th-large', label: 'Categories', perm: 'categories' },
             { to: '/admin/coupons', icon: 'fa-ticket', label: 'Coupons', perm: 'coupons' },
             { to: '/admin/banners', icon: 'fa-image', label: 'Banners', perm: 'banners' },
@@ -42,9 +42,9 @@ const NAV = [
     {
         group: 'Insights',
         items: [
-            { to: '/admin/analytics', icon: 'fa-chart-line', label: 'Analytics', perm: 'analytics' },
-            { to: '/admin/revenue', icon: 'fa-indian-rupee', label: 'Revenue', perm: 'revenue' },
-            { to: '/admin/inventory', icon: 'fa-warehouse', label: 'Inventory', perm: 'inventory' },
+            { to: '/admin/analytics', icon: 'fa-line-chart', label: 'Analytics', perm: 'analytics' },
+            { to: '/admin/revenue', icon: 'fa-rupee', label: 'Revenue', perm: 'revenue' },
+            { to: '/admin/inventory', icon: 'fa-industry', label: 'Inventory', perm: 'inventory' },
             { to: '/admin/reviews', icon: 'fa-star', label: 'Reviews', perm: 'reviews' },
             { to: '/admin/reports', icon: 'fa-file-excel-o', label: 'Reports & Exports', perm: 'reports' }
         ]
@@ -53,7 +53,7 @@ const NAV = [
         group: 'System',
         items: [
             { to: '/admin/settings', icon: 'fa-cog', label: 'Settings', perm: 'settings' },
-            { to: '/admin/permissions', icon: 'fa-shield-alt', label: 'Permissions', perm: 'permissions' }
+            { to: '/admin/permissions', icon: 'fa-shield', label: 'Permissions', perm: 'permissions' }
         ]
     }
 ];
@@ -82,14 +82,14 @@ const TITLES = {
 // Quick global jump — maps a keyword to the most relevant admin section.
 const SEARCH_ROUTES = [
     { re: /order|deliver|ship|payment|cod/i, to: '/admin/orders', label: 'Orders', icon: 'fa-shopping-basket' },
-    { re: /product|catalog|item|price/i, to: '/admin/products', label: 'Products', icon: 'fa-box' },
+    { re: /product|catalog|item|price/i, to: '/admin/products', label: 'Products', icon: 'fa-cube' },
     { re: /user|customer|account|admin/i, to: '/admin/users', label: 'Users', icon: 'fa-users' },
     { re: /coupon|promo|discount|code/i, to: '/admin/coupons', label: 'Coupons', icon: 'fa-ticket' },
     { re: /review|rating|feedback/i, to: '/admin/reviews', label: 'Reviews', icon: 'fa-star' },
     { re: /banner|hero|carousel|slide|promo/i, to: '/admin/banners', label: 'Banners', icon: 'fa-image' },
-    { re: /inventory|stock|warehouse/i, to: '/admin/inventory', label: 'Inventory', icon: 'fa-warehouse' },
-    { re: /analytic|traffic|trend|sales/i, to: '/admin/analytics', label: 'Analytics', icon: 'fa-chart-line' },
-    { re: /revenue|earning|money|profit/i, to: '/admin/revenue', label: 'Revenue', icon: 'fa-indian-rupee' },
+    { re: /inventory|stock|warehouse/i, to: '/admin/inventory', label: 'Inventory', icon: 'fa-industry' },
+    { re: /analytic|traffic|trend|sales/i, to: '/admin/analytics', label: 'Analytics', icon: 'fa-line-chart' },
+    { re: /revenue|earning|money|profit/i, to: '/admin/revenue', label: 'Revenue', icon: 'fa-rupee' },
     { re: /categor|collection/i, to: '/admin/categories', label: 'Categories', icon: 'fa-th-large' },
     { re: /setting|config|permission|role/i, to: '/admin/settings', label: 'Settings', icon: 'fa-cog' },
     { re: /boy|rider|partner/i, to: '/admin/delivery-boys', label: 'Delivery Boys', icon: 'fa-motorcycle' },
@@ -109,7 +109,7 @@ const buildNotifications = (a = {}) => {
     const list = [];
     if (pending) list.push({ icon: 'fa-shopping-basket', tone: 'ad-stat--info', title: `${pending} order${pending === 1 ? '' : 's'} pending confirmation`, time: 'Live' });
     if (low) list.push({ icon: 'fa-exclamation-triangle', tone: 'ad-stat--warning', title: `${low} product${low === 1 ? '' : 's'} running low on stock`, time: 'Live' });
-    if (oos) list.push({ icon: 'fa-box', tone: 'ad-stat--danger', title: `${oos} product${oos === 1 ? '' : 's'} out of stock`, time: 'Live' });
+    if (oos) list.push({ icon: 'fa-cube', tone: 'ad-stat--danger', title: `${oos} product${oos === 1 ? '' : 's'} out of stock`, time: 'Live' });
     if (returns) list.push({ icon: 'fa-refresh', tone: 'ad-stat--danger', title: `${returns} return request${returns === 1 ? '' : 's'} received`, time: 'Live' });
     return list;
 };

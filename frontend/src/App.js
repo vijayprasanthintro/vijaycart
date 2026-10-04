@@ -16,6 +16,7 @@ import BottomNavigation from './components/layouts/BottomNavigation';
 import CategoryNav from './components/home/CategoryNav';
 import LocationBar from './components/home/LocationBar';
 import ProtectedRoute from './components/route/ProtectedRoute';
+import ScrollRestoration from './components/route/ScrollRestoration';
 import ErrorBoundary from './components/layouts/ErrorBoundary';
 import Loader from './components/layouts/Loader';
 import PageTransition from './components/layouts/PageTransition';
@@ -112,6 +113,9 @@ function Shell() {
 
   return (
     <>
+      {/* Route-level scroll management: every new navigation opens at the
+          top of the page (back/forward restores the previous position). */}
+      <ScrollRestoration />
       <a href="#main-content" className="skip-link">Skip to main content</a>
       {!hideChrome && <Header />}
       {!hideChrome && <LocationBar />}

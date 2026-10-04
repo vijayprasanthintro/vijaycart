@@ -51,7 +51,7 @@ export default function Analytics() {
                     <div><div className="ad-stat__label">Total Orders</div><div className="ad-stat__value">{analytics.totalOrders || 0}</div></div>
                 </div>
                 <div className="ad-stat ad-stat--primary">
-                    <div className="ad-stat__icon"><i className="fa fa-indian-rupee" aria-hidden="true"></i></div>
+                    <div className="ad-stat__icon"><i className="fa fa-rupee" aria-hidden="true"></i></div>
                     <div><div className="ad-stat__label">Revenue (14d)</div><div className="ad-stat__value">{toINR(revenueTrend.reduce((s, d) => s + d.value, 0))}</div></div>
                 </div>
                 <div className="ad-stat ad-stat--info">
@@ -66,7 +66,7 @@ export default function Analytics() {
 
             <div className="ad-chart-row">
                 <div className="ad-card">
-                    <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-chart-area" aria-hidden="true"></i> Revenue — Last 14 Days</h3></div>
+                    <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-area-chart" aria-hidden="true"></i> Revenue — Last 14 Days</h3></div>
                     <div className="ad-card__body"><AreaChart data={revenueTrend} color="var(--ad-primary)" format={v => toINR(v)} /></div>
                 </div>
                 <div className="ad-card">
@@ -77,7 +77,7 @@ export default function Analytics() {
 
             <div className="ad-chart-row">
                 <div className="ad-card">
-                    <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-chart-bar" aria-hidden="true"></i> Orders — Last 14 Days</h3></div>
+                    <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-bar-chart" aria-hidden="true"></i> Orders — Last 14 Days</h3></div>
                     <div className="ad-card__body"><BarChart data={orderTrend} /></div>
                 </div>
                 <div className="ad-card">
@@ -92,7 +92,7 @@ export default function Analytics() {
                 </div>
                 <div className="ad-card__body">
                     {!loading && (analytics.topProducts || []).length === 0 && (
-                        <div className="ad-empty"><i className="fa fa-box-open" aria-hidden="true"></i><p>No sales data yet.</p></div>
+                        <div className="ad-empty"><i className="fa fa-archive" aria-hidden="true"></i><p>No sales data yet.</p></div>
                     )}
                     <div className="ad-form" style={{ gap: '0.9rem' }}>
                         {(analytics.topProducts || []).map((p, i) => (

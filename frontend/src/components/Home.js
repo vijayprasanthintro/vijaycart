@@ -27,7 +27,7 @@ const SHOP_CATEGORIES = [
 const QUICK_ACCESS = [
   { name: 'Offers', icon: 'fa-percent', cls: 'cat-icon-appliances', to: '/search/all' },
   { name: 'Mobiles & Acc', icon: 'fa-mobile', cls: 'cat-icon-mobile', to: '/search/all?category=Smartphones' },
-  { name: 'Fashion', icon: 'fa-tshirt', cls: 'cat-icon-fashion', to: '/search/all?category=Clothes%2FShoes' },
+  { name: 'Fashion', icon: 'fa-tags', cls: 'cat-icon-fashion', to: '/search/all?category=Clothes%2FShoes' },
   { name: 'Electronics', icon: 'fa-plug', cls: 'cat-icon-electronics', to: '/search/all?category=Electronics' },
   { name: 'Grocery', icon: 'fa-shopping-basket', cls: 'cat-icon-grocery', to: '/search/all?category=Food' },
   { name: 'Home', icon: 'fa-home', cls: 'cat-icon-home', to: '/search/all?category=Home' },

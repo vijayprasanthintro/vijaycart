@@ -19,7 +19,7 @@ const statusMeta = (status) => {
     if (s.includes('delivered')) return { label: status, cls: 'delivered', icon: 'fa-check-circle' };
     if (s.includes('out for delivery')) return { label: status, cls: 'shipped', icon: 'fa-truck' };
     if (s.includes('ship')) return { label: status, cls: 'shipped', icon: 'fa-truck' };
-    if (s.includes('pack')) return { label: status, cls: 'packed', icon: 'fa-box' };
+    if (s.includes('pack')) return { label: status, cls: 'packed', icon: 'fa-cube' };
     if (s.includes('confirm')) return { label: status, cls: 'confirmed', icon: 'fa-check-circle-o' };
     return { label: status || 'Pending', cls: 'processing', icon: 'fa-hourglass-half' };
 };
@@ -31,7 +31,7 @@ const returnMeta = (status) => {
     const rejected = s.includes('rejected');
     const completed = s.includes('completed');
     const cls = rejected ? 'rejected' : completed ? 'completed' : 'requested';
-    if (isReplace) return { label: status, cls, icon: 'fa-arrows-rotate', sub: 'A replacement has been requested for this order.' };
+    if (isReplace) return { label: status, cls, icon: 'fa-refresh', sub: 'A replacement has been requested for this order.' };
     if (isReturn) return { label: status, cls, icon: 'fa-rotate-left', sub: 'A return has been requested for this order.' };
     return null;
 };
@@ -39,7 +39,7 @@ const returnMeta = (status) => {
 const TRACK_STEPS = [
     { label: 'Order Placed', icon: 'fa-check' },
     { label: 'Confirmed', icon: 'fa-check-circle-o' },
-    { label: 'Packed', icon: 'fa-box' },
+    { label: 'Packed', icon: 'fa-cube' },
     { label: 'Shipped', icon: 'fa-truck' },
     { label: 'Out for Delivery', icon: 'fa-motorcycle' },
     { label: 'Delivered', icon: 'fa-check-circle' },
@@ -250,18 +250,18 @@ export default function OrderDetail () {
                     <div className="row">
                         <div className="col-12 col-lg-8">
                             <div className="co-card">
-                                <div className="co-card-head"><div><i className="fa fa-location-dot mr-2" aria-hidden="true"></i>Delivery Address</div></div>
+                                <div className="co-card-head"><div><i className="fa fa-map-marker mr-2" aria-hidden="true"></i>Delivery Address</div></div>
                                 <div className="co-address-name">{shippingInfo.name || user.name || ''}</div>
                                 <p className="co-address-line">{shippingInfo.address}{shippingInfo.landmark ? `, ${shippingInfo.landmark}` : ''}{shippingInfo.locality ? `, ${shippingInfo.locality}` : ''}, {shippingInfo.city}{shippingInfo.state ? `, ${shippingInfo.state}` : ''} {shippingInfo.postalCode}</p>
                                 <div className="addr-meta"><i className="fa fa-phone" aria-hidden="true"></i>{shippingInfo.phoneNo} &middot; {shippingInfo.country}</div>
-                                {shippingInfo.instructions && <div className="addr-meta addr-inst"><i className="fa fa-note-sticky mr-1" aria-hidden="true"></i>{shippingInfo.instructions}</div>}
+                                {shippingInfo.instructions && <div className="addr-meta addr-inst"><i className="fa fa-sticky-note-o mr-1" aria-hidden="true"></i>{shippingInfo.instructions}</div>}
                             </div>
 
                             <div className="co-card">
                                     <div className="co-card-head">
                                         <div><i className="fa fa-shopping-bag mr-2" aria-hidden="true"></i>Items <span className="section-accent">({orderItems.reduce((a, it) => a + it.quantity, 0)})</span></div>
                                         <span className={`co-pay-state ${isPaid ? 'paid' : paymentMethod === 'cod' ? 'cod' : 'unpaid'}`}>
-                                            <i className={`fa mr-1 ${isPaid ? 'fa-check-circle' : paymentMethod === 'cod' ? 'fa-hand-holding-dollar' : 'fa-clock-o'}`} aria-hidden="true"></i>{isPaid ? 'Paid' : paymentMethod === 'cod' ? 'Pay on Delivery' : 'Not Paid'}
+                                            <i className={`fa mr-1 ${isPaid ? 'fa-check-circle' : paymentMethod === 'cod' ? 'fa-money' : 'fa-clock-o'}`} aria-hidden="true"></i>{isPaid ? 'Paid' : paymentMethod === 'cod' ? 'Pay on Delivery' : 'Not Paid'}
                                         </span>
                                     </div>
                                 {orderItems.map((item, idx) => (
@@ -308,7 +308,7 @@ export default function OrderDetail () {
                                     <b>{formatMoney(totalPrice)}</b>
                                 </div>
                                 <div className="od-pay-method">
-                                    <i className="fa fa-money-bill-wave mr-1" aria-hidden="true"></i>
+                                    <i className="fa fa-money mr-1" aria-hidden="true"></i>
                                     <span>
                                         {paymentMethod === 'cod'
                                             ? (isDelivered
@@ -328,13 +328,13 @@ export default function OrderDetail () {
                                             <i className="fa fa-rotate-left mr-1" aria-hidden="true"></i>Return Order
                                         </button>
                                         <button type="button" className="mo-btn w-100 justify-content-center" onClick={() => { setReturnType('replace'); setShowReturn(true); }}>
-                                            <i className="fa fa-arrows-rotate mr-1" aria-hidden="true"></i>Replace Order
+                                            <i className="fa fa-refresh mr-1" aria-hidden="true"></i>Replace Order
                                         </button>
                                     </div>
                                 )}
                                 {!isCancelled && (
                                     <button type="button" className="mo-btn w-100 justify-content-center" onClick={() => openInvoice(orderDetail)}>
-                                        <i className="fa fa-file-invoice mr-1" aria-hidden="true"></i>Download Invoice
+                                        <i className="fa fa-file-text-o mr-1" aria-hidden="true"></i>Download Invoice
                                     </button>
                                 )}
                                 {!isCancelled && (
@@ -364,7 +364,7 @@ export default function OrderDetail () {
                                 <i className="fa fa-rotate-left" aria-hidden="true"></i>Return
                             </button>
                             <button type="button" className={`rr-type ${returnType === 'replace' ? 'active' : ''}`} onClick={() => setReturnType('replace')}>
-                                <i className="fa fa-arrows-rotate" aria-hidden="true"></i>Replace
+                                <i className="fa fa-refresh" aria-hidden="true"></i>Replace
                             </button>
                         </div>
                         <div className="form-group">

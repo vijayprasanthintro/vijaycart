@@ -146,7 +146,7 @@ export default function Settings() {
                     <div className="ad-card ad-settings-card">
                         <div className="ad-card__body">
                             <form className="ad-form" onSubmit={submit}>
-                                <SectionHead icon="fa-store" title="General" desc="Store identity &amp; support contact" />
+                                <SectionHead icon="fa-shopping-bag" title="General" desc="Store identity &amp; support contact" />
                                 <div className="ad-form--grid">
                                     <div className="ad-field">
                                         <label className="ad-label">Store Name</label>
@@ -241,7 +241,7 @@ export default function Settings() {
                     <div className="ad-card ad-settings-card">
                         <div className="ad-card__body">
                             <form className="ad-form" onSubmit={submit}>
-                                <SectionHead icon="fa-hand-holding-dollar" title="Cash on Delivery" desc="COD availability, limits &amp; pincodes" />
+                                <SectionHead icon="fa-money" title="Cash on Delivery" desc="COD availability, limits &amp; pincodes" />
                                 <div className="ad-toggle-row">
                                     <div className="ad-toggle-row__text">
                                         <span className="ad-toggle-row__title">Enable Cash on Delivery</span>
@@ -347,7 +347,7 @@ export default function Settings() {
                     <div className="ad-card ad-settings-card">
                         <div className="ad-card__body">
                             <form className="ad-form" onSubmit={submit}>
-                                <SectionHead icon="fa-sliders-h" title="Orders &amp; Stock" desc="Order defaults &amp; inventory alerts" />
+                                <SectionHead icon="fa-sliders" title="Orders &amp; Stock" desc="Order defaults &amp; inventory alerts" />
                                 <div className="ad-form--grid">
                                     <div className="ad-field">
                                         <label className="ad-label">Low Stock Alert Threshold</label>

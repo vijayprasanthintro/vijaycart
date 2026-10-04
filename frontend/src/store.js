@@ -12,6 +12,7 @@ import settingReducer from './slices/settingSlice'
 import analyticsReducer from './slices/analyticsSlice'
 import bannerReducer from './slices/bannerSlice'
 import sellerReducer from './slices/sellerSlice'
+import addressReducer from './slices/addressSlice'
 
 
 const reducer = combineReducers({
@@ -27,7 +28,8 @@ const reducer = combineReducers({
     settingState: settingReducer,
     analyticsState: analyticsReducer,
     bannerState: bannerReducer,
-    sellerState: sellerReducer
+    sellerState: sellerReducer,
+    addressState: addressReducer
 })
 
 

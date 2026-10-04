@@ -179,7 +179,7 @@ export default function Header() {
             </div>
 
             <Link to="/orders" className="vc-hd__item vc-hd__item--icon" aria-label="Orders">
-              <i className="fa fa-box-open" aria-hidden="true"></i>
+              <i className="fa fa-archive" aria-hidden="true"></i>
               <span className="vc-nav-btn-text d-none d-xl-inline">Orders</span>
             </Link>
 

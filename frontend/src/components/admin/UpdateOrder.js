@@ -130,7 +130,7 @@ export default function UpdateOrder() {
                             const danger = isLocked ? s === LOCKED_STATUS : isCancelled && s === 'Cancelled';
                             const done = reached && !isCurrent;
                             const time = historyTimes[s] ? fmtTime(historyTimes[s]) : null;
-                            const icon = s === LOCKED_STATUS ? 'fa-lock' : s === 'Delivered' ? 'fa-check' : s === 'Cancelled' ? 'fa-times' : s === 'Out for Delivery' ? 'fa-truck' : s === 'Packed' ? 'fa-box' : s === 'Shipped' ? 'fa-paper-plane-o' : s === 'Confirmed' ? 'fa-check-circle-o' : 'fa-hourglass-half';
+                            const icon = s === LOCKED_STATUS ? 'fa-lock' : s === 'Delivered' ? 'fa-check' : s === 'Cancelled' ? 'fa-times' : s === 'Out for Delivery' ? 'fa-truck' : s === 'Packed' ? 'fa-cube' : s === 'Shipped' ? 'fa-paper-plane-o' : s === 'Confirmed' ? 'fa-check-circle-o' : 'fa-hourglass-half';
                             return (
                                 <div className={`ad-timeline__item ${done ? 'ad-timeline__item--done' : ''} ${isCurrent ? 'ad-timeline__item--current' : ''} ${danger ? 'ad-timeline__item--danger' : ''}`} key={s}>
                                     <div className="ad-timeline__rail">

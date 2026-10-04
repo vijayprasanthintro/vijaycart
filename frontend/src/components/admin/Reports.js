@@ -199,7 +199,7 @@ export default function Reports() {
                 />
 
                 <ReportCard
-                    icon="fa-box" accent="ad-stat--violet"
+                    icon="fa-cube" accent="ad-stat--violet"
                     title="Products Report" desc="Full catalogue with pricing & stock"
                     loading={productsLoading && products.length === 0}
                     headers={productHeaders} rows={productRows}
@@ -223,7 +223,7 @@ export default function Reports() {
                 />
 
                 <ReportCard
-                    icon="fa-warehouse" accent="ad-stat--warning"
+                    icon="fa-industry" accent="ad-stat--warning"
                     title="Inventory Report" desc="Products at or below the low-stock threshold"
                     loading={productsLoading && products.length === 0}
                     headers={inventoryHeaders} rows={inventoryRows}
@@ -235,7 +235,7 @@ export default function Reports() {
                 />
 
                 <ReportCard
-                    icon="fa-indian-rupee" accent="ad-stat--primary"
+                    icon="fa-rupee" accent="ad-stat--primary"
                     title="Revenue Report" desc="Revenue split by order status"
                     loading={analyticsLoading && analytics.totalOrders === undefined}
                     headers={revenueHeaders} rows={revenueRows}

@@ -108,7 +108,7 @@ export function AreaChart({ data = [], color = 'var(--ad-primary)', height = 220
     const lineId = `${gid}-line`;
 
     const values = data.map(d => Number(d.value) || 0);
-    if (data.length === 0) return <div className="ad-empty ad-empty--small"><i className="fa fa-chart-line" aria-hidden="true"></i><p>No data yet.</p></div>;
+    if (data.length === 0) return <div className="ad-empty ad-empty--small"><i className="fa fa-line-chart" aria-hidden="true"></i><p>No data yet.</p></div>;
 
     const max = Math.max(1, ...values);
     const W = 640;

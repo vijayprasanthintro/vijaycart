@@ -47,7 +47,7 @@ const NAV_CATEGORIES = [
     to: '/search/all?category=Clothes%2FShoes',
     active: (p, q) => q === 'Clothes/Shoes',
     children: [
-      { label: 'Clothing', icon: 'fa-tshirt', to: '/search/all?category=Clothes%2FShoes' },
+      { label: 'Clothing', icon: 'fa-tags', to: '/search/all?category=Clothes%2FShoes' },
       { label: 'Watches', icon: 'fa-clock-o', to: '/search/all?category=Accessories' },
     ],
   },
@@ -58,7 +58,7 @@ const NAV_CATEGORIES = [
     to: '/search/all?category=Clothes%2FShoes',
     active: (p, q) => q === 'Clothes/Shoes',
     children: [
-      { label: 'Clothing', icon: 'fa-tshirt', to: '/search/all?category=Clothes%2FShoes' },
+      { label: 'Clothing', icon: 'fa-tags', to: '/search/all?category=Clothes%2FShoes' },
       { label: 'Watches', icon: 'fa-clock-o', to: '/search/all?category=Accessories' },
     ],
   },

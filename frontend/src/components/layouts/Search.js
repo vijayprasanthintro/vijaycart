@@ -154,7 +154,7 @@ export default function Search() {
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => navigate(`/product/${p._id}`)}
                 >
-                  <i className="fa fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                  <i className="fa fa-external-link" aria-hidden="true"></i>
                   <span className="sp-label">{p.name}</span>
                   <span className="sp-type">Product</span>
                 </button>

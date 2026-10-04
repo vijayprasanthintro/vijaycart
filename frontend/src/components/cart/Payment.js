@@ -16,18 +16,18 @@ import CardForm from "./CardForm";
 import { formatMoney, getDeliveryDay } from "../../utils/productHelper";
 
 const METHODS = [
-    { key: 'upi', label: 'UPI', icon: 'fa-mobile-screen', hint: 'Pay via Google Pay, PhonePe, Paytm & more' },
+    { key: 'upi', label: 'UPI', icon: 'fa-mobile', hint: 'Pay via Google Pay, PhonePe, Paytm & more' },
     { key: 'card', label: 'Credit / Debit Card', icon: 'fa-credit-card', hint: 'Visa, Mastercard, RuPay, Amex' },
-    { key: 'netbanking', label: 'Net Banking', icon: 'fa-building-columns', hint: 'All major Indian banks supported' },
-    { key: 'wallet', label: 'VijayCart Wallet', icon: 'fa-wallet', hint: 'Instant checkout using your balance' },
-    { key: 'cod', label: 'Cash on Delivery', icon: 'fa-hand-holding-dollar', hint: 'Pay in cash when your order arrives' },
+    { key: 'netbanking', label: 'Net Banking', icon: 'fa-bank', hint: 'All major Indian banks supported' },
+    { key: 'wallet', label: 'VijayCart Wallet', icon: 'fa-credit-card', hint: 'Instant checkout using your balance' },
+    { key: 'cod', label: 'Cash on Delivery', icon: 'fa-money', hint: 'Pay in cash when your order arrives' },
 ];
 
 const UPI_APPS = [
     { key: 'gpay', name: 'Google Pay', icon: 'fa-google' },
-    { key: 'phonepe', name: 'PhonePe', icon: 'fa-mobile-screen' },
-    { key: 'paytm', name: 'Paytm', icon: 'fa-wallet' },
-    { key: 'bhim', name: 'BHIM', icon: 'fa-landmark' },
+    { key: 'phonepe', name: 'PhonePe', icon: 'fa-mobile' },
+    { key: 'paytm', name: 'Paytm', icon: 'fa-credit-card' },
+    { key: 'bhim', name: 'BHIM', icon: 'fa-bank' },
 ];
 
 const BANKS = [
@@ -405,7 +405,7 @@ export default function Payment() {
 
                             {failure && (
                                 <div className="pm-failure">
-                                    <div className="pm-failure-ico"><i className="fa fa-circle-xmark" aria-hidden="true"></i></div>
+                                    <div className="pm-failure-ico"><i className="fa fa-times-circle" aria-hidden="true"></i></div>
                                     <div className="pm-failure-body">
                                         <b>Payment Failed</b>
                                         <p>{failure.message}</p>
@@ -504,7 +504,7 @@ export default function Payment() {
                                     {method === 'wallet' && (
                                         <div className="pm-wallet">
                                             <div className="pm-wallet-balance">
-                                                <i className="fa fa-wallet" aria-hidden="true"></i>
+                                                <i className="fa fa-credit-card" aria-hidden="true"></i>
                                                 <div>
                                                     <span className="pm-wallet-label">Wallet Balance</span>
                                                     <b className="pm-wallet-amt">{walletBalance === null ? <i className="fa fa-spinner fa-spin" aria-hidden="true"></i> : formatMoney(walletBalance)}</b>
@@ -529,7 +529,7 @@ export default function Payment() {
                                             ) : (
                                                 <Fragment>
                                                     <div className="pm-cod-note">
-                                                        <i className="fa fa-hand-holding-dollar" aria-hidden="true"></i>
+                                                        <i className="fa fa-money" aria-hidden="true"></i>
                                                         <p>Please keep <b>{formatMoney(total)}</b> ready in cash when your order arrives. Our delivery partner will collect the payment at your doorstep.</p>
                                                     </div>
                                                     <ul className="pm-cod-list">
@@ -538,7 +538,7 @@ export default function Payment() {
                                                         <li><i className="fa fa-check" aria-hidden="true"></i>Available for orders up to {formatMoney(codCheck.maxAmount)}</li>
                                                     </ul>
                                                     <button type="button" className="checkout-btn w-100" onClick={handleCodPlace} disabled={processing}>
-                                                        <i className="fa fa-box mr-2" aria-hidden="true"></i>Place Order — Pay {formatMoney(total)} on Delivery
+                                                        <i className="fa fa-cube mr-2" aria-hidden="true"></i>Place Order — Pay {formatMoney(total)} on Delivery
                                                     </button>
                                                 </Fragment>
                                             )}
@@ -550,7 +550,7 @@ export default function Payment() {
 
                         <div className="co-card co-support">
                             <div className="co-card-head">
-                                <div><i className="fa fa-headset mr-2" aria-hidden="true"></i>Payment Support</div>
+                                <div><i className="fa fa-headphones mr-2" aria-hidden="true"></i>Payment Support</div>
                             </div>
                             <div className="co-support-body">
                                 <div className="co-support-item">

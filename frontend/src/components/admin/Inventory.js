@@ -72,11 +72,11 @@ export default function Inventory() {
 
             <div className="ad-stat-grid">
                 <div className="ad-stat ad-stat--info">
-                    <div className="ad-stat__icon"><i className="fa fa-box" aria-hidden="true"></i></div>
+                    <div className="ad-stat__icon"><i className="fa fa-cube" aria-hidden="true"></i></div>
                     <div><div className="ad-stat__label">Products</div><div className="ad-stat__value">{products.length}</div></div>
                 </div>
                 <div className="ad-stat ad-stat--primary">
-                    <div className="ad-stat__icon"><i className="fa fa-indian-rupee" aria-hidden="true"></i></div>
+                    <div className="ad-stat__icon"><i className="fa fa-rupee" aria-hidden="true"></i></div>
                     <div><div className="ad-stat__label">Inventory Value</div><div className="ad-stat__value">{toINR(inventoryValue)}</div></div>
                 </div>
                 <div className="ad-stat ad-stat--warning">
@@ -108,7 +108,7 @@ export default function Inventory() {
                     {loading ? (
                         <div className="ad-loading"><i className="fa fa-spinner fa-spin" aria-hidden="true"></i> Loading inventory…</div>
                     ) : filtered.length === 0 ? (
-                        <div className="ad-empty"><i className="fa fa-warehouse" aria-hidden="true"></i><p>No products match your filters.</p></div>
+                        <div className="ad-empty"><i className="fa fa-industry" aria-hidden="true"></i><p>No products match your filters.</p></div>
                     ) : (
                         <div className="ad-table-wrap">
                             <table className="ad-table">
@@ -126,7 +126,7 @@ export default function Inventory() {
                                         <tr key={product._id}>
                                             <td>
                                                 <div className="ad-toolbar" style={{ justifyContent: 'flex-start' }}>
-                                                    {product.images && product.images[0] ? <img src={productImage(product)} alt={product.name} className="ad-avatar" style={{ width: 40, height: 40 }} onError={imgOnError} /> : <span className="ad-avatar"><i className="fa fa-box" aria-hidden="true"></i></span>}
+                                                    {product.images && product.images[0] ? <img src={productImage(product)} alt={product.name} className="ad-avatar" style={{ width: 40, height: 40 }} onError={imgOnError} /> : <span className="ad-avatar"><i className="fa fa-cube" aria-hidden="true"></i></span>}
                                                     <span className="ad-td-strong" style={{ maxWidth: 280 }}>{product.name}</span>
                                                 </div>
                                             </td>

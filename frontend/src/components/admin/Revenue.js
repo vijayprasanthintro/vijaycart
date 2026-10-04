@@ -51,7 +51,7 @@ export default function Revenue() {
 
             <div className="ad-stat-grid">
                 <div className="ad-stat ad-stat--primary">
-                    <div className="ad-stat__icon"><i className="fa fa-indian-rupee" aria-hidden="true"></i></div>
+                    <div className="ad-stat__icon"><i className="fa fa-rupee" aria-hidden="true"></i></div>
                     <div><div className="ad-stat__label">Gross Revenue</div><div className="ad-stat__value">{toINR(analytics.revenue)}</div></div>
                 </div>
                 <div className="ad-stat ad-stat--success">
@@ -70,7 +70,7 @@ export default function Revenue() {
 
             <div className="ad-chart-row">
                 <div className="ad-card">
-                    <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-chart-area" aria-hidden="true"></i> Revenue — Last 14 Days</h3></div>
+                    <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-area-chart" aria-hidden="true"></i> Revenue — Last 14 Days</h3></div>
                     <div className="ad-card__body"><AreaChart data={revenueTrend} color="var(--ad-primary)" format={v => toINR(v)} /></div>
                 </div>
                 <div className="ad-card">
@@ -80,7 +80,7 @@ export default function Revenue() {
             </div>
 
             <div className="ad-card">
-                <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-indian-rupee" aria-hidden="true"></i> Revenue Breakdown</h3></div>
+                <div className="ad-card__head"><h3 className="ad-card__title"><i className="fa fa-rupee" aria-hidden="true"></i> Revenue Breakdown</h3></div>
                 <div className="ad-card__body">
                     <div className="ad-form" style={{ gap: '0.6rem' }}>
                         {Object.entries(analytics.statusRevenue || {}).map(([label, value]) => {

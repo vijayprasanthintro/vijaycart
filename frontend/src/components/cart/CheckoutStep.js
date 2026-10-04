@@ -3,10 +3,10 @@ import { easeOutExpo } from '../../utils/motion';
 
 const STEPS = [
     { key: 'account', icon: 'fa-user', label: 'Account' },
-    { key: 'shipping', icon: 'fa-location-dot', label: 'Address' },
-    { key: 'confirmOrder', icon: 'fa-file-lines', label: 'Summary' },
+    { key: 'shipping', icon: 'fa-map-marker', label: 'Address' },
+    { key: 'confirmOrder', icon: 'fa-file-text-o', label: 'Summary' },
     { key: 'payment', icon: 'fa-credit-card', label: 'Payment' },
-    { key: 'confirmation', icon: 'fa-circle-check', label: 'Confirmation' },
+    { key: 'confirmation', icon: 'fa-check-circle', label: 'Confirmation' },
 ];
 
 export default function CheckoutSteps({ shipping, confirmOrder, payment, confirmation }) {

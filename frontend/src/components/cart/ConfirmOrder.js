@@ -15,9 +15,9 @@ const generateOrderKey = () =>
         : `ord_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 
 const TYPES = {
-    home: { label: 'Home', icon: 'fa-house' },
+    home: { label: 'Home', icon: 'fa-home' },
     work: { label: 'Work', icon: 'fa-briefcase' },
-    other: { label: 'Other', icon: 'fa-location-dot' },
+    other: { label: 'Other', icon: 'fa-map-marker' },
 };
 
 const SUPPORT = {
@@ -136,7 +136,7 @@ export default function ConfirmOrder () {
                     <div className="col-12 col-lg-8">
                         <div className="co-card">
                             <div className="co-card-head">
-                                <div><i className="fa fa-location-dot mr-2" aria-hidden="true"></i>Delivery Address</div>
+                                <div><i className="fa fa-map-marker mr-2" aria-hidden="true"></i>Delivery Address</div>
                                 <Link to="/shipping" className="co-change"><i className="fa fa-pencil mr-1" aria-hidden="true"></i>Change</Link>
                             </div>
                             <div className="co-address">
@@ -146,7 +146,7 @@ export default function ConfirmOrder () {
                                 </div>
                                 <p className="co-address-line">{shippingInfo.address}{shippingInfo.landmark ? `, ${shippingInfo.landmark}` : ''}, {shippingInfo.city}, {shippingInfo.state} {shippingInfo.postalCode}</p>
                                 <div className="addr-meta"><i className="fa fa-phone" aria-hidden="true"></i>{shippingInfo.phoneNo} &middot; {shippingInfo.country}</div>
-                                {shippingInfo.instructions && <div className="addr-meta addr-inst"><i className="fa fa-note-sticky mr-1" aria-hidden="true"></i>{shippingInfo.instructions}</div>}
+                                {shippingInfo.instructions && <div className="addr-meta addr-inst"><i className="fa fa-sticky-note-o mr-1" aria-hidden="true"></i>{shippingInfo.instructions}</div>}
                                 <div className="de-pill"><i className="fa fa-truck mr-1" aria-hidden="true"></i>Delivery by <b>{getDeliveryLabel(shippingInfo.postalCode)}</b></div>
                             </div>
                         </div>
@@ -177,7 +177,7 @@ export default function ConfirmOrder () {
 
                         <div className="co-card co-support">
                             <div className="co-card-head">
-                                <div><i className="fa fa-headset mr-2" aria-hidden="true"></i>Need help with your order?</div>
+                                <div><i className="fa fa-headphones mr-2" aria-hidden="true"></i>Need help with your order?</div>
                             </div>
                             <div className="co-support-body">
                                 <div className="co-support-item">
@@ -189,7 +189,7 @@ export default function ConfirmOrder () {
                                     <span><b>Call us</b>Reach our helpline at <a href={`tel:${SUPPORT.phone.replace(/\s/g, '')}`}>{SUPPORT.phone}</a> (Mon–Sat, 9 AM – 7 PM).</span>
                                 </div>
                                 <div className="co-support-item">
-                                    <i className="fa fa-circle-question" aria-hidden="true"></i>
+                                    <i className="fa fa-question-circle" aria-hidden="true"></i>
                                     <span><b>Order help</b>Track, cancel or return your order anytime from the <Link to="/orders">My Orders</Link> page.</span>
                                 </div>
                             </div>

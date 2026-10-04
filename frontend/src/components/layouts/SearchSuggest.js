@@ -39,7 +39,7 @@ const CATEGORY_ICONS = {
   'Wearables': 'fa-clock-o',
   'Components': 'fa-cogs',
   'Accessories': 'fa-clock-o',
-  'Clothes/Shoes': 'fa-tshirt',
+  'Clothes/Shoes': 'fa-tags',
   'Home': 'fa-home',
   'Food': 'fa-cutlery',
   'Sports': 'fa-futbol-o',

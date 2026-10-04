@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { saveShippingInfo } from "../../slices/cartSlice";
+import { fetchAddresses, addAddress, updateAddress, deleteAddress, setDefaultAddress } from "../../actions/addressActions";
 import MetaData from "../layouts/MetaData";
 import { countries } from 'countries-list';
 import { Link, useNavigate } from "react-router-dom";
@@ -53,12 +54,14 @@ export const validateShipping = (shippingInfo, navigate) => {
     }
 }
 
-const ADDRESS_KEY = 'vijaycart_addresses';
+// The address book lives on the authenticated user's account (MongoDB) and is
+// synced through Redux (addressState). The old localStorage copy is migrated
+// to the account automatically by fetchAddresses() on first load.
 
 const TYPES = [
-    { key: 'home', label: 'Home', icon: 'fa-house' },
+    { key: 'home', label: 'Home', icon: 'fa-home' },
     { key: 'work', label: 'Work', icon: 'fa-briefcase' },
-    { key: 'other', label: 'Other', icon: 'fa-location-dot' },
+    { key: 'other', label: 'Other', icon: 'fa-map-marker' },
 ];
 
 const INSTRUCTIONS = [
@@ -75,22 +78,10 @@ const emptyForm = () => ({
     postalCode: '', country: 'United States', type: 'home', isDefault: false
 });
 
-const readAddresses = () => {
-    try { return JSON.parse(localStorage.getItem(ADDRESS_KEY)) || []; } catch { return []; }
-};
-
 export default function Shipping() {
     const { shippingInfo } = useSelector(state => state.cartState)
-    const [addresses, setAddresses] = useState(readAddresses);
-    const [selectedId, setSelectedId] = useState(() => {
-        const list = readAddresses();
-        if (!list.length) return null;
-        if (shippingInfo && shippingInfo.id) {
-            const prev = list.find(a => a.id === shippingInfo.id);
-            if (prev) return prev.id;
-        }
-        return (list.find(a => a.isDefault) || list[0]).id;
-    });
+    const { items: addresses, loaded: addressesLoaded } = useSelector(state => state.addressState)
+    const [selectedId, setSelectedId] = useState(null);
     const [showForm, setShowForm] = useState(false);
     const [listCollapsed, setListCollapsed] = useState(false);
     const [editingId, setEditingId] = useState(null);
@@ -101,6 +92,23 @@ export default function Shipping() {
     const navigate = useNavigate();
     const countriesList = Object.values(countries);
     const formRef = useRef(null);
+
+    // Load the account's saved addresses (the header LocationBar usually
+    // triggers this first; this guard covers deep-links to /shipping).
+    useEffect(() => {
+        if (!addressesLoaded) dispatch(fetchAddresses());
+    }, [dispatch, addressesLoaded]);
+
+    // Keep the selected address valid as the server list changes: prefer the
+    // user's explicit selection, then the checkout choice, then the default.
+    useEffect(() => {
+        setSelectedId(prev => {
+            if (prev && addresses.some(a => a._id === prev)) return prev;
+            if (shippingInfo?.id && addresses.some(a => a._id === shippingInfo.id)) return shippingInfo.id;
+            const fallback = addresses.find(a => a.isDefault) || addresses[0];
+            return fallback ? fallback._id : null;
+        });
+    }, [addresses, shippingInfo]);
 
     const lookupPin = async (code, iso2) => {
         setPinLookup({ loading: true, found: false, error: '', data: null });
@@ -140,11 +148,7 @@ export default function Shipping() {
         return () => clearTimeout(t);
     }, [form.postalCode, form.country]);
 
-    const selected = addresses.find(a => a.id === selectedId) || null;
-
-    useEffect(() => {
-        try { localStorage.setItem(ADDRESS_KEY, JSON.stringify(addresses)); } catch { /* ignore */ }
-    }, [addresses]);
+    const selected = addresses.find(a => a._id === selectedId) || null;
 
     const isMobileViewport = () => typeof window !== 'undefined' && window.matchMedia('(max-width: 991.98px)').matches;
 
@@ -159,7 +163,7 @@ export default function Shipping() {
             return;
         }
         dispatch(saveShippingInfo({
-            id: selected.id,
+            id: selected._id,
             name: selected.name,
             phoneNo: selected.phoneNo,
             address: selected.address,
@@ -185,7 +189,7 @@ export default function Shipping() {
     };
 
     const startEdit = (addr) => {
-        setEditingId(addr.id);
+        setEditingId(addr._id);
         setForm({
             name: addr.name, phoneNo: addr.phoneNo, address: addr.address,
             city: addr.city, state: addr.state, district: addr.district,
@@ -202,7 +206,7 @@ export default function Shipping() {
         setEditingId(null);
     };
 
-    const submitForm = (e) => {
+    const submitForm = async (e) => {
         e.preventDefault();
         const errs = {};
         if (!form.name.trim()) errs.name = 'Full name is required';
@@ -217,45 +221,41 @@ export default function Shipping() {
         setErrors(errs);
         if (Object.keys(errs).length) return;
 
-        if (editingId) {
-            setAddresses(prev => prev.map(a => (a.id === editingId ? { ...a, ...form } : a)));
-            toast.success('Address updated');
-        } else {
-            const newAddr = {
-                ...form,
-                id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
-                isDefault: form.isDefault || addresses.length === 0
-            };
-            setAddresses(prev => {
-                const others = (form.isDefault || prev.length === 0)
-                    ? prev.map(a => ({ ...a, isDefault: false }))
-                    : prev;
-                return [...others, newAddr];
-            });
-            setSelectedId(newAddr.id);
-            if (isMobileViewport()) setListCollapsed(true);
-            toast.success('Address added');
+        try {
+            if (editingId) {
+                await dispatch(updateAddress(editingId, { ...form, isDefault: Boolean(form.isDefault) }));
+                toast.success('Address updated');
+            } else {
+                const prevIds = new Set(addresses.map(a => a._id));
+                const nextList = await dispatch(addAddress({ ...form, isDefault: Boolean(form.isDefault) || addresses.length === 0 }));
+                const created = nextList.find(a => !prevIds.has(a._id));
+                if (created) setSelectedId(created._id);
+                if (isMobileViewport()) setListCollapsed(true);
+                toast.success('Address added');
+            }
+            closeForm();
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Could not save the address. Please try again.');
         }
-        closeForm();
     };
 
-    const makeDefault = (addr) => {
-        setAddresses(prev => prev.map(a => ({ ...a, isDefault: a.id === addr.id })));
-        toast.info('Default address updated');
+    const makeDefault = async (addr) => {
+        try {
+            await dispatch(setDefaultAddress(addr._id));
+            toast.info('Default address updated');
+        } catch (error) {
+            toast.error('Could not update the default address. Please try again.');
+        }
     };
 
-    const removeAddress = (addr) => {
+    const removeAddress = async (addr) => {
         if (!window.confirm('Remove this delivery address?')) return;
-        let list = addresses.filter(a => a.id !== addr.id);
-        if (addr.isDefault && list.length) {
-            list = list.map((a, i) => (i === 0 ? { ...a, isDefault: true } : a));
+        try {
+            await dispatch(deleteAddress(addr._id));
+            toast('Address removed', { type: 'info' });
+        } catch (error) {
+            toast.error('Could not remove the address. Please try again.');
         }
-        setAddresses(list);
-        if (selectedId === addr.id) {
-            const next = list.find(a => a.isDefault) || list[0] || null;
-            setSelectedId(next ? next.id : null);
-        }
-        toast('Address removed', { type: 'info' });
     };
 
     const typeInfo = (key) => TYPES.find(t => t.key === key) || TYPES[2];
@@ -414,24 +414,28 @@ export default function Shipping() {
                     <div className="col-12 col-lg-4 addr-col">
                         {addresses.length === 0 && !showForm ? (
                             <div className="empty-state mt-2">
-                                <div className="empty-icon"><i className="fa fa-location-dot" aria-hidden="true"></i></div>
-                                <h2 className="empty-title">No saved addresses</h2>
-                                <p className="empty-sub">Add a delivery address to continue with your checkout.</p>
-                                <button type="button" className="empty-cta" onClick={openNew}><i className="fa fa-plus mr-2" aria-hidden="true"></i>Add New Address</button>
+                                <div className="empty-icon"><i className="fa fa-map-marker" aria-hidden="true"></i></div>
+                                <h2 className="empty-title">{addressesLoaded ? 'No saved addresses' : 'Loading saved addresses…'}</h2>
+                                <p className="empty-sub">{addressesLoaded
+                                    ? 'Add a delivery address to continue with your checkout.'
+                                    : 'Fetching your saved delivery addresses.'}</p>
+                                {addressesLoaded && (
+                                    <button type="button" className="empty-cta" onClick={openNew}><i className="fa fa-plus mr-2" aria-hidden="true"></i>Add New Address</button>
+                                )}
                             </div>
                         ) : (
                             <div className={`addr-grid${listCollapsed ? ' addr-grid--collapsed' : ''}`}>
                                 {addresses.map(addr => {
                                     const t = typeInfo(addr.type);
-                                    const isSelected = addr.id === selectedId;
+                                    const isSelected = addr._id === selectedId;
                                     return (
                                         <div
-                                            key={addr.id}
+                                            key={addr._id}
                                             className={`addr-card ${isSelected ? 'selected' : ''}`}
-                                            onClick={() => selectAddress(addr.id)}
+                                            onClick={() => selectAddress(addr._id)}
                                             role="button"
                                             tabIndex={0}
-                                            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectAddress(addr.id); } }}
+                                            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectAddress(addr._id); } }}
                                         >
                                             <div className="addr-radio" aria-hidden="true">{isSelected && <span></span>}</div>
                                             <div className="addr-info">
@@ -442,7 +446,7 @@ export default function Shipping() {
                                                 </div>
                                                 <p className="addr-full">{addr.address}{addr.landmark ? `, ${addr.landmark}` : ''}, {addr.city}, {addr.state} {addr.postalCode}</p>
                                                 <div className="addr-meta"><i className="fa fa-phone" aria-hidden="true"></i>{addr.phoneNo} &middot; {addr.country}</div>
-                                                {addr.instructions && <div className="addr-meta addr-inst"><i className="fa fa-note-sticky" aria-hidden="true"></i>{addr.instructions}</div>}
+                                                {addr.instructions && <div className="addr-meta addr-inst"><i className="fa fa-sticky-note-o" aria-hidden="true"></i>{addr.instructions}</div>}
                                                 <div className="addr-actions" onClick={e => e.stopPropagation()}>
                                                     <button type="button" className="addr-edit" onClick={() => startEdit(addr)}><i className="fa fa-pencil mr-1" aria-hidden="true"></i>Edit</button>
                                                     <button type="button" className="addr-del" onClick={() => removeAddress(addr)}><i className="fa fa-trash mr-1" aria-hidden="true"></i>Remove</button>
@@ -479,7 +483,7 @@ export default function Shipping() {
                                     <div className="addr-sel-name">{selected.name} <span className={`addr-tag ${typeInfo(selected.type).key}`}>{typeInfo(selected.type).label}</span></div>
                                     <p className="addr-sel-line">{selected.address}{selected.landmark ? `, ${selected.landmark}` : ''}, {selected.city}, {selected.state} {selected.postalCode}</p>
                                     <div className="addr-sel-meta"><i className="fa fa-phone mr-1" aria-hidden="true"></i>{selected.phoneNo} &middot; {selected.country}</div>
-                                    {selected.instructions && <div className="addr-meta addr-inst"><i className="fa fa-note-sticky mr-1" aria-hidden="true"></i>{selected.instructions}</div>}
+                                    {selected.instructions && <div className="addr-meta addr-inst"><i className="fa fa-sticky-note-o mr-1" aria-hidden="true"></i>{selected.instructions}</div>}
                                 </Fragment>
                             ) : (
                                 <p className="addr-sel-empty">Select or add an address to continue.</p>

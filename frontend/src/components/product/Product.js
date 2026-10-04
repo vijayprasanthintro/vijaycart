@@ -131,7 +131,7 @@ export default memo(function Product ({product, col, index = 0}) {
                         <span className="delivery-free">Free Delivery</span>
                         <span className="delivery-by">by {delivery.by}</span>
                         {inStock && pricing.price <= 5000 && (
-                            <span className="cod-chip"><i className="fa fa-hand-holding-dollar mr-1" aria-hidden="true"></i>COD Available</span>
+                            <span className="cod-chip"><i className="fa fa-money mr-1" aria-hidden="true"></i>COD Available</span>
                         )}
                     </div>
 

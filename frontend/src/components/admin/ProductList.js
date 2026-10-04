@@ -160,7 +160,7 @@ export default function ProductList() {
                         <span className="ad-bulk-bar__count"><i className="fa fa-check-square-o" aria-hidden="true"></i> {selected.size} selected</span>
                         <div className="ad-bulk-bar__stock">
                             <input className="ad-input ad-input--sm" type="number" min="0" placeholder="New stock" value={bulkStock} onChange={e => setBulkStock(e.target.value)} aria-label="Set stock for selected products" />
-                            <button type="button" className="ad-btn ad-btn--soft ad-btn--sm" onClick={bulkStockHandler}><i className="fa fa-boxes" aria-hidden="true"></i> Set Stock</button>
+                            <button type="button" className="ad-btn ad-btn--soft ad-btn--sm" onClick={bulkStockHandler}><i className="fa fa-cubes" aria-hidden="true"></i> Set Stock</button>
                         </div>
                         <button type="button" className="ad-btn ad-btn--danger ad-btn--sm" onClick={bulkDeleteHandler}><i className="fa fa-trash" aria-hidden="true"></i> Delete</button>
                         <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" onClick={clearSelection}>Clear</button>
@@ -170,7 +170,7 @@ export default function ProductList() {
                     {loading ? (
                         <div className="ad-loading"><i className="fa fa-spinner fa-spin" aria-hidden="true"></i> Loading products…</div>
                     ) : filtered.length === 0 ? (
-                        <div className="ad-empty"><i className="fa fa-box-open" aria-hidden="true"></i><p>No products match your filters.</p></div>
+                        <div className="ad-empty"><i className="fa fa-archive" aria-hidden="true"></i><p>No products match your filters.</p></div>
                     ) : (
                         <div className="ad-table-wrap">
                             <table className="ad-table">
@@ -198,7 +198,7 @@ export default function ProductList() {
                                                 {product.images && product.images[0] ? (
                                                     <img src={productImage(product)} alt={product.name} className="ad-avatar" style={{ width: 42, height: 42 }} onError={imgOnError} />
                                                 ) : (
-                                                    <span className="ad-avatar"><i className="fa fa-box" aria-hidden="true"></i></span>
+                                                    <span className="ad-avatar"><i className="fa fa-cube" aria-hidden="true"></i></span>
                                                 )}
                                             </td>
                                             <td>

@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { userOrders as userOrdersAction } from '../../actions/orderActions';
 import { logout } from '../../actions/userActions';
+import { fetchAddresses } from '../../actions/addressActions';
 import { useWishlist } from '../../context/WishlistContext';
 import { formatMoney } from '../../utils/productHelper';
 import { toast } from 'react-toastify';
@@ -27,26 +28,26 @@ const getInitials = (name = '') => {
 export default function Profile () {
     const { user, loading } = useSelector(state => state.authState);
     const { userOrders = [] } = useSelector(state => state.orderState);
+    const { items: savedAddresses, loaded: addressesLoaded } = useSelector(state => state.addressState);
     const { count: wishlistCount } = useWishlist();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [addrCount, setAddrCount] = useState(0);
     const [avatarFailed, setAvatarFailed] = useState(false);
-
-    useEffect(() => {
-        try {
-            const list = JSON.parse(localStorage.getItem('vijaycart_addresses')) || [];
-            setAddrCount(list.length);
-        } catch { setAddrCount(0); }
-    }, []);
 
     useEffect(() => {
         setAvatarFailed(false);
     }, [user?._id]);
 
+    // Saved addresses live on the account — the count reflects the server list.
+    useEffect(() => {
+        if (!addressesLoaded) dispatch(fetchAddresses());
+    }, [dispatch, addressesLoaded]);
+
     useEffect(() => {
         dispatch(userOrdersAction())
     }, [dispatch])
+
+    const addrCount = savedAddresses.length;
 
     const logoutHandler = async () => {
         await dispatch(logout());
@@ -63,12 +64,12 @@ export default function Profile () {
     const stats = [
         { icon: 'fa-shopping-bag', value: userOrders.length, label: 'Orders' },
         { icon: 'fa-heart', value: wishlistCount, label: 'Wishlist' },
-        { icon: 'fa-location-dot', value: addrCount, label: 'Addresses' },
+        { icon: 'fa-map-marker', value: addrCount, label: 'Addresses' },
     ];
 
     const tiles = [
         { to: '/myprofile/update', icon: 'fa-user-circle', label: 'Personal Information', sub: 'Name, email, mobile & avatar' },
-        { to: '/shipping', icon: 'fa-location-dot', label: 'Delivery Addresses', sub: `${addrCount} saved address${addrCount === 1 ? '' : 'es'}` },
+        { to: '/shipping', icon: 'fa-map-marker', label: 'Delivery Addresses', sub: `${addrCount} saved address${addrCount === 1 ? '' : 'es'}` },
         { to: '/orders', icon: 'fa-shopping-bag', label: 'My Orders', sub: 'Track, cancel & re-order' },
         { to: '/wishlist', icon: 'fa-heart', label: 'Wishlist', sub: `${wishlistCount} saved item${wishlistCount === 1 ? '' : 's'}` },
         { to: '/search/all', icon: 'fa-fire', label: 'Shop Deals', sub: 'Explore offers' },

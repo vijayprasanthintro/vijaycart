@@ -114,7 +114,7 @@ export default function UserOrders () {
                     <div className="text-center my-5"><i className="fa fa-spinner fa-spin fa-2x" style={{ color: 'var(--vc-orange)' }} aria-hidden="true"></i></div>
                 ) : filtered.length === 0 ? (
                     <div className="empty-state">
-                        <div className="empty-icon"><i className="fa fa-box-open" aria-hidden="true"></i></div>
+                        <div className="empty-icon"><i className="fa fa-archive" aria-hidden="true"></i></div>
                         <h2 className="empty-title">{tab === 'all' ? 'No orders yet' : `No ${tab} orders`}</h2>
                         <p className="empty-sub">{tab === 'all' ? 'When you place an order, it will show up here with live tracking.' : 'Orders in this status will appear here.'}</p>
                         <Link to="/search/all" className="empty-cta"><i className="fa fa-shopping-bag mr-2" aria-hidden="true"></i>Start Shopping</Link>
@@ -137,7 +137,7 @@ export default function UserOrders () {
 
                                     {rbadge && (
                                         <div className={`mo-return-badge ${rbadge.cls}`}>
-                                            <i className={`fa mr-1 ${rbadge.cls === 'return' ? 'fa-rotate-left' : 'fa-arrows-rotate'}`} aria-hidden="true"></i>{rbadge.label} {String(order.returnStatus).toLowerCase().includes('requested') ? 'requested' : String(order.returnStatus).toLowerCase()}
+                                            <i className={`fa mr-1 ${rbadge.cls === 'return' ? 'fa-rotate-left' : 'fa-refresh'}`} aria-hidden="true"></i>{rbadge.label} {String(order.returnStatus).toLowerCase().includes('requested') ? 'requested' : String(order.returnStatus).toLowerCase()}
                                         </div>
                                     )}
 
@@ -158,7 +158,7 @@ export default function UserOrders () {
                                         <div className="mo-pay">
                                             {order.paymentMethod === 'cod'
                                                 ? <Fragment>
-                                                    <i className="fa fa-hand-holding-dollar mr-1" aria-hidden="true"></i>
+                                                    <i className="fa fa-money mr-1" aria-hidden="true"></i>
                                                     COD{String(order.orderStatus || '').toLowerCase().includes('delivered') ? (order.codStatus === 'Collected' ? ' · Cash Collected' : ' · Cash Pending') : ''}
                                                   </Fragment>
                                                 : <Fragment>
@@ -170,7 +170,7 @@ export default function UserOrders () {
 
                                     <div className="mo-actions">
                                         <Link to={`/order/${order._id}`} className="mo-btn primary"><i className="fa fa-eye mr-1" aria-hidden="true"></i>View Details</Link>
-                                        <button type="button" className="mo-btn" onClick={() => openInvoice(order)}><i className="fa fa-file-invoice mr-1" aria-hidden="true"></i>Invoice</button>
+                                        <button type="button" className="mo-btn" onClick={() => openInvoice(order)}><i className="fa fa-file-text-o mr-1" aria-hidden="true"></i>Invoice</button>
                                         <button type="button" className="mo-btn" onClick={() => buyAgain(order)}><i className="fa fa-cart-plus mr-1" aria-hidden="true"></i>Buy Again</button>
                                         {canCancel(order.orderStatus) && (
                                             <button type="button" className="mo-btn danger" onClick={() => handleCancel(order)}><i className="fa fa-times mr-1" aria-hidden="true"></i>Cancel Order</button>

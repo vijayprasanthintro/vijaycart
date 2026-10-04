@@ -6,11 +6,11 @@ import { getDeliveryLabel, formatMoney } from "../../utils/productHelper";
 import { openInvoice } from "../../utils/invoice";
 
 const METHOD_META = {
-    upi: { label: 'UPI', icon: 'fa-mobile-screen' },
+    upi: { label: 'UPI', icon: 'fa-mobile' },
     card: { label: 'Credit / Debit Card', icon: 'fa-credit-card' },
-    netbanking: { label: 'Net Banking', icon: 'fa-building-columns' },
-    wallet: { label: 'VijayCart Wallet', icon: 'fa-wallet' },
-    cod: { label: 'Cash on Delivery', icon: 'fa-hand-holding-dollar' },
+    netbanking: { label: 'Net Banking', icon: 'fa-bank' },
+    wallet: { label: 'VijayCart Wallet', icon: 'fa-credit-card' },
+    cod: { label: 'Cash on Delivery', icon: 'fa-money' },
 };
 
 export default function OrderSuccess() {
@@ -43,7 +43,7 @@ export default function OrderSuccess() {
                 {orderDetail && orderDetail._id && (
                     <div className="os-meta">
                         <div className="os-meta-item">
-                            <i className="fa fa-money-bill-wave" aria-hidden="true"></i>
+                            <i className="fa fa-money" aria-hidden="true"></i>
                             <span>
                                 <b>{formatMoney(orderDetail.totalPrice)}</b>
                                 {isCod ? ' payable on delivery' : ' paid'}
@@ -76,15 +76,15 @@ export default function OrderSuccess() {
                     )}
                     {orderDetail && orderDetail._id && (
                         <button type="button" className="os-invoice" onClick={() => openInvoice(orderDetail)}>
-                            <i className="fa fa-file-invoice mr-1" aria-hidden="true"></i>Download Invoice
+                            <i className="fa fa-file-text-o mr-1" aria-hidden="true"></i>Download Invoice
                         </button>
                     )}
-                    <Link to="/orders" className="checkout-btn"><i className="fa fa-box-open mr-2" aria-hidden="true"></i>View My Orders</Link>
+                    <Link to="/orders" className="checkout-btn"><i className="fa fa-archive mr-2" aria-hidden="true"></i>View My Orders</Link>
                     <Link to="/" className="os-continue"><i className="fa fa-home mr-1" aria-hidden="true"></i>Continue Shopping</Link>
                 </div>
 
                 <div className="os-support">
-                    <i className="fa fa-headset" aria-hidden="true"></i>
+                    <i className="fa fa-headphones" aria-hidden="true"></i>
                     <span>Need help with this order? Email <a href="mailto:help@vijaycart.com">help@vijaycart.com</a> or call <a href="tel:+918220477466">+91 82204 77466</a></span>
                 </div>
             </div>

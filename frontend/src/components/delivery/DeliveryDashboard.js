@@ -208,7 +208,7 @@ export default function DeliveryDashboard() {
                                         <span className={`badge ${STATUS_BADGES[status] || 'badge-secondary'}`}>{status}</span>
                                         {order.paymentMethod === 'cod' && (
                                             <span className={`de-cod-badge ${order.codStatus === 'Collected' ? 'de-cod-badge--done' : ''}`}>
-                                                <i className="fa fa-hand-holding-dollar mr-1" aria-hidden="true"></i>COD
+                                                <i className="fa fa-money mr-1" aria-hidden="true"></i>COD
                                                 {order.orderStatus === 'Delivered' && (order.codStatus === 'Collected' ? ' · Cash Collected' : ' · Cash Pending')}
                                             </span>
                                         )}
@@ -255,7 +255,7 @@ export default function DeliveryDashboard() {
 
                                     <div className="de-order-foot">
                                         <a href={mapLink(order)} target="_blank" rel="noreferrer" className="de-btn de-btn--ghost">
-                                            <i className="fa fa-map-marker-alt mr-1" aria-hidden="true"></i> Navigate
+                                            <i className="fa fa-map-marker mr-1" aria-hidden="true"></i> Navigate
                                         </a>
                                         <a href={callLink(order)} className="de-btn de-btn--ghost">
                                             <i className="fa fa-phone mr-1" aria-hidden="true"></i> Call
@@ -276,7 +276,7 @@ export default function DeliveryDashboard() {
                                         )}
                                         {tab === 'history' && order.paymentMethod === 'cod' && status === 'Delivered' && order.codStatus !== 'Collected' && (
                                             <button type="button" className="de-btn de-btn--primary" disabled={busy} onClick={() => collectCodCash(order)}>
-                                                {busy ? <i className="fa fa-spinner fa-spin mr-1" aria-hidden="true"></i> : <i className="fa fa-hand-holding-dollar mr-1" aria-hidden="true"></i>}
+                                                {busy ? <i className="fa fa-spinner fa-spin mr-1" aria-hidden="true"></i> : <i className="fa fa-money mr-1" aria-hidden="true"></i>}
                                                 Collect Cash
                                             </button>
                                         )}
@@ -320,7 +320,7 @@ export default function DeliveryDashboard() {
                                 checked={collectCash}
                                 onChange={e => setCollectCash(e.target.checked)}
                             />
-                            <span><i className="fa fa-hand-holding-dollar mr-1" aria-hidden="true"></i>Cash of <b>₹{Number(otpOrder.totalPrice || 0).toLocaleString('en-IN')}</b> collected from customer</span>
+                            <span><i className="fa fa-money mr-1" aria-hidden="true"></i>Cash of <b>₹{Number(otpOrder.totalPrice || 0).toLocaleString('en-IN')}</b> collected from customer</span>
                         </label>
                     )}
                 </Modal.Body>

@@ -305,7 +305,7 @@ export default function Dashboard() {
                     value={revenue}
                     format={v => toINR(v)}
                     sub={`${toINR(analytics.paidRevenue)} collected · ${toINR(analytics.pendingRevenue)} in transit`}
-                    icon="fa-indian-rupee" tone="ad-stat--primary"
+                    icon="fa-rupee" tone="ad-stat--primary"
                     delta={revDelta} spark={revenueSeries} sparkColor="var(--ad-primary)"
                     rangeLabel={rangeLabel} delay="0.05s"
                 />
@@ -328,7 +328,7 @@ export default function Dashboard() {
                     label="Products"
                     value={analytics.totalProducts || 0}
                     sub={`${analytics.lowStock || 0} low on stock · ${analytics.outOfStock || 0} out of stock`}
-                    icon="fa-box" tone="ad-stat--violet"
+                    icon="fa-cube" tone="ad-stat--violet"
                     delay="0.2s"
                 />
             </div>
@@ -377,7 +377,7 @@ export default function Dashboard() {
             <div className="ad-chart-row">
                 <div className="ad-card ad-card--lift ad-anim ad-delay-1">
                     <div className="ad-card__head">
-                        <h3 className="ad-card__title"><i className="fa fa-chart-area" aria-hidden="true"></i> Revenue Trend — Last {rangeLabel}</h3>
+                        <h3 className="ad-card__title"><i className="fa fa-area-chart" aria-hidden="true"></i> Revenue Trend — Last {rangeLabel}</h3>
                         <div className="ad-card__tools">
                             <RangeTabs value={range} onChange={setRange} />
                             <Link to="/admin/revenue" className="ad-btn ad-btn--link">Revenue →</Link>
@@ -409,7 +409,7 @@ export default function Dashboard() {
                                     <div className="ad-growth__sub">{today}</div>
                                 </div>
                             </div>
-                            <GrowthRow icon="fa-indian-rupee" label="Revenue" value={revDelta} />
+                            <GrowthRow icon="fa-rupee" label="Revenue" value={revDelta} />
                             <GrowthRow icon="fa-shopping-basket" label="Orders" value={ordDelta} />
                             <GrowthRow icon="fa-calculator" label="Avg order value" value={aovDelta} />
                             <Link to="/admin/analytics" className="ad-btn ad-btn--soft ad-btn--sm ad-growth__cta">View Insights <i className="fa fa-arrow-right" aria-hidden="true"></i></Link>
@@ -437,7 +437,7 @@ export default function Dashboard() {
                     </div>
                     <div className="ad-card__body">
                         {!loading && (analytics.topProducts || []).length === 0 && (
-                            <div className="ad-empty"><i className="fa fa-box-open" aria-hidden="true"></i><p>No sales data yet.</p></div>
+                            <div className="ad-empty"><i className="fa fa-archive" aria-hidden="true"></i><p>No sales data yet.</p></div>
                         )}
                         {(analytics.topProducts || []).slice(0, 6).map((p, i) => (
                             <div className="ad-list-item" key={i} style={{ padding: '0.7rem 0' }}>
