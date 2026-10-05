@@ -26,7 +26,7 @@ migrateOrderStatuses().catch(err => {
 // setup. Binding with no host listens on the dual-stack '::' interface so both
 // IPv4 and IPv6 clients (Railway's private network is IPv6) can reach the app.
 const PORT = process.env.PORT || 8000;
-const server = app.listen(PORT,"0.0.0.0", ()=>{
+const server = app.listen(PORT, ()=>{
     logger.info(`Server listening on port ${PORT} (${process.env.NODE_ENV || 'development'})`);
     logger.info(`Local: http://localhost:${PORT}`);
 })
