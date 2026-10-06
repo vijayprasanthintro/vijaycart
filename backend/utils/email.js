@@ -20,7 +20,8 @@ const sendEmail = async options => {
         },
         to: [{ email: options.email }],
         subject: options.subject,
-        textContent: options.message
+        textContent: options.message,
+        ...(options.html ? { htmlContent: options.html } : {})
     };
 
     try {

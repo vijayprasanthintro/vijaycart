@@ -4,6 +4,7 @@ const DeliveryPerson = require('../models/deliveryPersonModel');
 const Otp = require('../models/otpModel');
 const ErrorHandler = require('../utils/errorHandler');
 const sendEmail = require('../utils/email');
+const buildOtpEmail = require('../utils/otpEmailTemplate');
 const sendToken = require('../utils/jwt');
 const logger = require('../utils/logger');
 const crypto = require('crypto');
@@ -44,6 +45,9 @@ const displayTarget = (user) => (user.email ? maskEmail(user.email) : maskMobile
 //Step 1 & 3: Request a new OTP - /api/v1/otp/request
 exports.requestOtp = catchAsyncError(async (req, res, next) => {
     const { mobile, email } = req.body || {};
+    // Name supplied by the Sign Up form. Optional: when it is missing (e.g.
+    // a plain login), the legacy email-derived name is used instead.
+    const providedName = String(req.body.name || '').trim();
 
     if (!mobile && !email) {
         return next(new ErrorHandler('Please enter your mobile number or email', 400));
@@ -85,7 +89,8 @@ exports.requestOtp = catchAsyncError(async (req, res, next) => {
     // Unknown number + a valid email supplied -> self-register the account.
     if (!user && email && isValidEmail(email)) {
         const rawName = String(email).split('@')[0].replace(/[._-]+/g, ' ').trim();
-        const name = rawName ? rawName.charAt(0).toUpperCase() + rawName.slice(1) : 'VijayCart User';
+        const derivedName = rawName ? rawName.charAt(0).toUpperCase() + rawName.slice(1) : 'VijayCart User';
+        const name = providedName || derivedName;
         try {
             user = await User.create({
                 name,
@@ -109,6 +114,22 @@ exports.requestOtp = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler('You are not registered as a delivery partner.', 403));
     }
 
+    // Sign Up supplies a fresh email: when the number already maps to an
+    // existing (legacy) account, rebind that account to the email the user
+    // typed so the OTP — and the profile — land on the right inbox. Refuse if
+    // the email already belongs to a DIFFERENT account so one address can
+    // never be silently stolen.
+    const lowerEmail = String(email || '').trim().toLowerCase();
+    if (!isDeliveryLogin && user && lowerEmail && isValidEmail(lowerEmail)
+        && lowerEmail !== String(user.email || '').toLowerCase()) {
+        const emailOwner = await User.findOne({ email: lowerEmail });
+        if (emailOwner && String(emailOwner._id) !== String(user._id)) {
+            return next(new ErrorHandler('This email is already linked to another account. Please login with that account.', 409));
+        }
+        user.email = lowerEmail;
+        await user.save({ validateBeforeSave: false });
+    }
+
     const now = Date.now();
 
     // Enforce the resend cooldown (30s by default) per user.
@@ -127,15 +148,26 @@ exports.requestOtp = catchAsyncError(async (req, res, next) => {
         expiresAt: new Date(now + OTP_EXPIRES_MS)
     });
 
-    // Deliver the OTP through the Brevo transactional email API.
+    // Deliver the OTP through the Brevo transactional email API. The branded
+    // "Verify Your Login" HTML email is built from otpEmailTemplate so it
+    // renders nicely in Gmail / Outlook / Apple Mail.
     try {
         await sendEmail({
             email: user.email,
-            subject: 'VijayCart Login OTP',
-            message: `Your VijayCart OTP is ${otp}.\n\n` +
-                `This OTP is valid for ${Math.round(OTP_EXPIRES_MS / 60000)} minutes. ` +
-                `Do not share this OTP with anyone.\n\n` +
-                `If you did not request this OTP, you can safely ignore this email.`
+            subject: 'VijayCart — Verify Your Login',
+            message: `Hey ${user.name},\n\n` +
+                `Use the 6-digit code below to securely continue signing in to VijayCart.\n\n` +
+                `Your verification code is: ${otp}\n\n` +
+                `This code is valid for ${Math.round(OTP_EXPIRES_MS / 60000)} minutes.\n\n` +
+                `Do not share this code with anyone.\n` +
+                `If you did not request this code, you can safely ignore this email.\n\n` +
+                `Happy Shopping!\nTeam VijayCart`,
+            html: buildOtpEmail({
+                name: user.name,
+                otp,
+                minutes: Math.round(OTP_EXPIRES_MS / 60000),
+                year: new Date().getFullYear()
+            })
         });
     } catch (error) {
         // Log the FULL Brevo API failure so the real cause surfaces in the

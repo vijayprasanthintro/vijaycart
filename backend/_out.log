@@ -1,0 +1,363 @@
+[2026-10-06T13:23:07.167Z] INFO Server listening on port 8000 (development) 
+[2026-10-06T13:23:07.175Z] INFO Local: http://localhost:8000 
+MongoDB is connected to the host: 127.0.0.1
+[0mGET /api/v1/products?limit=3 [32m200[0m 133.321 ms - 2381[0m
+[2026-10-06T13:29:23.609Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 9.489 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 117.602 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 116.714 ms - -[0m
+[0mGET /api/v1/myaddresses [32m200[0m 36.966 ms - 332[0m
+[0mGET /api/v1/banners [32m200[0m 13.065 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 26.841 ms - -[0m
+[0mGET /api/v1/myprofile [32m200[0m 30.078 ms - 776[0m
+[0mGET /api/v1/wishlist [32m200[0m 41.562 ms - 30[0m
+[2026-10-06T13:32:03.275Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/banners [32m200[0m 16.498 ms - -[0m
+[0mGET /api/v1/myprofile [33m401[0m 2.519 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 24.065 ms - -[0m
+[2026-10-06T13:32:41.405Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.168 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 14.753 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 24.401 ms - -[0m
+[0mGET /api/v1/myaddresses [32m200[0m 19.121 ms - 332[0m
+[0mGET /api/v1/banners [32m200[0m 10.336 ms - -[0m
+[0mGET /api/v1/myprofile [32m200[0m 17.277 ms - 776[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 20.875 ms - -[0m
+[0mGET /api/v1/wishlist [32m200[0m 22.898 ms - 30[0m
+[0mGET /api/v1/products?limit=200 [36m304[0m 20.567 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 5.210 ms - -[0m
+[0mGET /api/v1/logout [32m200[0m 3.033 ms - 38[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.679 ms - 142[0m
+[2026-10-06T13:39:09.100Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.267 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.932 ms - 142[0m
+[2026-10-06T13:40:15.330Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.384 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.697 ms - 142[0m
+[2026-10-06T13:40:40.921Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.530 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 2.300 ms - 142[0m
+[2026-10-06T13:41:34.602Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 7.384 ms - -[0m
+[2026-10-06T13:43:29.739Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.586 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.433 ms - 142[0m
+[0mGET /api/v1/banners [32m200[0m 39.109 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 57.260 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 21.530 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 4.540 ms - -[0m
+[2026-10-06T13:44:47.385Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.591 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 1.233 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 4.529 ms - -[0m
+[2026-10-06T13:45:27.462Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.352 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 13.579 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 21.220 ms - -[0m
+[2026-10-06T13:47:53.711Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 5.965 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 92.269 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 5.219 ms - -[0m
+[2026-10-06T13:49:23.105Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.204 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 11.184 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 4.289 ms - -[0m
+[2026-10-06T13:50:16.531Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.208 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 9.205 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 5.178 ms - -[0m
+[2026-10-06T13:51:40.229Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.482 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 13.801 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 9.817 ms - -[0m
+[2026-10-06T13:53:18.506Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.647 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 11.774 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 43.469 ms - -[0m
+[2026-10-06T13:54:30.279Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 47.455 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 177.078 ms - -[0m
+[2026-10-06T13:56:46.689Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 3.331 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 25.068 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 23.432 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 4.969 ms - -[0m
+[2026-10-06T13:57:34.815Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.049 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 15.641 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.557 ms - 142[0m
+[2026-10-06T13:58:00.462Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 3.581 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.671 ms - 142[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.364 ms - 142[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.496 ms - 142[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 10.509 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 8.623 ms - -[0m
+[2026-10-06T13:59:40.443Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.923 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.709 ms - 142[0m
+[2026-10-06T14:00:28.685Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.946 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 1.677 ms - 142[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.903 ms - 142[0m
+[2026-10-06T14:01:05.247Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.683 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.417 ms - 142[0m
+[0mGET /api/v1/banners [32m200[0m 104.450 ms - -[0m
+[2026-10-06T14:01:30.379Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.336 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 86.789 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 5.165 ms - -[0m
+[2026-10-06T14:02:04.510Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.117 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 8.184 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 4.556 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 0.855 ms - -[0m
+[2026-10-06T14:02:21.018Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.036 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 11.761 ms - -[0m
+[2026-10-06T14:02:30.303Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 2.197 ms - -[0m
+[0mGET /api/v1/myprofile [33m401[0m 2.223 ms - -[0m
+[2026-10-06T14:03:08.265Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 4.119 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.825 ms - 142[0m
+[0mPOST /api/v1/otp/request [31m500[0m 1444.352 ms - 334[0m
+[2026-10-06T14:04:27.303Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 4.179 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 1.001 ms - 142[0m
+[0mPOST /api/v1/otp/request [31m500[0m 724.151 ms - 334[0m
+[0mGET /api/v1/banners [32m200[0m 59.916 ms - -[0m
+[2026-10-06T14:06:15.467Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 9.318 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 137.345 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 1432.642 ms - -[0m
+[2026-10-06T14:06:38.239Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 6.826 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 332.591 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 5.825 ms - -[0m
+[2026-10-06T14:07:12.260Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.726 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 22.964 ms - -[0m
+[0mPOST /api/v1/otp/request [31m500[0m 768.227 ms - 334[0m
+[2026-10-06T14:07:59.323Z] WARN Please wait 15s before requesting a new OTP. {"method":"POST","url":"/api/v1/otp/request","ip":"127.0.0.1"}
+[0mPOST /api/v1/otp/request [33m429[0m 303.760 ms - 316[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.946 ms - 142[0m
+[2026-10-06T14:08:03.656Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.450 ms - -[0m
+[2026-10-06T14:08:12.483Z] WARN Please wait 2s before requesting a new OTP. {"method":"POST","url":"/api/v1/otp/request","ip":"127.0.0.1"}
+[0mPOST /api/v1/otp/request [33m429[0m 11.058 ms - 314[0m
+[2026-10-06T14:08:15.152Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 9.081 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 62.701 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 115.536 ms - -[0m
+[0mPOST /api/v1/otp/request [31m500[0m 710.575 ms - 334[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 2.518 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 38.337 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 2.423 ms - 142[0m
+[0mGET /api/v1/auth/config [32m200[0m 2.271 ms - 142[0m
+[2026-10-06T14:08:44.764Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.257 ms - -[0m
+[2026-10-06T14:10:28.558Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 18.567 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.895 ms - 142[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 60.205 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 92.729 ms - -[0m
+[2026-10-06T14:10:46.635Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.982 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.652 ms - 142[0m
+[2026-10-06T14:11:01.759Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 3.133 ms - -[0m
+COOKIE OPTIONS: {"maxAge":604800000,"httpOnly":true,"sameSite":"lax","secure":false,"path":"/"}
+[0mPOST /api/v1/admin/login [32m200[0m 123.252 ms - 530[0m
+[0mGET /api/v1/wishlist [32m200[0m 41.422 ms - 30[0m
+[0mGET /api/v1/settings [32m200[0m 250.422 ms - -[0m
+[0mGET /api/v1/admin/analytics?range=14 [32m200[0m 652.961 ms - -[0m
+[0mGET /api/v1/admin/analytics [32m200[0m 681.721 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 4.239 ms - -[0m
+[0mGET /api/v1/myaddresses [32m200[0m 9.351 ms - 31[0m
+[0mGET /api/v1/banners [32m200[0m 10.485 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 27.788 ms - -[0m
+[0mGET /api/v1/myprofile [32m200[0m 25.311 ms - 328[0m
+[0mGET /api/v1/wishlist [32m200[0m 31.457 ms - 30[0m
+[0mGET /api/v1/myaddresses [32m200[0m 8.688 ms - 31[0m
+[0mGET /api/v1/logout [32m200[0m 0.717 ms - 38[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.588 ms - 142[0m
+[0mPOST /api/v1/otp/request [31m500[0m 738.690 ms - 334[0m
+[2026-10-06T14:17:57.988Z] WARN Please wait 21s before requesting a new OTP. {"method":"POST","url":"/api/v1/otp/request","ip":"127.0.0.1"}
+[0mPOST /api/v1/otp/request [33m429[0m 12.532 ms - 316[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 120.821 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 106.037 ms - -[0m
+[2026-10-06T14:18:17.581Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.593 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 1.329 ms - 142[0m
+[2026-10-06T14:18:25.339Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.450 ms - -[0m
+COOKIE OPTIONS: {"maxAge":604800000,"httpOnly":true,"sameSite":"lax","secure":false,"path":"/"}
+[0mPOST /api/v1/admin/login [32m200[0m 78.004 ms - 530[0m
+[0mGET /api/v1/wishlist [32m200[0m 11.597 ms - 30[0m
+[0mGET /api/v1/settings [32m200[0m 14.449 ms - -[0m
+[0mGET /api/v1/admin/analytics?range=14 [32m200[0m 336.399 ms - -[0m
+[0mGET /api/v1/admin/analytics [32m200[0m 376.379 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 3.205 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 3.617 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 4.539 ms - -[0m
+[0mGET /api/v1/categories [32m200[0m 38.636 ms - -[0m
+[0mPUT /api/v1/admin/category/6a786b067fdc49002c5d21e8 [32m200[0m 33.804 ms - 175[0m
+[0mPUT /api/v1/admin/category/6a786b067fdc49002c5d21e9 [32m200[0m 5.263 ms - 177[0m
+[0mPUT /api/v1/admin/category/6a786b067fdc49002c5d21ea [32m200[0m 12.018 ms - 175[0m
+[0mPUT /api/v1/admin/category/6a786b067fdc49002c5d21eb [32m200[0m 12.184 ms - 171[0m
+[0mPUT /api/v1/admin/category/6a786b067fdc49002c5d21ec [32m200[0m 11.118 ms - 171[0m
+[0mGET /api/v1/myprofile [32m200[0m 12.102 ms - 328[0m
+[0mGET /api/v1/wishlist [32m200[0m 18.168 ms - 30[0m
+[0mGET /api/v1/categories [32m200[0m 15.395 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 10.428 ms - -[0m
+[0mGET /api/v1/admin/analytics [32m200[0m 170.381 ms - -[0m
+[0mGET /api/v1/myprofile [32m200[0m 10.587 ms - 328[0m
+[0mGET /api/v1/myaddresses [32m200[0m 6.606 ms - 31[0m
+[0mGET /api/v1/banners [32m200[0m 9.867 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 22.951 ms - -[0m
+[0mGET /api/v1/myprofile [32m200[0m 22.838 ms - 328[0m
+[0mGET /api/v1/wishlist [32m200[0m 31.431 ms - 30[0m
+[0mGET /api/v1/myaddresses [32m200[0m 7.432 ms - 31[0m
+[0mGET /api/v1/myaddresses [32m200[0m 7.876 ms - 31[0m
+[0mGET /api/v1/banners [32m200[0m 8.155 ms - -[0m
+[0mGET /api/v1/myprofile [32m200[0m 13.569 ms - 328[0m
+[0mGET /api/v1/wishlist [32m200[0m 15.798 ms - 30[0m
+[0mGET /api/v1/myaddresses [32m200[0m 6.581 ms - 31[0m
+[0mGET /api/v1/myprofile [32m200[0m 12.831 ms - 328[0m
+[0mGET /api/v1/wishlist [32m200[0m 22.482 ms - 30[0m
+[0mGET /api/v1/categories [32m200[0m 13.003 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 7.028 ms - -[0m
+[0mGET /api/v1/admin/analytics [32m200[0m 153.331 ms - -[0m
+[0mGET /api/v1/myprofile [32m200[0m 5.061 ms - 328[0m
+[2026-10-06T14:26:11.023Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 16.431 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 92.878 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 66.622 ms - -[0m
+[2026-10-06T14:26:26.394Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.573 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 1.917 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 19.936 ms - -[0m
+[2026-10-06T14:26:41.616Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.426 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 13.305 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 21.469 ms - -[0m
+[2026-10-06T14:26:53.295Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 1.676 ms - -[0m
+[0mGET /api/v1/myprofile [33m401[0m 1.810 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 17.653 ms - -[0m
+[2026-10-06T14:27:08.061Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.160 ms - -[0m
+[2026-10-06T14:27:36.310Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.330 ms - -[0m
+[2026-10-06T14:28:25.194Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.726 ms - -[0m
+[2026-10-06T14:28:39.078Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.315 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.333 ms - 142[0m
+[2026-10-06T14:29:06.186Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.323 ms - -[0m
+[2026-10-06T14:29:25.085Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.946 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.768 ms - 142[0m
+[2026-10-06T14:29:38.445Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 6.124 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.312 ms - 142[0m
+[2026-10-06T14:30:06.855Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 16.916 ms - -[0m
+[0mGET /api/v1/myprofile [32m200[0m 32.819 ms - 328[0m
+[0mGET /api/v1/wishlist [32m200[0m 34.804 ms - 30[0m
+[0mGET /api/v1/categories [32m200[0m 20.138 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 12.169 ms - -[0m
+[0mGET /api/v1/admin/analytics [32m200[0m 174.525 ms - -[0m
+[0mGET /api/v1/myaddresses [32m200[0m 5.554 ms - 31[0m
+[0mGET /api/v1/banners [32m200[0m 10.371 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 11.417 ms - -[0m
+[0mGET /api/v1/myprofile [32m200[0m 11.976 ms - 328[0m
+[0mGET /api/v1/wishlist [32m200[0m 17.116 ms - 30[0m
+[0mGET /api/v1/myaddresses [32m200[0m 8.254 ms - 31[0m
+[0mGET /api/v1/logout [32m200[0m 1.532 ms - 38[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.750 ms - 142[0m
+[0mPOST /api/v1/otp/request [31m500[0m 849.085 ms - 334[0m
+[2026-10-06T14:33:09.940Z] WARN Please wait 18s before requesting a new OTP. {"method":"POST","url":"/api/v1/otp/request","ip":"127.0.0.1"}
+[0mPOST /api/v1/otp/request [33m429[0m 16.318 ms - 316[0m
+[2026-10-06T14:33:11.340Z] WARN Please wait 17s before requesting a new OTP. {"method":"POST","url":"/api/v1/otp/request","ip":"127.0.0.1"}
+[0mPOST /api/v1/otp/request [33m429[0m 21.710 ms - 316[0m
+[2026-10-06T14:33:11.960Z] WARN Please wait 16s before requesting a new OTP. {"method":"POST","url":"/api/v1/otp/request","ip":"127.0.0.1"}
+[0mPOST /api/v1/otp/request [33m429[0m 5.808 ms - 316[0m
+[0mPOST /api/v1/otp/request [31m500[0m 784.797 ms - 334[0m
+[0mGET /api/v1/auth/config [32m200[0m 1.104 ms - 142[0m
+[2026-10-06T14:33:59.654Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 12.806 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 1.286 ms - 142[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 13.617 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 11.314 ms - -[0m
+[0mGET /api/v1/products?limit=200 [36m304[0m 26.887 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 10.377 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.600 ms - 142[0m
+[0mGET /api/v1/auth/config [32m200[0m 2.127 ms - 142[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.428 ms - 142[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.963 ms - 142[0m
+[0mGET /api/v1/auth/config [32m200[0m 1.852 ms - 142[0m
+[2026-10-06T14:46:50.813Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 8.174 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 90.615 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 82.897 ms - -[0m
+[2026-10-06T14:47:11.031Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.550 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.992 ms - 142[0m
+[2026-10-06T14:47:27.631Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 6.842 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.786 ms - 142[0m
+[2026-10-06T14:47:46.593Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 6.504 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.790 ms - 142[0m
+[2026-10-06T14:48:03.282Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.075 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 7.352 ms - -[0m
+[2026-10-06T14:48:16.249Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.806 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 11.834 ms - -[0m
+[2026-10-06T14:49:54.513Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.061 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.623 ms - 142[0m
+[2026-10-06T14:50:17.586Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 5.282 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 2.393 ms - 142[0m
+[2026-10-06T14:50:21.757Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.295 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.717 ms - 142[0m
+[2026-10-06T14:50:31.434Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.591 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 1.156 ms - 142[0m
+[0mPOST /api/v1/otp/request [31m500[0m 891.612 ms - 334[0m
+[2026-10-06T14:52:50.569Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 24.853 ms - -[0m
+[0mPOST /api/v1/otp/request [31m500[0m 755.128 ms - 334[0m
+[0mPOST /api/v1/otp/request [31m500[0m 643.099 ms - 334[0m
+[2026-10-06T14:53:57.958Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 18.280 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 34.905 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 23.780 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 1.191 ms - 142[0m
+[0mPOST /api/v1/otp/request [31m500[0m 719.597 ms - 334[0m
+[0mPOST /api/v1/otp/request [32m200[0m 866.808 ms - 122[0m
+COOKIE OPTIONS: {"maxAge":604800000,"httpOnly":true,"sameSite":"lax","secure":false,"path":"/"}
+[0mPOST /api/v1/otp/verify [32m200[0m 24.808 ms - 976[0m
+[0mGET /api/v1/myaddresses [32m200[0m 13.335 ms - 332[0m
+[0mGET /api/v1/wishlist [32m200[0m 21.082 ms - 30[0m
+[0mGET /api/v1/banners [32m200[0m 5.044 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 10.677 ms - -[0m
+[0mGET /api/v1/logout [32m200[0m 1.209 ms - 38[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.691 ms - 142[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.460 ms - 142[0m
+[0mPOST /api/v1/otp/request [32m200[0m 687.106 ms - 122[0m
+COOKIE OPTIONS: {"maxAge":604800000,"httpOnly":true,"sameSite":"lax","secure":false,"path":"/"}
+[0mPOST /api/v1/otp/verify [32m200[0m 9.816 ms - 976[0m
+[0mGET /api/v1/myaddresses [32m200[0m 11.589 ms - 332[0m
+[0mGET /api/v1/wishlist [32m200[0m 14.298 ms - 30[0m
+[0mGET /api/v1/banners [32m200[0m 14.617 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 27.982 ms - -[0m
+[0mGET /api/v1/logout [32m200[0m 0.846 ms - 38[0m
+[0mGET /api/v1/auth/config [32m200[0m 2.828 ms - 142[0m

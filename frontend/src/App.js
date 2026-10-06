@@ -27,6 +27,7 @@ import PageTransition from './components/layouts/PageTransition';
 const ProductDetail = lazy(() => import(/* webpackChunkName: "product-detail" */ './components/product/ProductDetail'));
 const ProductSearch = lazy(() => import(/* webpackChunkName: "product-search" */ './components/product/ProductSearch'));
 const Login = lazy(() => import(/* webpackChunkName: "login" */ './components/user/Login'));
+const SignUp = lazy(() => import(/* webpackChunkName: "login" */ './components/user/SignUp'));
 const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './components/user/Profile'));
 const Wishlist = lazy(() => import(/* webpackChunkName: "wishlist" */ './components/user/Wishlist'));
 const UpdateProfile = lazy(() => import(/* webpackChunkName: "update-profile" */ './components/user/UpdateProfile'));
@@ -119,9 +120,23 @@ function Shell() {
       <a href="#main-content" className="skip-link">Skip to main content</a>
       {!hideChrome && <Header />}
       {!hideChrome && <LocationBar />}
+      {/* Category navigation lives in the global chrome, ABOVE the hero
+          banner (header → category nav → banner → content). */}
       {!hideChrome && <CategoryNav />}
       <main id="main-content" className='container' role="main">
-        <ToastContainer theme='dark' />
+        {/* ONE universal notification system: every toast call (cart, OTP,
+            auth, payment, order, pincode, admin, ...) renders through this
+            single toastify container, styled light + premium in App.css. */}
+        <ToastContainer
+          position='bottom-right'
+          theme='light'
+          autoClose={3000}
+          newestOnTop
+          closeOnClick
+          pauseOnFocusLoss={false}
+          limit={4}
+          toastClassName='vc-toast'
+        />
         <Suspense fallback={<RouteFallback />}>
           <ErrorBoundary>
             <AnimatePresence mode="wait" initial={false}>
@@ -136,6 +151,7 @@ function Shell() {
                   <Route path='/search/' element={<ProductSearch />} />
                   <Route path='/product/:id' element={<ProductDetail />} />
                   <Route path='/login' element={<Login />} />
+                  <Route path='/signup' element={<SignUp />} />
                   <Route path='/myprofile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                   <Route path='/myprofile/update' element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
                   <Route path='/cart' element={<Cart />} />

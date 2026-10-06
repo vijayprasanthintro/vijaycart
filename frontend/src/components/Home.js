@@ -11,19 +11,6 @@ import { buildHomeFeed } from "../utils/homeFeed";
 import { SectionTitleSkeleton, ProductRowSkeleton } from "./layouts/Skeletons";
 const FLASH_KEY = 'vijaycart_flash_ends';
 
-const SHOP_CATEGORIES = [
-  { name: 'Smartphones', icon: 'fa-mobile', count: 'Up to 40% off' },
-  { name: 'Electronics', icon: 'fa-plug', count: 'Daily deals' },
-  { name: 'Laptops', icon: 'fa-laptop', count: 'Top brands' },
-  { name: 'Headphones', icon: 'fa-headphones', count: 'Studio sound' },
-  { name: 'Beauty/Health', icon: 'fa-heartbeat', count: 'Self care' },
-  { name: 'Sports', icon: 'fa-futbol-o', count: 'Active wear' },
-  { name: 'Home', icon: 'fa-home', count: 'Smart living' },
-  { name: 'Accessories', icon: 'fa-clock-o', count: 'Everyday carry' },
-  { name: 'Books', icon: 'fa-book', count: 'Read more' },
-  { name: 'Cameras', icon: 'fa-camera', count: 'Capture life' },
-];
-
 const QUICK_ACCESS = [
   { name: 'Offers', icon: 'fa-percent', cls: 'cat-icon-appliances', to: '/search/all' },
   { name: 'Mobiles & Acc', icon: 'fa-mobile', cls: 'cat-icon-mobile', to: '/search/all?category=Smartphones' },
@@ -152,22 +139,6 @@ export default function Home() {
         <Fragment>
           {/* Personalized section */}
           {anyProduct && <PersonalizedSection products={allProducts} />}
-
-          {/* Shop by Category */}
-          <section className="section">
-            <div className="section-head">
-              <h2 className="section-title">Shop by <span className="section-accent">Category</span></h2>
-            </div>
-            <div className="category-grid">
-              {SHOP_CATEGORIES.map(cat => (
-                <Link key={cat.name} to={`/search/all?category=${encodeURIComponent(cat.name)}`} className="category-card">
-                  <span className="cat-card-icon"><i className={`fa ${cat.icon}`} aria-hidden="true"></i></span>
-                  <span className="cat-card-name">{cat.name}</span>
-                  <span className="cat-card-count">{cat.count}</span>
-                </Link>
-              ))}
-            </div>
-          </section>
 
           {/* Deals of the Day */}
           <ProductCarousel

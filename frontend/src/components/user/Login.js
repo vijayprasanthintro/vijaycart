@@ -11,6 +11,13 @@ import axios from 'axios';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Small, professional toast popup used for all success / error messages.
+// Positioning and styling come from the universal toast system in App.css.
+const TOAST_STYLE = {
+    position: toast.POSITION.BOTTOM_RIGHT,
+    className: 'vc-toast'
+};
+
 const readRemember = () => {
     try { return localStorage.getItem(REMEMBER_KEY) !== '0'; } catch { return true; }
 };
@@ -40,8 +47,6 @@ export default function Login() {
     const [googleReady, setGoogleReady] = useState(false);
     const [googleLoading, setGoogleLoading] = useState(false);
     const otpRefs = useRef([]);
-    const googleBtnRef = useRef(null);
-    const googleRenderedRef = useRef(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -60,7 +65,7 @@ export default function Login() {
     useEffect(() => {
         if (error) {
             toast(error, {
-                position: toast.POSITION.BOTTOM_CENTER,
+                ...TOAST_STYLE,
                 type: 'error',
                 onOpen: () => { dispatch(clearAuthError) }
             })
@@ -70,7 +75,7 @@ export default function Login() {
     useEffect(() => {
         if (otpError) {
             toast(otpError, {
-                position: toast.POSITION.BOTTOM_CENTER,
+                ...TOAST_STYLE,
                 type: 'error'
             })
         }
@@ -147,6 +152,11 @@ export default function Login() {
         });
     };
 
+    // "Don't have an account?" -> dedicated Sign Up page (separate route).
+    const handleSignUp = () => {
+        navigate('/signup');
+    };
+
     const otpDigits = Array.from({ length: 6 }, (_, i) => otpCode[i] || '');
 
     const handleOtpInput = (i, val) => {
@@ -201,8 +211,8 @@ export default function Login() {
         const credential = response && response.credential;
         if (!credential) {
             toast('Google sign-in was cancelled or failed. Please try again.', {
-                type: 'error',
-                position: toast.POSITION.BOTTOM_CENTER
+                ...TOAST_STYLE,
+                type: 'error'
             });
             return;
         }
@@ -267,76 +277,42 @@ export default function Login() {
         return () => { cancelled = true; };
     }, [googleClientId, handleCredentialResponse]);
 
-    // 4. Render the official Google button into the container once the script
-    //    is ready and the container is on screen (the "send" step).
-    useEffect(() => {
-        if (step !== 'send') {
-            googleRenderedRef.current = false;
+    // Open the Google account chooser/popup from our own premium-styled
+    // button. Selection hands the ID token to the `callback` configured in
+    // initialize() above.
+    const handleGoogleClick = () => {
+        if (googleLoading) return;
+        if (!googleReady || !googleClientId || !window.google || !window.google.accounts || !window.google.accounts.id) {
+            toast.info('Google sign-in is unavailable right now. Use the Email OTP option instead.', TOAST_STYLE);
             return;
         }
-        if (!googleReady || !googleClientId || !googleBtnRef.current) return;
-        if (googleRenderedRef.current) return;
-        if (!window.google || !window.google.accounts || !window.google.accounts.id) return;
-
-        const container = googleBtnRef.current;
-        const width = Math.max(240, Math.min(360, (container.clientWidth || 340) - 4));
         try {
-            window.google.accounts.id.renderButton(container, {
-                theme: 'outline',
-                size: 'large',
-                shape: 'rect',
-                text: 'continue_with',
-                width,
-                logo_alignment: 'left'
+            window.google.accounts.id.prompt((notification) => {
+                // The chooser could not be shown at all (unsupported browser,
+                // sited cookies blocked...) — fall back to email OTP.
+                if (notification && notification.isNotDisplayed) {
+                    toast.info('Google sign-in could not open in this browser. Use the Email OTP option instead.', TOAST_STYLE);
+                }
             });
-            googleRenderedRef.current = true;
         } catch (e) {
-            /* the button may already be rendered or the container re-created */
+            toast.error('Google sign-in failed to open. Please try again.', TOAST_STYLE);
         }
-    }, [step, googleReady, googleClientId]);
+    };
 
     return (
         <Fragment>
             <MetaData title={`Login`} />
-            <section className="vc-auth" aria-label="Sign in to VijayCart">
+            <section className="vc-auth vc-auth--login" aria-label="Sign in to VijayCart">
                 <div className="vc-auth-panel">
                     <span className="vc-auth-orb vc-auth-orb--1" aria-hidden="true"></span>
                     <span className="vc-auth-orb vc-auth-orb--2" aria-hidden="true"></span>
                     <span className="vc-auth-orb vc-auth-orb--3" aria-hidden="true"></span>
 
                     <div className="vc-auth-card">
-                        <div className="vc-auth-brand">
+                        <div className="vc-auth-brand vc-login-brand">
                             <span className="vc-auth-logo"><i className="fa fa-shopping-bag" aria-hidden="true"></i></span>
                             <span className="vc-auth-name">VijayCart</span>
                         </div>
-
-                        {step === 'send' && (
-                            <Fragment>
-                                <div className="vc-google-wrap">
-                                    {googleClientId ? (
-                                        <div className="vc-google-btn" ref={googleBtnRef}></div>
-                                    ) : (
-                                        <button
-                                            type="button"
-                                            className="vc-google-btn vc-google-btn--disabled"
-                                            disabled
-                                            title="Google sign-in will be enabled shortly"
-                                        >
-                                            <GoogleIcon />
-                                            Continue with Google
-                                        </button>
-                                    )}
-                                    {googleClientId && !googleReady && (
-                                        <p className="vc-google-note"><i className="fa fa-spinner fa-spin mr-1" aria-hidden="true"></i>Loading Google sign-in…</p>
-                                    )}
-                                    {googleLoading && (
-                                        <p className="vc-google-note"><i className="fa fa-spinner fa-spin mr-1" aria-hidden="true"></i>Signing you in…</p>
-                                    )}
-                                </div>
-
-                                <div className="vc-divider"><span>or sign in with OTP</span></div>
-                            </Fragment>
-                        )}
 
                         <AnimatePresence>
                             {step === 'send' ? (
@@ -349,8 +325,10 @@ export default function Login() {
                                     exit={{ opacity: 0, x: -28 }}
                                     transition={stepTransition}
                                 >
-                                    <h1 className="vc-title">Welcome back</h1>
-                                    <p className="vc-sub">Sign in with a one-time password (OTP). No passwords to remember.</p>
+                                    <div className="vc-login-head">
+                                        <h1 className="vc-lg-title">Welcome Back</h1>
+                                        <p className="vc-lg-sub">Login to your account</p>
+                                    </div>
 
                                     <div className="vc-tabs" role="tablist" aria-label="Sign in method">
                                         <button type="button" className={`vc-tab${mode === 'mobile' ? ' active' : ''}`} onClick={() => { setMode('mobile'); setErrors({}); }}>Mobile</button>
@@ -358,41 +336,42 @@ export default function Login() {
                                     </div>
 
                                     {mode === 'mobile' ? (
-                                        <div className="vc-field">
-                                            <input
-                                                id="login_mobile_field"
-                                                type="tel"
-                                                inputMode="numeric"
-                                                maxLength="10"
-                                                placeholder=" "
-                                                autoComplete="tel"
-                                                value={mobile}
-                                                onChange={e => setMobile(e.target.value.replace(/\D/g, ''))}
-                                            />
-                                            <label htmlFor="login_mobile_field">Mobile Number</label>
+                                        <div className="vc-lg-fieldwrap">
+                                            <div className="vc-lg-field">
+                                                <i className="fa fa-mobile vc-lg-icon" aria-hidden="true"></i>
+                                                <input
+                                                    id="login_mobile_field"
+                                                    type="tel"
+                                                    inputMode="numeric"
+                                                    maxLength="10"
+                                                    placeholder=" "
+                                                    autoComplete="tel"
+                                                    value={mobile}
+                                                    onChange={e => setMobile(e.target.value.replace(/\D/g, ''))}
+                                                />
+                                                <label htmlFor="login_mobile_field">Mobile Number</label>
+                                            </div>
                                             {errors.mobile && <p className="vc-error"><i className="fa fa-exclamation-circle mr-1" aria-hidden="true"></i>{errors.mobile}</p>}
-                                            <p className="vc-hint">We'll send a 6-digit OTP to your registered email.</p>
+                                            <p className="vc-hint">We'll send a 6-digit OTP to your registered mobile number.</p>
                                         </div>
                                     ) : (
-                                        <div className="vc-field">
-                                            <input
-                                                id="login_email_field"
-                                                type="email"
-                                                placeholder=" "
-                                                autoComplete="email"
-                                                value={email}
-                                                onChange={e => setEmail(e.target.value)}
-                                            />
-                                            <label htmlFor="login_email_field">Email Address</label>
+                                        <div className="vc-lg-fieldwrap">
+                                            <div className="vc-lg-field">
+                                                <i className="fa fa-envelope vc-lg-icon" aria-hidden="true"></i>
+                                                <input
+                                                    id="login_email_field"
+                                                    type="email"
+                                                    placeholder=" "
+                                                    autoComplete="email"
+                                                    value={email}
+                                                    onChange={e => setEmail(e.target.value)}
+                                                />
+                                                <label htmlFor="login_email_field">Email Address</label>
+                                            </div>
                                             {errors.email && <p className="vc-error"><i className="fa fa-exclamation-circle mr-1" aria-hidden="true"></i>{errors.email}</p>}
-                                            <p className="vc-hint">We'll send a 6-digit OTP to this email.</p>
+                                            <p className="vc-hint">We'll send a 6-digit OTP to this email address.</p>
                                         </div>
                                     )}
-
-                                    <button type="submit" className="vc-btn" disabled={otpLoading}>
-                                        {otpLoading ? <i className="fa fa-spinner fa-spin mr-2" aria-hidden="true"></i> : <i className="fa fa-paper-plane mr-2" aria-hidden="true"></i>}
-                                        {otpLoading ? 'Sending OTP…' : 'Send OTP'}
-                                    </button>
 
                                     <div className="vc-remember">
                                         <label className="vc-rem-label">
@@ -402,6 +381,38 @@ export default function Login() {
                                             </span>
                                             <span>Remember me on this device</span>
                                         </label>
+                                    </div>
+
+                                    <button type="submit" className="vc-btn vc-lg-login" disabled={otpLoading}>
+                                        {otpLoading ? <i className="fa fa-spinner fa-spin mr-2" aria-hidden="true"></i> : <i className="fa fa-paper-plane mr-2" aria-hidden="true"></i>}
+                                        {otpLoading ? 'Sending OTP…' : 'LOGIN'}
+                                    </button>
+
+                                    <p className="vc-lg-signup">
+                                        Don't have an account?{' '}
+                                        <button type="button" className="vc-lg-signup-link" onClick={handleSignUp}>Sign Up</button>
+                                    </p>
+
+                                    <div className="vc-divider"><span>OR</span></div>
+
+                                    <div className="vc-google-wrap vc-lg-google">
+                                        <button
+                                            type="button"
+                                            className="vc-google-btn vc-google-btn--gold"
+                                            onClick={handleGoogleClick}
+                                            disabled={googleLoading || !googleReady || !googleClientId}
+                                            title={googleReady && googleClientId ? 'Continue with Google' : 'Google sign-in will be enabled shortly'}
+                                        >
+                                            <GoogleIcon />
+                                            Continue with Google
+                                            <i className="fa fa-crown vc-google-crown" aria-hidden="true"></i>
+                                        </button>
+                                        {googleClientId && !googleReady && (
+                                            <p className="vc-google-note"><i className="fa fa-spinner fa-spin mr-1" aria-hidden="true"></i>Loading Google sign-in…</p>
+                                        )}
+                                        {googleLoading && (
+                                            <p className="vc-google-note"><i className="fa fa-spinner fa-spin mr-1" aria-hidden="true"></i>Signing you in…</p>
+                                        )}
                                     </div>
 
                                     <div className="vc-perks">
@@ -419,8 +430,10 @@ export default function Login() {
                                     exit={{ opacity: 0, x: -28 }}
                                     transition={stepTransition}
                                 >
-                                    <h1 className="vc-title">Enter OTP</h1>
-                                    <p className="vc-sub">{otpInfo && otpInfo.to ? `A 6-digit OTP was sent to ${otpInfo.to}.` : 'Enter the 6-digit OTP sent to you.'}</p>
+                                    <div className="vc-login-head">
+                                        <h1 className="vc-lg-title">Enter OTP</h1>
+                                        <p className="vc-lg-sub">{otpInfo && otpInfo.to ? `A 6-digit OTP was sent to ${otpInfo.to}.` : 'Enter the 6-digit OTP sent to you.'}</p>
+                                    </div>
 
                                     <div className="vc-otp" onPaste={handleOtpPaste}>
                                         {otpDigits.map((d, i) => (

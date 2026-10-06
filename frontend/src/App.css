@@ -1943,9 +1943,12 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
   text-decoration: none;
   color: #fff;
   outline: none;
-  /* Compact banner: keep the ratio tight so the hero does not dominate the
-     first viewport, but never cut off the content on short/wide screens. */
-  aspect-ratio: 16 / 6.4;
+  /* Compact banner: a wide, Flipkart/Amazon-style hero that never dominates
+     the first viewport. The ratio keeps it short on big screens while
+     min/max-height guarantee the text + CTA always fit without clipping. */
+  aspect-ratio: 16 / 4.4;
+  min-height: 195px;
+  max-height: 300px;
 }
 .vc-hero__slide:focus-visible { outline: 3px solid var(--vc-orange); outline-offset: -3px; border-radius: 4px; }
 
@@ -1978,8 +1981,8 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1.7rem 2.4rem;
-  max-width: 500px;
+  padding: 1.35rem 2.2rem;
+  max-width: 480px;
 }
 .vc-hero__kicker {
   display: inline-block;
@@ -1994,7 +1997,7 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
 }
 .vc-hero__title {
   font-family: var(--font-heading);
-  font-size: 2.1rem;
+  font-size: 1.85rem;
   font-weight: 800;
   line-height: 1.08;
   margin: 0 0 0.35rem;
@@ -2006,7 +2009,7 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
   font-size: 0.88rem;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.82);
-  margin: 0 0 0.95rem;
+  margin: 0 0 0.8rem;
   line-height: 1.5;
 }
 .vc-hero__cta {
@@ -2014,7 +2017,7 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
   align-items: center;
   gap: 8px;
   width: fit-content;
-  padding: 0.62rem 1.5rem;
+  padding: 0.55rem 1.35rem;
   border-radius: 10px;
   color: #fff;
   font-family: var(--font-accent);
@@ -2104,11 +2107,12 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 190px;
+  min-height: 170px;
+  padding: 1rem;
   text-decoration: none;
   color: #fff;
 }
-.vc-hero__fallback-inner { text-align: center; padding: 2rem; }
+.vc-hero__fallback-inner { text-align: center; padding: 1.1rem; }
 .vc-hero__fallback-kicker {
   font-family: var(--font-accent);
   font-size: 0.68rem;
@@ -2121,15 +2125,15 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
 }
 .vc-hero__fallback-title {
   font-family: var(--font-heading);
-  font-size: 1.8rem;
+  font-size: 1.55rem;
   font-weight: 800;
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.3rem;
   color: #fff;
 }
 .vc-hero__fallback-sub {
   color: rgba(255, 255, 255, 0.75);
-  font-size: 0.9rem;
-  margin: 0 0 1.2rem;
+  font-size: 0.86rem;
+  margin: 0 0 0.95rem;
 }
 .vc-hero__fallback-cta {
   display: inline-flex;
@@ -2167,7 +2171,9 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
 
 @media (max-width: 575.98px) {
   .vc-hero { border-radius: 12px; }
-  .vc-hero__slide { aspect-ratio: 16 / 10; min-height: 200px; }
+  /* Mobile: shorter banner — the copy sits on top of the image, so the
+     slide only needs to be tall enough for kicker + title + CTA. */
+  .vc-hero__slide { aspect-ratio: 16 / 8.4; min-height: 168px; max-height: 210px; }
   .vc-hero__overlay {
     background: linear-gradient(0deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
   }
@@ -2185,7 +2191,7 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
   .vc-hero__dot { width: 22px; height: 4px; }
   .vc-hero__dot--active { width: 32px; }
   .vc-hero__fallback-title { font-size: 1.3rem; }
-  .vc-hero__fallback-link { min-height: 150px; }
+  .vc-hero__fallback-link { min-height: 140px; }
 }
 
 /* ========== QUICK ACCESS PROMO STRIP (HOME) ========== */
@@ -2411,51 +2417,6 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
 .scroll-btn:hover { background: var(--vc-orange); color: #fff; border-color: transparent; }
 .scroll-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #fff; color: var(--muted-text); box-shadow: none; transform: none; }
 
-/* ========== SHOP BY CATEGORY ========== */
-.category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.9rem; }
-.category-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1.2rem 0.8rem;
-  border-radius: var(--radius-md);
-  background: #fff;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  text-align: center;
-  text-decoration: none;
-  color: var(--text-soft);
-  transition: all 0.28s;
-  position: relative;
-  overflow: hidden;
-}
-.category-card::after {
-  content: '';
-  position: absolute;
-  top: -36px; right: -36px;
-  width: 72px; height: 72px;
-  border-radius: 50%;
-  background: rgba(40, 116, 240, 0.06);
-  transition: all 0.28s;
-}
-.category-card:hover { transform: translateY(-4px); border-color: rgba(40,116,240,0.35); box-shadow: var(--shadow-md); color: var(--text); text-decoration: none; }
-.category-card:hover::after { transform: scale(1.7); }
-.cat-card-icon {
-  width: 48px; height: 48px;
-  border-radius: 14px;
-  background: var(--primary-soft);
-  color: var(--vc-orange);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.3rem;
-  transition: all 0.28s;
-}
-.category-card:hover .cat-card-icon { background: var(--vc-orange); color: #fff; }
-.cat-card-name { font-family: var(--font-accent); font-weight: 600; font-size: 0.84rem; color: var(--text); }
-.cat-card-count { color: var(--success); font-size: 0.72rem; font-family: var(--font-accent); font-weight: 600; }
-
 /* ========== TOP CATEGORIES TABS ========== */
 .category-tabs {
   display: flex;
@@ -2650,7 +2611,10 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
   animation: skeletonLoad 1.4s infinite;
 }
 @keyframes skeletonLoad { 100% { transform: translateX(100%); } }
-.sk-banner { width: 100%; aspect-ratio: 16 / 7; border-radius: 16px; margin-top: 1.4rem; }
+.sk-banner { width: 100%; aspect-ratio: 16 / 4.4; min-height: 195px; max-height: 300px; border-radius: 16px; margin-top: 0; }
+/* Inside the hero the slide itself already defines the compact height —
+   the skeleton must simply fill it instead of sizing itself. */
+.vc-hero__slide--skeleton .sk-banner { width: 100%; height: 100%; aspect-ratio: auto; min-height: 0; max-height: none; border-radius: 0; }
 .sk-chip-row { display: flex; gap: 0.6rem; overflow: hidden; margin-top: 1.2rem; }
 .sk-chip { width: 92px; height: 88px; border-radius: 14px; flex-shrink: 0; }
 .sk-section-title { width: 220px; height: 22px; border-radius: 8px; margin: 2.4rem 0 0 0; }
@@ -3584,8 +3548,6 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
 @media (max-width: 767.98px) {
   .section-title { font-size: 1.3rem; }
   .section { margin-top: 1.8rem; }
-  .category-grid { grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 0.7rem; }
-  .category-card { padding: 0.9rem 0.5rem; }
   .flash-deals-wrap { padding: 1.1rem 0.8rem; }
   .promo-banner { padding: 1.6rem 1.1rem; }
   .promo-title { font-size: 1.5rem; }
@@ -3633,8 +3595,6 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
 
 @media (max-width: 575.98px) {
   .section-head { align-items: flex-start; }
-  .category-card { min-width: 100px; }
-  .category-grid { grid-template-columns: repeat(3, 1fr); }
   .countdown-box { min-width: 40px; }
   .wishlist-grid { grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
   .personalized-card { flex: 0 0 150px; max-width: 50%; }
@@ -3645,7 +3605,7 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
   .wrapper form h1 { font-size: 1.4rem; }
   .quick-access-icon { width: 34px; height: 34px; font-size: 0.95rem; border-radius: 10px; }
   .quick-access-label { font-size: 0.62rem; }
-  .sk-banner { aspect-ratio: 16 / 9; }
+  .sk-banner { aspect-ratio: 16 / 8.4; min-height: 168px; max-height: 210px; }
 }
 
 /* ============================================================
@@ -3666,10 +3626,22 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
     margin-bottom: 0.8rem;
   }
 
-  /* Flash deals box: zero horizontal padding so its carousel bleeds
-     to the viewport edge exactly like the other sections. */
-  .flash-deals-wrap { padding: 1rem 0 1.2rem; }
+  /* Flash deals box: it is a VISIBLE bordered container, so its carousel
+     must stay strictly inside the box instead of bleeding 20px past the
+     right border (the bleed below is only correct for plain sections that
+     sit flush against the viewport edge). */
+  .flash-deals-wrap { padding: 1rem 0.6rem 1.2rem; }
+  .flash-deals-wrap .product-scroll-track {
+    width: 100%;
+    margin-right: 0;
+    padding: 0.25rem 0 1rem;
+  }
   .flash-deals-wrap .section-title .d-flex { gap: 0.4rem; }
+  /* "Deals of the Day" + countdown + View All + arrows cannot fit one row
+     on a phone, so let the header wrap instead of pushing the controls
+     past the right border of the box (they were being clipped). */
+  .flash-deals-wrap .section-head { flex-wrap: wrap; row-gap: 0.55rem; }
+  .flash-deals-wrap .section-head > .d-flex { margin-left: auto; }
 
   /* The track becomes a horizontal scroll container (not a grid). */
   .product-scroll-track,
@@ -4342,6 +4314,213 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
   .vc-title { font-size: 1.5rem; }
   .vc-otp { gap: 0.4rem; }
   .vc-otp input { width: 42px; height: 50px; font-size: 1.2rem; }
+}
+
+/* ========== CUSTOMER LOGIN — REDESIGNED CARD (Login.js only) ==========
+   Scoped to .vc-auth--login so AdminLogin / DeliveryLogin (which share the
+   base .vc-* auth classes above) keep their original layout untouched. */
+.vc-login-brand { justify-content: center; margin-bottom: 1.15rem; }
+.vc-login-brand .vc-auth-logo {
+  width: 54px; height: 54px; border-radius: 16px; font-size: 1.45rem;
+}
+.vc-login-head { text-align: center; margin-bottom: 1.35rem; }
+.vc-lg-title { color: var(--text); font-size: 1.85rem; line-height: 1.15; margin: 0 0 0.35rem; letter-spacing: -0.02em; }
+.vc-lg-sub { color: var(--muted-text); font-size: 0.92rem; line-height: 1.5; margin: 0; }
+
+/* Identifier field with a leading icon */
+.vc-lg-fieldwrap { margin-bottom: 1.05rem; }
+.vc-lg-field { position: relative; }
+.vc-lg-field input {
+  width: 100%;
+  padding: 1.35rem 2.7rem 0.55rem 2.9rem;
+  font-size: 1rem; color: var(--text);
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+.vc-lg-field input:focus { background: #fff; border-color: var(--vc-orange); box-shadow: 0 0 0 3px rgba(40, 116, 240, 0.18); }
+.vc-lg-icon {
+  position: absolute; left: 1.05rem; top: 1.6rem; transform: translateY(-50%);
+  color: var(--muted-text); font-size: 0.95rem; pointer-events: none;
+  transition: color 0.2s;
+}
+.vc-lg-field:focus-within .vc-lg-icon { color: var(--vc-orange); }
+.vc-lg-field label {
+  position: absolute; left: 2.9rem; top: 50%; transform: translateY(-50%);
+  color: var(--muted-text);
+  font-family: var(--font-accent); font-size: 0.92rem; letter-spacing: 0.3px;
+  pointer-events: none; transition: all 0.2s ease;
+}
+.vc-lg-field input:focus + label,
+.vc-lg-field input:not(:placeholder-shown) + label {
+  top: 0.6rem; transform: translateY(0);
+  font-size: 0.66rem; letter-spacing: 0.6px; text-transform: uppercase;
+  color: var(--vc-orange);
+}
+
+.vc-lg-login { margin-top: 0.55rem; }
+
+/* "Don't have an account? Sign Up" sits directly under LOGIN */
+.vc-lg-signup { text-align: center; margin: 0.95rem 0 0; font-size: 0.86rem; color: var(--muted-text); }
+.vc-lg-signup-link {
+  background: none; border: none; padding: 0; margin-left: 0.15rem;
+  color: var(--vc-orange); font-family: var(--font-accent);
+  font-weight: 700; font-size: 0.88rem; cursor: pointer;
+}
+.vc-lg-signup-link:hover { text-decoration: underline; }
+
+.vc-lg-google { margin-top: 0.95rem; }
+.vc-auth--login .vc-divider { margin: 1.25rem 0 1.1rem; }
+
+/* Gold premium-styled "Continue with Google" button (custom, GSI prompt) */
+.vc-google-btn--gold {
+  position: relative; overflow: hidden;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.65rem;
+  width: 100%; padding: 0.95rem 1.2rem;
+  border: 1px solid rgba(184, 134, 11, 0.45); border-radius: 14px; cursor: pointer;
+  font-family: var(--font-accent); font-weight: 700;
+  font-size: 0.95rem; letter-spacing: 1px;
+  color: #4a3400;
+  background: linear-gradient(135deg, #ffeaa1 0%, #f7cf4a 45%, #e9b41d 100%);
+  box-shadow: 0 10px 26px rgba(233, 180, 29, 0.32);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.vc-google-btn--gold:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(233, 180, 29, 0.45); }
+.vc-google-btn--gold:disabled { cursor: not-allowed; opacity: 0.8; transform: none; }
+.vc-google-btn--gold svg { flex-shrink: 0; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15)); }
+.vc-google-btn--gold::after {
+  content: ""; position: absolute; top: 0; left: -120%;
+  width: 45%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-20deg); transition: left 0.6s;
+}
+.vc-google-btn--gold:hover:not(:disabled)::after { left: 150%; }
+.vc-google-crown { color: #8a5a00; font-size: 0.85rem; }
+
+/* ========== UNIVERSAL NOTIFICATION TOASTS (light premium) ========== */
+/*
+ * ONE notification system for the whole app: every toast call (cart, OTP,
+ * auth, payment, order, pincode, admin, ...) goes through react-toastify's
+ * single <ToastContainer> in App.js. The global styles below give every one
+ * of them the same small, light, premium design with per-type accents.
+ */
+
+/* Compact containers: sized to content on desktop */
+.Toastify__toast-container {
+  width: auto !important;
+  max-width: min(360px, calc(100vw - 24px));
+}
+
+/* A handful of legacy calls pinned their position to BOTTOM_CENTER — move
+   that container to the same bottom-right corner on desktop so all toasts
+   share one spot. */
+@media (min-width: 640px) {
+  .Toastify__toast-container--bottom-center {
+    left: auto !important;
+    right: 1rem !important;
+    bottom: 1rem !important;
+    transform: translateX(0) !important;
+  }
+}
+
+/* On small screens behave like a full-width bottom sheet (content centered) */
+@media (max-width: 639.98px) {
+  .Toastify__toast-container--bottom-center,
+  .Toastify__toast-container--bottom-right {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    transform: none !important;
+    padding: 4px 12px !important;
+  }
+}
+
+/* The toast card itself */
+.Toastify__toast {
+  min-height: 0 !important;
+  margin-bottom: 0.7rem;
+  padding: 0.7rem 0.8rem !important;
+  border-radius: 14px !important;
+  font-family: var(--font-accent) !important;
+  font-size: 0.82rem !important;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: 0.1px;
+  box-shadow: 0 10px 30px rgba(18, 38, 63, 0.14) !important;
+  color: #12263f;
+}
+
+.Toastify__toast-body {
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center;
+}
+
+/* Shared toast class (applied to every toast via ToastContainer's
+   toastClassName): compact, automatically sized to the message length. */
+.vc-toast {
+  width: fit-content !important;
+  min-width: 240px;
+  max-width: 86%;
+  margin: 0 auto;
+}
+
+/* Per-type light surfaces */
+.Toastify__toast--success { background: #ffffff !important; border: 1px solid #c2e6d2; color: #12263f !important; }
+.Toastify__toast--error { background: #ffffff !important; border: 1px solid #f4c4ca; color: #12263f !important; }
+.Toastify__toast--warning { background: #ffffff !important; border: 1px solid #f5e3b4; color: #12263f !important; }
+.Toastify__toast--info { background: #ffffff !important; border: 1px solid #c9dcf8; color: #12263f !important; }
+
+/* Tinted icon chips */
+.Toastify__toast-icon {
+  width: 26px !important;
+  height: 26px !important;
+  margin-inline-end: 9px !important;
+  border-radius: 50%;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.Toastify__toast--success .Toastify__toast-icon { background: #e6f7ee; color: #1a7f37; }
+.Toastify__toast--error .Toastify__toast-icon { background: #fdebec; color: #d93025; }
+.Toastify__toast--warning .Toastify__toast-icon { background: #fdf5e0; color: #b36b00; }
+.Toastify__toast--info .Toastify__toast-icon { background: #ebf3ff; color: #2874f0; }
+
+/* Close button */
+.Toastify__close-button {
+  color: #7c8ba0 !important;
+  opacity: 0.65;
+  align-self: center;
+  margin-inline-start: 8px;
+  transform: scale(0.82);
+  transition: opacity 0.2s ease;
+}
+.Toastify__close-button:hover { opacity: 1; }
+
+/* Progress bar */
+.Toastify__progress-bar {
+  bottom: 0 !important;
+  height: 3px !important;
+}
+.Toastify__progress-bar--success { background: linear-gradient(90deg, #3fbf7d, #1a7f37) !important; }
+.Toastify__progress-bar--error { background: linear-gradient(90deg, #f0716b, #d93025) !important; }
+.Toastify__progress-bar--warning { background: linear-gradient(90deg, #f2c054, #b36b00) !important; }
+.Toastify__progress-bar--info { background: linear-gradient(90deg, #6aa2f5, #2874f0) !important; }
+
+/* Small inline confirmation shown below the OTP step header */
+.vc-note {
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  font-family: var(--font-accent); font-size: 0.78rem; font-weight: 600;
+  margin: -0.4rem auto 0.95rem;
+}
+.vc-note--ok { color: #1a7f37; }
+
+@media (max-width: 575.98px) {
+  .vc-auth--login .vc-lg-title { font-size: 1.55rem; }
+  .vc-auth--login .vc-auth-brand { margin-bottom: 1rem; }
 }
 
 /* ========== WAITLIST / NOTIFY ME (product page) ========== */
