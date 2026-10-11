@@ -12,6 +12,8 @@ export default function AdminLogin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
+    const [serverError, setServerError] = useState(null);
+    const [attempted, setAttempted] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -24,14 +26,21 @@ export default function AdminLogin() {
     }, [isAuthenticated, user, navigate])
 
     useEffect(() => {
-        if (error) {
+        if (attempted && error) {
+            setServerError(error);
             toast(error, {
                 position: toast.POSITION.BOTTOM_CENTER,
                 type: 'error',
-                onOpen: () => { dispatch(clearAuthError) }
+                onOpen: () => { dispatch(clearAuthError()) }
             })
         }
-    }, [error, dispatch])
+    }, [error, attempted, dispatch])
+
+    const clearAttempt = () => {
+        setAttempted(false);
+        setServerError(null);
+        dispatch(clearAuthError());
+    };
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -46,6 +55,8 @@ export default function AdminLogin() {
         }
         if (!password) errs.password = 'Password is required';
         setErrors(errs);
+        setServerError(null);
+        setAttempted(true);
         if (Object.keys(errs).length > 0) return;
 
         const data = await dispatch(adminLogin({ email: value, password }));
@@ -71,6 +82,13 @@ export default function AdminLogin() {
                             <h1 className="vc-title">Admin Login</h1>
                             <p className="vc-sub">Sign in with your admin username or email and password.</p>
 
+                            {serverError && (
+                                <div className="vc-login-banner" role="alert">
+                                    <i className="fa fa-exclamation-circle mr-1" aria-hidden="true"></i>
+                                    {serverError}
+                                </div>
+                            )}
+
                             <div className="vc-field">
                                 <input
                                     id="admin_login_email"
@@ -78,7 +96,7 @@ export default function AdminLogin() {
                                     placeholder=" "
                                     autoComplete="username"
                                     value={email}
-                                    onChange={e => setEmail(e.target.value)}
+                                    onChange={e => { setEmail(e.target.value); clearAttempt(); }}
                                 />
                                 <label htmlFor="admin_login_email">Email or Username</label>
                                 {errors.email && <p className="vc-error"><i className="fa fa-exclamation-circle mr-1" aria-hidden="true"></i>{errors.email}</p>}
@@ -91,7 +109,7 @@ export default function AdminLogin() {
                                     placeholder=" "
                                     autoComplete="current-password"
                                     value={password}
-                                    onChange={e => setPassword(e.target.value)}
+                                    onChange={e => { setPassword(e.target.value); clearAttempt(); }}
                                 />
                                 <label htmlFor="admin_login_password">Password</label>
                                 {errors.password && <p className="vc-error"><i className="fa fa-exclamation-circle mr-1" aria-hidden="true"></i>{errors.password}</p>}

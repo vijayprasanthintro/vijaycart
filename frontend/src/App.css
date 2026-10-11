@@ -4263,6 +4263,8 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
 }
 .vc-hint { color: var(--muted-text); font-size: 0.78rem; margin-top: 0.5rem; }
 .vc-error { display: flex; align-items: center; gap: 0.35rem; color: var(--danger); font-size: 0.78rem; font-family: var(--font-accent); margin-top: 0.45rem; }
+.vc-login-banner { display: flex; align-items: flex-start; gap: 0.45rem; color: var(--danger); background: rgba(220, 38, 38, 0.08); border: 1px solid rgba(220, 38, 38, 0.35); border-radius: 0.6rem; padding: 0.6rem 0.75rem; font-size: 0.82rem; font-family: var(--font-accent); margin-bottom: 1rem; line-height: 1.4; }
+.vc-login-banner .fa { margin-top: 0.15rem; }
 
 .vc-btn {
   display: inline-flex; align-items: center; justify-content: center; width: 100%;

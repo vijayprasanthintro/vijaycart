@@ -68,7 +68,19 @@ export const adminLogin = (credentials) => async (dispatch) => {
         dispatch(loginSuccess(data))
         return data
     } catch (error) {
-        dispatch(loginFail(error.response?.data?.message || error.message))
+        const status = error.response?.status;
+        const serverMessage = error.response?.data?.message;
+        let message = serverMessage || error.message;
+        if (!serverMessage) {
+            if (status === 404) {
+                message = 'Admin login API not found (404). The backend URL in use may be misconfigured or not deployed.';
+            } else if (status && status >= 500) {
+                message = `The admin server returned an error (${status}). Please try again in a moment.`;
+            } else if (!status) {
+                message = 'Network error - could not reach the admin server. Check the backend URL and your connection.';
+            }
+        }
+        dispatch(loginFail(message))
         return null
     }
 }

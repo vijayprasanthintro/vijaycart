@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://vijaycart-production-2ec5.up.railway.app/api/:path*"
+      "destination": "https://3pkgfqwokqax-production-rcqexbsf.us-central1.suga.run/api/:path*"
     },
     {
       "source": "/uploads/:path*",
-      "destination": "https://vijaycart-production-2ec5.up.railway.app/uploads/:path*"
+      "destination": "https://3pkgfqwokqax-production-rcqexbsf.us-central1.suga.run/uploads/:path*"
     }
   ]
 }
