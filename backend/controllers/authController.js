@@ -35,6 +35,10 @@ exports.googleLogin = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler('Google account has no email address. Please sign in with OTP.', 400));
     }
 
+    if (payload.email_verified === false) {
+        return next(new ErrorHandler('Your Google email is not verified. Please verify it with Google or sign in with OTP.', 401));
+    }
+
     const normalizedEmail = String(payload.email).trim().toLowerCase();
     const googleId = payload.sub;
 

@@ -16,6 +16,7 @@ export default memo(function Product ({product, col, index = 0}) {
     const navigate = useNavigate();
     const location = useLocation();
     const { isAuthenticated } = useSelector(state => state.authState);
+    const { settings } = useSelector(state => state.settingState);
     const { isWishlisted, toggleWishlist } = useWishlist();
     const [showQuick, setShowQuick] = useState(false);
     const pricing = getPricing(product);
@@ -23,6 +24,9 @@ export default memo(function Product ({product, col, index = 0}) {
     const inStock = isInStock(product);
     const wish = isWishlisted(product._id);
     const delivery = getDelivery(product);
+    const enableRatings = settings ? settings.enableRatings !== false : true;
+    const enableWishlist = settings ? settings.enableWishlist !== false : true;
+    const showDeliveryEstimate = settings ? settings.showDeliveryEstimate !== false : true;
 
     const handleAddToCart = (e) => {
         e.preventDefault();
@@ -80,6 +84,7 @@ export default memo(function Product ({product, col, index = 0}) {
                 </div>
 
                 {/* Wishlist heart */}
+                {enableWishlist && (
                 <button
                     type="button"
                     onClick={handleWishlist}
@@ -89,6 +94,7 @@ export default memo(function Product ({product, col, index = 0}) {
                 >
                     <i className={`fa ${wish ? 'fa-heart' : 'fa-heart-o'}`} aria-hidden="true"></i>
                 </button>
+                )}
 
                 {product.images.length > 0 &&
                 <div className="position-relative overflow-hidden">
@@ -112,6 +118,7 @@ export default memo(function Product ({product, col, index = 0}) {
                         <Link to={`/product/${product._id}`} title={product.name}>{product.name}</Link>
                     </h5>
 
+                    {enableRatings && (
                     <div className="rating-row">
                         <div className="rating-outer">
                             <div className="rating-inner" style={{width: `${rating / 5 * 100}%`}}></div>
@@ -119,6 +126,7 @@ export default memo(function Product ({product, col, index = 0}) {
                         <span className="rating-value">{rating}</span>
                         <span className="no-of-reviews">({product.numOfReviews || 0})</span>
                     </div>
+                    )}
 
                     <div className="price-row">
                         <span className="card-text">{formatMoney(pricing.price)}</span>
@@ -129,7 +137,7 @@ export default memo(function Product ({product, col, index = 0}) {
                     <div className="delivery-row">
                         <span className="delivery-truck"><i className="fa fa-truck" aria-hidden="true"></i></span>
                         <span className="delivery-free">Free Delivery</span>
-                        <span className="delivery-by">by {delivery.by}</span>
+                        {showDeliveryEstimate && <span className="delivery-by">by {delivery.by}</span>}
                         {inStock && pricing.price <= 5000 && (
                             <span className="cod-chip"><i className="fa fa-money mr-1" aria-hidden="true"></i>COD Available</span>
                         )}
@@ -168,13 +176,13 @@ export default memo(function Product ({product, col, index = 0}) {
                             <div className="col-12 col-md-7 quickview-info">
                                 <span className="product-seller">{product.brand || product.seller}</span>
                                 <h3 className="qv-title">{product.name}</h3>
-                                <div className="rating-row mb-2">
+                                {enableRatings && <div className="rating-row mb-2">
                                     <div className="rating-outer">
                                         <div className="rating-inner" style={{width: `${rating / 5 * 100}%`}}></div>
                                     </div>
                                     <span className="rating-value">{rating}</span>
                                     <span className="no-of-reviews">({product.numReviews || 0} Reviews)</span>
-                                </div>
+                                </div>}
                                 <div className="price-row mb-3">
                                     <span className="qv-price">{formatMoney(pricing.price)}</span>
                                     <span className="mrp">{formatMoney(pricing.mrp)}</span>

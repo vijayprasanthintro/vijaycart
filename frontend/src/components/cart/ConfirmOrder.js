@@ -30,12 +30,20 @@ const COUPON_EXAMPLES = ['VJ10', 'SAVE20', 'FREESHIP'];
 export default function ConfirmOrder () {
     const { shippingInfo, items: cartItems, buyNowItems, coupon, orderKey, coinsRedeemed } = useSelector(state => state.cartState);
     const { user } = useSelector(state => state.authState);
+    const { settings } = useSelector(state => state.settingState);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [couponInput, setCouponInput] = useState(coupon ? coupon.code : '');
     const [couponBusy, setCouponBusy] = useState(false);
     const [couponError, setCouponError] = useState('');
     const [vijayCoins, setVijayCoins] = useState(Number(user && user.vijayCoins) || 0);
+
+    const freeShippingThreshold = Number(settings && settings.freeShippingAbove !== undefined ? settings.freeShippingAbove : 499) || 499;
+    const shippingCharge = Number(settings && settings.shippingFee !== undefined ? settings.shippingFee : 40) || 0;
+    const deliveryDays = Number(settings && settings.deliveryEstimateDays) || 5;
+    const showDeliveryEstimate = settings ? settings.showDeliveryEstimate !== false : true;
+    const supportEmail = (settings && settings.supportEmail && settings.supportEmail.trim()) || SUPPORT.email;
+    const supportPhone = (settings && settings.supportPhone && settings.supportPhone.trim()) || SUPPORT.phone;
 
     // A "Buy Now" checkout checks out only the selected product; otherwise the
     // whole cart is checked out as before.
@@ -44,7 +52,7 @@ export default function ConfirmOrder () {
     const itemsPrice = checkoutItems.reduce((acc, item)=> (acc + item.price * item.quantity),0);
     const mrpPrice = checkoutItems.reduce((acc, item)=> (acc + getPricing({ _id: item.product, price: item.price, mrp: item.mrp, discount: item.discount }).mrp * item.quantity),0);
     const youSave = Math.max(0, mrpPrice - itemsPrice);
-    const shippingPrice = itemsPrice > 499 ? 0 : 40;
+    const shippingPrice = itemsPrice > freeShippingThreshold ? 0 : shippingCharge;
     const taxPrice = Number(0.05 * itemsPrice).toFixed(2);
     const couponDiscount = coupon ? Math.min(Number(coupon.discount) || 0, itemsPrice) : 0;
     const payableBeforeCoins = itemsPrice + shippingPrice + Number(taxPrice) - couponDiscount;
@@ -147,7 +155,7 @@ export default function ConfirmOrder () {
                                 <p className="co-address-line">{shippingInfo.address}{shippingInfo.landmark ? `, ${shippingInfo.landmark}` : ''}, {shippingInfo.city}, {shippingInfo.state} {shippingInfo.postalCode}</p>
                                 <div className="addr-meta"><i className="fa fa-phone" aria-hidden="true"></i>{shippingInfo.phoneNo} &middot; {shippingInfo.country}</div>
                                 {shippingInfo.instructions && <div className="addr-meta addr-inst"><i className="fa fa-sticky-note-o mr-1" aria-hidden="true"></i>{shippingInfo.instructions}</div>}
-                                <div className="de-pill"><i className="fa fa-truck mr-1" aria-hidden="true"></i>Delivery by <b>{getDeliveryLabel(shippingInfo.postalCode)}</b></div>
+                                {showDeliveryEstimate && <div className="de-pill"><i className="fa fa-truck mr-1" aria-hidden="true"></i>Delivery by <b>{getDeliveryLabel(shippingInfo.postalCode, deliveryDays)}</b></div>}
                             </div>
                         </div>
 
@@ -182,11 +190,11 @@ export default function ConfirmOrder () {
                             <div className="co-support-body">
                                 <div className="co-support-item">
                                     <i className="fa fa-envelope" aria-hidden="true"></i>
-                                    <span><b>Email support</b>Write to us at <a href={`mailto:${SUPPORT.email}`}>{SUPPORT.email}</a> — we reply within 24 hours.</span>
+                                    <span><b>Email support</b>Write to us at <a href={`mailto:${supportEmail}`}>{supportEmail}</a> — we reply within 24 hours.</span>
                                 </div>
                                 <div className="co-support-item">
                                     <i className="fa fa-phone" aria-hidden="true"></i>
-                                    <span><b>Call us</b>Reach our helpline at <a href={`tel:${SUPPORT.phone.replace(/\s/g, '')}`}>{SUPPORT.phone}</a> (Mon–Sat, 9 AM – 7 PM).</span>
+                                    <span><b>Call us</b>Reach our helpline at <a href={`tel:${supportPhone.replace(/\s/g, '')}`}>{supportPhone}</a> (Mon–Sat, 9 AM – 7 PM).</span>
                                 </div>
                                 <div className="co-support-item">
                                     <i className="fa fa-question-circle" aria-hidden="true"></i>
@@ -303,7 +311,7 @@ export default function ConfirmOrder () {
                                 </div>
                             )}
 
-                            <div className="de-pill de-pill--summary"><i className="fa fa-truck mr-1" aria-hidden="true"></i>Delivery by <b>{getDeliveryDay(shippingInfo.postalCode)}</b> &middot; Free</div>
+                            {showDeliveryEstimate && <div className="de-pill de-pill--summary"><i className="fa fa-truck mr-1" aria-hidden="true"></i>Delivery by <b>{getDeliveryDay(shippingInfo.postalCode, deliveryDays)}</b> &middot; Free</div>}
                             <button className="checkout-btn w-100" onClick={processPayment}>
                                 <i className="fa fa-lock mr-2" aria-hidden="true"></i>Proceed to Payment
                             </button>

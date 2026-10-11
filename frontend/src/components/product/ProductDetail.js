@@ -28,10 +28,15 @@ export default function ProductDetail () {
     const { loading, product = {}, isReviewSubmitted, error, notFound } = useSelector((state) => state.productState);
     const { products: relatedProducts, loading: relatedLoading } = useSelector((state) => state.productsState);
     const { user } = useSelector(state => state.authState);
+    const { settings } = useSelector(state => state.settingState);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
     const { id } = useParams()
+    const enableRatings = settings ? settings.enableRatings !== false : true;
+    const enableWishlist = settings ? settings.enableWishlist !== false : true;
+    const enableReviews = settings ? settings.enableReviews !== false : true;
+    const showDeliveryEstimate = settings ? settings.showDeliveryEstimate !== false : true;
     const [quantity, setQuantity] = useState(1);
     const [activeImage, setActiveImage] = useState(0);
     const [show, setShow] = useState(false);
@@ -542,12 +547,12 @@ export default function ProductDetail () {
                                             aria-label="Share this product"
                                             className="share-btn pd-gallery-action"
                                         ><i className="fa fa-share-alt" aria-hidden="true"></i></button>
-                                        <button
+                                        {enableWishlist && <button
                                             type="button"
                                             onClick={(e) => { e.stopPropagation(); toggleWish(); }}
                                             aria-label={isWished ? 'Remove from wishlist' : 'Add to wishlist'}
                                             className={`wishlist-btn pd-gallery-action ${isWished ? 'active' : ''}`}
-                                        ><i className={`fa ${isWished ? 'fa-heart' : 'fa-heart-o'}`} aria-hidden="true"></i></button>
+                                        ><i className={`fa ${isWished ? 'fa-heart' : 'fa-heart-o'}`} aria-hidden="true"></i></button>}
                                     </div>
 
                                     <div
@@ -592,8 +597,10 @@ export default function ProductDetail () {
                                 <div className="pd-meta">
                                     {product.brand && <span className="pd-badge-chip pd-brand-chip"><i className="fa fa-certificate" aria-hidden="true"></i>{product.brand}</span>}
                                     <span className="pd-badge-chip"><i className="fa fa-tag" aria-hidden="true"></i>{product.category || 'General'}</span>
+                                    {enableRatings && <>
                                     <span className="pd-rs-chip"><i className="fa fa-star" aria-hidden="true"></i> {ratingVal}</span>
                                     <span className="no-of-reviews">({product.numOfReviews || displayReviews.length} Ratings &amp; Reviews)</span>
+                                    </>}
                                 </div>
 
                                 <div className="pd-price-row">
@@ -617,7 +624,7 @@ export default function ProductDetail () {
                                     <div className="delivery-box-body">
                                         <div className="delivery-box-top">
                                             <span className="delivery-label">Delivery</span>
-                                            <span className="delivery-est">Free delivery by <strong>{delivery.by}</strong></span>
+                                            {showDeliveryEstimate && <span className="delivery-est">Free delivery by <strong>{delivery.by}</strong></span>}
                                         </div>
                                         <div className="pin-check">
                                             <input
@@ -701,12 +708,12 @@ export default function ProductDetail () {
                                         onClick={buyNow}
                                         className="buy-now-btn w-100 w-sm-auto"
                                     ><i className="fa fa-bolt mr-2" aria-hidden="true"></i>Buy Now</button>
-                                    <button
+                                    {enableWishlist && <button
                                         type="button"
                                         onClick={toggleWish}
                                         aria-label={isWished ? 'Remove from wishlist' : 'Add to wishlist'}
                                         className={`wishlist-btn detail-wish ${isWished ? 'active' : ''}`}
-                                    ><i className={`fa ${isWished ? 'fa-heart' : 'fa-heart-o'}`} aria-hidden="true"></i></button>
+                                    ><i className={`fa ${isWished ? 'fa-heart' : 'fa-heart-o'}`} aria-hidden="true"></i></button>}
                                     <button
                                         type="button"
                                         onClick={shareProduct}
@@ -796,6 +803,7 @@ export default function ProductDetail () {
                         </section>
 
                         {/* Ratings & Reviews */}
+                        {enableReviews && (
                         <section className="pd-section">
                             <div className="pd-rev-head">
                                 <div>
@@ -819,6 +827,7 @@ export default function ProductDetail () {
                                 ? <ProductReview reviews={displayReviews} product={product} />
                                 : <p className="text-muted mt-3">No reviews yet. Be the first to review this product!</p>}
                         </section>
+                        )}
 
                         {/* Similar products */}
                         {similar.length > 0 && (

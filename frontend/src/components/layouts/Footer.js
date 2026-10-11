@@ -1,7 +1,23 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useSelector } from 'react-redux';
 
 export default function Footer (){
+    const { settings = {} } = useSelector((state) => state.settingState);
+    const storeName = (settings.storeName && settings.storeName.trim()) || 'VijayCart';
+    const storeTagline = (settings.storeTagline && settings.storeTagline.trim()) || 'Smart Shopping. Better Choices.';
+    const supportEmail = (settings.supportEmail && settings.supportEmail.trim()) || 'help@vijaycart.com';
+    const supportPhone = (settings.supportPhone && settings.supportPhone.trim()) || '+91 8220477466';
+    const freeAbove = Number(settings.freeShippingAbove !== undefined ? settings.freeShippingAbove : 499) || 499;
+
+    const renderBrand = () => {
+        const low = storeName.toLowerCase();
+        if (low === 'vijaycart') return (<><span>Vijay</span><span className="text-gold">Cart</span></>);
+        const idx = low.lastIndexOf('cart');
+        if (idx > 0) return (<>{storeName.slice(0, idx)}<span className="text-gold">{storeName.slice(idx)}</span></>);
+        return storeName;
+    };
+
     return (
         <motion.footer
             className="site-footer"
@@ -14,11 +30,11 @@ export default function Footer (){
                     <div className="footer-col footer-brand-col">
                         <Link to="/" className="footer-brand">
                             <i className="fa fa-shopping-bag footer-brand-icon" aria-hidden="true"></i>
-                            <span>Vijay<span className="text-gold">Cart</span></span>
+                            <span>{renderBrand()}</span>
                         </Link>
-                        <p className="footer-tagline">Smart Shopping. Better Choices.</p>
+                        <p className="footer-tagline">{storeTagline}</p>
                         <p className="footer-about">
-                            VijayCart is your premium destination for mobiles, laptops, fashion,
+                            {storeName} is your premium destination for mobiles, laptops, fashion,
                             electronics and more - with unbeatable prices, fast delivery and a
                             smooth shopping experience.
                         </p>
@@ -33,20 +49,20 @@ export default function Footer (){
                     <div className="footer-col">
                         <h5 className="footer-heading">Support</h5>
                         <ul className="footer-links">
-                          
-                            <li><span>help@vijaycart.com</span></li>
-                            <li><span>+91 8220477466</span></li>
+                           
+                            <li><span>{supportEmail}</span></li>
+                            <li><span>{supportPhone}</span></li>
                         </ul>
                     </div>
                 </div>
 
                 <div className="footer-bottom">
                     <p className="mb-0">
-                        &copy; 2026 <span className="text-gold fw-bold">VijayCart</span>. All Rights Reserved.
+                        &copy; 2026 <span className="text-gold fw-bold">{storeName}</span>. All Rights Reserved.
                     </p>
                     <p className="mb-0 footer-bottom-note">
                         <i className="fa fa-lock" aria-hidden="true"></i> Secure payments
-                        &nbsp;&bull;&nbsp; Free delivery on orders above ₹499
+                        &nbsp;&bull;&nbsp; Free delivery on orders above ₹{freeAbove.toLocaleString('en-IN')}
                     </p>
                 </div>
             </div>

@@ -96,6 +96,15 @@ const userSchema = new mongoose.Schema({
         sparse: true,
         validate: [validator.isEmail, 'Please enter valid email address']
     },
+    username:{
+        type: String,
+        trim: true,
+        lowercase: true,
+        unique: true,
+        sparse: true,
+        maxlength: [40, 'Username cannot exceed 40 characters'],
+        match: [/^[a-zA-Z0-9._-]+$/, 'Username can only contain letters, numbers, dots, dashes and underscores']
+    },
     mobile: {
         type: String,
         trim: true,

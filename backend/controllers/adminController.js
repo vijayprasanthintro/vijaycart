@@ -6,18 +6,26 @@ const Setting = require('../models/settingModel');
 const ErrorHandler = require('../utils/errorHandler');
 const sendToken = require('../utils/jwt');
 
-//Admin login (email + password) - POST /api/v1/admin/login
+//Admin login (email or username + password) - POST /api/v1/admin/login
 //A separate, simple password path for admin access that does not depend on
 //the customer OTP flow. Regular users keep using OTP.
 exports.loginAdmin = catchAsyncError(async (req, res, next) => {
-    const { email, password } = req.body || {};
+    const { email, username, password } = req.body || {};
 
-    if (!email || !password) {
-        return next(new ErrorHandler('Please enter email and password', 400));
+    const rawId = String((email || username) || '').trim().toLowerCase();
+    if (!rawId || !password) {
+        return next(new ErrorHandler('Please enter your email or username and password', 400));
     }
 
+    // An "@" identifies an email login; anything else is matched as a username
+    // (vijayadmin etc.). Both match the same normalized identifier.
+    const isEmail = rawId.includes('@');
+    const query = isEmail
+        ? { email: rawId }
+        : { username: String(rawId).replace(/\s+/g, '') };
+
     // select('+password') overrides the field's select:false so bcrypt can run.
-    const user = await User.findOne({ email: String(email).trim().toLowerCase() }).select('+password');
+    const user = await User.findOne(query).select('+password');
 
     if (!user || !user.password) {
         // Same message for "no account" and "no password set yet" so the

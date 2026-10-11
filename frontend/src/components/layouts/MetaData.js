@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async"
+import { useSelector } from "react-redux"
 
 const SITE_URL = process.env.REACT_APP_SITE_URL || 'https://vijaycart.com';
 const SITE_NAME = 'VijayCart';
@@ -22,8 +23,9 @@ export default function MetaData({
   jsonLd,
   noindex = false,
 }) {
+  const { settings = {} } = useSelector((state) => state.settingState || {});
   const fullTitle = title ? `${title} - ${SITE_NAME}` : `${SITE_NAME} - Smart Shopping. Better Choices.`;
-  const desc = description || DEFAULT_DESCRIPTION;
+  const desc = description || settings.metaDescription || DEFAULT_DESCRIPTION;
   const canonical = absoluteUrl(path || '/');
   const ogImage = absoluteUrl(image || DEFAULT_IMAGE);
 

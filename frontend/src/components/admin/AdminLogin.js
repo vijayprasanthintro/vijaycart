@@ -6,6 +6,7 @@ import MetaData from '../layouts/MetaData';
 import { adminLogin, clearAuthError } from '../../actions/userActions';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const USERNAME_RE = /^[a-zA-Z0-9._-]{2,40}$/;
 
 export default function AdminLogin() {
     const [email, setEmail] = useState('');
@@ -34,14 +35,20 @@ export default function AdminLogin() {
 
     const submitHandler = async (e) => {
         e.preventDefault();
+        const value = email.trim();
         const errs = {};
-        if (!email.trim()) errs.email = 'Email is required';
-        else if (!EMAIL_RE.test(email.trim())) errs.email = 'Enter a valid email address';
+        if (!value) {
+            errs.email = 'Email or username is required';
+        } else if (value.includes('@')) {
+            if (!EMAIL_RE.test(value)) errs.email = 'Enter a valid email address';
+        } else if (!USERNAME_RE.test(value)) {
+            errs.email = 'Username should be 2-40 characters (letters, numbers, dots, dashes, underscores)';
+        }
         if (!password) errs.password = 'Password is required';
         setErrors(errs);
         if (Object.keys(errs).length > 0) return;
 
-        const data = await dispatch(adminLogin({ email, password }));
+        const data = await dispatch(adminLogin({ email: value, password }));
         if (data) navigate('/admin/dashboard');
     }
 
@@ -62,18 +69,18 @@ export default function AdminLogin() {
 
                         <form onSubmit={submitHandler} noValidate>
                             <h1 className="vc-title">Admin Login</h1>
-                            <p className="vc-sub">Sign in with your admin email and password.</p>
+                            <p className="vc-sub">Sign in with your admin username or email and password.</p>
 
                             <div className="vc-field">
                                 <input
                                     id="admin_login_email"
-                                    type="email"
+                                    type="text"
                                     placeholder=" "
-                                    autoComplete="email"
+                                    autoComplete="username"
                                     value={email}
                                     onChange={e => setEmail(e.target.value)}
                                 />
-                                <label htmlFor="admin_login_email">Email Address</label>
+                                <label htmlFor="admin_login_email">Email or Username</label>
                                 {errors.email && <p className="vc-error"><i className="fa fa-exclamation-circle mr-1" aria-hidden="true"></i>{errors.email}</p>}
                             </div>
 

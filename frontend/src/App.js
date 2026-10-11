@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import store from './store';
 import { AUTH_KEY } from './slices/authSlice';
 import { loadUser } from './actions/userActions';
+import { getSettings } from './actions/settingActions';
 import Home from './components/Home';
 import Header from './components/layouts/Header';
 import Footer from './components/layouts/Footer';
@@ -216,6 +217,7 @@ function App() {
           console.error('Failed to initialize app data', error);
         }
       }
+      store.dispatch(getSettings());
     };
 
     initializeApp();

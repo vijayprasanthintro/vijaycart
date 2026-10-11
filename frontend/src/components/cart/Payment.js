@@ -88,8 +88,23 @@ export default function Payment() {
     const navigate = useNavigate();
     const orderInfo = readOrderInfo()
     const { user } = useSelector(state => state.authState)
+    const { settings } = useSelector(state => state.settingState)
     const { items: cartItems, buyNowItems, shippingInfo, orderKey } = useSelector(state => state.cartState)
     const { error: orderError } = useSelector(state => state.orderState)
+
+    const deliveryDays = Number(settings && settings.deliveryEstimateDays) || 5;
+    const showDeliveryEstimate = settings ? settings.showDeliveryEstimate !== false : true;
+    const prepaidEnabled = settings ? settings.prepaidEnabled !== false : true;
+    const stripeEnabled = settings ? settings.stripeEnabled !== false : true;
+    const supportEmail = (settings && settings.supportEmail && settings.supportEmail.trim()) || SUPPORT.email;
+    const supportPhone = (settings && settings.supportPhone && settings.supportPhone.trim()) || SUPPORT.phone;
+
+    const availableMethods = METHODS.filter(m => {
+        if (m.key === 'cod') return true;
+        if (m.key === 'card') return prepaidEnabled && stripeEnabled;
+        return prepaidEnabled;
+    });
+    const activeMethod = METHODS.find(m => m.key === method) || null;
 
     // A "Buy Now" checkout places an order for only the selected product;
     // otherwise the whole cart is ordered as before.
@@ -203,6 +218,13 @@ export default function Payment() {
     useEffect(() => {
         if (method === 'cod' && codCheck.available === false) setMethod('upi');
     }, [method, codCheck.available]);
+
+    // Keep the selected method in sync with the store's payment settings
+    // (prepaid / Stripe toggles) whenever they are saved.
+    useEffect(() => {
+        setMethod(prev => availableMethods.some(m => m.key === prev) ? prev : (availableMethods.length ? availableMethods[0].key : ''));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [settings]);
 
     const generateOrderKey = () =>
         (typeof crypto !== 'undefined' && crypto.randomUUID)
@@ -377,7 +399,10 @@ export default function Payment() {
                             </div>
 
                             <div className="pm-methods">
-                                {METHODS.map(m => {
+                                {availableMethods.length === 0 && (
+                                    <p className="pay-hint"><i className="fa fa-info-circle mr-1" aria-hidden="true"></i>No payment methods are currently enabled for this store. Please contact support.</p>
+                                )}
+                                {availableMethods.map(m => {
                                     const codDisabled = m.key === 'cod' && codCheck.available === false;
                                     const hint = m.key !== 'cod' ? m.hint
                                         : codCheck.loading ? 'Checking availability at your pincode…'
@@ -555,11 +580,11 @@ export default function Payment() {
                             <div className="co-support-body">
                                 <div className="co-support-item">
                                     <i className="fa fa-envelope" aria-hidden="true"></i>
-                                    <span>Payment issues? Email <a href={`mailto:${SUPPORT.email}`}>{SUPPORT.email}</a> and we will resolve it within 24 hours.</span>
+                                    <span>Payment issues? Email <a href={`mailto:${supportEmail}`}>{supportEmail}</a> and we will resolve it within 24 hours.</span>
                                 </div>
                                 <div className="co-support-item">
                                     <i className="fa fa-phone" aria-hidden="true"></i>
-                                    <span>Call <a href={`tel:${SUPPORT.phone.replace(/\s/g, '')}`}>{SUPPORT.phone}</a> for instant help with your payment.</span>
+                                    <span>Call <a href={`tel:${supportPhone.replace(/\s/g, '')}`}>{supportPhone}</a> for instant help with your payment.</span>
                                 </div>
                             </div>
                         </div>
@@ -602,14 +627,14 @@ export default function Payment() {
                             </div>
                             <div className="pm-method-confirm">
                                 <span>Paying via</span>
-                                <b><i className={`fa ${METHODS.find(m => m.key === method).icon} mr-1`} aria-hidden="true"></i>{METHOD_META[method]}</b>
+                                <b>{activeMethod ? <><i className={`fa ${activeMethod.icon} mr-1`} aria-hidden="true"></i>{METHOD_META[activeMethod.key]}</> : '—'}</b>
                             </div>
                             <div className="co-pay-address">
                                 <div className="co-pay-address-label">Delivering to</div>
                                 <div className="co-pay-address-line">
                                     {shippingInfo.name || user.name} &middot; {shippingInfo.city}, {shippingInfo.state} {shippingInfo.postalCode}
                                 </div>
-                                <div className="de-pill"><i className="fa fa-truck mr-1" aria-hidden="true"></i>Delivery by <b>{getDeliveryDay(shippingInfo.postalCode)}</b></div>
+                                {showDeliveryEstimate && <div className="de-pill"><i className="fa fa-truck mr-1" aria-hidden="true"></i>Delivery by <b>{getDeliveryDay(shippingInfo.postalCode, deliveryDays)}</b></div>}
                             </div>
                         </div>
                     </div>

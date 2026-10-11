@@ -10,9 +10,30 @@ import SearchSuggest from './SearchSuggest';
 export default function Header() {
   const { isAuthenticated, user } = useSelector((state) => state.authState);
   const { items } = useSelector((state) => state.cartState);
+  const { settings } = useSelector((state) => state.settingState);
   const { count: wishlistCount } = useWishlist();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const storeName = (settings && settings.storeName && settings.storeName.trim()) || 'VijayCart';
+  const storeTagline = (settings && settings.storeTagline && settings.storeTagline.trim()) || 'Marketplace';
+  const supportEmail = (settings && settings.supportEmail && settings.supportEmail.trim()) || 'help@vijaycart.com';
+  const supportPhone = (settings && settings.supportPhone && settings.supportPhone.trim()) || '+91 8220477466';
+  const announcement = (settings && settings.announcement && settings.announcement.trim()) || '';
+  const waitlistBanner = settings && settings.enableWaitlist === true
+    ? ((settings.waitlistMessage && settings.waitlistMessage.trim()) || "We're launching soon — sign up for early access!")
+    : '';
+
+  const brandName = () => {
+    if (storeName.toLowerCase() === 'vijaycart') {
+      return (<><span>Vijay</span><span>Cart</span></>);
+    }
+    const idx = storeName.toLowerCase().lastIndexOf('cart');
+    if (idx > 0) {
+      return (<><span>{storeName.slice(0, idx)}</span><span>{storeName.slice(idx)}</span></>);
+    }
+    return storeName;
+  };
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
@@ -92,6 +113,13 @@ export default function Header() {
 
   return (
     <>
+      {/* Store announcements / waitlist banner (from admin Settings) */}
+      {(announcement || waitlistBanner) && (
+        <div className={`vc-announcement${waitlistBanner && !announcement ? ' vc-announcement--waitlist' : ''}`}>
+          <span>{announcement || waitlistBanner}</span>
+        </div>
+      )}
+
       {/* ==================== DESKTOP HEADER ==================== */}
       <motion.header
         className={`vc-hd ${scrolled ? 'vc-hd--scrolled' : ''}`}
@@ -106,8 +134,8 @@ export default function Header() {
               <i className="fa fa-shopping-bag" aria-hidden="true"></i>
             </span>
             <span className="vc-hd__brand-text">
-              <span className="vc-hd__brand-name">Vijay<span>Cart</span></span>
-              <span className="vc-hd__brand-tagline">Marketplace</span>
+              <span className="vc-hd__brand-name">{brandName()}</span>
+              <span className="vc-hd__brand-tagline">{storeTagline}</span>
             </span>
           </Link>
 
@@ -167,11 +195,11 @@ export default function Header() {
                     </Link>
                     <div className="vc-hd__dropdown-divider"></div>
                     <div className="vc-hd__dropdown-heading">Customer Service</div>
-                    <a href="mailto:help@vijaycart.com" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
-                      <i className="fa fa-envelope" aria-hidden="true"></i>help@vijaycart.com
+                    <a href={`mailto:${supportEmail}`} className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
+                      <i className="fa fa-envelope" aria-hidden="true"></i>{supportEmail}
                     </a>
-                    <a href="tel:+918220477466" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
-                      <i className="fa fa-phone" aria-hidden="true"></i>+91 8220477466
+                    <a href={`tel:${supportPhone.replace(/[^+\d]/g, '')}`} className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
+                      <i className="fa fa-phone" aria-hidden="true"></i>{supportPhone}
                     </a>
                   </motion.div>
                 )}
@@ -208,7 +236,7 @@ export default function Header() {
             <span className="vc-mhd__brand-icon">
               <i className="fa fa-shopping-bag" aria-hidden="true"></i>
             </span>
-            <span className="vc-mhd__brand-name">Vijay<span>Cart</span></span>
+            <span className="vc-mhd__brand-name">{brandName()}</span>
           </Link>
         </div>
 

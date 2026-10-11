@@ -81,6 +81,7 @@ function DealsTimer() {
 export default function Home() {
   const dispatch = useDispatch();
   const { loading, error, products } = useSelector((state) => state.productsState);
+  const { settings = {} } = useSelector((state) => state.settingState);
   const recentlyViewed = useRecentlyViewed();
 
   const retry = useCallback(() => {
@@ -108,7 +109,7 @@ export default function Home() {
 
   return (
     <Fragment>
-      <MetaData title={'Buy Best Products'} />
+      <MetaData title={settings.metaTitle || 'Buy Best Products'} description={settings.metaDescription || ''} />
 
       {/* Hero carousel — always rendered immediately, never gated behind the
           products API request. Gating it meant the banner was swapped for a

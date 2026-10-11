@@ -74,18 +74,17 @@ export const getDelivery = (product = {}) => {
 }
 
 // Estimated delivery label for checkout / orders, e.g. "Friday, Aug 7".
-export const getDeliveryDate = (seed = '') => {
-  const est = getDelivery({ _id: String(seed || 'delivery') });
+export const getDeliveryDate = (seed = '', days = null) => {
   const d = new Date();
-  d.setDate(d.getDate() + est.days);
+  d.setDate(d.getDate() + (Number(days) > 0 ? Number(days) : getDelivery({ _id: String(seed || 'delivery') }).days));
   return d;
 };
 
-export const getDeliveryLabel = (seed = '') =>
-  getDeliveryDate(seed).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+export const getDeliveryLabel = (seed = '', days = null) =>
+  getDeliveryDate(seed, days).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
 
-export const getDeliveryDay = (seed = '') =>
-  getDeliveryDate(seed).toLocaleDateString('en-US', { weekday: 'long' });
+export const getDeliveryDay = (seed = '', days = null) =>
+  getDeliveryDate(seed, days).toLocaleDateString('en-US', { weekday: 'long' });
 
 // -------- Image URL resolution & fallback --------
 // Product images are stored in MongoDB as paths relative to the frontend

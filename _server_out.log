@@ -1,0 +1,86 @@
+[2026-10-11T15:10:25.657Z] INFO Server listening on port 8000 (development) 
+[2026-10-11T15:10:25.668Z] INFO Local: http://localhost:8000 
+MongoDB is connected to the host: 127.0.0.1
+[0mGET /api/v1/health [33m404[0m 13.637 ms - 48[0m
+[0mGET /api/v1/health [33m404[0m 2.314 ms - 48[0m
+COOKIE OPTIONS: {"maxAge":604800000,"httpOnly":true,"sameSite":"lax","secure":false,"path":"/"}
+[0mPOST /api/v1/admin/login [32m200[0m 283.606 ms - 554[0m
+COOKIE OPTIONS: {"maxAge":604800000,"httpOnly":true,"sameSite":"lax","secure":false,"path":"/"}
+[0mPOST /api/v1/admin/login [32m200[0m 70.914 ms - 554[0m
+COOKIE OPTIONS: {"maxAge":604800000,"httpOnly":true,"sameSite":"lax","secure":false,"path":"/"}
+[0mPOST /api/v1/admin/login [32m200[0m 70.172 ms - 554[0m
+[2026-10-11T15:14:58.777Z] WARN Invalid credentials. Run the admin seeder if the password was never set. {"method":"POST","url":"/api/v1/admin/login","ip":"::1"}
+[0mPOST /api/v1/admin/login [33m401[0m 4.292 ms - 373[0m
+COOKIE OPTIONS: {"maxAge":604800000,"httpOnly":true,"sameSite":"lax","secure":false,"path":"/"}
+[0mPOST /api/v1/admin/login [32m200[0m 68.589 ms - 554[0m
+[0mGET /api/v1/settings [32m200[0m 21.311 ms - 1127[0m
+[0mGET /api/v1/admin/settings [33m404[0m 0.789 ms - 48[0m
+[0mGET /api/v1/settings [32m200[0m 2.570 ms - 1127[0m
+[0mGET / [33m404[0m 7.024 ms - 139[0m
+[2026-10-11T15:18:52.479Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 5.178 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 105.063 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 910.190 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 747.164 ms - -[0m
+[2026-10-11T15:21:21.512Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.128 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 4.135 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 2.033 ms - 142[0m
+[2026-10-11T15:22:00.483Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 2.094 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 32.774 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.530 ms - 142[0m
+[2026-10-11T15:23:48.835Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.817 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 4.637 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.829 ms - 142[0m
+[2026-10-11T15:24:50.325Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.324 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 4.077 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 1.736 ms - 142[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.368 ms - 142[0m
+[2026-10-11T15:25:14.864Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.396 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 3.552 ms - -[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.343 ms - 142[0m
+[0mGET /api/v1/auth/config [32m200[0m 0.317 ms - 142[0m
+[2026-10-11T15:25:53.729Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/banners [32m200[0m 12.621 ms - -[0m
+[0mGET /api/v1/myprofile [33m401[0m 2.223 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [32m200[0m 20.623 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 4.635 ms - -[0m
+COOKIE OPTIONS: {"maxAge":604800000,"httpOnly":true,"sameSite":"lax","secure":false,"path":"/"}
+[0mPOST /api/v1/admin/login [32m200[0m 118.002 ms - 554[0m
+[2026-10-11T15:26:14.219Z] WARN Login first to handle this resource {"method":"PUT","url":"/api/v1/admin/settings","ip":"::1"}
+[0mPUT /api/v1/admin/settings [33m401[0m 3.105 ms - 1088[0m
+COOKIE OPTIONS: {"maxAge":604800000,"httpOnly":true,"sameSite":"lax","secure":false,"path":"/"}
+[0mPOST /api/v1/admin/login [32m200[0m 71.562 ms - 554[0m
+[0mPUT /api/v1/admin/settings [32m200[0m 96.509 ms - 1165[0m
+[2026-10-11T15:27:14.198Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 1.403 ms - -[0m
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 18.383 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 15.414 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 2.997 ms - -[0m
+COOKIE OPTIONS: {"maxAge":604800000,"httpOnly":true,"sameSite":"lax","secure":false,"path":"/"}
+[0mPOST /api/v1/admin/login [32m200[0m 76.015 ms - 554[0m
+[0mPUT /api/v1/admin/settings [32m200[0m 9.869 ms - 1127[0m
+[2026-10-11T15:27:53.421Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 37.209 ms - -[0m
+[0mGET /api/v1/myprofile [33m401[0m 2.309 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 48.771 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 6.179 ms - -[0m
+COOKIE OPTIONS: {"maxAge":604800000,"httpOnly":true,"sameSite":"lax","secure":false,"path":"/"}
+[0mPOST /api/v1/admin/login [32m200[0m 75.214 ms - 554[0m
+[0mPUT /api/v1/admin/settings [32m200[0m 13.509 ms - 1129[0m
+[2026-10-11T15:28:15.515Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/myprofile [33m401[0m 6.555 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 14.563 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 8.342 ms - -[0m
+COOKIE OPTIONS: {"maxAge":604800000,"httpOnly":true,"sameSite":"lax","secure":false,"path":"/"}
+[0mPOST /api/v1/admin/login [32m200[0m 79.380 ms - 554[0m
+[0mPUT /api/v1/admin/settings [32m200[0m 9.206 ms - 1127[0m
+[2026-10-11T15:28:41.728Z] WARN Login first to handle this resource {"method":"GET","url":"/api/v1/myprofile","ip":"127.0.0.1"}
+[0mGET /api/v1/products?page=1&limit=200 [36m304[0m 26.569 ms - -[0m
+[0mGET /api/v1/banners [32m200[0m 28.627 ms - -[0m
+[0mGET /api/v1/myprofile [33m401[0m 2.339 ms - -[0m
+[0mGET /api/v1/settings [32m200[0m 4.119 ms - -[0m

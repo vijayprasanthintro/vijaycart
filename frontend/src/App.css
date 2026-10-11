@@ -134,6 +134,23 @@ a:hover { color: var(--vc-orange); text-decoration: none; }
    HEADER — FLIPKART MARKETPLACE STYLE
    ============================================================ */
 
+/* ---- Announcement / waitlist bar (admin Settings) ---- */
+.vc-announcement {
+  position: relative;
+  z-index: 999;
+  background: linear-gradient(90deg, #7a5cff 0%, #2874f0 100%);
+  color: #ffffff;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.42rem 1rem;
+}
+.vc-announcement span { display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
+.vc-announcement--waitlist {
+  background: linear-gradient(90deg, #6b21a8 0%, #9333ea 100%);
+}
+
 /* ---- Desktop Header ---- */
 .vc-hd {
   position: sticky;

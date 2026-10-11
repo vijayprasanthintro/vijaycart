@@ -8,14 +8,17 @@ import { getPricing, formatMoney, getDelivery, resolveProductImage, imgOnError }
 import { toast } from 'react-toastify';
 
 const SAVED_KEY = 'vijaycart_saved';
-const FREE_SHIPPING_THRESHOLD = 499;
-const SHIPPING_CHARGE = 40;
 
 export default function Cart() {
     const { items } = useSelector(state => state.cartState)
     const { isAuthenticated } = useSelector(state => state.authState)
+    const { settings } = useSelector(state => state.settingState)
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const freeShippingThreshold = Number(settings && settings.freeShippingAbove !== undefined ? settings.freeShippingAbove : 499) || 499;
+    const shippingCharge = Number(settings && settings.shippingFee !== undefined ? settings.shippingFee : 40) || 0;
+    const showDeliveryEstimate = settings ? settings.showDeliveryEstimate !== false : true;
 
     const [saved, setSaved] = useState(() => {
         try { return JSON.parse(localStorage.getItem(SAVED_KEY)) || []; } catch { return []; }
@@ -62,10 +65,10 @@ export default function Cart() {
     const itemsPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const mrpPrice = items.reduce((acc, item) => acc + getPricing({ _id: item.product, price: item.price, mrp: item.mrp, discount: item.discount }).mrp * item.quantity, 0);
     const youSave = Math.max(0, mrpPrice - itemsPrice);
-    const freeShipping = itemsPrice > FREE_SHIPPING_THRESHOLD;
-    const shippingPrice = freeShipping ? 0 : SHIPPING_CHARGE;
+    const freeShipping = itemsPrice > freeShippingThreshold;
+    const shippingPrice = freeShipping ? 0 : shippingCharge;
     const totalPrice = itemsPrice + shippingPrice;
-    const freeProgress = Math.min(100, Math.round((itemsPrice / FREE_SHIPPING_THRESHOLD) * 100));
+    const freeProgress = Math.min(100, Math.round((itemsPrice / freeShippingThreshold) * 100));
 
     const checkoutHandler = () => {
         if (items.length === 0) return;
@@ -114,7 +117,7 @@ export default function Cart() {
                             <span className="cart-mrp">{formatMoney(pricing.mrp)}</span>
                             <span className="cart-discount">-{pricing.discount}%</span>
                         </div>
-                        <div className="cart-delivery"><i className="fa fa-truck" aria-hidden="true"></i> Free delivery by <strong>{delivery.by}</strong></div>
+                        <div className="cart-delivery"><i className="fa fa-truck" aria-hidden="true"></i> Free delivery{showDeliveryEstimate ? <> by <strong>{delivery.by}</strong></> : null}</div>
                         {renderStockWarn(item)}
                     </div>
                 </div>
@@ -174,7 +177,7 @@ export default function Cart() {
                                             <span>
                                                 {freeShipping
                                                     ? <Fragment>Yay! You have unlocked <strong>FREE delivery</strong>.</Fragment>
-                                                    : <Fragment>Add <strong>{formatMoney(FREE_SHIPPING_THRESHOLD - itemsPrice)}</strong> more to get <strong>FREE delivery</strong>.</Fragment>}
+                                                    : <Fragment>Add <strong>{formatMoney(freeShippingThreshold - itemsPrice)}</strong> more to get <strong>FREE delivery</strong>.</Fragment>}
                                             </span>
                                             <div className="cart-free-progress" aria-hidden="true"><motion.span initial={{ width: '0%' }} animate={{ width: `${freeProgress}%` }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}></motion.span></div>
                                         </div>
