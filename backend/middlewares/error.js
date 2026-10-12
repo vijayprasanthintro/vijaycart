@@ -30,6 +30,21 @@ module.exports = (err, req, res, next) =>{
         err.statusCode = 401;
     }
 
+    // A database outage (dropped/refused connection, server selection timeout,
+    // buffered command timeout) is a server-side problem. Report it as 503 so
+    // the client never receives a misleading "invalid credentials" style 401.
+    if (
+        err.name === 'MongooseServerSelectionError' ||
+        err.name === 'MongoServerSelectionError' ||
+        err.name === 'MongoNetworkError' ||
+        err.name === 'MongoNotConnectedError' ||
+        err.name === 'MongoTimeoutError' ||
+        /buffering timed out|failed to connect|server selection timed out|ECONNREFUSED|ETIMEDOUT/i.test(err.message || '')
+    ) {
+        err.statusCode = 503;
+        err.message = 'Database unavailable. Please try again in a moment.';
+    }
+
     if(process.env.NODE_ENV == 'development'){
         return res.status(err.statusCode).json({
             success: false,
