@@ -26,11 +26,15 @@ const categorySlice = createSlice({
             }
         },
         categorySuccess(state, action) {
+            const updated = action.payload && action.payload.category;
             return {
                 ...state,
                 loading: false,
                 isCreated: false,
-                isUpdated: true
+                isUpdated: true,
+                categories: updated
+                    ? state.categories.map(c => (c._id === updated._id ? { ...c, ...updated } : c))
+                    : state.categories
             }
         },
         categoryCreated(state, action) {

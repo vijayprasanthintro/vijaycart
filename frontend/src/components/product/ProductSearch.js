@@ -9,7 +9,7 @@ import 'rc-tooltip/assets/bootstrap.css';
 import MetaData from "../layouts/MetaData";
 import Product from "./Product";
 import { ProductRowSkeleton } from "../layouts/Skeletons";
-import { getDiscountFor } from "../../utils/productHelper";
+import { getPricing } from "../../utils/productHelper";
 
 const PAGE_SIZE = 8;
 const PRICE_MIN = 1;
@@ -40,6 +40,8 @@ const SORT_OPTIONS = [
 
 const DISCOUNT_OPTIONS = [10, 20, 30];
 const RATING_OPTIONS = [4, 3, 2, 1];
+
+const brandOf = (p) => ((p && (p.brand || p.seller)) || '');
 
 function resolveCategoryParam(value) {
   if (!value) return { group: null, sub: null };
@@ -111,7 +113,7 @@ export default function ProductSearch() {
 
   const brandOptions = useMemo(() => {
     const counts = {};
-    allProducts.forEach(p => { if (p.seller) counts[p.seller] = (counts[p.seller] || 0) + 1; });
+    allProducts.forEach(p => { const b = brandOf(p); if (b) counts[b] = (counts[b] || 0) + 1; });
     return Object.entries(counts).sort((a, b) => b[1] - a[1]);
   }, [allProducts]);
 
@@ -121,15 +123,16 @@ export default function ProductSearch() {
     // Match keyword against product name, brand (seller) and category.
     if (kw && !(
       p.name.toLowerCase().includes(kw) ||
+      brandOf(p).toLowerCase().includes(kw) ||
       (p.seller || '').toLowerCase().includes(kw) ||
       (p.category || '').toLowerCase().includes(kw)
     )) return false;
     if (sub && p.category !== sub) return false;
     if (!sub && groupSubs && !groupSubs.includes(p.category)) return false;
-    if (brands.length && !brands.includes(p.seller)) return false;
+    if (brands.length && !brands.includes(brandOf(p))) return false;
     if (p.price < priceCommitted[0] || p.price > priceCommitted[1]) return false;
     if (rating && Number(p.ratings) < rating) return false;
-    if (discount && getDiscountFor(p._id) < discount) return false;
+    if (discount && getPricing(p).discount < discount) return false;
     if (excludeOOS && Number(p.stock) <= 0) return false;
     return true;
   }), [allProducts, kw, sub, groupSubs, brands, priceCommitted, rating, discount, excludeOOS]);
@@ -142,7 +145,7 @@ export default function ProductSearch() {
       case 'price-high': arr.sort((a, b) => b.price - a.price); break;
       case 'rating': arr.sort((a, b) => Number(b.ratings || 0) - Number(a.ratings || 0)); break;
       case 'newest': arr.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)); break;
-      case 'discount': arr.sort((a, b) => getDiscountFor(b._id) - getDiscountFor(a._id)); break;
+      case 'discount': arr.sort((a, b) => getPricing(b).discount - getPricing(a).discount); break;
       default: break;
     }
     return arr;
@@ -157,7 +160,7 @@ export default function ProductSearch() {
   const effectivePage = Math.min(currentPage, pageCount);
   const pagedProducts = sorted.slice((effectivePage - 1) * PAGE_SIZE, effectivePage * PAGE_SIZE);
 
-  const pageTitle = sub || (keyword ? `Search results for "${keyword}"` : (activeGroup ? activeGroup.label : 'All Products'));
+  const pageTitle = sub || (actualKeyword ? `Search results for "${actualKeyword}"` : (activeGroup ? activeGroup.label : 'All Products'));
   const activeSortLabel = SORT_OPTIONS.find(o => o.value === sortBy)?.label || 'Relevance';
   const filterCount = [
     Boolean(group || sub),
@@ -303,7 +306,7 @@ export default function ProductSearch() {
   const crumbs = [{ label: 'Home', to: '/' }];
   if (activeGroup) crumbs.push({ label: activeGroup.label, to: `/search/${actualKeyword || 'all'}?category=${encodeURIComponent(activeGroup.label)}` });
   if (sub) crumbs.push({ label: sub });
-  if (keyword) crumbs.push({ label: `"${keyword}"` });
+  if (actualKeyword) crumbs.push({ label: `"${actualKeyword}"` });
   if (crumbs.length === 1) crumbs.push({ label: 'All Products' });
 
   return (

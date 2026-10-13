@@ -14,6 +14,7 @@ export default function CategoryList() {
     const [icon, setIcon] = useState('fa-tag');
     const [sortOrder, setSortOrder] = useState(0);
     const [saving, setSaving] = useState(false);
+    const [pending, setPending] = useState({});
 
     useEffect(() => {
         dispatch(getCategories());
@@ -72,8 +73,15 @@ export default function CategoryList() {
         setSaving(false);
     };
 
-    const toggleActive = (cat) => {
-        dispatch(updateCategory(cat._id, { active: !cat.active }));
+    const toggleActive = async (cat) => {
+        if (pending[cat._id]) return;
+        setPending(p => ({ ...p, [cat._id]: true }));
+        await dispatch(updateCategory(cat._id, { active: !cat.active }));
+        setPending(p => {
+            const next = { ...p };
+            delete next[cat._id];
+            return next;
+        });
     };
 
     const remove = (cat) => {
@@ -119,7 +127,7 @@ export default function CategoryList() {
                                             <td>
                                                 <label className="ad-toggle-row" style={{ padding: 0, border: 'none' }}>
                                                     <div className="ad-toggle">
-                                                        <input type="checkbox" checked={cat.active} onChange={() => toggleActive(cat)} />
+                                                        <input type="checkbox" checked={!!cat.active} disabled={!!pending[cat._id]} onChange={() => toggleActive(cat)} />
                                                         <span className="ad-toggle__slider"></span>
                                                     </div>
                                                 </label>
