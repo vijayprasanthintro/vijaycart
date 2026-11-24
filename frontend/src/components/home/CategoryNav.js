@@ -1,12 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { easeOutExpo } from '../../utils/motion';
-
-const ddItemVariants = {
-  hidden: { opacity: 0, y: 6 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.2, ease: easeOutExpo } },
-};
 
 const NAV_CATEGORIES = [
   {
@@ -67,7 +60,7 @@ const NAV_CATEGORIES = [
     icon: 'fa-child',
     cls: 'vc-cn-icon--kids',
     to: '/search/all?category=Accessories',
-    active: (p, q) => false,
+    active: () => false,
     children: [],
   },
   {
@@ -122,34 +115,23 @@ function CategoryDropdown({ cat, onClose }) {
   if (!cat.children || cat.children.length === 0) return null;
 
   return (
-    <motion.div
-      className="vc-cn-dd"
-      role="menu"
-      initial="hidden"
-      animate="show"
-      exit="hidden"
-      variants={{
-        hidden: { opacity: 0, y: 8, scale: 0.98 },
-        show: { opacity: 1, y: 0, scale: 1, transition: { staggerChildren: 0.04, delayChildren: 0.03 } },
-      }}
-    >
-      <motion.div className="vc-cn-dd__header" variants={ddItemVariants}>
+    <div className="vc-cn-dd" role="menu">
+      <div className="vc-cn-dd__header">
         <span className="vc-cn-dd__header-label">{cat.label}</span>
-      </motion.div>
+      </div>
       {cat.children.map((child) => (
-        <motion.div key={child.label} variants={ddItemVariants}>
-          <Link
-            to={child.to}
-            className="vc-cn-dd__item"
-            role="menuitem"
-            onClick={onClose}
-          >
-            <i className={`fa ${child.icon} vc-cn-dd__item-icon`} aria-hidden="true"></i>
-            <span>{child.label}</span>
-          </Link>
-        </motion.div>
+        <Link
+          key={child.label}
+          to={child.to}
+          className="vc-cn-dd__item"
+          role="menuitem"
+          onClick={onClose}
+        >
+          <i className={`fa ${child.icon} vc-cn-dd__item-icon`} aria-hidden="true"></i>
+          <span>{child.label}</span>
+        </Link>
       ))}
-    </motion.div>
+    </div>
   );
 }
 
@@ -160,8 +142,9 @@ export default function CategoryNav() {
   const activeCategory = queryParams.get('category');
   const [mobileDropdown, setMobileDropdown] = useState(null);
   const [hoveredIdx, setHoveredIdx] = useState(null);
-  const [scrollBtns, setScrollBtns] = useState({ left: false, right: false });
-  const scrollRef = useRef(null);
+  const [desktopScrollBtns, setDesktopScrollBtns] = useState({ left: false, right: false });
+  const desktopScrollRef = useRef(null);
+  const mobileScrollRef = useRef(null);
   const hoverTimerRef = useRef(null);
 
   const isActive = useCallback((cat) => {
@@ -173,23 +156,28 @@ export default function CategoryNav() {
     setMobileDropdown(null);
   }, [location.pathname, location.search]);
 
-  const checkScroll = useCallback(() => {
-    const el = scrollRef.current;
+  const checkDesktopScroll = useCallback(() => {
+    const el = desktopScrollRef.current;
     if (!el) return;
-    setScrollBtns({ left: el.scrollLeft > 2, right: el.scrollLeft < el.scrollWidth - el.clientWidth - 2 });
+    const left = el.scrollLeft > 2;
+    const right = el.scrollLeft < el.scrollWidth - el.clientWidth - 2;
+    setDesktopScrollBtns(prev => (prev.left === left && prev.right === right ? prev : { left, right }));
   }, []);
 
   useEffect(() => {
-    const el = scrollRef.current;
+    const el = desktopScrollRef.current;
     if (!el) return;
-    checkScroll();
-    el.addEventListener('scroll', checkScroll, { passive: true });
-    window.addEventListener('resize', checkScroll);
-    return () => { el.removeEventListener('scroll', checkScroll); window.removeEventListener('resize', checkScroll); };
-  }, [checkScroll]);
+    checkDesktopScroll();
+    el.addEventListener('scroll', checkDesktopScroll, { passive: true });
+    window.addEventListener('resize', checkDesktopScroll);
+    return () => {
+      el.removeEventListener('scroll', checkDesktopScroll);
+      window.removeEventListener('resize', checkDesktopScroll);
+    };
+  }, [checkDesktopScroll]);
 
-  const scroll = (dir) => {
-    const el = scrollRef.current;
+  const scrollDesktop = (dir) => {
+    const el = desktopScrollRef.current;
     if (el) el.scrollBy({ left: dir * 260, behavior: 'smooth' });
   };
 
@@ -210,18 +198,18 @@ export default function CategoryNav() {
       {/* ===== DESKTOP CATEGORY NAV ===== */}
       <nav className="vc-cn" aria-label="Category navigation">
         <div className="vc-cn__inner">
-          {scrollBtns.left && (
+          {desktopScrollBtns.left && (
             <button
               type="button"
               className="vc-cn__arrow vc-cn__arrow--left"
-              onClick={() => scroll(-1)}
+              onClick={() => scrollDesktop(-1)}
               aria-label="Scroll categories left"
             >
               <i className="fa fa-chevron-left" aria-hidden="true"></i>
             </button>
           )}
 
-          <div className="vc-cn__scroll" ref={scrollRef}>
+          <div className="vc-cn__scroll" ref={desktopScrollRef}>
             {NAV_CATEGORIES.map((cat, idx) => {
               const active = isActive(cat);
               const hasDropdown = cat.children && cat.children.length > 0;
@@ -248,21 +236,17 @@ export default function CategoryNav() {
                       <i className={`fa fa-angle-down vc-cn__chevron ${isOpen ? 'vc-cn__chevron--open' : ''}`} aria-hidden="true"></i>
                     )}
                   </Link>
-                  {hasDropdown && (
-                    <AnimatePresence>
-                      {isOpen && <CategoryDropdown cat={cat} onClose={() => setHoveredIdx(null)} />}
-                    </AnimatePresence>
-                  )}
+                  {hasDropdown && isOpen && <CategoryDropdown cat={cat} onClose={() => setHoveredIdx(null)} />}
                 </div>
               );
             })}
           </div>
 
-          {scrollBtns.right && (
+          {desktopScrollBtns.right && (
             <button
               type="button"
               className="vc-cn__arrow vc-cn__arrow--right"
-              onClick={() => scroll(1)}
+              onClick={() => scrollDesktop(1)}
               aria-label="Scroll categories right"
             >
               <i className="fa fa-chevron-right" aria-hidden="true"></i>
@@ -273,7 +257,7 @@ export default function CategoryNav() {
 
       {/* ===== MOBILE CATEGORY NAV ===== */}
       <nav className="vc-cn-m" aria-label="Category navigation">
-        <div className="vc-cn-m__scroll" ref={scrollRef}>
+        <div className="vc-cn-m__scroll" ref={mobileScrollRef}>
           {NAV_CATEGORIES.map((cat) => {
             const active = isActive(cat);
             const hasDropdown = cat.children && cat.children.length > 0;
@@ -303,29 +287,21 @@ export default function CategoryNav() {
           })}
         </div>
 
-        <AnimatePresence>
-          {mobileDropdown && (
-            <motion.div
-              className="vc-cn-m__dropdown"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2, ease: easeOutExpo }}
-            >
-              {NAV_CATEGORIES.find((c) => c.label === mobileDropdown)?.children.map((child) => (
-                <Link
-                  key={child.label}
-                  to={child.to}
-                  className="vc-cn-m__dd-item"
-                  onClick={() => setMobileDropdown(null)}
-                >
-                  <i className={`fa ${child.icon} vc-cn-m__dd-icon`} aria-hidden="true"></i>
-                  <span>{child.label}</span>
-                </Link>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {mobileDropdown && (
+          <div className="vc-cn-m__dropdown">
+            {NAV_CATEGORIES.find((c) => c.label === mobileDropdown)?.children.map((child) => (
+              <Link
+                key={child.label}
+                to={child.to}
+                className="vc-cn-m__dd-item"
+                onClick={() => setMobileDropdown(null)}
+              >
+                <i className={`fa ${child.icon} vc-cn-m__dd-icon`} aria-hidden="true"></i>
+                <span>{child.label}</span>
+              </Link>
+            ))}
+          </div>
+        )}
       </nav>
     </>
   );

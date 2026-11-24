@@ -1,9 +1,7 @@
 import { memo, useRef, useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import Product from '../product/Product';
 import { ProductRowSkeleton } from '../layouts/Skeletons';
-import { fadeUp, staggerContainer } from '../../utils/motion';
 
 export default memo(function ProductCarousel({
   title,
@@ -26,8 +24,10 @@ export default memo(function ProductCarousel({
   const checkScroll = useCallback(() => {
     const el = trackRef.current;
     if (!el) return;
-    setCanLeft(el.scrollLeft > 4);
-    setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 4);
+    const nextLeft = el.scrollLeft > 4;
+    const nextRight = el.scrollLeft < el.scrollWidth - el.clientWidth - 4;
+    setCanLeft(prev => (prev === nextLeft ? prev : nextLeft));
+    setCanRight(prev => (prev === nextRight ? prev : nextRight));
   }, []);
 
   useEffect(() => {
@@ -56,14 +56,8 @@ export default memo(function ProductCarousel({
   const showControls = !loading && !error && products.length > 0 && (canLeft || canRight);
 
   return (
-    <motion.section
-      className={`section ${className}`}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.1 }}
-      variants={staggerContainer(0.08, 0)}
-    >
-      <motion.div className="section-head" variants={fadeUp}>
+    <section className={`section ${className}`}>
+      <div className="section-head">
         <div>
           <h2 className="section-title">{title}</h2>
           {subtitle && <p className="section-sub mt-1">{subtitle}</p>}
@@ -93,9 +87,9 @@ export default memo(function ProductCarousel({
             </div>
           )}
         </div>
-      </motion.div>
+      </div>
 
-      <motion.div variants={fadeUp}>
+      <div>
       {loading ? (
         <ProductRowSkeleton count={4} />
       ) : error ? (
@@ -125,7 +119,7 @@ export default memo(function ProductCarousel({
           </div>
         </div>
       )}
-      </motion.div>
-    </motion.section>
+      </div>
+    </section>
   );
 })

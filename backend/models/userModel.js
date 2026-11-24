@@ -72,7 +72,15 @@ const addressSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Country is required'],
         trim: true,
-        maxlength: [80, 'Country cannot exceed 80 characters']
+        maxlength: [80, 'Country cannot exceed 80 characters'],
+        default: 'India'
+    },
+    countryCode: {
+        type: String,
+        trim: true,
+        uppercase: true,
+        maxlength: [3, 'Country code cannot exceed 3 characters'],
+        default: 'IN'
     },
     type: {
         type: String,
@@ -186,6 +194,20 @@ const userSchema = new mongoose.Schema({
     ],
     resetPasswordToken: String,
     resetPasswordTokenExpire: Date,
+    isDeleted: {
+        type: Boolean,
+        default: false,
+        index: true
+    },
+    deletedAt: {
+        type: Date,
+        default: null
+    },
+    deletedBy: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User',
+        default: null
+    },
     createdAt :{
         type: Date,
         default: Date.now

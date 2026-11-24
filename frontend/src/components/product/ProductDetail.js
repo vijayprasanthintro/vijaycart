@@ -278,7 +278,7 @@ export default function ProductDetail () {
     // fetch related products by category
     useEffect(() => {
         if (product.category) {
-            dispatch(getProducts(null, null, product.category, null, 1, 100));
+            dispatch(getProducts(null, null, product.category, null, 1, 24));
         }
     }, [dispatch, product.category]);
 
@@ -291,7 +291,7 @@ export default function ProductDetail () {
     // backend now honours `limit` instead of paginating 8 per page)
     const loadPool = useCallback(async () => {
         try {
-            const res = await axios.get('/api/v1/products?limit=200');
+            const res = await axios.get('/api/v1/products?limit=24');
             setPool(res?.data?.products || []);
         } catch { /* ignore */ } finally {
             setPoolLoaded(true);

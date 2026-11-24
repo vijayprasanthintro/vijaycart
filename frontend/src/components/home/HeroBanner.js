@@ -1,10 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { getBanners } from '../../actions/bannerActions';
-
-const EASE = [0.16, 1, 0.3, 1];
 
 const DEFAULT_SLIDES = [
   {
@@ -101,9 +98,9 @@ export default function HeroBanner() {
   const [paused, setPaused] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const [touchStart, setTouchStart] = useState(null);
-  const [progress, setProgress] = useState(0);
   const [slides, setSlides] = useState([]);
   const progressRef = useRef(null);
+  const dotProgressRef = useRef(null);
   const touchTimerRef = useRef(null);
 
   const dispatch = useDispatch();
@@ -142,26 +139,29 @@ export default function HeroBanner() {
     if (index >= slides.length) setIndex(0);
   }, [slides.length, index]);
 
-  const goTo = useCallback((next) => {
+  const goTo = useCallback((nextIdx) => {
     if (transitioning) return;
     setTransitioning(true);
-    setIndex(next);
-    setProgress(0);
+    setIndex(nextIdx);
+    if (dotProgressRef.current) dotProgressRef.current.style.width = '0%';
     setTimeout(() => setTransitioning(false), TRANSITION_MS);
   }, [transitioning]);
 
   const next = useCallback(() => goTo((index + 1) % slides.length), [goTo, index, slides.length]);
   const prev = useCallback(() => goTo((index - 1 + slides.length) % slides.length), [goTo, index, slides.length]);
 
-  // Auto-advance with progress
+  // Auto-advance with progress. Update DOM directly to avoid rerendering the
+  // whole banner every animation frame.
   useEffect(() => {
     if (paused || transitioning) return;
-    setProgress(0);
+    const bar = dotProgressRef.current;
+    if (bar) bar.style.width = '0%';
     const startTime = Date.now();
     const tick = () => {
       const elapsed = Date.now() - startTime;
       const pct = Math.min((elapsed / AUTO_ADVANCE_MS) * 100, 100);
-      setProgress(pct);
+      const el = dotProgressRef.current;
+      if (el) el.style.width = `${pct}%`;
       if (pct >= 100) {
         next();
       } else {
@@ -236,43 +236,13 @@ export default function HeroBanner() {
                 />
                 <div className="vc-hero__overlay" />
               </div>
-              <div className="vc-hero__content">
-                <motion.span
-                  className="vc-hero__kicker"
-                  style={{ color: s.accent }}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={i === index ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-                  transition={{ duration: 0.45, ease: EASE, delay: i === index ? 0.05 : 0 }}
-                >
-                  {s.kicker}
-                </motion.span>
-                <motion.h2
-                  className="vc-hero__title"
-                  initial={{ opacity: 0, y: 22 }}
-                  animate={i === index ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
-                  transition={{ duration: 0.5, ease: EASE, delay: i === index ? 0.15 : 0 }}
-                >
-                  {s.title}
-                </motion.h2>
-                <motion.p
-                  className="vc-hero__subtitle"
-                  initial={{ opacity: 0, y: 22 }}
-                  animate={i === index ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
-                  transition={{ duration: 0.5, ease: EASE, delay: i === index ? 0.25 : 0 }}
-                >
-                  {s.subtitle}
-                </motion.p>
-                <motion.span
-                  className="vc-hero__cta"
-                  style={{ background: s.accent }}
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={i === index ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
-                  transition={{ duration: 0.45, ease: EASE, delay: i === index ? 0.35 : 0 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.97 }}
-                >
+              <div className={`vc-hero__content ${i === index ? 'vc-hero__content--active' : ''}`}>
+                <span className="vc-hero__kicker" style={{ color: s.accent }}>{s.kicker}</span>
+                <h2 className="vc-hero__title">{s.title}</h2>
+                <p className="vc-hero__subtitle">{s.subtitle}</p>
+                <span className="vc-hero__cta" style={{ background: s.accent }}>
                   {s.cta} <i className="fa fa-arrow-right" aria-hidden="true"></i>
-                </motion.span>
+                </span>
               </div>
             </Link>
           ))}
@@ -311,8 +281,9 @@ export default function HeroBanner() {
           >
             {i === index && (
               <span
+                ref={dotProgressRef}
                 className="vc-hero__dot-progress"
-                style={{ width: `${progress}%` }}
+                style={{ width: '0%' }}
               />
             )}
           </button>

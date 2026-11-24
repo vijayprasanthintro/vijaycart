@@ -29,6 +29,7 @@ const isBcrypt = (p) => String(p || '').startsWith('$2');
                 console.log(`Reset password for ${email} (was plaintext: ${wasPlain})`);
             } else {
                 console.log(`WARN ${email} not found - run the admin/delivery seeder first`);
+                
             }
         }
 

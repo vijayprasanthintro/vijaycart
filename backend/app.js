@@ -40,10 +40,6 @@ app.use(helmet({
     },
     crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
-app.use(cors({
-  origin: "https://vijaycart-snowy.vercel.app",
-  credentials: true,
-}));
 
 // Request logging. Development goes to stdout in the readable dev format;
 // production streams structured JSON through the shared logger.

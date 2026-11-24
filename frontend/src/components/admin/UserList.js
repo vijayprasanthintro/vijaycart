@@ -11,11 +11,13 @@ import AdminExport from './AdminExport';
 export default function UserList() {
     const { users = [], loading = true, error, isUserDeleted } = useSelector(state => state.userState);
     const { adminOrders = [] } = useSelector(state => state.orderState);
+    const { user: authUser } = useSelector(state => state.authState);
     const dispatch = useDispatch();
 
     const [query, setQuery] = useState('');
     const [role, setRole] = useState('');
     const [page, setPage] = useState(1);
+    const [deletingId, setDeletingId] = useState(null);
     const PER_PAGE = 10;
 
     useEffect(() => {
@@ -29,8 +31,7 @@ export default function UserList() {
             return;
         }
         if (isUserDeleted) {
-            toast('User deleted successfully!', { type: 'success', position: toast.POSITION.BOTTOM_CENTER, onOpen: () => dispatch(clearUserDeleted()) });
-            return;
+            dispatch(clearUserDeleted());
         }
     }, [dispatch, error, isUserDeleted]);
 
@@ -65,7 +66,22 @@ export default function UserList() {
         joined: u.createdAt || ''
     }));
 
-    const deleteHandler = id => dispatch(deleteUser(id));
+    const deleteHandler = async (id) => {
+        if (!id || deletingId) return;
+        const target = users.find(u => u._id === id);
+        if (authUser?._id === id) {
+            toast.error('You cannot delete your own account', { position: toast.POSITION.BOTTOM_CENTER });
+            return;
+        }
+        const label = target ? `${target.name} (${target.role})` : 'this account';
+        if (!window.confirm(`Delete ${label}? This action cannot be undone.`)) return;
+        setDeletingId(id);
+        const result = await dispatch(deleteUser(id));
+        setDeletingId(null);
+        if (result?.success) {
+            toast.success(result.message || 'User deleted successfully', { position: toast.POSITION.BOTTOM_CENTER });
+        }
+    };
 
     const roleBadge = roleVal => (
         <span className={`ad-badge ${roleVal === 'admin' ? 'ad-badge--danger' : roleVal === 'deliveryboy' ? 'ad-badge--primary' : 'ad-badge--info'}`}>
@@ -133,8 +149,14 @@ export default function UserList() {
                                             <td>
                                                 <div className="ad-toolbar">
                                                     <Link to={`/admin/user/${user._id}`} className="ad-btn ad-btn--ghost ad-btn--sm" title="Edit"><i className="fa fa-pencil" aria-hidden="true"></i></Link>
-                                                    <button type="button" className="ad-btn ad-btn--danger ad-btn--sm ad-btn--icon" title="Delete" onClick={() => deleteHandler(user._id)}>
-                                                        <i className="fa fa-trash" aria-hidden="true"></i>
+                                                    <button
+                                                        type="button"
+                                                        className="ad-btn ad-btn--danger ad-btn--sm ad-btn--icon"
+                                                        title={authUser?._id === user._id ? 'You cannot delete your own account' : 'Delete'}
+                                                        disabled={deletingId === user._id || authUser?._id === user._id}
+                                                        onClick={() => deleteHandler(user._id)}
+                                                    >
+                                                        <i className={`fa ${deletingId === user._id ? 'fa-spinner fa-spin' : 'fa-trash'}`} aria-hidden="true"></i>
                                                     </button>
                                                 </div>
                                             </td>

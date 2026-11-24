@@ -106,7 +106,7 @@ exports.requestOtp = catchAsyncError(async (req, res, next) => {
         }
     }
 
-    if (!user) {
+    if (!user || user.isDeleted) {
         return next(new ErrorHandler('No account found with this mobile number. Enter your email to create a new account.', 404));
     }
 
@@ -217,7 +217,7 @@ exports.verifyOtp = catchAsyncError(async (req, res, next) => {
     }
 
     const user = await User.findById(userId);
-    if (!user) {
+    if (!user || user.isDeleted) {
         return next(new ErrorHandler('Invalid request. Please request a new OTP.', 404));
     }
 

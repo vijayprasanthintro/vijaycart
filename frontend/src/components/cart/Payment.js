@@ -99,6 +99,11 @@ export default function Payment() {
     const supportEmail = (settings && settings.supportEmail && settings.supportEmail.trim()) || SUPPORT.email;
     const supportPhone = (settings && settings.supportPhone && settings.supportPhone.trim()) || SUPPORT.phone;
 
+    const [method, setMethod] = useState('upi');
+    const [processing, setProcessing] = useState(null);
+    const [failure, setFailure] = useState(null);
+    const [methodError, setMethodError] = useState({});
+
     const availableMethods = METHODS.filter(m => {
         if (m.key === 'cod') return true;
         if (m.key === 'card') return prepaidEnabled && stripeEnabled;
@@ -113,11 +118,6 @@ export default function Payment() {
     const total = Number(orderInfo ? orderInfo.totalPrice : 0);
     const discountPrice = Number(orderInfo ? orderInfo.discountPrice : 0);
     const coinsRedeemed = Math.max(0, Math.floor(Number(orderInfo ? orderInfo.coinsRedeemed : 0) || 0));
-
-    const [method, setMethod] = useState('upi');
-    const [processing, setProcessing] = useState(null);
-    const [failure, setFailure] = useState(null);
-    const [methodError, setMethodError] = useState({});
 
     // UPI
     const [upiId, setUpiId] = useState('');

@@ -1,7 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { memo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { motion } from 'framer-motion';
 import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useWishlist } from '../../context/WishlistContext';
@@ -9,14 +8,12 @@ import { addCartItem } from '../../actions/cartActions';
 import { getPricing, formatMoney, roundRating, isInStock, getBadge, getDelivery, productImage } from '../../utils/productHelper';
 import OptimizedImage from '../common/OptimizedImage';
 
-const EASE = [0.16, 1, 0.3, 1];
-
 export default memo(function Product ({product, col, index = 0}) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
-    const { isAuthenticated } = useSelector(state => state.authState);
-    const { settings } = useSelector(state => state.settingState);
+    const isAuthenticated = useSelector(state => state.authState.isAuthenticated);
+    const settings = useSelector(state => state.settingState.settings) || {};
     const { isWishlisted, toggleWishlist } = useWishlist();
     const [showQuick, setShowQuick] = useState(false);
     const pricing = getPricing(product);
@@ -65,18 +62,8 @@ export default memo(function Product ({product, col, index = 0}) {
     };
 
     return (
-        <motion.div
-            className={`col-12 col-sm-6 col-lg-${col} my-3`}
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: EASE, delay: (index % 4) * 0.08 }}
-        >
-            <motion.div
-                className="card-premium card-product p-0 rounded"
-                whileHover={{ y: -6 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-            >
+        <div className={`col-12 col-sm-6 col-lg-${col} my-3`}>
+            <div className="card-premium card-product p-0 rounded">
                 {/* Badges */}
                 <div className="product-badges">
                     <span className="product-badge bg-gold">{getBadge(product)}</span>
@@ -102,6 +89,8 @@ export default memo(function Product ({product, col, index = 0}) {
                     className="card-img-top mx-auto"
                     src={productImage(product)}
                     alt={product.name}
+                    width={400}
+                    height={300}
                   />
                   <button
                     type="button"
@@ -162,7 +151,7 @@ export default memo(function Product ({product, col, index = 0}) {
                         </button>
                     </div>
                 </div>
-            </motion.div>
+            </div>
 
             {/* Quick View Modal */}
             {showQuick && (
@@ -202,6 +191,6 @@ export default memo(function Product ({product, col, index = 0}) {
                     </Modal.Body>
                 </Modal>
             )}
-        </motion.div>
+        </div>
     )
 })

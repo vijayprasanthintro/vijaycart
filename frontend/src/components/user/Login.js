@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
-import { clearAuthError, sendOtp, verifyOtp, googleLogin } from '../../actions/userActions';
+import { clearAuthError, sendOtp, verifyOtp, loadUser } from '../../actions/userActions';
 import MetaData from '../layouts/MetaData';
 import { toast } from 'react-toastify';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -21,8 +21,6 @@ const TOAST_STYLE = {
 const readRemember = () => {
     try { return localStorage.getItem(REMEMBER_KEY) !== '0'; } catch { return true; }
 };
-
-const GSI_SRC = 'https://accounts.google.com/gsi/client';
 
 // Official Google "G" logo (Google's own multi-color mark).
 const GoogleIcon = () => (
@@ -44,7 +42,6 @@ export default function Login() {
     const [errors, setErrors] = useState({})
     const [remember, setRemember] = useState(readRemember)
     const [googleClientId, setGoogleClientId] = useState(null);
-    const [googleReady, setGoogleReady] = useState(false);
     const [googleLoading, setGoogleLoading] = useState(false);
     const otpRefs = useRef([]);
     const dispatch = useDispatch();
@@ -187,17 +184,16 @@ export default function Login() {
 
     const stepTransition = { duration: 0.3, ease: easeOutExpo };
 
-    // -------- Google Sign-In --------
+    // -------- Google Sign-In (full-page redirect) --------
 
-    // 1. Fetch the public auth config so we know whether Google is enabled and
-    //    can render the official button with the right client id.
     useEffect(() => {
         let cancelled = false;
         const loadConfig = async () => {
             try {
                 const { data } = await axios.get('/api/v1/auth/config');
                 if (cancelled) return;
-                setGoogleClientId(data?.config?.googleClientId || null);
+                const available = Boolean(data?.config?.googleAvailable && data?.config?.googleClientId);
+                setGoogleClientId(available ? data.config.googleClientId : null);
             } catch {
                 if (!cancelled) setGoogleClientId(null);
             }
@@ -206,97 +202,39 @@ export default function Login() {
         return () => { cancelled = true; };
     }, []);
 
-    // 2. Verify the ID token the browser hands back from Google.
-    const handleCredentialResponse = useCallback(async (response) => {
-        const credential = response && response.credential;
-        if (!credential) {
-            toast('Google sign-in was cancelled or failed. Please try again.', {
-                ...TOAST_STYLE,
-                type: 'error'
-            });
-            return;
-        }
-        setGoogleLoading(true);
-        try {
-            const data = await dispatch(googleLogin(credential));
-            if (data) {
-                // loginSuccess flips isAuthenticated and the effect above
-                // navigates to `redirect`.
-            }
-        } finally {
-            setGoogleLoading(false);
-        }
-    }, [dispatch]);
-
-    // 3. Load the Google Identity Services script and initialize it. Re-runs
-    //    whenever the config arrives.
     useEffect(() => {
-        if (!googleClientId) {
-            setGoogleReady(false);
-            return;
+        const params = new URLSearchParams(location.search);
+        const oauthError = params.get('error');
+        const oauthSuccess = params.get('auth') === 'google_success';
+        if (!oauthError && !oauthSuccess) return;
+
+        if (oauthError) {
+            toast(oauthError, { ...TOAST_STYLE, type: 'error' });
         }
-        let cancelled = false;
+        if (oauthSuccess) {
+            dispatch(loadUser());
+        }
 
-        const loadScript = () => new Promise((resolve, reject) => {
-            if (window.google && window.google.accounts && window.google.accounts.id) return resolve();
-            const existing = document.querySelector(`script[src="${GSI_SRC}"]`);
-            if (existing) {
-                existing.addEventListener('load', resolve, { once: true });
-                existing.addEventListener('error', () => reject(new Error('GSI load failed')), { once: true });
-                return;
-            }
-            const script = document.createElement('script');
-            script.src = GSI_SRC;
-            script.async = true;
-            script.defer = true;
-            script.onload = resolve;
-            script.onerror = () => reject(new Error('GSI load failed'));
-            document.body.appendChild(script);
-        });
+        params.delete('error');
+        params.delete('auth');
+        const nextSearch = params.toString();
+        navigate(`${location.pathname}${nextSearch ? `?${nextSearch}` : ''}`, { replace: true });
+    }, [dispatch, location.pathname, location.search, navigate]);
 
-        loadScript()
-            .then(() => {
-                if (cancelled) return;
-                if (window.google && window.google.accounts && window.google.accounts.id) {
-                    window.google.accounts.id.initialize({
-                        client_id: googleClientId,
-                        callback: handleCredentialResponse,
-                        auto_select: false,
-                        cancel_on_tap_outside: false,
-                        ux_mode: 'popup'
-                    });
-                    setGoogleReady(true);
-                } else {
-                    setGoogleReady(false);
-                }
-            })
-            .catch(() => {
-                if (!cancelled) setGoogleReady(false);
-            });
-
-        return () => { cancelled = true; };
-    }, [googleClientId, handleCredentialResponse]);
-
-    // Open the Google account chooser/popup from our own premium-styled
-    // button. Selection hands the ID token to the `callback` configured in
-    // initialize() above.
     const handleGoogleClick = () => {
         if (googleLoading) return;
-        if (!googleReady || !googleClientId || !window.google || !window.google.accounts || !window.google.accounts.id) {
+        if (!googleClientId) {
             toast.info('Google sign-in is unavailable right now. Use the Email OTP option instead.', TOAST_STYLE);
             return;
         }
-        try {
-            window.google.accounts.id.prompt((notification) => {
-                // The chooser could not be shown at all (unsupported browser,
-                // sited cookies blocked...) — fall back to email OTP.
-                if (notification && notification.isNotDisplayed) {
-                    toast.info('Google sign-in could not open in this browser. Use the Email OTP option instead.', TOAST_STYLE);
-                }
-            });
-        } catch (e) {
-            toast.error('Google sign-in failed to open. Please try again.', TOAST_STYLE);
-        }
+        setGoogleLoading(true);
+        const target = redirect.startsWith('/') ? redirect : `/${redirect}`;
+        const backendBase = (process.env.REACT_APP_BACKEND_URL || '').replace(/\/$/, '');
+        const localBackend = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+            ? `${window.location.protocol}//${window.location.hostname}:8000`
+            : '';
+        const base = backendBase || localBackend;
+        window.location.href = `${base}/api/v1/google?redirect=${encodeURIComponent(target)}`;
     };
 
     return (
@@ -400,18 +338,15 @@ export default function Login() {
                                             type="button"
                                             className="vc-google-btn vc-google-btn--gold"
                                             onClick={handleGoogleClick}
-                                            disabled={googleLoading || !googleReady || !googleClientId}
-                                            title={googleReady && googleClientId ? 'Continue with Google' : 'Google sign-in will be enabled shortly'}
+                                            disabled={googleLoading || !googleClientId}
+                                            title={googleClientId ? 'Continue with Google' : 'Google sign-in is not configured yet'}
                                         >
                                             <GoogleIcon />
                                             Continue with Google
                                             <i className="fa fa-crown vc-google-crown" aria-hidden="true"></i>
                                         </button>
-                                        {googleClientId && !googleReady && (
-                                            <p className="vc-google-note"><i className="fa fa-spinner fa-spin mr-1" aria-hidden="true"></i>Loading Google sign-in…</p>
-                                        )}
                                         {googleLoading && (
-                                            <p className="vc-google-note"><i className="fa fa-spinner fa-spin mr-1" aria-hidden="true"></i>Signing you in…</p>
+                                            <p className="vc-google-note"><i className="fa fa-spinner fa-spin mr-1" aria-hidden="true"></i>Redirecting to Google…</p>
                                         )}
                                     </div>
 

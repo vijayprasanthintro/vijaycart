@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 
 export default function Footer (){
-    const { settings = {} } = useSelector((state) => state.settingState);
+    const settings = useSelector((state) => state.settingState.settings) || {};
     const storeName = (settings.storeName && settings.storeName.trim()) || 'VijayCart';
     const storeTagline = (settings.storeTagline && settings.storeTagline.trim()) || 'Smart Shopping. Better Choices.';
     const supportEmail = (settings.supportEmail && settings.supportEmail.trim()) || 'help@vijaycart.com';
@@ -19,12 +18,7 @@ export default function Footer (){
     };
 
     return (
-        <motion.footer
-            className="site-footer"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <footer className="site-footer">
             <div className="container">
                 <div className="footer-grid">
                     <div className="footer-col footer-brand-col">
@@ -66,6 +60,6 @@ export default function Footer (){
                     </p>
                 </div>
             </div>
-        </motion.footer>
+        </footer>
     )
 }

@@ -21,6 +21,8 @@ const {
     updateUser,
     deleteUser,
     googleLogin,
+    googleAuthStart,
+    googleCallback,
     getWishlist,
     addToWishlist,
     removeFromWishlist,
@@ -50,7 +52,8 @@ const {
 } = require('../middlewares/validate');
 
 router.route('/auth/config').get(getPublicConfig);
-router.route('/google').post(googleLoginRules(), validate, googleLogin);
+router.route('/google').get(googleAuthStart).post(googleLoginRules(), validate, googleLogin);
+router.route('/google/callback').get(googleCallback);
 router.route('/otp/request').post(otpRequestRules(), validate, requestOtp);
 router.route('/otp/verify').post(otpVerifyRules(), validate, verifyOtp);
 router.route('/logout').get(logoutUser);

@@ -22,7 +22,10 @@ const QUICK_ACCESS = [
   { name: 'Sports', icon: 'fa-futbol-o', cls: 'cat-icon-sports', to: '/search/all?category=Sports' },
 ];
 
-const FULL_CATALOG_LIMIT = 200;
+// Enough for all homepage sections after de-duplication, without rendering an
+// oversized catalog in one view.
+const FULL_CATALOG_LIMIT = 48;
+const HOME_GRID_LIMIT = 24;
 
 function useFlashTimer() {
   const [timer, setTimer] = useState({ h: '05', m: '47', s: '30' });
@@ -80,8 +83,10 @@ function DealsTimer() {
 
 export default function Home() {
   const dispatch = useDispatch();
-  const { loading, error, products } = useSelector((state) => state.productsState);
-  const { settings = {} } = useSelector((state) => state.settingState);
+  const loading = useSelector((state) => state.productsState.loading);
+  const error = useSelector((state) => state.productsState.error);
+  const products = useSelector((state) => state.productsState.products) || [];
+  const settings = useSelector((state) => state.settingState.settings) || {};
   const recentlyViewed = useRecentlyViewed();
 
   const retry = useCallback(() => {
@@ -277,7 +282,7 @@ export default function Home() {
               </div>
               {activeTopCategory && (
                 <div className="row home-grid">
-                  {activeTopCategory.products.map((product, i) => (
+                  {activeTopCategory.products.slice(0, HOME_GRID_LIMIT).map((product, i) => (
                     <Product key={product._id} product={product} col={3} index={i} />
                   ))}
                 </div>
@@ -293,7 +298,7 @@ export default function Home() {
                 <Link to="/search/all" className="view-all-link">View All <i className="fa fa-arrow-right" aria-hidden="true"></i></Link>
               </div>
               <div className="row home-grid">
-                {feed.moreProducts.map((product, i) => <Product key={product._id} product={product} col={3} index={i} />)}
+                {feed.moreProducts.slice(0, HOME_GRID_LIMIT).map((product, i) => <Product key={product._id} product={product} col={3} index={i} />)}
               </div>
             </section>
           )}

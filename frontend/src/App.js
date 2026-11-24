@@ -2,7 +2,7 @@ import './App.css';
 import { lazy, Suspense, useEffect, Children, isValidElement, cloneElement } from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom'
-import { AnimatePresence } from 'framer-motion';
+/* route transitions use lightweight CSS/page wrapper */
 import { HelmetProvider } from 'react-helmet-async'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -140,11 +140,10 @@ function Shell() {
         />
         <Suspense fallback={<RouteFallback />}>
           <ErrorBoundary>
-            <AnimatePresence mode="wait" initial={false}>
               <Routes
                 location={location}
                 key={location.pathname.split('/')[1] || 'home'}
-            >
+              >
               {animatedRoutes(
                 <>
                   <Route path='/' element={<Home />} />
@@ -197,7 +196,6 @@ function Shell() {
                 </>
               )}
             </Routes>
-            </AnimatePresence>
           </ErrorBoundary>
         </Suspense>
       </main>

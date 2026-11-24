@@ -13,6 +13,15 @@ const DEFAULT_SPECS = [
     { label: 'Color', value: '' }
 ];
 
+const Section = ({ icon, title, children }) => (
+    <div className="ad-form-section">
+        <div className="ad-form-section__head"><i className={`fa ${icon}`} aria-hidden="true"></i>{title}</div>
+        <div className="ad-form-section__body">{children}</div>
+    </div>
+);
+
+const Err = ({ errors, field }) => errors[field] ? <div className="ad-form-error"><i className="fa fa-exclamation-circle" aria-hidden="true"></i> {errors[field]}</div> : null;
+
 export default function NewProduct() {
     const [name, setName] = useState("");
     const [brand, setBrand] = useState("");
@@ -111,15 +120,6 @@ export default function NewProduct() {
         }
     }, [isProductCreated, error, dispatch, navigate]);
 
-    const Section = ({ icon, title, children }) => (
-        <div className="ad-form-section">
-            <div className="ad-form-section__head"><i className={`fa ${icon}`} aria-hidden="true"></i>{title}</div>
-            <div className="ad-form-section__body">{children}</div>
-        </div>
-    );
-
-    const Err = ({ field }) => errors[field] ? <div className="ad-form-error"><i className="fa fa-exclamation-circle" aria-hidden="true"></i> {errors[field]}</div> : null;
-
     return (
         <Fragment>
             <div className="ad-page-head">
@@ -135,7 +135,7 @@ export default function NewProduct() {
                         <div className="ad-field ad-field--full">
                             <label className="ad-label">Name *</label>
                             <input className="ad-input" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. NovaTech Astro 5G Smartphone" />
-                            <Err field="name" />
+                            <Err errors={errors} field="name" />
                         </div>
                         <div className="ad-field">
                             <label className="ad-label">Brand</label>
@@ -149,7 +149,7 @@ export default function NewProduct() {
                                     <option key={c._id} value={c.name}>{c.name}</option>
                                 ))}
                             </select>
-                            <Err field="category" />
+                            <Err errors={errors} field="category" />
                         </div>
                     </div>
                 </Section>
@@ -159,7 +159,7 @@ export default function NewProduct() {
                         <div className="ad-field">
                             <label className="ad-label">Selling Price (₹) *</label>
                             <input className="ad-input" type="number" min="0" value={price} onChange={e => setPrice(e.target.value)} />
-                            <Err field="price" />
+                            <Err errors={errors} field="price" />
                         </div>
                         <div className="ad-field">
                             <label className="ad-label">Original Price / MRP (₹)</label>
@@ -172,12 +172,12 @@ export default function NewProduct() {
                         <div className="ad-field">
                             <label className="ad-label">Stock *</label>
                             <input className="ad-input" type="number" min="0" value={stock} onChange={e => setStock(e.target.value)} />
-                            <Err field="stock" />
+                            <Err errors={errors} field="stock" />
                         </div>
                         <div className="ad-field ad-field--full">
                             <label className="ad-label">Seller Name *</label>
                             <input className="ad-input" value={seller} onChange={e => setSeller(e.target.value)} placeholder="e.g. VijayCart Official" />
-                            <Err field="seller" />
+                            <Err errors={errors} field="seller" />
                         </div>
                     </div>
                 </Section>
@@ -228,7 +228,7 @@ export default function NewProduct() {
                 <Section icon="fa-align-left" title="Description">
                     <div className="ad-field">
                         <textarea className="ad-textarea" rows={6} value={description} onChange={e => setDescription(e.target.value)} placeholder="Describe the product, its features and benefits…"></textarea>
-                        <Err field="description" />
+                        <Err errors={errors} field="description" />
                     </div>
                 </Section>
 

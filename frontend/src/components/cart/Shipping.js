@@ -72,10 +72,19 @@ const INSTRUCTIONS = [
     'Do not ring the doorbell',
 ];
 
+const INDIAN_STATES = [
+    'Andaman and Nicobar Islands', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar',
+    'Chandigarh', 'Chhattisgarh', 'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Goa',
+    'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka',
+    'Kerala', 'Ladakh', 'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya',
+    'Mizoram', 'Nagaland', 'Odisha', 'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim',
+    'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
+];
+
 const emptyForm = () => ({
     name: '', phoneNo: '', address: '', city: '', state: '',
     district: '', locality: '', landmark: '', instructions: '',
-    postalCode: '', country: 'United States', type: 'home', isDefault: false
+    postalCode: '', country: 'India', type: 'home', isDefault: false
 });
 
 export default function Shipping() {
@@ -209,25 +218,44 @@ export default function Shipping() {
     const submitForm = async (e) => {
         e.preventDefault();
         const errs = {};
+        const isIndia = form.country === 'India';
+        const phoneDigits = form.phoneNo.replace(/\D/g, '');
+        const normalizedPhone = isIndia && phoneDigits.length === 12 && phoneDigits.startsWith('91')
+            ? phoneDigits.slice(2)
+            : phoneDigits;
         if (!form.name.trim()) errs.name = 'Full name is required';
         if (!form.phoneNo.trim()) errs.phoneNo = 'Phone number is required';
-        else if (!/^[0-9+\-\s()]{10,16}$/.test(form.phoneNo.trim())) errs.phoneNo = 'Enter a valid phone number';
+        else if (isIndia) {
+            if (!/^[6-9]\d{9}$/.test(normalizedPhone)) errs.phoneNo = 'Enter a valid 10-digit Indian mobile number';
+        } else if (!/^[0-9+\-\s()]{10,16}$/.test(form.phoneNo.trim())) {
+            errs.phoneNo = 'Enter a valid phone number';
+        }
         if (!form.address.trim()) errs.address = 'Address is required';
         else if (form.address.trim().length < 8) errs.address = 'Address is too short';
         if (!form.city.trim()) errs.city = 'City is required';
         if (!form.state.trim()) errs.state = 'State is required';
-        if (!form.postalCode.trim()) errs.postalCode = 'Postal code is required';
+        if (isIndia && !INDIAN_STATES.includes(form.state.trim())) errs.state = 'Select a valid Indian state / UT';
+        const postal = form.postalCode.trim();
+        if (!postal) errs.postalCode = isIndia ? 'PIN code is required' : 'Postal code is required';
+        else if (isIndia && !/^[1-9][0-9]{5}$/.test(postal)) errs.postalCode = 'Enter a valid 6-digit Indian PIN code';
         if (!form.country) errs.country = 'Country is required';
         setErrors(errs);
         if (Object.keys(errs).length) return;
 
+        const payload = {
+            ...form,
+            phoneNo: isIndia ? normalizedPhone : form.phoneNo.trim(),
+            postalCode: postal,
+            countryCode: (ISO_BY_COUNTRY[form.country] || '').toUpperCase() || (isIndia ? 'IN' : ''),
+        };
+
         try {
             if (editingId) {
-                await dispatch(updateAddress(editingId, { ...form, isDefault: Boolean(form.isDefault) }));
+                await dispatch(updateAddress(editingId, { ...payload, isDefault: Boolean(payload.isDefault) }));
                 toast.success('Address updated');
             } else {
                 const prevIds = new Set(addresses.map(a => a._id));
-                const nextList = await dispatch(addAddress({ ...form, isDefault: Boolean(form.isDefault) || addresses.length === 0 }));
+                const nextList = await dispatch(addAddress({ ...payload, isDefault: Boolean(payload.isDefault) || addresses.length === 0 }));
                 const created = nextList.find(a => !prevIds.has(a._id));
                 if (created) setSelectedId(created._id);
                 if (isMobileViewport()) setListCollapsed(true);
@@ -297,7 +325,7 @@ export default function Shipping() {
                                 <div className="col-12 col-md-6">
                                     <div className="form-group">
                                         <label htmlFor="addr_phone">Phone Number</label>
-                                        <input type="tel" id="addr_phone" className="form-control" placeholder="10-digit mobile number" value={form.phoneNo} onChange={e => setForm({ ...form, phoneNo: e.target.value })} />
+                                        <input type="tel" id="addr_phone" className="form-control" placeholder={form.country === 'India' ? '+91 9876543210' : 'Phone number'} value={form.phoneNo} onChange={e => setForm({ ...form, phoneNo: e.target.value })} />
                                         {errors.phoneNo && <p className="form-error"><i className="fa fa-exclamation-circle mr-1" aria-hidden="true"></i>{errors.phoneNo}</p>}
                                     </div>
                                 </div>
@@ -324,7 +352,16 @@ export default function Shipping() {
                                 <div className="col-12 col-md-4">
                                     <div className="form-group">
                                         <label htmlFor="addr_state">State</label>
-                                        <input type="text" id="addr_state" className="form-control" placeholder="State" value={form.state} onChange={e => setForm({ ...form, state: e.target.value })} />
+                                        {form.country === 'India' ? (
+                                            <select id="addr_state" className="form-control" value={form.state} onChange={e => setForm({ ...form, state: e.target.value })} style={{ background: '#fff', color: '#212121' }}>
+                                                <option value="" style={{ background: '#fff', color: '#212121' }}>Select state / UT</option>
+                                                {INDIAN_STATES.map(s => (
+                                                    <option key={s} value={s} style={{ background: '#fff', color: '#212121' }}>{s}</option>
+                                                ))}
+                                            </select>
+                                        ) : (
+                                            <input type="text" id="addr_state" className="form-control" placeholder="State" value={form.state} onChange={e => setForm({ ...form, state: e.target.value })} />
+                                        )}
                                         {errors.state && <p className="form-error"><i className="fa fa-exclamation-circle mr-1" aria-hidden="true"></i>{errors.state}</p>}
                                     </div>
                                 </div>
@@ -358,7 +395,21 @@ export default function Shipping() {
                                 <div className="col-12">
                                     <div className="form-group">
                                         <label htmlFor="addr_country">Country</label>
-                                        <select id="addr_country" className="form-control" value={form.country} onChange={e => setForm({ ...form, country: e.target.value })} style={{ background: '#fff', color: '#212121' }}>
+                                        <select
+                                            id="addr_country"
+                                            className="form-control"
+                                            value={form.country}
+                                            onChange={e => {
+                                                const country = e.target.value;
+                                                const nextIsIndia = country === 'India';
+                                                setForm(prev => ({
+                                                    ...prev,
+                                                    country,
+                                                    state: nextIsIndia && prev.state && !INDIAN_STATES.includes(prev.state) ? '' : prev.state
+                                                }));
+                                            }}
+                                            style={{ background: '#fff', color: '#212121' }}
+                                        >
                                             {countriesList.map(country => (
                                                 <option key={country.name} value={country.name} style={{ background: '#fff', color: '#212121' }}>{country.name}</option>
                                             ))}

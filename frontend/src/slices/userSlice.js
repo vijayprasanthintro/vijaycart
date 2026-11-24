@@ -59,10 +59,12 @@ const userSlice = createSlice({
             }
         },
         deleteUserSuccess(state, action){
+            const deletedId = action.payload;
             return {
                 ...state,
                 loading: false,
-                isUserDeleted : true
+                isUserDeleted : true,
+                users: deletedId ? state.users.filter(u => u._id !== deletedId) : state.users
             }
         },
         deleteUserFail(state, action){

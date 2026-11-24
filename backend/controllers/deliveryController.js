@@ -135,6 +135,120 @@ exports.toggleAvailability = catchAsyncError(async (req, res, next) => {
     })
 });
 
+//Admin: Delete a delivery boy - /api/v1/admin/deliveryboy/:id
+exports.deleteDeliveryBoy = catchAsyncError(async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+    if (!user || user.role !== 'deliveryboy' || user.isDeleted) {
+        return next(new ErrorHandler('Delivery boy not found', 404))
+    }
+
+    if (String(user._id) === String(req.user.id)) {
+        return next(new ErrorHandler('You cannot delete your own account', 400))
+    }
+
+    const [customerOrderCount, deliveryOrderCount, sellerApplicationCount] = await Promise.all([
+        Order.countDocuments({ user: user._id }),
+        Order.countDocuments({ deliveryBoy: user._id }),
+        require('../models/sellerApplicationModel').countDocuments({ user: user._id })
+    ]);
+    const hasAssociatedRecords = customerOrderCount > 0 || deliveryOrderCount > 0 || sellerApplicationCount > 0;
+
+    if (hasAssociatedRecords) {
+        await Order.updateMany(
+            { deliveryBoy: user._id, orderStatus: { $nin: ['Delivered', 'Cancelled', 'Cancelled by Customer'] } },
+            { $unset: { deliveryBoy: 1 } }
+        );
+        await DeliveryPerson.deleteOne({ user: user._id });
+
+        const tombstone = `deleted_${String(user._id)}_${Date.now()}`;
+        user.isDeleted = true;
+        user.deletedAt = new Date();
+        user.deletedBy = req.user.id;
+        user.email = `${tombstone}@deleted.vijaycart.local`;
+        user.username = undefined;
+        user.mobile = undefined;
+        user.googleId = undefined;
+        user.password = undefined;
+        user.avatar = undefined;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordTokenExpire = undefined;
+        user.wishlist = [];
+        user.addresses = [];
+        await user.save({ validateBeforeSave: false });
+
+        return res.status(200).json({
+            success: true,
+            message: 'Delivery boy has associated records and was safely deactivated. They can no longer log in.',
+            mode: 'soft-delete'
+        })
+    }
+
+    await DeliveryPerson.deleteOne({ user: user._id });
+    await require('../models/sellerApplicationModel').deleteMany({ user: user._id });
+    await User.deleteOne({ _id: user._id });
+
+    res.status(200).json({
+        success: true,
+        message: 'Delivery boy deleted successfully',
+        mode: 'hard-delete'
+    })
+});
+
+//Admin: Update a delivery boy - /api/v1/admin/deliveryboy/:id
+exports.updateDeliveryBoy = catchAsyncError(async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+    if (!user || user.role !== 'deliveryboy' || user.isDeleted) {
+        return next(new ErrorHandler('Delivery boy not found', 404))
+    }
+
+    const { name, email, mobile, vehicleNumber } = req.body || {};
+    const nextEmail = email ? String(email).trim().toLowerCase() : user.email;
+    const nextMobile = mobile ? String(mobile).replace(/\D/g, '') : user.mobile;
+
+    if (nextMobile && !/^[6-9]\d{9}$/.test(nextMobile)) {
+        return next(new ErrorHandler('Please enter a valid 10-digit mobile number', 400))
+    }
+
+    const conflict = await User.findOne({
+        _id: { $ne: user._id },
+        isDeleted: { $ne: true },
+        $or: [
+            ...(nextEmail ? [{ email: nextEmail }] : []),
+            ...(nextMobile ? [{ mobile: nextMobile }] : [])
+        ]
+    });
+    if (conflict) {
+        return next(new ErrorHandler('A user already exists with this email or mobile number', 400))
+    }
+
+    if (name) user.name = String(name).trim();
+    if (nextEmail) user.email = nextEmail;
+    if (nextMobile) user.mobile = nextMobile;
+    await user.save({ validateBeforeSave: false });
+
+    const person = await ensureDeliveryPerson(user);
+    if (name) person.name = user.name;
+    if (nextEmail) person.email = user.email;
+    if (nextMobile) person.phone = nextMobile;
+    if (vehicleNumber !== undefined) person.vehicleNumber = String(vehicleNumber || '').trim();
+    await person.save();
+
+    res.status(200).json({
+        success: true,
+        deliveryBoy: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            mobile: user.mobile,
+            phone: person.phone,
+            vehicleNumber: person.vehicleNumber || '',
+            availability: person.availability !== false,
+            status: person.status,
+            assignedOrders: person.assignedOrders || []
+        }
+    })
+});
+
 //Admin: Assign a delivery boy to an order - /api/v1/admin/order/:id/assign
 exports.assignOrder = catchAsyncError(async (req, res, next) => {
     const order = await Order.findById(req.params.id);

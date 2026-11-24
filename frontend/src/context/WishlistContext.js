@@ -22,6 +22,11 @@ export function WishlistProvider({ children }) {
   });
   const [loading, setLoading] = useState(false);
   const prevAuth = useRef(null);
+  const itemsRef = useRef(items);
+
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
 
   // Load the user's wishlist whenever the auth state flips (login / logout /
   // initial refresh where the cached session is restored).
@@ -55,13 +60,13 @@ export function WishlistProvider({ children }) {
     return () => { cancelled = true; };
   }, [isAuthenticated]);
 
-  const isWishlisted = useCallback((id) => items.some(i => i._id === id), [items]);
+  const isWishlisted = useCallback((id) => itemsRef.current.some(i => i._id === id), []);
 
   // Optimistic add/remove against the API. Returns { ok, added } so callers can
   // toast the right message; reverts the local state if the request fails.
   const toggleWishlist = useCallback(async (product) => {
     if (!product || !product._id) return { ok: false, added: false };
-    const exists = items.some(i => i._id === product._id);
+    const exists = itemsRef.current.some(i => i._id === product._id);
 
     if (exists) {
       setItems(prev => prev.filter(i => i._id !== product._id));
@@ -80,7 +85,7 @@ export function WishlistProvider({ children }) {
       setItems(prev => exists ? [{ ...product }, ...prev] : prev.filter(i => i._id !== product._id));
       return { ok: false, added: exists };
     }
-  }, [items]);
+  }, []);
 
   const removeFromWishlist = useCallback(async (id) => {
     setItems(prev => prev.filter(i => i._id !== id));

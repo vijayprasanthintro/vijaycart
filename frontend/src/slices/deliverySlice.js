@@ -67,6 +67,14 @@ const deliverySlice = createSlice({
                 isUpdated: false
             }
         },
+        removeDeliveryBoy(state, action) {
+            const id = action.payload;
+            return {
+                ...state,
+                loading: false,
+                deliveryBoys: state.deliveryBoys.filter(b => b._id !== id)
+            }
+        },
         deliveryFail(state, action) {
             return {
                 ...state,
@@ -88,6 +96,7 @@ export const {
     deliveryBoysSuccess,
     updateDeliverySuccess,
     clearUpdateDelivery,
+    removeDeliveryBoy,
     deliveryFail
 } = actions;
 

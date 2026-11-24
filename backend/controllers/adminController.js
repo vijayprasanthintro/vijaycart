@@ -25,7 +25,7 @@ exports.loginAdmin = catchAsyncError(async (req, res, next) => {
         : { username: String(rawId).replace(/\s+/g, '') };
 
     // select('+password') overrides the field's select:false so bcrypt can run.
-    const user = await User.findOne(query).select('+password');
+    const user = await User.findOne({ ...query, isDeleted: { $ne: true } }).select('+password');
 
     if (!user || !user.password) {
         // Same message for "no account" and "no password set yet" so the

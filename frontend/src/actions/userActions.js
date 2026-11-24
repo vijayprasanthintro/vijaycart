@@ -180,10 +180,13 @@ export const deleteUser = id => async (dispatch) => {
 
     try {
         dispatch(deleteUserRequest())
-        await axios.delete(`/api/v1/admin/user/${id}`);
-        dispatch(deleteUserSuccess())
+        const { data } = await axios.delete(`/api/v1/admin/user/${id}`);
+        dispatch(deleteUserSuccess(id))
+        return { success: true, message: data?.message }
     } catch (error) {
-        dispatch(deleteUserFail(error.response?.data?.message || error.message))
+        const message = error.response?.data?.message || error.message;
+        dispatch(deleteUserFail(message))
+        return { success: false, message }
     }
 
 }

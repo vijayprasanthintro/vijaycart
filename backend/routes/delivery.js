@@ -1,5 +1,5 @@
 const express = require('express');
-const { myDeliveryOrders, todayDeliveryOrders, updateDeliveryStatus, deliveryHistory, getDeliveryBoys, createDeliveryBoy, toggleAvailability, assignOrder } = require('../controllers/deliveryController');
+const { myDeliveryOrders, todayDeliveryOrders, updateDeliveryStatus, deliveryHistory, getDeliveryBoys, createDeliveryBoy, toggleAvailability, assignOrder, deleteDeliveryBoy, updateDeliveryBoy } = require('../controllers/deliveryController');
 const router = express.Router();
 const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/authenticate');
 const {
@@ -19,6 +19,9 @@ router.route('/delivery/history').get(isAuthenticatedUser, authorizeRoles('deliv
 //Admin Routes
 router.route('/admin/deliveryboys').get(isAuthenticatedUser, authorizeRoles('admin'), getDeliveryBoys);
 router.route('/admin/deliveryboy').post(isAuthenticatedUser, authorizeRoles('admin'), deliveryBoyRules(), validate, createDeliveryBoy);
+router.route('/admin/deliveryboy/:id')
+    .put(isAuthenticatedUser, authorizeRoles('admin'), objectIdParam('id'), deliveryBoyRules(), validate, updateDeliveryBoy)
+    .delete(isAuthenticatedUser, authorizeRoles('admin'), objectIdParam('id'), validate, deleteDeliveryBoy);
 router.route('/admin/deliveryboy/:id/availability').put(isAuthenticatedUser, authorizeRoles('admin'), objectIdParam('id'), validate, toggleAvailability);
 router.route('/admin/order/:id/assign').put(isAuthenticatedUser, authorizeRoles('admin'), objectIdParam('id'), assignOrderRules(), validate, assignOrder);
 

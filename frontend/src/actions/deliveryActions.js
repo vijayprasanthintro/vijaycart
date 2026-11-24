@@ -5,7 +5,9 @@ import {
     deliveryRequest,
     historySuccess,
     todayOrdersSuccess,
-    updateDeliverySuccess
+    updateDeliverySuccess,
+    deliverySuccess,
+    removeDeliveryBoy
 } from '../slices/deliverySlice';
 import axios from 'axios';
 
@@ -92,5 +94,31 @@ export const toggleAvailability = (id, availability) => async (dispatch) => {
     } catch (error) {
         dispatch(deliveryFail(error.response?.data?.message || error.message))
         return { success: false, error: error.response?.data?.message || error.message }
+    }
+}
+
+export const deleteDeliveryBoy = (id) => async (dispatch) => {
+    try {
+        dispatch(deliveryRequest())
+        const { data } = await axios.delete(`/api/v1/admin/deliveryboy/${id}`)
+        dispatch(removeDeliveryBoy(id))
+        return { success: true, message: data?.message }
+    } catch (error) {
+        const message = error.response?.data?.message || error.message;
+        dispatch(deliveryFail(message))
+        return { success: false, error: message }
+    }
+}
+
+export const updateDeliveryBoy = (id, deliveryBoyData) => async (dispatch) => {
+    try {
+        dispatch(deliveryRequest())
+        const { data } = await axios.put(`/api/v1/admin/deliveryboy/${id}`, deliveryBoyData)
+        dispatch(deliverySuccess())
+        return { success: true, deliveryBoy: data.deliveryBoy, message: data?.message }
+    } catch (error) {
+        const message = error.response?.data?.message || error.message;
+        dispatch(deliveryFail(message))
+        return { success: false, error: message }
     }
 }

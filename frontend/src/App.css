@@ -1113,12 +1113,13 @@ a:hover { color: var(--vc-orange); text-decoration: none; }
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
-  animation: fadeInUp 0.45s ease backwards;
   position: relative;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 360px;
 }
 .card-premium:hover {
   transform: translateY(-4px);
@@ -2000,6 +2001,20 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
   justify-content: center;
   padding: 1.35rem 2.2rem;
   max-width: 480px;
+}
+.vc-hero__slide--active .vc-hero__kicker,
+.vc-hero__slide--active .vc-hero__title,
+.vc-hero__slide--active .vc-hero__subtitle,
+.vc-hero__slide--active .vc-hero__cta { animation: heroContentIn 0.45s ease both; }
+.vc-hero__slide--active .vc-hero__title { animation-delay: 0.08s; }
+.vc-hero__slide--active .vc-hero__subtitle { animation-delay: 0.14s; }
+.vc-hero__slide--active .vc-hero__cta { animation-delay: 0.2s; }
+@keyframes heroContentIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .vc-hero__slide--active .vc-hero__kicker,
+  .vc-hero__slide--active .vc-hero__title,
+  .vc-hero__slide--active .vc-hero__subtitle,
+  .vc-hero__slide--active .vc-hero__cta { animation: none; }
 }
 .vc-hero__kicker {
   display: inline-block;

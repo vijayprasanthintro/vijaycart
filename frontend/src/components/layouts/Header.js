@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { motion, AnimatePresence } from 'framer-motion';
 import { logout } from '../../actions/userActions';
 import { useWishlist } from '../../context/WishlistContext';
 import { Dropdown, Image } from 'react-bootstrap';
 import SearchSuggest from './SearchSuggest';
 
 export default function Header() {
-  const { isAuthenticated, user } = useSelector((state) => state.authState);
-  const { items } = useSelector((state) => state.cartState);
-  const { settings } = useSelector((state) => state.settingState);
+  const isAuthenticated = useSelector((state) => state.authState.isAuthenticated);
+  const user = useSelector((state) => state.authState.user);
+  const items = useSelector((state) => state.cartState.items);
+  const settings = useSelector((state) => state.settingState.settings);
   const { count: wishlistCount } = useWishlist();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,7 +43,15 @@ export default function Header() {
   const cartCount = items.reduce((sum, i) => sum + (Number(i.quantity) || 0), 0);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    let last = window.scrollY > 20;
+    setScrolled(last);
+    const handleScroll = () => {
+      const next = window.scrollY > 20;
+      if (next !== last) {
+        last = next;
+        setScrolled(next);
+      }
+    };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -121,12 +129,7 @@ export default function Header() {
       )}
 
       {/* ==================== DESKTOP HEADER ==================== */}
-      <motion.header
-        className={`vc-hd ${scrolled ? 'vc-hd--scrolled' : ''}`}
-        initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      >
+      <header className={`vc-hd ${scrolled ? 'vc-hd--scrolled' : ''}`}>
         <div className="container vc-hd__inner">
           {/* Brand */}
           <Link to="/" className="vc-hd__brand">
@@ -172,15 +175,8 @@ export default function Header() {
                 <span className="vc-nav-btn-text d-none d-xl-inline">More</span>
                 <i className="fa fa-angle-down vc-nav-chevron d-none d-xl-inline" aria-hidden="true"></i>
               </button>
-              <AnimatePresence>
                 {moreOpen && (
-                  <motion.div
-                    className="vc-hd__dropdown"
-                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                    transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                  >
+                  <div className="vc-hd__dropdown">
                     <Link to="/search/all" className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
                       <i className="fa fa-percent" aria-hidden="true"></i>All Offers
                     </Link>
@@ -201,9 +197,8 @@ export default function Header() {
                     <a href={`tel:${supportPhone.replace(/[^+\d]/g, '')}`} className="vc-hd__dropdown-item" onClick={() => setMoreOpen(false)}>
                       <i className="fa fa-phone" aria-hidden="true"></i>{supportPhone}
                     </a>
-                  </motion.div>
+                  </div>
                 )}
-              </AnimatePresence>
             </div>
 
             <Link to="/orders" className="vc-hd__item vc-hd__item--icon" aria-label="Orders">
@@ -225,7 +220,7 @@ export default function Header() {
 
           </nav>
         </div>
-      </motion.header>
+      </header>
 
       {/* ==================== MOBILE HEADER ==================== */}
       <header className={`vc-mhd ${scrolled ? 'vc-mhd--scrolled' : ''}`}>
