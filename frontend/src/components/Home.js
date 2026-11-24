@@ -26,6 +26,7 @@ const QUICK_ACCESS = [
 // oversized catalog in one view.
 const FULL_CATALOG_LIMIT = 48;
 const HOME_GRID_LIMIT = 24;
+const EMPTY_PRODUCTS = [];
 
 function useFlashTimer() {
   const [timer, setTimer] = useState({ h: '05', m: '47', s: '30' });
@@ -85,7 +86,7 @@ export default function Home() {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.productsState.loading);
   const error = useSelector((state) => state.productsState.error);
-  const products = useSelector((state) => state.productsState.products) || [];
+  const products = useSelector((state) => state.productsState.products) || EMPTY_PRODUCTS;
   const settings = useSelector((state) => state.settingState.settings) || {};
   const recentlyViewed = useRecentlyViewed();
 
@@ -98,7 +99,7 @@ export default function Home() {
     dispatch(getProducts(null, null, null, null, 1, FULL_CATALOG_LIMIT));
   }, [error, dispatch]);
 
-  const allProducts = useMemo(() => products || [], [products]);
+  const allProducts = products;
   const anyProduct = allProducts.length > 0;
 
   // One shared feed build so every section gets its own ranking and the page
