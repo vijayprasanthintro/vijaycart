@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 /**
  * Persisted state of the Website Design Studio.
- * `designId` is the design that is live on the storefront. The customisation
- * object only stores explicit overrides; the full token set is resolved from
- * the design catalog on read, so upgrading a catalog design automatically
+ * `designId` is the design that is live on the storefront. `customization`
+ * stores only explicit overrides; the full token set is resolved from the
+ * design catalog on read, so upgrading a catalog design automatically
  * upgrades every store that uses it.
  */
 const designStateSchema = new mongoose.Schema({

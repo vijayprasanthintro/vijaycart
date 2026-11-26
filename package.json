@@ -13,7 +13,10 @@
     "prod": "set NODE_ENV=production&&nodemon backend/server.js",
     "build": "npm --prefix frontend ci && npm --prefix frontend run build",
     "seeder": "node backend/utils/seeder.js",
-    "seed:admin": "node backend/utils/adminSeeder.js"
+    "seed:admin": "node backend/utils/adminSeeder.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "node frontend/node_modules/eslint/bin/eslint.js --no-eslintrc -c .eslintrc.json --resolve-plugins-relative-to frontend backend frontend/src --ext .js,.jsx"
   },
   "author": "Vijayprasanth",
   "license": "ISC",
@@ -46,6 +49,7 @@
     "xss-clean": "^0.1.4"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "prettier": "^3.10.1"
   }
 }

@@ -44,6 +44,7 @@ export default function Login() {
     const [googleClientId, setGoogleClientId] = useState(null);
     const [googleLoading, setGoogleLoading] = useState(false);
     const otpRefs = useRef([]);
+    const googleStartedRef = useRef(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -222,19 +223,22 @@ export default function Login() {
     }, [dispatch, location.pathname, location.search, navigate]);
 
     const handleGoogleClick = () => {
-        if (googleLoading) return;
+        if (googleStartedRef.current || googleLoading) return;
         if (!googleClientId) {
             toast.info('Google sign-in is unavailable right now. Use the Email OTP option instead.', TOAST_STYLE);
             return;
         }
+        googleStartedRef.current = true;
         setGoogleLoading(true);
         const target = redirect.startsWith('/') ? redirect : `/${redirect}`;
-        const backendBase = (process.env.REACT_APP_BACKEND_URL || '').replace(/\/$/, '');
-        const localBackend = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-            ? `${window.location.protocol}//${window.location.hostname}:8000`
-            : '';
-        const base = backendBase || localBackend;
-        window.location.href = `${base}/api/v1/google?redirect=${encodeURIComponent(target)}`;
+
+        // Keep the whole OAuth round trip on the site origin. Vercel rewrites
+        // /api/* to the backend, so the state and JWT cookies are stored for
+        // the domain the browser uses for every later API call. Only local
+        // development talks to port 8000 directly.
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const base = isLocal ? `${window.location.protocol}//${window.location.hostname}:8000` : '';
+        window.location.assign(`${base}/api/v1/google?redirect=${encodeURIComponent(target)}`);
     };
 
     return (

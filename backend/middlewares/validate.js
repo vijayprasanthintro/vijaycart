@@ -1,13 +1,4 @@
-// Centralized input validation using express-validator.
-//
-// Each export is an array of validation chains plus a `validate` handler.
-// Wire them into a route like:
-//   router.route('/order/new')
-//     .post(isAuthenticatedUser, ...orderRules(), validate, newOrder);
-//
-// The `validate` handler returns the first error as a 400 in the app's
-// standard `{ success: false, message }` shape so the existing error UI and
-// error middleware keep working unchanged.
+// Validation chains return the first error in the app's standard 400 shape.
 
 const { body, param, query, validationResult } = require('express-validator');
 
@@ -33,6 +24,9 @@ function validate(req, res, next) {
     });
 }
 
+const isValidMobile = (value) => /^[6-9]\d{9}$/.test(String(value).replace(/\D/g, ''));
+const isValidOptionalMobile = (value) => /^[6-9]\d{9}$/.test(String(value || '').replace(/\D/g, ''));
+
 const objectIdParam = (name) =>
     param(name).isMongoId().withMessage('Invalid resource id');
 
@@ -42,7 +36,7 @@ const otpRequestRules = () => [
         .optional({ values: 'falsy' })
         .isString().withMessage('Mobile number must be a string')
         .trim()
-        .custom((v) => /^[6-9]\d{9}$/.test(String(v).replace(/\D/g, '')))
+        .custom(isValidMobile)
         .withMessage('Please enter a valid 10-digit mobile number'),
     body('email')
         .optional({ values: 'falsy' })
@@ -70,7 +64,7 @@ const profileUpdateRules = () => [
         .isLength({ max: 120 }).withMessage('Email is too long'),
     body('mobile')
         .optional({ values: 'falsy' })
-        .custom((v) => /^[6-9]\d{9}$/.test(String(v).replace(/\D/g, '')))
+        .custom(isValidMobile)
         .withMessage('Please enter a valid 10-digit mobile number')
 ];
 
@@ -163,7 +157,7 @@ const orderRules = () => [
         .custom((v) => /^\d{6}$/.test(String(v || '').replace(/\D/g, '')))
         .withMessage('Please provide a valid 6-digit PIN code'),
     body('shippingInfo.phoneNo')
-        .custom((v) => /^[6-9]\d{9}$/.test(String(v || '').replace(/\D/g, '')))
+        .custom(isValidOptionalMobile)
         .withMessage('Please provide a valid 10-digit phone number'),
     body('itemsPrice')
         .optional({ values: 'falsy' })
@@ -243,7 +237,7 @@ const deliveryBoyRules = () => [
     body('name').isLength({ min: 2, max: 50 }).withMessage('Please enter the delivery partner name'),
     body('email').isEmail().withMessage('Please enter a valid email address'),
     body('mobile')
-        .custom((v) => /^[6-9]\d{9}$/.test(String(v).replace(/\D/g, '')))
+        .custom(isValidMobile)
         .withMessage('Please enter a valid 10-digit mobile number'),
     body('vehicleNumber')
         .optional({ values: 'falsy' })
@@ -276,7 +270,7 @@ const adminUserUpdateRules = () => [
         .isEmail().withMessage('Please enter a valid email address'),
     body('mobile')
         .optional({ values: 'falsy' })
-        .custom((v) => /^[6-9]\d{9}$/.test(String(v).replace(/\D/g, '')))
+        .custom(isValidMobile)
         .withMessage('Please enter a valid 10-digit mobile number'),
     body('role')
         .optional({ values: 'falsy' })
@@ -290,7 +284,7 @@ const sellerApplyRules = () => [
     body('storeCategory')
         .isLength({ min: 2, max: 80 }).withMessage('Please choose a store category'),
     body('storePhone')
-        .custom((v) => /^[6-9]\d{9}$/.test(String(v).replace(/\D/g, '')))
+        .custom(isValidMobile)
         .withMessage('Please enter a valid 10-digit mobile number'),
     body('storeCity')
         .isLength({ min: 2, max: 80 }).withMessage('Please enter a valid city'),

@@ -32,7 +32,7 @@ function parseJsonArray(value) {
     try {
         const parsed = JSON.parse(value);
         return Array.isArray(parsed) ? parsed : null;
-    } catch (e) {
+    } catch {
         return null;
     }
 }
@@ -44,11 +44,17 @@ function parseJsonField(value) {
         try {
             const parsed = JSON.parse(value);
             return Array.isArray(parsed) ? parsed : [];
-        } catch (e) {
+        } catch {
             return [];
         }
     }
     return Array.isArray(value) ? value : [];
+}
+
+function parseProductFields(body) {
+    ['specifications', 'features', 'highlights'].forEach((field) => {
+        if (body[field] !== undefined) body[field] = parseJsonField(body[field]);
+    });
 }
 
 // Diagnostic health check - /api/v1/products/health
@@ -109,15 +115,7 @@ exports.getProducts = catchAsyncError(async (req, res, next)=>{
 exports.newProduct = catchAsyncError(async (req, res, next)=>{
     req.body.images = uploadedProductImages(req);
 
-    if (req.body.specifications !== undefined) {
-        req.body.specifications = parseJsonField(req.body.specifications);
-    }
-    if (req.body.features !== undefined) {
-        req.body.features = parseJsonField(req.body.features);
-    }
-    if (req.body.highlights !== undefined) {
-        req.body.highlights = parseJsonField(req.body.highlights);
-    }
+    parseProductFields(req.body);
 
     req.body.user = req.user.id;
     const product = await Product.create(req.body);
@@ -186,22 +184,7 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
     delete req.body.imagesCleared;
     delete req.body.keptImages;
 
-    if (req.body.specifications !== undefined) {
-        req.body.specifications = parseJsonField(req.body.specifications);
-    }
-    if (req.body.features !== undefined) {
-        req.body.features = parseJsonField(req.body.features);
-    }
-    if (req.body.highlights !== undefined) {
-        req.body.highlights = parseJsonField(req.body.highlights);
-    }
-    
-    if(!product) {
-        return res.status(404).json({
-            success: false,
-            message: "Product not found"
-        });
-    }
+    parseProductFields(req.body);
 
     const updated = await Product.findByIdAndUpdate(req.params.id, req.body, {
         new: true,

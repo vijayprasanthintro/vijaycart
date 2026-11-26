@@ -9,12 +9,13 @@ const sendToken = require('../utils/jwt');
 const { OAuth2Client } = require('google-auth-library');
 const crypto = require('crypto');
 
-//Google Sign-In (token verification) - /api/v1/google
-//The frontend obtains a Google ID token via Google Identity Services and posts
-//it here. The backend verifies the token with google-auth-library using the
-//GOOGLE_CLIENT_ID, then creates or links the account and issues the normal
-//VijayCart JWT cookie — the rest of the app (auth cache, protected routes,
-//cart/checkout) is untouched.
+const countOtherActiveAdmins = (userId) => User.countDocuments({
+    role: 'admin',
+    isDeleted: { $ne: true },
+    _id: { $ne: userId }
+});
+
+// Google Sign-In: verify the ID token, then use the normal VijayCart JWT cookie.
 exports.googleLogin = catchAsyncError(async (req, res, next) => {
     const clientId = process.env.GOOGLE_CLIENT_ID;
     if (!clientId) {
@@ -95,16 +96,31 @@ const getFrontendUrl = (req) => {
 };
 
 const getGoogleRedirectUri = (req) => {
-    const explicit = (process.env.GOOGLE_REDIRECT_URI || '').trim();
-    if (explicit) return explicit.replace(/\/$/, '');
+    const callbackPath = '/api/v1/google/callback';
+    const trimUrl = (value) => String(value || '').trim().replace(/\/$/, '');
+    const host = String(req.get('host') || '');
 
-    const configured = (process.env.GOOGLE_CALLBACK_URL || '').trim();
-    if (configured && /\/api\/v1\/google\/callback\/?$/.test(configured)) {
-        return configured.replace(/\/$/, '');
+    // Local development must use the local API so the cookie is stored for
+    // localhost and the CRA proxy can forward it to the backend.
+    if (process.env.NODE_ENV !== 'production' && /^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(host)) {
+        return `${req.protocol}://${host}${callbackPath}`;
     }
 
-    const backend = (process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, '');
-    return `${backend}/api/v1/google/callback`;
+    // Production must return to the frontend origin. Vercel rewrites /api/*
+    // to this backend, so the same handler runs while the OAuth state and JWT
+    // cookies stay on the VijayCart domain the browser actually uses.
+    const frontend = trimUrl(String(process.env.FRONTEND_URL || '').split(',')[0]);
+    if (process.env.NODE_ENV === 'production' && frontend) {
+        try {
+            return `${new URL(frontend).origin}${callbackPath}`;
+        } catch (e) { /* fall through to the configured value */ }
+    }
+
+    const configured = trimUrl(process.env.GOOGLE_CALLBACK_URL || process.env.GOOGLE_REDIRECT_URI);
+    if (configured.endsWith(callbackPath)) return configured;
+
+    const backend = trimUrl(process.env.BACKEND_URL || `${req.protocol}://${host}`);
+    return `${backend}${callbackPath}`;
 };
 
 const safeRedirectPath = (value) => {
@@ -611,11 +627,7 @@ exports.updateUser = catchAsyncError(async (req, res, next) => {
 
     // Prevent demoting/removing the last active admin
     if (user.role === 'admin' && req.body.role && req.body.role !== 'admin') {
-        const otherActiveAdmins = await User.countDocuments({
-            role: 'admin',
-            isDeleted: { $ne: true },
-            _id: { $ne: user._id }
-        });
+        const otherActiveAdmins = await countOtherActiveAdmins(user._id);
         if (otherActiveAdmins < 1) {
             return next(new ErrorHandler('Cannot change role of the last active admin account', 400))
         }
@@ -653,11 +665,7 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
 
     // Prevent deleting the last active admin
     if (user.role === 'admin') {
-        const otherActiveAdmins = await User.countDocuments({
-            role: 'admin',
-            isDeleted: { $ne: true },
-            _id: { $ne: user._id }
-        });
+        const otherActiveAdmins = await countOtherActiveAdmins(user._id);
         if (otherActiveAdmins < 1) {
             return next(new ErrorHandler('Cannot delete the last active admin account', 400))
         }

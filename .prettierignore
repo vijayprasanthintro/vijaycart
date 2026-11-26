@@ -1,0 +1,10 @@
+node_modules
+frontend/build
+frontend/node_modules
+build
+dist
+coverage
+backend/uploads
+package-lock.json
+frontend/package-lock.json
+*.log
