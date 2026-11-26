@@ -83,7 +83,6 @@ export default memo(function Product ({product, col, index = 0}) {
                 </button>
                 )}
 
-                {product.images.length > 0 &&
                 <div className="position-relative overflow-hidden">
                   <OptimizedImage
                     className="card-img-top mx-auto"
@@ -99,7 +98,7 @@ export default memo(function Product ({product, col, index = 0}) {
                   >
                     <i className="fa fa-eye" aria-hidden="true"></i> Quick View
                   </button>
-                </div>}
+                </div>
 
                 <div className="card-body d-flex flex-column">
                     <span className="product-seller">{product.brand || product.seller}</span>
@@ -159,8 +158,7 @@ export default memo(function Product ({product, col, index = 0}) {
                     <Modal.Body>
                         <div className="row align-items-center g-0">
                             <div className="col-12 col-md-5 text-center quickview-img">
-                                {product.images.length > 0 &&
-                                  <OptimizedImage src={productImage(product)} alt={product.name} />}
+                                <OptimizedImage src={productImage(product)} alt={product.name} />
                             </div>
                             <div className="col-12 col-md-7 quickview-info">
                                 <span className="product-seller">{product.brand || product.seller}</span>

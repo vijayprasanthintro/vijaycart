@@ -9,10 +9,10 @@ import {
 } from '../slices/categorySlice';
 import axios from 'axios';
 
-export const getCategories = () => async (dispatch) => {
+export const getCategories = (includeAll = false) => async (dispatch) => {
     try {
         dispatch(categoriesRequest())
-        const { data } = await axios.get(`/api/v1/categories`)
+        const { data } = await axios.get(`/api/v1/categories${includeAll ? '?all=true' : ''}`)
         dispatch(categoriesSuccess(data))
     } catch (error) {
         dispatch(categoriesFail(error.response?.data?.message || error.message))

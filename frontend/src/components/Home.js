@@ -1,26 +1,19 @@
 import { Fragment, useEffect, useState, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../actions/productActions";
+import { getCategories } from "../actions/categoryActions";
 import MetaData from "./layouts/MetaData";
-import Product from "./product/Product";
 import { Link } from 'react-router-dom';
-import HeroBanner from "./home/HeroBanner";
+import ThemeHero from "./home/ThemeHero";
+import QuickAccess from "./home/QuickAccess";
 import PersonalizedSection from "./home/PersonalizedSection";
 import ProductCarousel from "./home/ProductCarousel";
+import SectionHeader from "./home/SectionHeader";
+import ProductRow from "./home/ProductRow";
+import { STOREFRONT_CATEGORIES } from "../designs/storefrontContent";
 import { buildHomeFeed } from "../utils/homeFeed";
 import { SectionTitleSkeleton, ProductRowSkeleton } from "./layouts/Skeletons";
 const FLASH_KEY = 'vijaycart_flash_ends';
-
-const QUICK_ACCESS = [
-  { name: 'Offers', icon: 'fa-percent', cls: 'cat-icon-appliances', to: '/search/all' },
-  { name: 'Mobiles & Acc', icon: 'fa-mobile', cls: 'cat-icon-mobile', to: '/search/all?category=Smartphones' },
-  { name: 'Fashion', icon: 'fa-tags', cls: 'cat-icon-fashion', to: '/search/all?category=Clothes%2FShoes' },
-  { name: 'Electronics', icon: 'fa-plug', cls: 'cat-icon-electronics', to: '/search/all?category=Electronics' },
-  { name: 'Grocery', icon: 'fa-shopping-basket', cls: 'cat-icon-grocery', to: '/search/all?category=Food' },
-  { name: 'Home', icon: 'fa-home', cls: 'cat-icon-home', to: '/search/all?category=Home' },
-  { name: 'Beauty', icon: 'fa-heartbeat', cls: 'cat-icon-beauty', to: '/search/all?category=Beauty%2FHealth' },
-  { name: 'Sports', icon: 'fa-futbol-o', cls: 'cat-icon-sports', to: '/search/all?category=Sports' },
-];
 
 // Enough for all homepage sections after de-duplication, without rendering an
 // oversized catalog in one view.
@@ -88,7 +81,30 @@ export default function Home() {
   const error = useSelector((state) => state.productsState.error);
   const products = useSelector((state) => state.productsState.products) || EMPTY_PRODUCTS;
   const settings = useSelector((state) => state.settingState.settings) || {};
+  const categoriesFromStore = useSelector((state) => state.categoryState.categories);
+  const publicCategories = useMemo(() => categoriesFromStore || [], [categoriesFromStore]);
   const recentlyViewed = useRecentlyViewed();
+
+  useEffect(() => {
+    dispatch(getCategories());
+    // Admin category changes in another tab should show up as soon as the
+    // storefront regains focus, without requiring a manual refresh.
+    const refresh = () => {
+      if (document.visibilityState === 'visible') dispatch(getCategories());
+    };
+    window.addEventListener('focus', refresh);
+    document.addEventListener('visibilitychange', refresh);
+    return () => {
+      window.removeEventListener('focus', refresh);
+      document.removeEventListener('visibilitychange', refresh);
+    };
+  }, [dispatch]);
+
+  const visibleQuickAccess = useMemo(() => {
+    if (!publicCategories.length) return STOREFRONT_CATEGORIES;
+    const hidden = new Set(publicCategories.filter((c) => c.active === false).map((c) => c.name.toLowerCase()));
+    return STOREFRONT_CATEGORIES.filter((q) => !hidden.has((q.category || '').toLowerCase()));
+  }, [publicCategories]);
 
   const retry = useCallback(() => {
     dispatch(getProducts(null, null, null, null, 1, FULL_CATALOG_LIMIT));
@@ -117,23 +133,13 @@ export default function Home() {
     <Fragment>
       <MetaData title={settings.metaTitle || 'Buy Best Products'} description={settings.metaDescription || ''} />
 
-      {/* Hero carousel — always rendered immediately, never gated behind the
-          products API request. Gating it meant the banner was swapped for a
-          skeleton while products loaded (or forever if the request failed),
-          hiding it on mobile. */}
-      <div className="hero-section">
-        <HeroBanner />
-      </div>
+      {/* Theme hero — the same component and tokens used by the Design Studio
+          preview, always rendered immediately and never gated behind the
+          products request. */}
+      <ThemeHero />
 
-      {/* Quick access promo cards */}
-      <section className="quick-access">
-        {QUICK_ACCESS.map((q) => (
-          <Link key={q.name} to={q.to} className="quick-access-item">
-            <span className={`quick-access-icon ${q.cls}`}><i className={`fa ${q.icon}`} aria-hidden="true"></i></span>
-            <span className="quick-access-label">{q.name}</span>
-          </Link>
-        ))}
-      </section>
+      {/* Shared category cards — identical markup/styles in preview and live */}
+      <QuickAccess categories={visibleQuickAccess} />
 
       {loading && !anyProduct ? (
         <Fragment>
@@ -260,13 +266,11 @@ export default function Home() {
           {/* Top Categories */}
           {feed.topCategories.length > 0 && (
             <section className="section">
-              <div className="section-head">
-                <div>
-                  <h2 className="section-title">Top <span className="section-accent">Categories</span></h2>
-                  <p className="section-sub mt-1">Best-rated picks in the biggest categories</p>
-                </div>
-                <Link to="/search/all" className="view-all-link">View All <i className="fa fa-arrow-right" aria-hidden="true"></i></Link>
-              </div>
+              <SectionHeader
+                title={<span>Top <span className="section-accent">Categories</span></span>}
+                subtitle="Best-rated picks in the biggest categories"
+                viewAll="/search/all"
+              />
               <div className="category-tabs" role="tablist">
                 {feed.topCategories.map((t) => (
                   <button
@@ -282,11 +286,7 @@ export default function Home() {
                 ))}
               </div>
               {activeTopCategory && (
-                <div className="row home-grid">
-                  {activeTopCategory.products.slice(0, HOME_GRID_LIMIT).map((product, i) => (
-                    <Product key={product._id} product={product} col={3} index={i} />
-                  ))}
-                </div>
+                <ProductRow products={activeTopCategory.products.slice(0, HOME_GRID_LIMIT)} col={3} />
               )}
             </section>
           )}
@@ -294,13 +294,11 @@ export default function Home() {
           {/* More Products */}
           {feed.moreProducts.length > 0 && (
             <section className="section">
-              <div className="section-head">
-                <h2 className="section-title">More <span className="section-accent">Products</span></h2>
-                <Link to="/search/all" className="view-all-link">View All <i className="fa fa-arrow-right" aria-hidden="true"></i></Link>
-              </div>
-              <div className="row home-grid">
-                {feed.moreProducts.slice(0, HOME_GRID_LIMIT).map((product, i) => <Product key={product._id} product={product} col={3} index={i} />)}
-              </div>
+              <SectionHeader
+                title={<span>More <span className="section-accent">Products</span></span>}
+                viewAll="/search/all"
+              />
+              <ProductRow products={feed.moreProducts.slice(0, HOME_GRID_LIMIT)} col={3} />
             </section>
           )}
 

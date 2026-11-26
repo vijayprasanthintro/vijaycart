@@ -1,0 +1,1395 @@
+/* ==========================================================================
+   VIJAYCART — RESPONSIVE, CONTRAST & POLISH LAYER
+   --------------------------------------------------------------------------
+   Imported LAST (after App.css and theme-overrides.css) so it can refine the
+   legacy storefront styles without fighting the live design tokens.
+
+   Everything here is driven by the same CSS custom properties as the design
+   system (--primary, --on-primary, --text, --muted-strong, ...), so the rules
+   below keep working for all ten storefront designs.
+
+   Sections
+     1. Shell, container width and overflow guards
+     2. Contrast + readable typography
+     3. Product cards and product grids (phones get a real 2-column grid)
+     4. Buy Now / Add to Cart buttons
+     5. Product detail page
+     6. Header, category chips, bottom navigation and footer
+     7. Cart, checkout, orders, profile and wishlist polish
+     8. Admin dashboard polish
+     9. Small-screen safety net
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Shell, container width and overflow guards
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* Fallbacks used before ThemeContext has written the token values. */
+  --on-primary: #ffffff;
+  --on-secondary: #101828;
+  --on-accent: #101828;
+  --muted-strong: #4b5563;
+  --vc-bottom-nav-h: 62px;
+  --vc-page-gutter: clamp(14px, 3.2vw, 30px);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html,
+body,
+#root {
+  max-width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+/* The storefront and the admin shell both render inside <main class="container">.
+   A wider cap removes the "narrow strip in the middle of a big monitor" look
+   while the gutters keep content away from the screen edges. */
+.container {
+  width: 100%;
+  max-width: var(--vc-container, 1600px) !important;
+  padding-left: var(--vc-page-gutter);
+  padding-right: var(--vc-page-gutter);
+}
+
+main#main-content {
+  min-height: 55vh;
+}
+
+@media (min-width: 992px) {
+  .container {
+    padding-left: clamp(20px, 2.6vw, 40px);
+    padding-right: clamp(20px, 2.6vw, 40px);
+  }
+}
+
+/* A single, consistent focus ring for keyboard users. */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.skip-link:focus {
+  left: 12px;
+  right: auto;
+  top: 12px;
+  width: auto;
+  height: auto;
+  padding: 10px 16px;
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+  z-index: 4000;
+}
+
+/* --------------------------------------------------------------------------
+   2. Contrast + readable typography
+   -------------------------------------------------------------------------- */
+
+/* Secondary copy uses the stronger muted tone so it stays legible on both
+   light and dark surfaces (the raw --muted-text can be too faint). !important
+   is required because theme-overrides.css pins several of these to the faint
+   --muted-text token with !important. */
+.section-sub,
+.no-of-reviews,
+.product-seller,
+.mrp,
+.delivery-by,
+.cart-title-count,
+#product_id,
+.pd-mrp,
+.pd-badge-chip,
+.tracking-label,
+.location-title,
+.order-meta,
+.order-date,
+.review-date,
+.product-stock-note {
+  color: var(--muted-strong, #4b5563) !important;
+}
+
+/* "View all" is an action, not secondary copy: keep it in the theme accent
+   colour so it reads as a link and stays legible. */
+.view-all-link {
+  color: var(--primary) !important;
+}
+
+.view-all-link:hover {
+  color: var(--primary-dark) !important;
+}
+
+/* Text sitting on a themed primary surface must contrast with it. */
+.view-btn,
+#cart_btn,
+#review_btn,
+.pin-check-btn,
+.vc-hd__search-btn,
+.pd-sticky-buy,
+.empty-cta,
+.ad-btn--primary {
+  color: var(--on-primary, #fff);
+}
+
+.view-btn:hover,
+#cart_btn:hover,
+#review_btn:hover,
+.pin-check-btn:hover,
+.vc-hd__search-btn:hover,
+.pd-sticky-buy:hover,
+.empty-cta:hover {
+  color: var(--on-primary, #fff);
+}
+
+/* Disabled controls stay readable instead of fading into the background. */
+.view-btn:disabled,
+.buy-now-btn:disabled,
+#cart_btn:disabled,
+#review_btn:disabled {
+  background: var(--surface-alt, #f3f4f6) !important;
+  color: var(--muted-strong, #4b5563) !important;
+  border: 1px solid var(--border-strong, #d3d9e3) !important;
+  box-shadow: none !important;
+  opacity: 0.85 !important;
+  transform: none !important;
+}
+
+/* Tiny labels that were below the comfortable minimum on phones. */
+.quick-access-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Green savings labels were right at the 4.5:1 edge on the tinted card
+   surface; a slightly deeper green clears it while staying "positive". */
+.discount-chip {
+  color: color-mix(in srgb, var(--success) 82%, #000) !important;
+  font-weight: 700;
+}
+
+.vc-hd__brand-tagline {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+}
+
+.countdown-label,
+.product-badge,
+.cod-chip,
+.tracking-label {
+  font-size: max(0.62rem, 10px);
+}
+
+.countdown-label {
+  color: var(--muted-strong, #4b5563) !important;
+}
+
+.section-sub {
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   3. Product cards and product grids
+   -------------------------------------------------------------------------- */
+
+/* On phones the horizontal carousel becomes a true 2-column grid: no clipped
+   cards, no sideways scrolling, and the full screen width is used. */
+@media (max-width: 575.98px) {
+  .product-scroll-track,
+  .row.home-grid,
+  .row.product-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0.2rem 0 0.6rem !important;
+    overflow: visible !important;
+    scroll-snap-type: none !important;
+  }
+
+  .product-scroll-track > [class*="col-"],
+  .row.home-grid > [class*="col-"],
+  .row.product-grid > [class*="col-"] {
+    flex: initial !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    scroll-snap-align: none !important;
+  }
+
+  /* Card proportions follow the live Customize controls (radius + ratio). */
+  .card-premium {
+    border-radius: var(--product-card-radius, 14px) !important;
+  }
+
+  .card-product .position-relative.overflow-hidden,
+  .product-scroll-track .card-product .position-relative.overflow-hidden,
+  .row.home-grid .card-product .position-relative.overflow-hidden,
+  .row.product-grid .card-product .position-relative.overflow-hidden {
+    aspect-ratio: var(--vc-img-ratio, 1 / 1) !important;
+    background: var(--surface-alt, var(--surface, #fff));
+  }
+
+  .card-img-top,
+  .product-scroll-track .card-img-top,
+  .row.home-grid .card-img-top,
+  .row.product-grid .card-img-top {
+    padding: 8px !important;
+    object-fit: contain;
+  }
+
+  .card-body,
+  .product-scroll-track .card-body,
+  .row.home-grid .card-body,
+  .row.product-grid .card-body {
+    padding: var(--product-card-padding, 8px) !important;
+  }
+
+  .card-title,
+  .product-scroll-track .card-title,
+  .row.home-grid .card-title,
+  .row.product-grid .card-title {
+    font-size: 0.84rem !important;
+    line-height: 1.35;
+    min-height: 1.35em !important;
+    -webkit-line-clamp: 1 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .card-title a {
+    color: var(--text);
+  }
+
+  .product-seller {
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-product .rating-row {
+    display: none !important;
+  }
+
+  .price-row {
+    gap: 5px;
+    row-gap: 0;
+    align-items: baseline;
+  }
+
+  .card-text,
+  .product-scroll-track .card-text,
+  .row.home-grid .card-text,
+  .row.product-grid .card-text {
+    font-size: 1rem !important;
+    font-weight: 800;
+    margin: 0.15rem 0 !important;
+  }
+
+  .mrp {
+    font-size: 0.72rem;
+  }
+
+  .discount-chip {
+    font-size: 0.7rem;
+  }
+
+  .card-product .delivery-row,
+  .card-product .cod-chip,
+  .card-product .stock-status {
+    display: none !important;
+  }
+
+  .view-btn {
+    min-height: 38px;
+    padding: 0.5rem 0.35rem !important;
+    font-size: 0.78rem !important;
+    border-radius: 10px !important;
+  }
+
+  .product-badges {
+    top: 6px;
+    left: 6px;
+    gap: 3px;
+  }
+
+  .product-badge {
+    padding: 0.18rem 0.42rem;
+    font-size: 0.6rem;
+  }
+
+  .wishlist-btn {
+    top: 6px;
+    right: 6px;
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+
+  .quick-view-btn {
+    display: none !important;
+  }
+}
+
+/* Tablets keep the 3-column grid but get slightly larger card text. */
+@media (min-width: 576px) and (max-width: 991.98px) {
+  .card-title {
+    font-size: 0.9rem;
+  }
+  .card-text {
+    font-size: 1.15rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Buy Now / Add to Cart buttons
+   -------------------------------------------------------------------------- */
+
+/* A two-track grid guarantees Add to Cart and Buy Now are exactly the same
+   width, rather than relying on flex-grow where the 1.6px borders shift the
+   two boxes by a couple of pixels. Wishlist/share stay auto-sized on desktop
+   and are hidden by the legacy rules below 768px. */
+.detail-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto auto;
+  align-items: stretch;
+  gap: 12px;
+  margin-bottom: 1.1rem;
+}
+
+@media (max-width: 767.98px) {
+  .detail-actions {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.detail-actions #cart_btn,
+.detail-actions .buy-now-btn {
+  width: 100% !important;
+  max-width: none;
+  min-width: 0;
+  height: 50px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--vc-btn-radius, 12px);
+  font-family: var(--font-accent);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease,
+    color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Add to Cart: soft primary fill + primary text/outline. !important is needed
+   because the legacy .btn-primary rule (App.css) forces a solid background on
+   this button with !important. */
+.detail-actions #cart_btn {
+  background: var(--primary-soft) !important;
+  color: var(--primary) !important;
+  border: 1.6px solid var(--primary) !important;
+  box-shadow: none;
+}
+
+.detail-actions #cart_btn:hover {
+  background: color-mix(in srgb, var(--primary) 16%, var(--surface)) !important;
+  color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+/* Buy Now: solid theme primary gradient with a contrast-checked label. */
+.detail-actions .buy-now-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: var(--on-primary, #fff);
+  border: 1.6px solid transparent;
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--primary) 30%, transparent);
+}
+
+.detail-actions .buy-now-btn:hover {
+  color: var(--on-primary, #fff);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--primary) 40%, transparent);
+}
+
+.detail-actions #cart_btn:active,
+.detail-actions .buy-now-btn:active {
+  transform: scale(0.98);
+}
+
+/* Sticky mobile bar uses the same button language. */
+.pd-sticky-add {
+  background: var(--surface) !important;
+  color: var(--primary) !important;
+  border: 1.5px solid var(--primary) !important;
+}
+
+.pd-sticky-add:hover {
+  background: var(--primary-soft) !important;
+  color: var(--primary-dark) !important;
+}
+
+.pd-sticky-buy {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+  color: var(--on-primary, #fff) !important;
+  border: 1.5px solid transparent !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. Product detail page
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+  .pd-gallery {
+    flex-direction: column-reverse;
+    gap: 0.7rem;
+  }
+
+  .gallery-main {
+    min-height: 0 !important;
+    aspect-ratio: 1 / 1;
+    padding: 0.6rem !important;
+    border-radius: 16px;
+  }
+
+  .gallery-main img {
+    width: 100%;
+    height: 100%;
+    max-height: 100% !important;
+    object-fit: contain;
+  }
+
+  .gallery-thumbs {
+    flex-direction: row !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-height: none;
+    gap: 0.5rem;
+    padding-bottom: 0.25rem;
+    scrollbar-width: none;
+  }
+
+  .gallery-thumbs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery-thumb {
+    width: 58px;
+    height: 58px;
+  }
+
+  .pd-section {
+    padding: 1.1rem 1rem !important;
+    margin-top: 1.2rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .pd-title {
+    font-size: 1.2rem;
+    line-height: 1.3;
+  }
+
+  .pd-price {
+    font-size: 1.55rem;
+  }
+
+  .pd-mrp {
+    font-size: 0.88rem;
+  }
+
+  .pd-discount {
+    font-size: 0.82rem;
+  }
+
+  .pd-save {
+    font-size: 0.78rem;
+  }
+
+  .pd-price-row {
+    gap: 8px;
+    margin-bottom: 0.7rem;
+  }
+
+  .detail-actions {
+    gap: 10px;
+  }
+
+  .detail-actions #cart_btn,
+  .detail-actions .buy-now-btn {
+    height: 48px;
+    padding: 0 10px;
+    font-size: 0.86rem;
+  }
+
+  .qty-box {
+    justify-content: space-between;
+  }
+
+  .pd-trust {
+    gap: 0.55rem 1rem;
+    padding: 0.65rem 0.8rem;
+  }
+
+  .pd-trust span {
+    font-size: 0.75rem;
+  }
+
+  .pd-section-title {
+    font-size: 1.05rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6. Header, category chips, bottom navigation and footer
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+  .App {
+    padding-bottom: calc(var(--vc-bottom-nav-h) + env(safe-area-inset-bottom));
+  }
+
+  .bottom-nav {
+    min-height: var(--vc-bottom-nav-h);
+    background: color-mix(in srgb, var(--surface) 96%, transparent) !important;
+  }
+
+  .bottom-nav-item {
+    min-height: 56px;
+    padding: 0.45rem 0 0.4rem;
+    gap: 3px;
+  }
+
+  .bottom-nav-icon {
+    font-size: 1.18rem;
+  }
+
+  .bottom-nav-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  .bottom-nav-badge {
+    top: 4px;
+    right: calc(50% - 24px);
+    font-size: 0.6rem;
+  }
+
+  .pd-sticky {
+    bottom: calc(var(--vc-bottom-nav-h) + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 767.98px) {
+  .vc-mhd__row {
+    padding: 0.55rem 0.85rem 0.4rem;
+  }
+
+  .vc-mhd__brand-name {
+    font-size: 1.15rem;
+  }
+
+  .vc-mhd__search-row {
+    padding: 0 0.85rem 0.55rem;
+  }
+
+  .vc-mhd__search-bar {
+    height: 40px;
+  }
+
+  .vc-mhd__search-placeholder {
+    font-size: 0.85rem;
+  }
+
+  /* Category chips scroll horizontally instead of wrapping into a tall block. */
+  .vc-cn-m__scroll {
+    padding: 0.5rem 0.7rem;
+    gap: 0.45rem;
+  }
+
+  .vc-cn-m__chip {
+    font-size: 0.76rem;
+    padding: 0.45rem 0.65rem;
+  }
+
+  .section {
+    margin-top: calc(var(--vc-section-space, 40px) * 0.72);
+  }
+
+  .section-title {
+    font-size: 1.32rem;
+    line-height: 1.25;
+  }
+
+  .section-head {
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .view-all-link {
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  /* Category tabs: single scrollable row on phones. */
+  .category-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    padding-bottom: 0.25rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-tab {
+    flex: 0 0 auto;
+    font-size: 0.78rem;
+    padding: 0.45rem 0.9rem;
+  }
+
+  /* Column count is owned by theme-overrides.css so preview and live agree. */
+  .quick-access {
+    gap: calc(var(--vc-grid-gap, 20px) * 0.6);
+  }
+
+  .quick-access-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+
+  .quick-access-label {
+    font-size: 0.7rem;
+  }
+
+  /* Footer: brand block full width, links stacked, no horizontal squeeze. */
+  .site-footer {
+    margin-top: 2.2rem;
+    padding-top: 1.8rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.4rem;
+    padding-bottom: 1.2rem;
+  }
+
+  .footer-brand {
+    font-size: 1.3rem;
+  }
+
+  .footer-about {
+    max-width: none;
+    font-size: 0.85rem;
+  }
+
+  .footer-heading {
+    font-size: 0.8rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .footer-links a,
+  .footer-links span {
+    font-size: 0.85rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    font-size: 0.76rem;
+    text-align: left;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. Cart, checkout, orders, profile and wishlist polish
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 767.98px) {
+  .cart-title,
+  .products-heading {
+    font-size: 1.35rem;
+  }
+
+  .cart-item {
+    padding: 0.85rem;
+  }
+
+  .cart-item .cart-item-image,
+  .cart-item .card-img-top {
+    max-width: 96px;
+  }
+
+  .order-summary,
+  .cart-summary,
+  .summary-card {
+    position: static !important;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table {
+    font-size: 0.8rem;
+  }
+
+  .checkout-progress {
+    padding: 0 4px;
+  }
+
+  .profile-sidebar,
+  .account-sidebar {
+    position: static !important;
+  }
+
+  .wishlist-grid {
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .wishlist-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .wishlist-grid .card-img-top {
+    padding: 0.6rem;
+  }
+
+  .wishlist-grid .card-title {
+    font-size: 0.82rem;
+  }
+
+  .wishlist-grid .card-text {
+    font-size: 1.02rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   8. Admin dashboard polish
+   These rules only touch presentation. No layout structure or business logic
+   is changed; the Aurora design system keeps its own tokens.
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+  .ad-page {
+    padding: 16px 14px 28px;
+  }
+
+  .ad-page-head h1 {
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .ad-form {
+    max-width: 100% !important;
+  }
+
+  .ad-settings-savebar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .ad-settings-savebar .ad-btn {
+    flex: 1 1 auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   9. Small-screen safety net
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 419.98px) {
+  .detail-actions #cart_btn,
+  .detail-actions .buy-now-btn {
+    font-size: 0.82rem;
+    height: 46px;
+    padding: 0 8px;
+  }
+
+  .pd-sticky-inner {
+    gap: 0.5rem;
+    padding: 0.5rem 0.65rem;
+  }
+
+  .pd-sticky-add,
+  .pd-sticky-buy {
+    padding: 0.62rem 0.7rem;
+    font-size: 0.76rem;
+  }
+
+  .section-title {
+    font-size: 1.22rem;
+  }
+
+  /* 390px listing cards: image + brand + one-line name + price + CTA only.
+     Rating, delivery copy and stock text are hidden on listing grids; the
+     product detail page keeps all of them. */
+  .product-scroll-track .rating-row,
+  .row.home-grid .rating-row,
+  .row.product-grid .rating-row,
+  .wishlist-grid .rating-row,
+  .product-scroll-track .delivery-row,
+  .row.home-grid .delivery-row,
+  .row.product-grid .delivery-row,
+  .wishlist-grid .delivery-row,
+  .product-scroll-track .stock-status,
+  .row.home-grid .stock-status,
+  .row.product-grid .stock-status,
+  .wishlist-grid .stock-status {
+    display: none !important;
+  }
+
+  .product-scroll-track .card-title,
+  .row.home-grid .card-title,
+  .row.product-grid .card-title,
+  .wishlist-grid .card-title {
+    display: block !important;
+    min-height: 1.35em !important;
+    margin-bottom: 4px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    -webkit-line-clamp: 1 !important;
+  }
+}
+
+@media (max-width: 359.98px) {
+  :root {
+    --vc-page-gutter: 12px;
+  }
+
+  .product-scroll-track,
+  .row.home-grid,
+  .row.product-grid {
+    gap: 10px !important;
+  }
+
+  .card-title {
+    font-size: 0.76rem !important;
+  }
+
+  .view-btn {
+    font-size: 0.72rem !important;
+  }
+
+  .bottom-nav-label {
+    font-size: 0.64rem;
+  }
+}
+
+/* Respect reduced motion for the new hover transforms. */
+@media (prefers-reduced-motion: reduce) {
+  .detail-actions #cart_btn,
+  .detail-actions .buy-now-btn,
+  .pd-sticky-add,
+  .pd-sticky-buy {
+    transition: none !important;
+  }
+
+  .detail-actions #cart_btn:hover,
+  .detail-actions .buy-now-btn:hover {
+    transform: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   12. Theme-driven social icons, promo button and category tiles
+   -------------------------------------------------------------------------- */
+
+.footer-social a {
+  color: var(--social-default, var(--muted-text));
+  background: var(--social-bg, transparent);
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.footer-social a:hover {
+  background: var(--social-hover-bg, var(--surface-alt));
+  transform: translateY(-2px);
+}
+.footer-social a.social-facebook:hover { color: var(--social-facebook, #1877f2); }
+.footer-social a.social-youtube:hover { color: var(--social-youtube, #ff0000); }
+.footer-social a.social-twitter:hover { color: var(--social-twitter, #111111); }
+.footer-social a.social-instagram:hover { color: var(--social-instagram, #e1306c); }
+
+.promo-cta, .ds-pv-promo__btn {
+  background: var(--mega-shopping-days-bg, var(--primary)) !important;
+  color: var(--mega-shopping-days-text, var(--on-primary, #fff)) !important;
+  border-color: var(--mega-shopping-days-bg, var(--primary)) !important;
+}
+.promo-cta:hover, .ds-pv-promo__btn:hover {
+  background: var(--button-hover-bg, var(--primary-dark)) !important;
+  color: var(--button-hover-text, var(--on-primary, #fff)) !important;
+}
+
+.vc-cn__item, .ds-pv-cat, .category-box {
+  background: var(--category-box, var(--surface));
+  border: 1px solid var(--category-border, var(--border));
+  border-radius: var(--vc-card-radius, 12px);
+  box-shadow: var(--vc-shadow);
+}
+.vc-cn__item:hover, .ds-pv-cat:hover, .category-box:hover {
+  border-color: var(--hover-border, var(--primary));
+  background: var(--category-box, var(--surface-alt));
+  box-shadow: var(--vc-shadow-hover);
+}
+
+.product-card, .card-premium, .ds-pv-card {
+  background: var(--product-card-bg, var(--surface));
+  border: 1px solid var(--product-card-border, var(--border));
+}
+.product-price, .ds-pv-card__price { color: var(--product-price, var(--text)); }
+.ds-pv-card__price .ds-pv-card__mrp { color: var(--muted-text); }
+
+
+/* -------------------------------------------------------------------------- */
+
+/* 13. Granular theme token overrides - preview == live parity                */
+
+/* -------------------------------------------------------------------------- */
+
+/* Aliases must resolve against the element that owns the theme variables.
+   The admin preview puts its draft tokens on .ds-preview-page, so declaring
+   these only on :root would freeze the preview at the admin page's palette. */
+:root, .ds-preview-page {
+  --category-box-bg: var(--category-box, var(--surface));
+  --category-box-border-color: var(--category-border, var(--border));
+  --category-box-radius-val: var(--category-radius, var(--vc-card-radius, 14px));
+  --category-box-shadow: var(--vc-shadow);
+  --category-box-hover-bg: var(--surface-alt, var(--category-box-bg));
+  --category-box-hover-border: var(--hover-border, var(--primary));
+  --category-box-hover-shadow: var(--vc-shadow-hover);
+  --product-card-bg-token: var(--product-card-bg, var(--surface));
+  --product-card-border-token: var(--product-card-border, var(--border));
+  --promo-btn-bg: var(--mega-shopping-days-bg, var(--primary));
+  --promo-btn-text: var(--mega-shopping-days-text, var(--on-primary, #fff));
+}
+
+/* Category boxes / tiles */
+.vc-cn__item, .ds-pv-cat, .category-box, .cat-box, .category-card, .cat-tile {
+  background: var(--category-box-bg) !important;
+  border-width: var(--category-border-width, 1px) !important;
+  border-style: var(--category-border-style, solid) !important;
+  border-color: var(--category-box-border-color) !important;
+  border-radius: var(--category-box-radius-val) !important;
+  box-shadow: var(--category-box-shadow) !important;
+  padding: var(--category-padding, 16px);
+}
+.vc-cn__item:hover, .ds-pv-cat:hover, .category-box:hover, .cat-box:hover, .category-card:hover, .cat-tile:hover {
+  background: var(--category-box-hover-bg) !important;
+  border-color: var(--category-box-hover-border) !important;
+  box-shadow: var(--category-box-hover-shadow) !important;
+}
+
+/* Product cards */
+.product-card, .card-premium, .ds-pv-card, .vc-product-card, .product-item {
+  background: var(--product-card-bg-token) !important;
+  border-width: var(--product-card-border-width, 1px) !important;
+  border-style: var(--product-card-border-style, solid) !important;
+  border-color: var(--product-card-border-token) !important;
+  border-radius: var(--product-card-radius, var(--vc-card-radius, 14px)) !important;
+}
+.product-card .product-body, .card-premium .card-body, .vc-product-card .body { padding: var(--product-card-padding, 16px); }
+.product-card .product-title, .card-premium .card-title, .ds-pv-card__name, .product-item .name {
+  color: var(--product-title, var(--text)) !important;
+}
+.product-card .product-desc, .card-premium .card-text, .product-item .description {
+  color: var(--product-description, var(--muted-text)) !important;
+}
+.product-price, .ds-pv-card__price, .price, .product-item .price {
+  color: var(--product-price, var(--price, var(--text))) !important;
+}
+.sale-price, .discount-price, .ds-pv-card__price .new {
+  color: var(--sale-price, var(--discount-price, var(--danger))) !important;
+}
+
+/* Badges */
+.badge-discount, .discount-badge, .ds-pv-card__badge { background: var(--discount-badge, var(--danger)) !important; color: #fff !important; }
+.badge-bestseller, .bestseller-badge { background: var(--bestseller-badge, var(--secondary)) !important; color: #fff !important; }
+.badge-trending, .trending-badge { background: var(--trending-badge, #7c3aed) !important; color: #fff !important; }
+.rating-stars, .fa-star, .rating i { color: var(--rating-star, #f59e0b); }
+.in-stock, .stock-available { color: var(--stock-available, var(--success)) !important; }
+
+/* Buttons - theme driven */
+.btn-primary, .btn-gold, .ds-pv-btn--primary, .checkout-btn, #login_button, #register_button, #shipping_btn, #confirm_order_btn, #pay_btn, .review-btn, #view_order_details {
+  background: var(--primary-button-bg, var(--primary)) !important;
+  color: var(--primary-button-text, var(--on-primary, #fff)) !important;
+  border-color: var(--button-border, var(--primary-button-bg, var(--primary))) !important;
+}
+.btn-primary:hover, .btn-gold:hover, .ds-pv-btn--primary:hover, .checkout-btn:hover {
+  background: var(--button-hover-bg, var(--primary-dark)) !important;
+  color: var(--button-hover-text, var(--on-primary, #fff)) !important;
+}
+.btn-secondary, .ds-pv-btn--secondary {
+  background: var(--secondary-button-bg, var(--secondary)) !important;
+  color: var(--secondary-button-text, #fff) !important;
+}
+.btn:disabled, .btn[disabled], button:disabled {
+  background: var(--button-disabled-bg, #cbd5e1) !important;
+  color: var(--button-disabled-text, #64748b) !important;
+  border-color: var(--button-disabled-bg, #cbd5e1) !important;
+}
+.add-to-cart-btn, .ds-pv-btn--cart {
+  background: var(--add-to-cart-bg, var(--primary-soft)) !important;
+  color: var(--add-to-cart-text, var(--primary)) !important;
+  border-color: var(--add-to-cart-text, var(--primary)) !important;
+}
+.buy-now-btn, .ds-pv-btn--buy {
+  background: var(--buy-now-bg, var(--primary)) !important;
+  color: var(--buy-now-text, var(--on-primary, #fff)) !important;
+  border-color: var(--buy-now-bg, var(--primary)) !important;
+}
+.buy-now-btn:hover, .add-to-cart-btn:hover {
+  background: var(--button-hover-bg, var(--primary-dark)) !important;
+  color: var(--button-hover-text, var(--on-primary, #fff)) !important;
+}
+
+/* Mega Shopping Days / promo */
+.promo-cta, .ds-pv-promo__btn, .mega-shopping-btn {
+  background: var(--promo-btn-bg) !important;
+  color: var(--promo-btn-text) !important;
+  border-color: var(--promo-btn-bg) !important;
+}
+.promo-cta:hover, .ds-pv-promo__btn:hover, .mega-shopping-btn:hover {
+  background: var(--button-hover-bg, var(--primary-dark)) !important;
+  color: var(--button-hover-text, #fff) !important;
+}
+.promo-title, .ds-pv-promo__content h3 { color: var(--promo-text, #fff) !important; }
+.promo-badge, .ds-pv-promo__badge { background: var(--promo-badge, var(--danger)) !important; color: #fff !important; }
+
+/* Navigation / dropdown */
+.vc-cn, .category-nav, .ds-pv-nav { background: var(--nav-bg, #fff) !important; color: var(--nav-text, var(--text)) !important; }
+.vc-cn__link, .vc-cn__label, .ds-pv-nav__link { color: var(--nav-text, var(--text)) !important; }
+.vc-cn__item:hover .vc-cn__label, .vc-cn__link:hover { color: var(--nav-hover, var(--primary)) !important; }
+.vc-cn__item.is-active .vc-cn__label, .vc-cn__item.active .vc-cn__label { color: var(--active-category, var(--primary)) !important; }
+.vc-cn-dd, .dropdown-menu, .mega-menu, .ds-pv-mega {
+  background: var(--dropdown-bg, var(--mega-menu-bg, #fff)) !important;
+  color: var(--dropdown-text, var(--text)) !important;
+  border-color: var(--dropdown-border, var(--border)) !important;
+}
+.vc-cn-dd__item:hover, .dropdown-item:hover { background: var(--mega-menu-hover, var(--primary-soft)) !important; color: var(--nav-hover, var(--primary)) !important; }
+
+/* Footer / sections */
+footer, .footer, .ds-pv-footer { background: var(--footer-bg, #0b1220) !important; color: var(--footer-text, #e2e8f0) !important; }
+footer a, .footer a { color: var(--footer-link, var(--footer-text, #e2e8f0)); }
+footer a:hover, .footer a:hover { color: var(--link-hover, var(--primary)) !important; }
+
+/* Generic text/borders/inputs */
+body { background: var(--page-bg, var(--background, #f4f6fb)) !important; color: var(--body-text, var(--text, #0f172a)); }
+h1,h2,h3,.section-title,.ds-pv-section__title { color: var(--heading, var(--text)) !important; }
+h4,h5,h6 { color: var(--heading-secondary, var(--heading, var(--text))); }
+p, .description, .section-subtitle { color: var(--description, var(--muted-text, #334155)); }
+
+/* Promo copy must follow the promo gradient, not the page/hero foreground. */
+.promo-banner .promo-title,
+.promo-banner .promo-kicker,
+.promo-banner .promo-sub {
+  color: var(--promo-text, #fff) !important;
+}
+.promo-banner .promo-kicker,
+.promo-banner .promo-sub {
+  opacity: 0.88;
+}
+a { color: var(--link, var(--primary)); }
+a:hover { color: var(--link-hover, var(--primary-dark)); }
+input, select, textarea, .form-control { border-color: var(--input-border, var(--border)) !important; }
+input:focus, select:focus, textarea:focus, .form-control:focus { border-color: var(--active-border, var(--primary)) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--active-border, var(--primary)) 18%, transparent) !important; }
+hr, .divider { border-color: var(--divider, var(--border)) !important; }
+
+@media (min-width: 992px) { .vc-cn__scroll { overflow: visible !important; flex-wrap: wrap; justify-content: center; } .vc-cn__arrow { display: none !important; } .vc-cn-dd { z-index: 3000 !important; } }
+
+/* --------- 14. Homepage category strip: one horizontal row on mobile -------- */
+@media (max-width: 767px) {
+  .quick-access {
+    display: flex !important;
+    grid-template-columns: none !important;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    padding: 0.25rem 0 0.55rem;
+    margin: 0.8rem calc(-1 * var(--page-gutter, 12px));
+    padding-left: var(--page-gutter, 12px);
+    padding-right: var(--page-gutter, 12px);
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .quick-access::-webkit-scrollbar { display: none; }
+  .quick-access-item {
+    flex: 0 0 96px;
+    min-width: 96px;
+    max-width: 96px;
+    scroll-snap-align: start;
+    padding: 0.65rem 0.25rem;
+    gap: 0.3rem;
+    background: var(--category-box, var(--surface));
+    border-color: var(--category-border, var(--border));
+    border-radius: var(--category-radius, 12px);
+  }
+  .quick-access-item:hover { border-color: var(--hover-border, var(--primary)); }
+  .quick-access-label { white-space: nowrap; font-size: 0.66rem; color: var(--body-text, var(--text)); }
+}
+
+/* Recommended / Still Looking sections use themed surfaces + visible borders */
+.section, .flash-deals-wrap, .recommended-section, .still-looking-section {
+  background: var(--section-bg, var(--surface));
+  border: 1px solid var(--section-border, var(--border));
+  border-radius: var(--vc-card-radius, 14px);
+}
+
+/* Auth buttons */
+#login_button, #register_button, .auth-submit, .btn-login, .btn-register, .vc-lg-login, .vc-auth-submit {
+  background: var(--primary-button-bg, var(--primary)) !important;
+  color: var(--primary-button-text, var(--on-primary, #fff)) !important;
+  border: 1px solid var(--button-border, var(--primary)) !important;
+  border-radius: var(--button-radius, 10px);
+}
+#login_button:hover, #register_button:hover, .auth-submit:hover, .btn-login:hover, .btn-register:hover, .vc-lg-login:hover, .vc-auth-submit:hover {
+  background: var(--button-hover-bg, var(--primary-dark)) !important;
+  color: var(--button-hover-text, var(--on-primary, #fff)) !important;
+}
+
+/* --------- 15. Saved theme beats preset "personality" CSS ------------------ */
+/* Some design presets deliberately set border:0 / transparent backgrounds with
+   [data-design="..."] selectors. Those rules are more specific than the generic
+   theme rules above, so a saved custom border colour would be ignored. These
+   equally specific, later rules keep the admin's stored theme authoritative. */
+[data-design] .quick-access-item,
+[data-design] .vc-cn__item,
+[data-design] .category-box,
+[data-design] .cat-box {
+  background: var(--category-box, var(--surface)) !important;
+  border-width: var(--category-border-width, 1px) !important;
+  border-style: var(--category-border-style, solid) !important;
+  border-color: var(--category-border, var(--border)) !important;
+  border-radius: var(--category-radius, var(--vc-card-radius, 12px)) !important;
+  box-shadow: var(--vc-shadow) !important;
+}
+[data-design] .quick-access-item:hover,
+[data-design] .vc-cn__item:hover,
+[data-design] .category-box:hover,
+[data-design] .cat-box:hover {
+  background: var(--surface-alt, var(--category-box, var(--surface))) !important;
+  border-color: var(--hover-border, var(--primary)) !important;
+  box-shadow: var(--vc-shadow-hover) !important;
+}
+[data-design] .quick-access-icon {
+  background: var(--primary-soft, var(--surface-alt)) !important;
+  color: var(--primary) !important;
+  border-width: var(--category-border-width, 1px) !important;
+  border-style: var(--category-border-style, solid) !important;
+  border-color: var(--category-border, var(--border)) !important;
+  border-radius: 999px !important;
+}
+[data-design] .quick-access-label { color: var(--body-text, var(--text)) !important; }
+
+[data-design] .card-premium,
+[data-design] .product-card,
+[data-design] .vc-product-card {
+  background: var(--product-card-bg, var(--surface)) !important;
+  border-width: var(--product-card-border-width, 1px) !important;
+  border-style: var(--product-card-border-style, solid) !important;
+  border-color: var(--product-card-border, var(--border)) !important;
+  border-radius: var(--product-card-radius, var(--vc-card-radius, 14px)) !important;
+  box-shadow: var(--vc-shadow) !important;
+}
+[data-design] .card-premium:hover,
+[data-design] .product-card:hover,
+[data-design] .vc-product-card:hover { box-shadow: var(--vc-shadow-hover) !important; }
+
+[data-design] .promo-cta,
+[data-design] .mega-shopping-btn {
+  background: var(--mega-shopping-days-bg, var(--primary)) !important;
+  color: var(--mega-shopping-days-text, var(--on-primary, #fff)) !important;
+  border: 1px solid var(--mega-shopping-days-bg, var(--primary)) !important;
+  border-radius: var(--vc-btn-radius, 12px) !important;
+}
+[data-design] .promo-cta:hover,
+[data-design] .mega-shopping-btn:hover {
+  background: var(--button-hover-bg, var(--primary-dark)) !important;
+  color: var(--button-hover-text, var(--on-primary, #fff)) !important;
+}
+
+[data-design] .section,
+[data-design] .flash-deals-wrap,
+[data-design] .recommended-section,
+[data-design] .still-looking-section {
+  background: var(--section-bg, var(--surface)) !important;
+  border: 1px solid var(--section-border, var(--border)) !important;
+  border-radius: var(--vc-card-radius, 14px) !important;
+}
+
+/* --------------------------------------------------------------------------
+   Storefront alignment and visibility fixes (layout only).
+   No colour values, theme variables or Design Studio colour settings change.
+   -------------------------------------------------------------------------- */
+
+/* Deals of the Day is the reference: every section gets the same inner inset. */
+.section,
+.flash-deals-wrap,
+.recommended-section,
+.still-looking-section {
+  box-sizing: border-box;
+  padding: 1.4rem 1.2rem;
+}
+
+.section-head {
+  align-items: flex-start;
+  margin-bottom: 0.9rem;
+}
+.section-head__copy {
+  min-width: 0;
+}
+.section-head__actions {
+  margin-left: auto;
+}
+
+/* The accent rule sits above the heading, never across its glyphs. */
+.section-title {
+  padding-left: 0 !important;
+  padding-top: 12px;
+}
+.section-title::before,
+[data-design] .section-title::before {
+  left: 0 !important;
+  top: 0 !important;
+  transform: none !important;
+  width: 42px !important;
+  height: 1px !important;
+  border-radius: 0 !important;
+}
+
+/* Title, subtitle and the first card now start at the same left edge. */
+.product-scroll-track,
+.row.home-grid,
+.row.product-grid {
+  align-items: stretch !important;
+  grid-auto-rows: 1fr !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.product-scroll-track > [class*="col-"],
+.row.home-grid > [class*="col-"],
+.row.product-grid > [class*="col-"] {
+  display: flex !important;
+  align-items: stretch !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  animation: none !important;
+}
+
+/* Stable, equal card geometry. The image ratio still comes from the live
+   Design Studio "Product image ratio" token via --vc-img-ratio. */
+.card-premium,
+.card-product {
+  content-visibility: visible !important;
+  contain-intrinsic-size: none !important;
+  height: 100% !important;
+}
+.card-premium:hover,
+.card-product:hover {
+  transform: none !important;
+}
+.card-product .position-relative.overflow-hidden,
+.product-scroll-track .card-product .position-relative.overflow-hidden,
+.row.home-grid .card-product .position-relative.overflow-hidden,
+.row.product-grid .card-product .position-relative.overflow-hidden {
+  aspect-ratio: var(--vc-img-ratio, 4 / 3) !important;
+  overflow: hidden;
+}
+.card-product .card-img-top,
+.product-scroll-track .card-product .card-img-top,
+.row.home-grid .card-product .card-img-top,
+.row.product-grid .card-product .card-img-top {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  object-fit: cover !important;
+}
+.card-product .card-body {
+  flex: 1 1 auto !important;
+}
+.card-product .card-title {
+  flex: 0 0 auto !important;
+}
+.card-product .price-row {
+  margin-top: auto !important;
+}
+
+/* Section reveal transforms previously left rows at different y offsets. */
+.section.vc-reveal,
+.section.vc-reveal.vc-reveal-in,
+.flash-deals-wrap.vc-reveal,
+.flash-deals-wrap.vc-reveal.vc-reveal-in {
+  transform: none !important;
+}
+
+@media (max-width: 767.98px) {
+  .section,
+  .flash-deals-wrap,
+  .recommended-section,
+  .still-looking-section {
+    padding: 1rem 0.6rem 1.2rem;
+  }
+}
+
+/* Login CTA keeps its background; only the label colour is corrected. */
+.vc-hd__nav .vc-hd__item.vc-hd__item--link.vc-nav-login,
+.vc-hd__nav .vc-hd__item.vc-hd__item--link.vc-nav-login:hover,
+.vc-hd__nav .vc-hd__item.vc-hd__item--link.vc-nav-login:focus,
+.vc-hd__nav .vc-hd__item.vc-hd__item--link.vc-nav-login:focus-visible,
+.vc-hd__nav .vc-hd__item.vc-hd__item--link.vc-nav-login:active {
+  color: #fff !important;
+}
+
+/* Correct active class names (.vc-cn__item--active / .vc-cn-m__chip--active). */
+.vc-cn__item.vc-cn__item--active .vc-cn__label,
+.vc-cn-m__chip.vc-cn-m__chip--active .vc-cn-m__label,
+.vc-cn-m__chip.vc-cn-m__chip--active .vc-cn__label {
+  color: #fff !important;
+}
+
+/* Desktop Home control matches the Orders/Wishlist/Cart icon-above-label style. */
+.vc-hd__nav .vc-hd__item--icon.vc-nav-home.active,
+.vc-hd__nav .vc-hd__item--icon.vc-nav-home.active:hover,
+.vc-hd__nav .vc-hd__item--icon.vc-nav-home.active:focus,
+.vc-hd__nav .vc-hd__item--icon.vc-nav-home.active:focus-visible,
+.vc-hd__nav .vc-hd__item--icon.vc-nav-home.active:active {
+  background: var(--primary-soft) !important;
+  color: var(--primary) !important;
+}

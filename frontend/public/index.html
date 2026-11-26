@@ -43,6 +43,62 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <title>VijayCart - Smart Shopping. Better Choices.</title>
+    <style>
+      html.vc-theme-pending body { visibility: hidden !important; }
+      html.vc-theme-pending { background: var(--vc-first-paint-bg, #f5f7fa) !important; }
+    </style>
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('vc_design_state_v1');
+          if (!raw) {
+            document.documentElement.classList.add('vc-theme-pending');
+            document.documentElement.style.setProperty('--vc-first-paint-bg', '#f5f7fa');
+            return;
+          }
+          var parsed = JSON.parse(raw);
+          if (!parsed || !parsed.designId || !parsed.tokens) {
+            document.documentElement.classList.add('vc-theme-pending');
+            return;
+          }
+          var root = document.documentElement;
+          root.setAttribute('data-design', parsed.designId);
+          if (parsed.tokens && parsed.tokens.density) root.setAttribute('data-density', parsed.tokens.density);
+          var vars = parsed.vars;
+          if (vars && typeof vars === 'object') {
+            for (var k in vars) {
+              if (Object.prototype.hasOwnProperty.call(vars, k) && vars[k] != null) {
+                root.style.setProperty(k, String(vars[k]));
+              }
+            }
+          } else {
+            // Legacy cache without precomputed vars: apply critical colors to avoid blue flash.
+            var t = parsed.tokens || {};
+            var critical = {
+              '--background': t.background,
+              '--surface': t.surface,
+              '--text': t.text,
+              '--nav-bg': t.navBg,
+              '--footer-bg': t.footerBg,
+              '--announcement-bg': t.announcementBg,
+              '--primary': t.primary,
+              '--vc-blue': t.primary,
+              '--vc-orange': t.primary
+            };
+            for (var ck in critical) {
+              if (Object.prototype.hasOwnProperty.call(critical, ck) && critical[ck]) {
+                root.style.setProperty(ck, String(critical[ck]));
+              }
+            }
+          }
+        } catch (e) {
+          document.documentElement.classList.add('vc-theme-pending');
+        }
+        setTimeout(function () {
+          document.documentElement.classList.remove('vc-theme-pending');
+        }, 8000);
+      })();
+    </script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",

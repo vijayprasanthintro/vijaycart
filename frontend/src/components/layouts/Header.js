@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../actions/userActions';
 import { useWishlist } from '../../context/WishlistContext';
@@ -101,7 +101,7 @@ export default function Header() {
         <i className="fa fa-cog mr-2" aria-hidden="true"></i>Account Settings
       </Dropdown.Item>
       <Dropdown.Divider />
-      <Dropdown.Item onClick={logoutHandler} className="text-danger">
+      <Dropdown.Item onClick={logoutHandler} className="vc-logout">
         <i className="fa fa-sign-out mr-2" aria-hidden="true"></i>Logout
       </Dropdown.Item>
     </Dropdown.Menu>
@@ -200,6 +200,16 @@ export default function Header() {
                   </div>
                 )}
             </div>
+
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) => `vc-hd__item vc-hd__item--icon vc-nav-home${isActive ? ' active' : ''}`}
+              aria-label="Home"
+            >
+              <i className="fa fa-home" aria-hidden="true"></i>
+              <span className="vc-nav-btn-text d-none d-xl-inline">Home</span>
+            </NavLink>
 
             <Link to="/orders" className="vc-hd__item vc-hd__item--icon" aria-label="Orders">
               <i className="fa fa-archive" aria-hidden="true"></i>

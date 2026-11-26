@@ -1,115 +1,19 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategories } from '../../actions/categoryActions';
+import { STOREFRONT_CATEGORIES } from '../../designs/storefrontContent';
 
-const NAV_CATEGORIES = [
-  {
-    label: 'Electronics',
-    icon: 'fa-plug',
-    cls: 'vc-cn-icon--electronics',
-    to: '/search/all?category=Electronics',
-    active: (p, q) => q === 'Electronics',
-    children: [
-      { label: 'Smartphones', icon: 'fa-mobile', to: '/search/all?category=Smartphones' },
-      { label: 'Laptops', icon: 'fa-laptop', to: '/search/all?category=Laptops' },
-      { label: 'Headphones', icon: 'fa-headphones', to: '/search/all?category=Headphones' },
-      { label: 'Audio', icon: 'fa-volume-up', to: '/search/all?category=Audio' },
-      { label: 'Tablets', icon: 'fa-tablet', to: '/search/all?category=Tablets' },
-      { label: 'Gaming', icon: 'fa-gamepad', to: '/search/all?category=Gaming' },
-      { label: 'Cameras', icon: 'fa-camera', to: '/search/all?category=Cameras' },
-      { label: 'Wearables', icon: 'fa-clock-o', to: '/search/all?category=Wearables' },
-      { label: 'Accessories', icon: 'fa-keyboard-o', to: '/search/all?category=Accessories' },
-      { label: 'Drones', icon: 'fa-plane', to: '/search/all?category=Drones' },
-      { label: 'Components', icon: 'fa-microchip', to: '/search/all?category=Components' },
-    ],
-  },
-  {
-    label: 'TVs & Appliances',
-    icon: 'fa-television',
-    cls: 'vc-cn-icon--appliances',
-    to: '/search/all?category=Televisions',
-    active: (p, q) => q === 'Televisions' || q === 'Monitors',
-    children: [
-      { label: 'Televisions', icon: 'fa-television', to: '/search/all?category=Televisions' },
-      { label: 'Monitors', icon: 'fa-desktop', to: '/search/all?category=Monitors' },
-    ],
-  },
-  {
-    label: 'Men',
-    icon: 'fa-male',
-    cls: 'vc-cn-icon--men',
-    to: '/search/all?category=Clothes%2FShoes',
-    active: (p, q) => q === 'Clothes/Shoes',
-    children: [
-      { label: 'Clothing', icon: 'fa-tags', to: '/search/all?category=Clothes%2FShoes' },
-      { label: 'Watches', icon: 'fa-clock-o', to: '/search/all?category=Accessories' },
-    ],
-  },
-  {
-    label: 'Women',
-    icon: 'fa-female',
-    cls: 'vc-cn-icon--women',
-    to: '/search/all?category=Clothes%2FShoes',
-    active: (p, q) => q === 'Clothes/Shoes',
-    children: [
-      { label: 'Clothing', icon: 'fa-tags', to: '/search/all?category=Clothes%2FShoes' },
-      { label: 'Watches', icon: 'fa-clock-o', to: '/search/all?category=Accessories' },
-    ],
-  },
-  {
-    label: 'Baby & Kids',
-    icon: 'fa-child',
-    cls: 'vc-cn-icon--kids',
-    to: '/search/all?category=Accessories',
-    active: () => false,
-    children: [],
-  },
-  {
-    label: 'Home & Furniture',
-    icon: 'fa-home',
-    cls: 'vc-cn-icon--home',
-    to: '/search/all?category=Home',
-    active: (p, q) => q === 'Home',
-    children: [
-      { label: 'Home Décor', icon: 'fa-paint-brush', to: '/search/all?category=Home' },
-      { label: 'Kitchen', icon: 'fa-cutlery', to: '/search/all?category=Home' },
-    ],
-  },
-  {
-    label: 'Sports',
-    icon: 'fa-futbol-o',
-    cls: 'vc-cn-icon--sports',
-    to: '/search/all?category=Sports',
-    active: (p, q) => q === 'Sports' || q === 'Outdoor',
-    children: [
-      { label: 'Sports', icon: 'fa-futbol-o', to: '/search/all?category=Sports' },
-      { label: 'Outdoor', icon: 'fa-tree', to: '/search/all?category=Outdoor' },
-    ],
-  },
-  {
-    label: 'Books',
-    icon: 'fa-book',
-    cls: 'vc-cn-icon--books',
-    to: '/search/all?category=Books',
-    active: (p, q) => q === 'Books',
-    children: [],
-  },
-  {
-    label: 'Grocery',
-    icon: 'fa-shopping-basket',
-    cls: 'vc-cn-icon--grocery',
-    to: '/search/all?category=Food',
-    active: (p, q) => q === 'Food',
-    children: [],
-  },
-  {
-    label: 'Beauty/Health',
-    icon: 'fa-heartbeat',
-    cls: 'vc-cn-icon--beauty',
-    to: '/search/all?category=Beauty%2FHealth',
-    active: (p, q) => q === 'Beauty/Health',
-    children: [],
-  },
-];
+// One curated list shared with the Design Studio preview and the quick-access
+// cards, so the live navigation cannot drift from what the admin sees.
+const NAV_CATEGORIES = STOREFRONT_CATEGORIES.map((category) => ({
+  label: category.label,
+  icon: category.icon,
+  cls: category.cls,
+  to: category.to,
+  active: (pathname, query) => query === category.category,
+  children: [],
+}));
 
 function CategoryDropdown({ cat, onClose }) {
   if (!cat.children || cat.children.length === 0) return null;
@@ -138,8 +42,44 @@ function CategoryDropdown({ cat, onClose }) {
 export default function CategoryNav() {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const categoriesFromStore = useSelector((state) => state.categoryState.categories);
+  const publicCategories = useMemo(() => categoriesFromStore || [], [categoriesFromStore]);
   const queryParams = new URLSearchParams(location.search);
   const activeCategory = queryParams.get('category');
+
+  useEffect(() => {
+    dispatch(getCategories());
+    const refresh = () => {
+      if (document.visibilityState === 'visible') dispatch(getCategories());
+    };
+    window.addEventListener('focus', refresh);
+    document.addEventListener('visibilitychange', refresh);
+    return () => {
+      window.removeEventListener('focus', refresh);
+      document.removeEventListener('visibilitychange', refresh);
+    };
+  }, [dispatch]);
+
+  // Admin-hidden/deleted categories must disappear from public navigation.
+  // Until the public categories request resolves, show the full catalog so
+  // there is no flicker of an empty bar.
+  const visibleCategories = useMemo(() => {
+    if (!publicCategories.length) return NAV_CATEGORIES;
+    const hidden = new Set(publicCategories.filter((c) => c.active === false).map((c) => c.name.toLowerCase()));
+    const groupIsHidden = (label) => {
+      const l = label.toLowerCase();
+      if (hidden.has(l)) return true;
+      if (l === 'tv & appliances' && ['televisions', 'monitors'].every((n) => hidden.has(n))) return true;
+      return false;
+    };
+    return NAV_CATEGORIES
+      .filter((cat) => !groupIsHidden(cat.label))
+      .map((cat) => ({
+        ...cat,
+        children: (cat.children || []).filter((child) => !hidden.has(child.label.toLowerCase()))
+      }));
+  }, [publicCategories]);
   const [mobileDropdown, setMobileDropdown] = useState(null);
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const [desktopScrollBtns, setDesktopScrollBtns] = useState({ left: false, right: false });
@@ -210,7 +150,7 @@ export default function CategoryNav() {
           )}
 
           <div className="vc-cn__scroll" ref={desktopScrollRef}>
-            {NAV_CATEGORIES.map((cat, idx) => {
+            {visibleCategories.map((cat, idx) => {
               const active = isActive(cat);
               const hasDropdown = cat.children && cat.children.length > 0;
               const isOpen = hoveredIdx === idx;
@@ -258,7 +198,7 @@ export default function CategoryNav() {
       {/* ===== MOBILE CATEGORY NAV ===== */}
       <nav className="vc-cn-m" aria-label="Category navigation">
         <div className="vc-cn-m__scroll" ref={mobileScrollRef}>
-          {NAV_CATEGORIES.map((cat) => {
+          {visibleCategories.map((cat) => {
             const active = isActive(cat);
             const hasDropdown = cat.children && cat.children.length > 0;
             return (

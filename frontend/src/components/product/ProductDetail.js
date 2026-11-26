@@ -567,7 +567,7 @@ export default function ProductDetail () {
                                     >
                                         {canZoom && <span className="gallery-zoom-hint"><i className="fa fa-search-plus" aria-hidden="true"></i></span>}
                                         {images.length > 0 && images[activeImage] && (
-                                            <img src={typeof images[activeImage] === 'string' ? images[activeImage] : (images[activeImage] && images[activeImage].image) || ''} alt={product.name} loading="eager" decoding="async" fetchPriority="high" onError={imgOnError} />
+                                            <img src={typeof images[activeImage] === 'string' ? images[activeImage] : (images[activeImage] && images[activeImage].image) || ''} alt={product.name} loading="eager" decoding="async" fetchpriority="high" onError={imgOnError} />
                                         )}
                                         {canZoom && zoom.active && images[activeImage] && (
                                             <div

@@ -34,7 +34,7 @@ export default function PersonalizedSection({ products = [] }) {
               <i className="fa fa-heart-o" aria-hidden="true"></i>
               {isAuthenticated ? (
                 <span>
-                  <span className="personalized-name">{firstName},</span> still looking for these?
+                  <span className="personalized-name">{firstName},</span> Still looking for these?
                 </span>
               ) : (
                 'Still looking for these?'

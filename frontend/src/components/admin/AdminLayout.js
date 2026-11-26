@@ -50,6 +50,12 @@ const NAV = [
         ]
     },
     {
+        group: 'Design',
+        items: [
+            { to: '/admin/design-studio', icon: 'fa-paint-brush', label: 'Website Design Studio', perm: 'settings' }
+        ]
+    },
+    {
         group: 'System',
         items: [
             { to: '/admin/settings', icon: 'fa-cog', label: 'Settings', perm: 'settings' },
@@ -76,7 +82,8 @@ const TITLES = {
     '/admin/settings': { title: 'Settings', sub: 'Store configuration' },
     '/admin/permissions': { title: 'Permissions', sub: 'Roles & access control' },
     '/admin/reports': { title: 'Reports & Exports', sub: 'Download Orders, Products, Customers, Inventory & Revenue' },
-    '/admin/pincodes': { title: 'Pincode & COD', sub: 'Serviceable pincodes & COD availability' }
+    '/admin/pincodes': { title: 'Pincode & COD', sub: 'Serviceable pincodes & COD availability' },
+    '/admin/design-studio': { title: 'Website Design Studio', sub: 'Customize your storefront appearance' }
 };
 
 // Quick global jump — maps a keyword to the most relevant admin section.
@@ -92,6 +99,7 @@ const SEARCH_ROUTES = [
     { re: /revenue|earning|money|profit/i, to: '/admin/revenue', label: 'Revenue', icon: 'fa-rupee' },
     { re: /categor|collection/i, to: '/admin/categories', label: 'Categories', icon: 'fa-th-large' },
     { re: /setting|config|permission|role/i, to: '/admin/settings', label: 'Settings', icon: 'fa-cog' },
+    { re: /design|theme|studio|appearance|customize/i, to: '/admin/design-studio', label: 'Website Design Studio', icon: 'fa-paint-brush' },
     { re: /boy|rider|partner/i, to: '/admin/delivery-boys', label: 'Delivery Boys', icon: 'fa-motorcycle' },
     { re: /seller|become a seller|application|store/i, to: '/admin/seller-applications', label: 'Seller Applications', icon: 'fa-briefcase' },
     { re: /report|export|csv|excel|download/i, to: '/admin/reports', label: 'Reports & Exports', icon: 'fa-file-excel-o' },
