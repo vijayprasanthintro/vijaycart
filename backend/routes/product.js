@@ -14,16 +14,11 @@ const {
     deleteReviewRules
 } = require('../middlewares/validate');
 
-//Admin product images live in their own folder. It is created on demand so a
-//fresh checkout never fails the first upload.
+// Created on demand so a fresh checkout never fails the first upload.
 const productUploadDir = path.join(__dirname, '..', 'uploads', 'product');
 fs.mkdirSync(productUploadDir, { recursive: true });
 
-//Filenames are generated, never taken from the browser. Using file.originalname
-//meant two products uploading "image.jpg" overwrote each other on disk, so a
-//product could end up pointing at a different product's photo. The generated
-//name is unique per upload and is the single source of truth used by the
-//controller when it builds the image URL.
+// Generated names prevent two products uploading "image.jpg" from overwriting each other.
 const PRODUCT_IMAGE_EXT = { 'image/jpeg': '.jpg', 'image/png': '.png', 'image/webp': '.webp', 'image/gif': '.gif' };
 
 const upload = multer({
@@ -43,14 +38,11 @@ const upload = multer({
     }
 })
 
-//Review photos are stored under /uploads/review so customer content is never
-//mixed with admin product images. The folder is created on demand so a fresh
-//checkout never crashes the first upload.
+// Review photos are kept separate from admin product images.
 const reviewUploadDir = path.join(__dirname, '..', 'uploads', 'review');
 fs.mkdirSync(reviewUploadDir, { recursive: true });
 
-//Random, collision-proof names so two customers uploading "photo.jpg" never
-//overwrite each other, and only image types are accepted.
+// Random names avoid collisions; only image types are accepted.
 const REVIEW_IMAGE_EXT = { 'image/jpeg': '.jpg', 'image/png': '.png', 'image/webp': '.webp' };
 const reviewUpload = multer({
     storage: multer.diskStorage({
@@ -69,18 +61,13 @@ const reviewUpload = multer({
     }
 })
 
-
-router.route('/products').get( getProducts);
+router.route('/products').get(getProducts);
 router.route('/products/health').get(productsHealth);
-router.route('/product/:id')
-                            .get(objectIdParam('id'), validate, getSingleProduct);
-            
-        
+router.route('/product/:id').get(objectIdParam('id'), validate, getSingleProduct);
+
 router.route('/review').put(isAuthenticatedUser, reviewUpload.array('reviewImages', 5), reviewRules(), validate, createReview)
-                      
 
-
-//Admin routes
+// Admin routes
 router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles('admin'), upload.array('images'), productRules(), validate, newProduct);
 router.route('/admin/products').get(isAuthenticatedUser, authorizeRoles('admin'), getAdminProducts);
 router.route('/admin/products/bulk-delete').post(isAuthenticatedUser, authorizeRoles('admin'), bulkDeleteProducts);

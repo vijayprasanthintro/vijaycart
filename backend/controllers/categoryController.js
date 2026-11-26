@@ -9,22 +9,15 @@ const DEFAULT_CATEGORIES = [
     'Home', 'Food', 'Sports', 'Outdoor', 'Books', 'Beauty/Health'
 ];
 
-// Core navigation groups are always visible on the storefront, even if an
-// individual product sub-category is hidden in the admin panel.
-const NAV_GROUP_NAMES = [
-    'Electronics', 'Clothes/Shoes', 'Home', 'Sports', 'Books', 'Food', 'Beauty/Health'
-];
+const escapeRegExp = (value) => String(value).trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-//Public: Get categories - /api/v1/categories
-// ?all=true returns inactive too (used by admin panel)
+// Public: GET /api/v1/categories. The admin `all=true` flag currently returns the same list.
 exports.getCategories = catchAsyncError(async (req, res, next) => {
     const count = await Category.countDocuments();
     if (count === 0) {
-        await Category.insertMany(DEFAULT_CATEGORIES.map((name, i) => ({ name, sortOrder: i + 1, active: true })));
+        await Category.insertMany(DEFAULT_CATEGORIES.map((name, index) => ({ name, sortOrder: index + 1, active: true })));
     }
-    const includeAll = String(req.query.all) === 'true';
-    const filter = includeAll ? {} : {};
-    const categories = await Category.find(filter).sort({ sortOrder: 1, name: 1 });
+    const categories = await Category.find({}).sort({ sortOrder: 1, name: 1 });
     res.status(200).json({
         success: true,
         categories
@@ -37,7 +30,7 @@ exports.createCategory = catchAsyncError(async (req, res, next) => {
     if (!name || !String(name).trim()) {
         return next(new ErrorHandler('Please enter a category name', 400))
     }
-    const existing = await Category.findOne({ name: { $regex: `^${String(name).trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, $options: 'i' } });
+    const existing = await Category.findOne({ name: { $regex: `^${escapeRegExp(name)}$`, $options: 'i' } });
     if (existing) {
         return next(new ErrorHandler('Category with this name already exists', 400))
     }
@@ -61,10 +54,9 @@ exports.updateCategory = catchAsyncError(async (req, res, next) => {
 
     const { name, icon, sortOrder, active } = req.body;
     if (name !== undefined && String(name).trim() !== category.name) {
-        const escaped = String(name).trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const duplicate = await Category.findOne({
             _id: { $ne: category._id },
-            name: { $regex: `^${escaped}$`, $options: 'i' }
+            name: { $regex: `^${escapeRegExp(name)}$`, $options: 'i' }
         });
         if (duplicate) return next(new ErrorHandler('Category with this name already exists', 400));
         category.name = String(name).trim();

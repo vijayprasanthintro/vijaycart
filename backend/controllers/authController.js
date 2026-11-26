@@ -9,12 +9,13 @@ const sendToken = require('../utils/jwt');
 const { OAuth2Client } = require('google-auth-library');
 const crypto = require('crypto');
 
-//Google Sign-In (token verification) - /api/v1/google
-//The frontend obtains a Google ID token via Google Identity Services and posts
-//it here. The backend verifies the token with google-auth-library using the
-//GOOGLE_CLIENT_ID, then creates or links the account and issues the normal
-//VijayCart JWT cookie — the rest of the app (auth cache, protected routes,
-//cart/checkout) is untouched.
+const countOtherActiveAdmins = (userId) => User.countDocuments({
+    role: 'admin',
+    isDeleted: { $ne: true },
+    _id: { $ne: userId }
+});
+
+// Google Sign-In: verify the ID token, then use the normal VijayCart JWT cookie.
 exports.googleLogin = catchAsyncError(async (req, res, next) => {
     const clientId = process.env.GOOGLE_CLIENT_ID;
     if (!clientId) {
@@ -611,11 +612,7 @@ exports.updateUser = catchAsyncError(async (req, res, next) => {
 
     // Prevent demoting/removing the last active admin
     if (user.role === 'admin' && req.body.role && req.body.role !== 'admin') {
-        const otherActiveAdmins = await User.countDocuments({
-            role: 'admin',
-            isDeleted: { $ne: true },
-            _id: { $ne: user._id }
-        });
+        const otherActiveAdmins = await countOtherActiveAdmins(user._id);
         if (otherActiveAdmins < 1) {
             return next(new ErrorHandler('Cannot change role of the last active admin account', 400))
         }
@@ -653,11 +650,7 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
 
     // Prevent deleting the last active admin
     if (user.role === 'admin') {
-        const otherActiveAdmins = await User.countDocuments({
-            role: 'admin',
-            isDeleted: { $ne: true },
-            _id: { $ne: user._id }
-        });
+        const otherActiveAdmins = await countOtherActiveAdmins(user._id);
         if (otherActiveAdmins < 1) {
             return next(new ErrorHandler('Cannot delete the last active admin account', 400))
         }

@@ -31,23 +31,22 @@ const log = (level, ...args) => {
     }
 };
 
-async function postJson(url, payload, headers = {}) {
+async function post(url, contentType, body, headers = {}) {
     const res = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...headers },
-        body: JSON.stringify(payload)
+        headers: { 'Content-Type': contentType, ...headers },
+        body
     });
     return { status: res.status, body: await res.text() };
 }
 
-async function postForm(url, params, headers = {}) {
-    const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded', ...headers },
-        body: new URLSearchParams(params).toString()
-    });
-    return { status: res.status, body: await res.text() };
-}
+const postJson = (url, payload, headers) => post(url, 'application/json', JSON.stringify(payload), headers);
+const postForm = (url, params, headers) => post(
+    url,
+    'application/x-www-form-urlencoded',
+    new URLSearchParams(params).toString(),
+    headers
+);
 
 //Twilio REST API — https://www.twilio.com/docs/usage/api/message
 async function sendViaTwilio(to, message) {

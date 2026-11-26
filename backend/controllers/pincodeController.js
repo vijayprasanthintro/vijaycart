@@ -87,7 +87,7 @@ exports.lookupPincode = catchAsyncError(async (req, res, next) => {
         if (data) source = 'bundled';
         else {
             try { data = await liveUSA(code); if (data && data.state) source = 'live'; }
-            catch (e) { data = null; }
+            catch { data = null; }
         }
         if (!data || !data.state) { data = generateUSA(code); source = 'generated'; }
     } else {
@@ -95,7 +95,7 @@ exports.lookupPincode = catchAsyncError(async (req, res, next) => {
         if (data) source = 'bundled';
         else {
             try { data = await liveIndia(code); if (data && data.state) source = 'live'; }
-            catch (e) { data = null; }
+            catch { data = null; }
         }
         if (!data || !data.state) { data = generateIndia(code); source = 'generated'; }
     }
