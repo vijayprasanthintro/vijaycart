@@ -12,9 +12,12 @@
     "ecmaFeatures": { "jsx": true }
   },
   "extends": ["eslint:recommended"],
+  "plugins": ["react-hooks"],
   "rules": {
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
-    "no-console": "off"
+    "no-console": "off",
+    "no-control-regex": "off",
+    "react-hooks/exhaustive-deps": "warn"
   },
   "ignorePatterns": ["node_modules/", "frontend/build/", "backend/uploads/", "*.min.js"]
 }
