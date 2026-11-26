@@ -19,16 +19,15 @@ import { applyCachedDesign, setThemePending } from './designs/designUtils';
 
 // Centralized API configuration. Every axios request in the app uses these
 // defaults and the single API_BASE_URL from ./apiConfig:
-//   - local dev:  baseURL empty -> relative /api/v1 URLs, proxied to
-//                 http://localhost:8000 via the CRA "proxy" field in package.json
-//   - production: REACT_APP_API_URL left empty -> relative /api/v1 URLs are
-//                 served by Vercel's /api + /uploads rewrites (vercel.json),
-//                 which forward to the Railway backend. The browser only ever
-//                 resolves the Vercel domain, so no Railway hostname needs to
-//                 be resolvable client-side.
+//   - local dev:  relative /api/v1 URLs are proxied to http://localhost:8000
+//                 via the CRA "proxy" field in package.json.
+//   - production: API_BASE_URL is forced to '' so /api/v1/* stays same-origin.
+//                 Vercel's /api + /uploads rewrites (vercel.json) forward those
+//                 requests to the Suga backend. The browser only ever resolves
+//                 the VijayCart domain, which owns the JWT cookie.
 // withCredentials must stay true: the JWT session is an httpOnly cookie.
-// (With the rewrites, requests are same-origin, so the cookie is attached
-// automatically; with a direct REACT_APP_API_URL it is still sent cross-origin.)
+// Same-origin requests attach it automatically; this also keeps any explicitly
+// cross-origin request compatible with the existing cookie-based auth.
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = API_BASE_URL;
 // Fail clearly instead of hanging forever if the backend is unreachable or a

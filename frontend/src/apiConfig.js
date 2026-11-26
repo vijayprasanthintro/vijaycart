@@ -1,23 +1,19 @@
 // Single source of truth for the API base URL used across the whole app.
-// Every axios request and every image/upload URL resolution reads from here,
-// so the backend hostname is configured in exactly one place.
+// Every axios request and every image/upload URL resolution reads from here.
 //
-//   - local dev:     empty string -> all relative /api/v1/* requests are
-//                    proxied to http://localhost:8000 by the CRA "proxy" field
-//                    in frontend/package.json (no CORS involved)
-//   - Vercel prod:   REACT_APP_API_URL should be left EMPTY. The /api and
-//                    /uploads rewrites in frontend/vercel.json forward those
-//                    same-origin requests to the Railway backend, so the
-//                    browser only ever resolves the Vercel domain (which its
-//                    DNS can always reach). This is why production never needs
-//                    the raw Railway hostname in a client request.
+//   - local dev:     REACT_APP_API_URL may be empty (CRA proxies /api/v1/* to
+//                    http://localhost:8000) or point at a local API.
+//   - Vercel prod:   ALWAYS same-origin. The /api and /uploads rewrites in
+//                    vercel.json forward those requests to the Suga backend,
+//                    so the browser only ever resolves the VijayCart domain.
+//                    This is required for the httpOnly JWT cookie to be sent:
+//                    a cookie stored on the Vercel origin is not attached to
+//                    requests made directly to the raw Suga hostname.
 //
-// A non-empty REACT_APP_API_URL is only needed when you want the browser to
-// call the backend DIRECTLY (e.g. a custom API domain like api.example.com
-// that your network reliably resolves). Do NOT set it to a *.up.railway.app
-// hostname: many ISP/enterprise resolvers fail on it, which shows up as
-// net::ERR_NAME_NOT_RESOLVED in the browser.
-//
-// Never hardcode a hostname here. It is read from the build-time env var so
-// the same bundle works on every deployment.
-export const API_BASE_URL = process.env.REACT_APP_API_URL || '';
+// Production deliberately ignores REACT_APP_API_URL. A stale Vercel value
+// containing the raw backend host is baked into the CRA bundle at build time
+// and breaks /api/v1/myprofile after Google login (401 Unauthorized). No
+// hostname is hardcoded here; the production origin is the site itself.
+export const API_BASE_URL = process.env.NODE_ENV === 'production'
+    ? ''
+    : String(process.env.REACT_APP_API_URL || '').trim().replace(/\/+$/, '');

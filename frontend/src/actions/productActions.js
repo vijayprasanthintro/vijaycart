@@ -4,9 +4,9 @@ import { productsFail, productsSuccess, productsRequest, adminProductsRequest, a
 import { productFail, productSuccess, productRequest, productNotFound, createReviewRequest, createReviewSuccess, createReviewFail, newProductRequest, newProductSuccess, newProductFail, deleteProductRequest, deleteProductSuccess, deleteProductFail, updateProductRequest, updateProductSuccess, updateProductFail, reviewsRequest, reviewsSuccess, reviewsFail, deleteReviewRequest, deleteReviewSuccess, deleteReviewFail } from '../slices/productSlice';
 
 // API base: relative paths are used everywhere and resolved against the single
-// API_BASE_URL from ../apiConfig (REACT_APP_API_URL in production). When it is
-// unset the requests go to the same origin (CRA proxy in dev, Express static in
-// prod), so we never build broken "undefined/api/..." URLs.
+// API_BASE_URL from ../apiConfig. In production that value is forced to '' so
+// requests stay on the VijayCart origin and the Vercel /api rewrite forwards
+// them to the backend; in dev the CRA proxy handles the same relative paths.
 const API = API_BASE_URL;
 
 // Small in-memory cache for the two hottest reads (product detail + listing).
