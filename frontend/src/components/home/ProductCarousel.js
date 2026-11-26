@@ -1,6 +1,7 @@
 import { memo, useRef, useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Product from '../product/Product';
+import SectionHeader from './SectionHeader';
+import ProductRow from './ProductRow';
 import { ProductRowSkeleton } from '../layouts/Skeletons';
 
 export default memo(function ProductCarousel({
@@ -57,39 +58,34 @@ export default memo(function ProductCarousel({
 
   return (
     <section className={`section ${className}`}>
-      <div className="section-head">
-        <div>
-          <h2 className="section-title">{title}</h2>
-          {subtitle && <p className="section-sub mt-1">{subtitle}</p>}
-        </div>
-        <div className="d-flex align-items-center">
-          {viewAll && <Link to={viewAll} className="view-all-link">View All <i className="fa fa-arrow-right" aria-hidden="true"></i></Link>}
-          {showControls && (
-            <div className="d-flex ml-3">
-              <button
-                type="button"
-                className="scroll-btn"
-                onClick={() => scroll(-1)}
-                disabled={!canLeft}
-                aria-label="Scroll left"
-              >
-                <i className="fa fa-chevron-left" aria-hidden="true"></i>
-              </button>
-              <button
-                type="button"
-                className="scroll-btn"
-                onClick={() => scroll(1)}
-                disabled={!canRight}
-                aria-label="Scroll right"
-              >
-                <i className="fa fa-chevron-right" aria-hidden="true"></i>
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
+      <SectionHeader
+        title={title}
+        subtitle={subtitle}
+        viewAll={viewAll}
+        actions={showControls && (
+          <div className="d-flex ml-3">
+            <button
+              type="button"
+              className="scroll-btn"
+              onClick={() => scroll(-1)}
+              disabled={!canLeft}
+              aria-label="Scroll left"
+            >
+              <i className="fa fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <button
+              type="button"
+              className="scroll-btn"
+              onClick={() => scroll(1)}
+              disabled={!canRight}
+              aria-label="Scroll right"
+            >
+              <i className="fa fa-chevron-right" aria-hidden="true"></i>
+            </button>
+          </div>
+        )}
+      />
 
-      <div>
       {loading ? (
         <ProductRowSkeleton count={4} />
       ) : error ? (
@@ -113,13 +109,8 @@ export default memo(function ProductCarousel({
           )}
         </div>
       ) : (
-        <div className="product-scroll">
-          <div className="product-scroll-track" ref={trackRef}>
-            {products.map((product, i) => <Product key={product._id} product={product} col={col} index={i} />)}
-          </div>
-        </div>
+        <ProductRow products={products} col={col} trackRef={trackRef} />
       )}
-      </div>
     </section>
   );
 })

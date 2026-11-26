@@ -17,7 +17,7 @@ export default function CategoryList() {
     const [pending, setPending] = useState({});
 
     useEffect(() => {
-        dispatch(getCategories());
+        dispatch(getCategories(true));
     }, [dispatch]);
 
     useEffect(() => {
@@ -58,6 +58,11 @@ export default function CategoryList() {
         setModal(true);
     };
 
+    const notifyFailure = (result, fallback) => {
+        toast.error(result?.error || fallback, { position: toast.POSITION.BOTTOM_CENTER });
+        dispatch(clearCategoryState);
+    };
+
     const submit = async (e) => {
         e.preventDefault();
         if (!name.trim()) {
@@ -65,18 +70,24 @@ export default function CategoryList() {
             return;
         }
         setSaving(true);
-        if (editing) {
-            await dispatch(updateCategory(editing._id, { name, icon, sortOrder: Number(sortOrder) }));
-        } else {
-            await dispatch(createCategory({ name, icon, sortOrder: Number(sortOrder) }));
+        const result = editing
+            ? await dispatch(updateCategory(editing._id, { name, icon, sortOrder: Number(sortOrder) }))
+            : await dispatch(createCategory({ name, icon, sortOrder: Number(sortOrder) }));
+        if (result && result.success === false) {
+            notifyFailure(result, 'Could not save category');
+            setSaving(false);
+            return;
         }
+        await dispatch(getCategories(true));
         setSaving(false);
     };
 
     const toggleActive = async (cat) => {
         if (pending[cat._id]) return;
         setPending(p => ({ ...p, [cat._id]: true }));
-        await dispatch(updateCategory(cat._id, { active: !cat.active }));
+        const result = await dispatch(updateCategory(cat._id, { active: !cat.active }));
+        if (result && result.success === false) notifyFailure(result, 'Could not update category status');
+        else await dispatch(getCategories(true));
         setPending(p => {
             const next = { ...p };
             delete next[cat._id];
@@ -84,10 +95,22 @@ export default function CategoryList() {
         });
     };
 
-    const remove = (cat) => {
-        if (window.confirm(`Delete category "${cat.name}"?`)) {
-            dispatch(deleteCategory(cat._id));
-        }
+    const remove = async (cat) => {
+        if (!window.confirm(`Permanently delete category "${cat.name}"? This cannot be undone. Use the status toggle to hide it temporarily instead.`)) return;
+        setPending(p => ({ ...p, [cat._id]: true }));
+        const result = await dispatch(deleteCategory(cat._id));
+        if (result && result.success === false) notifyFailure(result, 'Could not delete category');
+        else await dispatch(getCategories(true));
+        setPending(p => { const next = { ...p }; delete next[cat._id]; return next; });
+    };
+
+    const move = async (cat, delta) => {
+        if (pending[cat._id]) return;
+        setPending(p => ({ ...p, [cat._id]: true }));
+        const result = await dispatch(updateCategory(cat._id, { sortOrder: Number(cat.sortOrder || 0) + delta }));
+        if (result && result.success === false) notifyFailure(result, 'Could not reorder category');
+        else await dispatch(getCategories(true));
+        setPending(p => { const next = { ...p }; delete next[cat._id]; return next; });
     };
 
     return (
@@ -134,8 +157,13 @@ export default function CategoryList() {
                                             </td>
                                             <td>
                                                 <div className="ad-toolbar">
-                                                    <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" onClick={() => openEdit(cat)}><i className="fa fa-pencil" aria-hidden="true"></i></button>
-                                                    <button type="button" className="ad-btn ad-btn--danger ad-btn--sm ad-btn--icon" onClick={() => remove(cat)}><i className="fa fa-trash" aria-hidden="true"></i></button>
+                                                    <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" title="Move up" disabled={!!pending[cat._id]} onClick={() => move(cat, -1)}><i className="fa fa-arrow-up" aria-hidden="true"></i></button>
+                                                    <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" title="Move down" disabled={!!pending[cat._id]} onClick={() => move(cat, 1)}><i className="fa fa-arrow-down" aria-hidden="true"></i></button>
+                                                    <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" title={cat.active === false ? 'Show on website' : 'Hide from website'} disabled={!!pending[cat._id]} onClick={() => toggleActive(cat)}>
+                                                        <i className={`fa ${cat.active === false ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true"></i>
+                                                    </button>
+                                                    <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" title="Edit category" onClick={() => openEdit(cat)}><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                                                    <button type="button" className="ad-btn ad-btn--danger ad-btn--sm ad-btn--icon" title="Delete category permanently" disabled={!!pending[cat._id]} onClick={() => remove(cat)}><i className="fa fa-trash" aria-hidden="true"></i></button>
                                                 </div>
                                             </td>
                                         </tr>

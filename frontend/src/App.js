@@ -1,4 +1,6 @@
 import './App.css';
+import './theme-overrides.css';
+import './responsive.css';
 import { lazy, Suspense, useEffect, Children, isValidElement, cloneElement } from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom'
@@ -21,6 +23,8 @@ import ScrollRestoration from './components/route/ScrollRestoration';
 import ErrorBoundary from './components/layouts/ErrorBoundary';
 import Loader from './components/layouts/Loader';
 import PageTransition from './components/layouts/PageTransition';
+import ThemeProvider from './context/ThemeContext';
+import BackToTop from './components/layouts/BackToTop';
 
 // Route-level code splitting: everything except the shell + landing page is
 // loaded on demand, shrinking the initial bundle and speeding up first paint.
@@ -65,6 +69,7 @@ const SellerApplications = lazy(() => import(/* webpackChunkName: "admin-seller-
 const BannerList = lazy(() => import(/* webpackChunkName: "admin-banners" */ './components/admin/BannerList'));
 const Reports = lazy(() => import(/* webpackChunkName: "admin-reports" */ './components/admin/Reports'));
 const Pincodes = lazy(() => import(/* webpackChunkName: "admin-pincodes" */ './components/admin/Pincodes'));
+const DesignStudio = lazy(() => import(/* webpackChunkName: "admin-design-studio" */ './components/admin/DesignStudio'));
 
 // Admin login (email + password, separate from customer OTP login)
 const AdminLogin = lazy(() => import(/* webpackChunkName: "admin-login" */ './components/admin/AdminLogin'));
@@ -188,6 +193,7 @@ function Shell() {
                     <Route path='permissions' element={<RequireModule perm="permissions"><Permissions /></RequireModule>} />
                     <Route path='delivery' element={<RequireModule perm="delivery"><AssignDelivery /></RequireModule>} />
                     <Route path='pincodes' element={<RequireModule perm="pincodes"><Pincodes /></RequireModule>} />
+                    <Route path='design-studio' element={<RequireModule perm="settings"><DesignStudio /></RequireModule>} />
                   </Route>
 
                   <Route path='/admin/login' element={<AdminLogin />} />
@@ -200,6 +206,7 @@ function Shell() {
         </Suspense>
       </main>
       {!hideChrome && <Footer />}
+      {!hideChrome && <BackToTop />}
       {!hideChrome && <BottomNavigation />}
     </>
   );
@@ -207,6 +214,11 @@ function Shell() {
 
 function App() {
   useEffect(() => {
+    // Theme settings must not wait for the (possibly slow) auth round-trip.
+    // Fetch them immediately so the persisted design replaces the cached paint
+    // as early as possible.
+    store.dispatch(getSettings());
+
     const initializeApp = async () => {
       try {
         await store.dispatch(loadUser());
@@ -215,7 +227,6 @@ function App() {
           console.error('Failed to initialize app data', error);
         }
       }
-      store.dispatch(getSettings());
     };
 
     initializeApp();
@@ -251,7 +262,9 @@ function App() {
       <div className="App">
         <div className="animated-bg"></div>
         <HelmetProvider>
-          <Shell />
+          <ThemeProvider>
+            <Shell />
+          </ThemeProvider>
         </HelmetProvider>
       </div>
     </Router>

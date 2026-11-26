@@ -14,14 +14,34 @@ const {
     deleteReviewRules
 } = require('../middlewares/validate');
 
-const upload = multer({storage: multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, path.join( __dirname,'..' , 'uploads/product' ) )
-    },
-    filename: function(req, file, cb ) {
-        cb(null, file.originalname)
+//Admin product images live in their own folder. It is created on demand so a
+//fresh checkout never fails the first upload.
+const productUploadDir = path.join(__dirname, '..', 'uploads', 'product');
+fs.mkdirSync(productUploadDir, { recursive: true });
+
+//Filenames are generated, never taken from the browser. Using file.originalname
+//meant two products uploading "image.jpg" overwrote each other on disk, so a
+//product could end up pointing at a different product's photo. The generated
+//name is unique per upload and is the single source of truth used by the
+//controller when it builds the image URL.
+const PRODUCT_IMAGE_EXT = { 'image/jpeg': '.jpg', 'image/png': '.png', 'image/webp': '.webp', 'image/gif': '.gif' };
+
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: function(req, file, cb) {
+            cb(null, productUploadDir)
+        },
+        filename: function(req, file, cb) {
+            const ext = PRODUCT_IMAGE_EXT[file.mimetype] || path.extname(file.originalname).toLowerCase() || '.jpg';
+            cb(null, `product-${Date.now()}-${Math.random().toString(36).slice(2, 10)}${ext}`)
+        }
+    }),
+    limits: { fileSize: 8 * 1024 * 1024, files: 10 },
+    fileFilter: function(req, file, cb) {
+        if (PRODUCT_IMAGE_EXT[file.mimetype]) return cb(null, true);
+        cb(new Error('Only JPG, PNG, WebP or GIF images are allowed for products'));
     }
-}) })
+})
 
 //Review photos are stored under /uploads/review so customer content is never
 //mixed with admin product images. The folder is created on demand so a fresh

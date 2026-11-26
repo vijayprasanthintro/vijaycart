@@ -5,6 +5,7 @@ import { getProduct, updateProduct } from "../../actions/productActions";
 import { getCategories } from "../../actions/categoryActions";
 import { clearError, clearProductUpdated } from "../../slices/productSlice";
 import { toast } from "react-toastify";
+import { resolveProductImage } from "../../utils/productHelper";
 
 const Section = ({ icon, title, children }) => (
     <div className="ad-form-section">
@@ -26,9 +27,13 @@ export default function UpdateProduct() {
     const [stock, setStock] = useState(0);
     const [seller, setSeller] = useState("");
     const [specs, setSpecs] = useState([]);
-    const [images, setImages] = useState([]);
+    //Two separate lists: images already stored on the product (URLs) and files
+    //picked in this session. Only the kept URLs are sent back, so the backend
+    //never has to guess which gallery entries the admin removed.
+    const [existingImages, setExistingImages] = useState([]);
+    const [newImages, setNewImages] = useState([]);
+    const [newPreviews, setNewPreviews] = useState([]);
     const [imagesCleared, setImagesCleared] = useState(false);
-    const [imagesPreview, setImagesPreview] = useState([]);
     const [errors, setErrors] = useState({});
     const [drag, setDrag] = useState(false);
 
@@ -45,11 +50,12 @@ export default function UpdateProduct() {
     const onImagesChange = (files) => {
         if (!files || !files.length) return;
         Array.from(files).forEach(file => {
+            if (!file.type || !file.type.startsWith('image/')) return;
             const reader = new FileReader();
             reader.onload = () => {
                 if (reader.readyState === 2) {
-                    setImagesPreview(oldArray => [...oldArray, reader.result]);
-                    setImages(oldArray => [...oldArray, file]);
+                    setNewPreviews(oldArray => [...oldArray, reader.result]);
+                    setNewImages(oldArray => [...oldArray, file]);
                 }
             };
             reader.readAsDataURL(file);
@@ -88,8 +94,10 @@ export default function UpdateProduct() {
             .filter(sp => sp.label.trim() || sp.value.trim())
             .map(sp => ({ label: sp.label.trim(), value: sp.value.trim() }));
         formData.append('specifications', JSON.stringify(cleanSpecs));
-        images.forEach(image => formData.append('images', image));
-        formData.append('imagesCleared', imagesCleared);
+        newImages.forEach(image => formData.append('images', image));
+        //Exact list of already-stored images to keep, in display order.
+        formData.append('keptImages', JSON.stringify(existingImages));
+        formData.append('imagesCleared', imagesCleared ? 'true' : 'false');
         dispatch(updateProduct(productId, formData));
     };
 
@@ -100,20 +108,26 @@ export default function UpdateProduct() {
     const removeSpec = (i) => setSpecs(specs.filter((_, idx) => idx !== i));
 
     const clearImagesHandler = () => {
-        setImages([]);
-        setImagesPreview([]);
+        setExistingImages([]);
+        setNewImages([]);
+        setNewPreviews([]);
         setImagesCleared(true);
     };
 
-    const removePreview = (i) => {
-        setImagesPreview(imagesPreview.filter((_, idx) => idx !== i));
-        setImages(images.filter((_, idx) => idx !== i));
+    const removeExistingImage = (url) => {
+        setExistingImages(existingImages.filter(img => img !== url));
+    };
+
+    const removeNewImage = (i) => {
+        setNewPreviews(newPreviews.filter((_, idx) => idx !== i));
+        setNewImages(newImages.filter((_, idx) => idx !== i));
     };
 
     useEffect(() => {
         if (isProductUpdated) {
             toast('Product updated successfully!', { type: 'success', position: toast.POSITION.BOTTOM_CENTER, onOpen: () => dispatch(clearProductUpdated()) });
-            setImages([]);
+            setNewImages([]);
+            setNewPreviews([]);
             return;
         }
         if (error) {
@@ -138,8 +152,11 @@ export default function UpdateProduct() {
                 ? product.specifications
                 : [{ label: 'Model', value: '' }, { label: 'RAM', value: '' }, { label: 'Storage', value: '' }, { label: 'Color', value: '' }]
             ).map(sp => ({ label: sp.label || '', value: sp.value || '' })));
-            const imgs = (product.images || []).map(img => img.image);
-            setImagesPreview(imgs);
+            const imgs = (product.images || []).map(img => img.image).filter(Boolean);
+            setExistingImages(imgs);
+            setNewImages([]);
+            setNewPreviews([]);
+            setImagesCleared(false);
         }
     }, [product]);
 
@@ -234,19 +251,29 @@ export default function UpdateProduct() {
                         <b>Drop images here or click to browse</b>
                         <span>PNG, JPG, WebP — first image is the product thumbnail</span>
                     </label>
-                    {imagesPreview.length > 0 && (
+                    {(existingImages.length > 0 || newPreviews.length > 0) && (
                         <div className="ad-upload__preview">
-                            {imagesPreview.map((image, i) => (
-                                <span className="ad-thumb" key={image}>
-                                    <img src={image} alt="Preview" />
-                                    <button type="button" className="ad-thumb__remove" onClick={() => removePreview(i)} title="Remove">
+                            {existingImages.map((image, i) => (
+                                <span className="ad-thumb" key={`existing-${image}-${i}`}>
+                                    <img src={resolveProductImage(image)} alt={name || ''} />
+                                    {i === 0 && <span className="ad-thumb__badge">Primary</span>}
+                                    <button type="button" className="ad-thumb__remove" onClick={() => removeExistingImage(image)} title="Remove">
+                                        <i className="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </span>
+                            ))}
+                            {newPreviews.map((image, i) => (
+                                <span className="ad-thumb" key={`new-${i}`}>
+                                    <img src={image} alt="New upload preview" />
+                                    {existingImages.length === 0 && i === 0 && <span className="ad-thumb__badge">Primary</span>}
+                                    <button type="button" className="ad-thumb__remove" onClick={() => removeNewImage(i)} title="Remove">
                                         <i className="fa fa-times" aria-hidden="true"></i>
                                     </button>
                                 </span>
                             ))}
                         </div>
                     )}
-                    {imagesPreview.length > 0 && (
+                    {(existingImages.length > 0 || newPreviews.length > 0) && (
                         <div className="ad-upload__actions">
                             <button type="button" className="ad-btn ad-btn--ghost ad-btn--sm" onClick={clearImagesHandler}>
                                 <i className="fa fa-trash" aria-hidden="true"></i> Clear all images

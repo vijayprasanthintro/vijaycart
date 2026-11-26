@@ -51,6 +51,7 @@ export default function NewProduct() {
     const onImagesChange = (files) => {
         if (!files || !files.length) return;
         Array.from(files).forEach(file => {
+            if (!file.type || !file.type.startsWith('image/')) return;
             const reader = new FileReader();
             reader.onload = () => {
                 if (reader.readyState === 2) {
@@ -214,8 +215,9 @@ export default function NewProduct() {
                     {imagesPreview.length > 0 && (
                         <div className="ad-upload__preview">
                             {imagesPreview.map((image, i) => (
-                                <span className="ad-thumb" key={image}>
-                                    <img src={image} alt="Preview" />
+                                <span className="ad-thumb" key={`${i}-${image.slice(-24)}`}>
+                                    <img src={image} alt={`Upload preview ${i + 1}`} />
+                                    {i === 0 && <span className="ad-thumb__badge">Primary</span>}
                                     <button type="button" className="ad-thumb__remove" onClick={() => removePreview(i)} title="Remove">
                                         <i className="fa fa-times" aria-hidden="true"></i>
                                     </button>

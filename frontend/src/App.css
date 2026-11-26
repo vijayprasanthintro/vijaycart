@@ -439,6 +439,25 @@ a:hover { color: var(--vc-orange); text-decoration: none; }
 }
 .vc-hd__dropdown-item:hover { background: var(--primary-soft); color: var(--vc-orange); text-decoration: none; }
 .vc-hd__dropdown-item i { width: 18px; font-size: 0.85rem; color: var(--vc-orange); text-align: center; }
+.vc-hd .dropdown-menu .dropdown-item.text-danger,
+.vc-hd .dropdown-menu .dropdown-item.text-danger i,
+.vc-hd__dropdown .vc-hd__dropdown-item.text-danger,
+.vc-hd__dropdown .vc-hd__dropdown-item.text-danger i {
+  color: #fff !important;
+}
+.vc-hd .dropdown-menu .dropdown-item.text-danger {
+  background: var(--danger) !important;
+}
+.vc-hd .dropdown-menu .dropdown-item.text-danger:hover,
+.vc-hd .dropdown-menu .dropdown-item.text-danger:focus,
+.vc-hd .dropdown-menu .dropdown-item.text-danger:active,
+.vc-hd .dropdown-menu .dropdown-item.text-danger.active,
+.vc-hd__dropdown .vc-hd__dropdown-item.text-danger:hover,
+.vc-hd__dropdown .vc-hd__dropdown-item.text-danger:focus,
+.vc-hd__dropdown .vc-hd__dropdown-item.text-danger:active {
+  color: #fff !important;
+  background: #b91c1c !important;
+}
 .vc-hd__dropdown-divider { height: 1px; background: var(--border); margin: 0.3rem 0; }
 .vc-hd__dropdown-heading {
   padding: 0.4rem 1rem;
@@ -1685,6 +1704,7 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
 .vc-cn {
   background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
   border-bottom: 1px solid rgba(40, 116, 240, 0.12);
+  overflow: visible;
   position: sticky;
   top: 0;
   z-index: 900;
@@ -1694,6 +1714,7 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
   position: relative;
   display: flex;
   align-items: center;
+  overflow: visible;
 }
 .vc-cn__scroll {
   display: flex;
@@ -1790,7 +1811,7 @@ ul.CTAs a { text-align: center; font-size: 0.88em !important; display: block; bo
   border: 1px solid rgba(40, 116, 240, 0.12);
   border-radius: 14px;
   box-shadow: 0 14px 38px rgba(15, 17, 17, 0.16);
-  z-index: 950;
+  z-index: 2000;
   padding: 0.45rem 0.5rem;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);

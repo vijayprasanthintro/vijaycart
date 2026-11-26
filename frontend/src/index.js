@@ -15,6 +15,7 @@ import {Provider } from 'react-redux';
 import { WishlistProvider } from './context/WishlistContext';
 import axios from 'axios';
 import { API_BASE_URL } from './apiConfig';
+import { applyCachedDesign, setThemePending } from './designs/designUtils';
 
 // Centralized API configuration. Every axios request in the app uses these
 // defaults and the single API_BASE_URL from ./apiConfig:
@@ -33,6 +34,11 @@ axios.defaults.baseURL = API_BASE_URL;
 // Fail clearly instead of hanging forever if the backend is unreachable or a
 // Railway cold start is unusually slow.
 axios.defaults.timeout = 45000;
+
+// Paint the last applied design before React mounts. /settings refreshes it a
+// moment later, but this removes any flash of the default palette on reload.
+// With no cache we use a neutral cover instead of painting eMox blue.
+if (!applyCachedDesign()) setThemePending(true);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

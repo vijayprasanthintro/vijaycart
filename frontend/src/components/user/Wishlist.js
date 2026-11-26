@@ -71,9 +71,7 @@ export default function Wishlist() {
                                     aria-label="Remove from wishlist"
                                 ><i className="fa fa-heart" aria-hidden="true"></i></button>
                                 <Link to={`/product/${product._id}`} className="d-block overflow-hidden">
-                                    {product.images && product.images.length > 0 && (
-                                        <img className="card-img-top mx-auto" src={productImage(product)} alt={product.name} loading="lazy" onError={imgOnError} />
-                                    )}
+                                    <img className="card-img-top mx-auto" src={productImage(product)} alt={product.name} loading="lazy" onError={imgOnError} />
                                 </Link>
                                 <div className="card-body d-flex flex-column">
                                     <h5 className="card-title"><Link to={`/product/${product._id}`} title={product.name}>{product.name}</Link></h5>

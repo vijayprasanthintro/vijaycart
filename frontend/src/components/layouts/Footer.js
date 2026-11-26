@@ -33,10 +33,10 @@ export default function Footer (){
                             smooth shopping experience.
                         </p>
                         <div className="footer-social">
-                            <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook"><i className="fa fa-facebook"></i></a>
-                            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><i className="fa fa-instagram"></i></a>
-                            <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter"><i className="fa fa-twitter"></i></a>
-                            <a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube"><i className="fa fa-youtube-play"></i></a>
+                            <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="social-facebook"><i className="fa fa-facebook"></i></a>
+                            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="social-instagram"><i className="fa fa-instagram"></i></a>
+                            <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter" className="social-twitter"><i className="fa fa-twitter"></i></a>
+                            <a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube" className="social-youtube"><i className="fa fa-youtube-play"></i></a>
                         </div>
                     </div>
 
